@@ -1,7 +1,31 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.bProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.bProperties
+
+@[expose] public section
+
+/-!
+# bitsToNat Properties
+
+In this file we introduce some generally helpful lemmas for `bitsToNat `.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
+
 
 namespace Elligator.Elligator1
 

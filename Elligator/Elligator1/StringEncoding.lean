@@ -1,13 +1,36 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Map
-import Elligator.Elligator1.phiProperties
-import Elligator.Elligator1.InvertedMap
-import Elligator.Elligator1.bProperties
-import Elligator.Elligator1.bitsToNatProperties
-import Elligator.Elligator1.SProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.Map
+public import Elligator.Elligator1.phiProperties
+public import Elligator.Elligator1.InvertedMap
+public import Elligator.Elligator1.bProperties
+public import Elligator.Elligator1.bitsToNatProperties
+public import Elligator.Elligator1.SProperties
+
+@[expose] public section
+
+/-!
+# String Encoding
+
+In this file we collect the main results regarding the string encoding logic of Elligator 1.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3 theorem 4.
+-/
 
 namespace Elligator.Elligator1
 
@@ -17,7 +40,10 @@ section StringEncoding
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
--- `ι` maps an element of `S` to `E_over_F` via `ι(τ) = ϕ(σ(τ))`.
+/-- `ι` maps an element of `S` to `E_over_F` via `ι(τ) = ϕ(σ(τ))`.
+
+Original: Chapter "3.4 Encoding as strings": Theorem 4
+-/
 noncomputable def ι
   (s : F)
   (s_h1 : s ≠ 0)
@@ -79,6 +105,11 @@ theorem ι_injective
       grind
     grind
 
+-- TODO remove this since prime version is better
+/-- `ι_over_S` is the set of points produced by `ι`.
+
+Original: Chapter "3.4 Encoding as strings": Theorem 4
+-/
 noncomputable def ι_over_S
   {s : F}
   (s_h1 : s ≠ 0)
@@ -91,6 +122,10 @@ noncomputable def ι_over_S
   Set (F × F) :=
   { P | ∃ (τ : (@S q)), P = ι s s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 τ }
 
+/-- `ι_over_S` is the set of points produced by `ι`.
+
+Original: Chapter "3.4 Encoding as strings": Theorem 4
+-/
 noncomputable def ι_over_S'
   {s : F}
   (s_h1 : s ≠ 0)

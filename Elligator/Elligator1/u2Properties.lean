@@ -1,19 +1,42 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.dProperties
-import Elligator.Elligator1.uProperties
-import Elligator.Elligator1.vProperties
-import Elligator.Elligator1.XProperties
-import Elligator.Elligator1.YProperties
-import Elligator.Elligator1.xProperties
-import Elligator.Elligator1.yProperties
-import Elligator.Elligator1.etaProperties
-import Elligator.Elligator1.X2Properties
-import Elligator.Elligator1.zProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.uProperties
+public import Elligator.Elligator1.vProperties
+public import Elligator.Elligator1.XProperties
+public import Elligator.Elligator1.YProperties
+public import Elligator.Elligator1.xProperties
+public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.etaProperties
+public import Elligator.Elligator1.X2Properties
+public import Elligator.Elligator1.zProperties
+
+@[expose] public section
+
+/-!
+# u2 Properties
+
+In this file we introduce some generally helpful lemmas for `u2` as introduced in `Elligator.Elligator1.Variables`.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
 
 namespace Elligator.Elligator1
 
@@ -300,7 +323,7 @@ lemma one_add_u2_ne_zero_base_case
 
 lemma one_add_u2_ne_zero
   {s : F}
-  (s_h1 : (s : F) ≠ 0)
+  (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   {q : ℕ}
   (field_cardinality : Fintype.card F = q)
@@ -324,7 +347,7 @@ lemma one_add_u2_ne_zero
       have h3 := one_add_u2_ne_zero_base_case ⟨t, h2⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
       grind
 
--- Theorem 3 part C define
+/-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def u'
   (s : F)
   (s_h1 : s ≠ 0)
@@ -455,7 +478,7 @@ lemma u'_ne_zero
     unfold u u'
     grind
 
--- Theorem 3 part C define
+/-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def v'
   (s : F)
   (s_h1 : s ≠ 0)

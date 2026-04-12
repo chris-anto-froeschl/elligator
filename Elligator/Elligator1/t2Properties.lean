@@ -1,20 +1,44 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.dProperties
-import Elligator.Elligator1.uProperties
-import Elligator.Elligator1.vProperties
-import Elligator.Elligator1.XProperties
-import Elligator.Elligator1.YProperties
-import Elligator.Elligator1.xProperties
-import Elligator.Elligator1.yProperties
-import Elligator.Elligator1.etaProperties
-import Elligator.Elligator1.X2Properties
-import Elligator.Elligator1.zProperties
-import Elligator.Elligator1.u2Properties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.uProperties
+public import Elligator.Elligator1.vProperties
+public import Elligator.Elligator1.XProperties
+public import Elligator.Elligator1.YProperties
+public import Elligator.Elligator1.xProperties
+public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.etaProperties
+public import Elligator.Elligator1.X2Properties
+public import Elligator.Elligator1.zProperties
+public import Elligator.Elligator1.u2Properties
+
+@[expose] public section
+
+/-!
+# t2 Variable Properties
+
+In this file we introduce some generally helpful lemmas for `t2` as introduced in `Elligator.Elligator1.Variables`.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
+
 
 namespace Elligator.Elligator1
 
@@ -159,7 +183,7 @@ lemma t2_in_t_or_neg_t
         exact h'
       exact h''
 
--- Theorem 3 part C define
+/-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def t'
   (s : F)
   (s_h1 : s ≠ 0)
@@ -372,7 +396,7 @@ lemma Y'_eq_Y
     change Y = Y
     rfl
 
--- Theorem 3 part C define
+/-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def x'
   (s : F)
   (s_h1 : s ≠ 0)
@@ -419,7 +443,7 @@ lemma x'_eq_x
     let h2 := X'_eq_X s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind
 
--- Theorem 3 part C define
+/-- `y'` is the `y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def y'
   (s : F)
   (s_h1 : s ≠ 0)

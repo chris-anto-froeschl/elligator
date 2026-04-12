@@ -1,6 +1,31 @@
-import Mathlib
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.dProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.dProperties
+
+@[expose] public section
+
+/-!
+# Edwards Curve
+
+In this file we give a basic framework to talk about Edwards Curves
+
+TODO does this fit into some existing ECC lib part?
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
 
 namespace Elligator.Elligator1
 
@@ -9,16 +34,22 @@ section EdwardsCurve
 variable {F : Type*} [Field F] [Fintype F]
 
 -- TODO generalize to actual characteristic ≠ 2
+/-- An \emph{Edwards curve} over a field $K$ (with $\mathrm{char}(K) \neq 2$) is a plane algebraic curve defined by an equation of the form
+\[
+x^2 + y^2 = 1 + d x^2 y^2,
+\]
+where $d \in K \setminus \{0,1\}$. -/
 def edwards_curve_equation
   (x y : F)
   (d : {d : F // d ≠ 0 ∧ d ≠ 1})
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
+  -- TODO remove these requirements and move into wrapper lemmas
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  := x^2 + y^2 = 1 + d * x^2 * y^2
+  : Prop := x^2 + y^2 = 1 + d * x^2 * y^2
 
--- E_over_F(s, q) is the set of points on the curve defined by the equation in the paper.
+/-- `E_over_F` is the set of points fulfilling the `edwards_curve_equation`. -/
 def E_over_F
   (s : F)
   (s_h1 : s ≠ 0)

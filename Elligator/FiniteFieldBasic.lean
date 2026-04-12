@@ -1,26 +1,45 @@
-import Mathlib
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl, Matthias Güdemann
+-/
+module
+
+public import Mathlib.Algebra.Field.Defs
+public import Mathlib.FieldTheory.Finite.Basic
+public import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
+public import Mathlib.Tactic.Cases
+
+@[expose] public section
+
+/-!
+# Finite Field Basic
+
+In this file we introduce some generally helpful lemmas for the finite field `F` with
+`q` fulfilling `IsPrimePow`, `Fintype.card F = q` and `q % 4 = 3`.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] for the original account on this specifc finite field.
+-/
 
 variable {F : Type*} [Field F] [Fintype F]
 
 namespace FiniteFieldBasic
 
 lemma q_ne_two
-  (q : ℕ)
-  (q_prime_power : IsPrimePow q)
+  {q : ℕ}
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : q ≠ 2 := by
-    intro h
-    have mod_two : 2 % 4 = 2 := by norm_num
-    nth_rw 1 [← h] at mod_two
-    rw [q_mod_4_congruent_3] at mod_two
-    norm_num at mod_two
+  : q ≠ 2 := by omega
 
-lemma q_mod_2_congruent_1
-  (q : ℕ)
+lemma q_mod_two_congruent_one
+  {q : ℕ}
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  q % 2 = 1 := by
-    exact Nat.odd_of_mod_four_eq_three q_mod_4_congruent_3
+  : q % 2 = 1 := by omega
 
 lemma q_odd
   (q : ℕ)
@@ -31,7 +50,7 @@ lemma q_odd
   Odd (Fintype.card F) := by
     rw [field_cardinality]
     rw [IsPrimePow] at q_prime_power
-    have hq: q % 2 = 1 := by apply q_mod_2_congruent_1 q q_mod_4_congruent_3
+    have hq: q % 2 = 1 := by apply q_mod_two_congruent_one q_mod_4_congruent_3
     have hq1: ∃ k, q = 2 * k + 1 := by
       apply Nat.mod_eq_iff.1 at hq
       cases hq
@@ -61,9 +80,6 @@ lemma q_sub_one_even
   :
   Even (Fintype.card F - 1) := by
     rw [field_cardinality]
-    --apply Nat.Prime.even_sub_one q_prime_power (q_ne_two q q_prime_power q_mod_4_congruent_3)
-    -- TODO use:
-    --apply Odd.mul
     have hq: Odd q := by
       rw [<- field_cardinality]
       apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3

@@ -1,24 +1,46 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.EdwardsCurve
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.dProperties
-import Elligator.Elligator1.uProperties
-import Elligator.Elligator1.vProperties
-import Elligator.Elligator1.XProperties
-import Elligator.Elligator1.YProperties
-import Elligator.Elligator1.xProperties
-import Elligator.Elligator1.yProperties
-import Elligator.Elligator1.Map
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.EdwardsCurve
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.uProperties
+public import Elligator.Elligator1.vProperties
+public import Elligator.Elligator1.XProperties
+public import Elligator.Elligator1.YProperties
+public import Elligator.Elligator1.xProperties
+public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.Map
+
+@[expose] public section
+
+/-!
+# Map Properties
+
+In this file we introduce lemmas, which are directly derivable from the main results in `Elligator.Elligator1.Map`.
+These results are mainly used for Theorem 3 proof part A, i.e. results only proofable right in between Theorem 1 and proof part B.
+This hierarchy allows to have a linear dependence hierarchy without polluting major result files.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
 
 namespace Elligator.Elligator1
 
--- This file holds lemmas, which are directly derivable from Theorem 1 and Definition 2 in the original paper.
--- i.e. Theorem 3 Proof A
--- This refactor allows to have a linear dependence hierarchy without polluting major result files.
 section MapProperties
 
 variable {F : Type*} [Field F] [Fintype F]
@@ -642,6 +664,10 @@ lemma y_add_one_eq_two
 --
 -- Actual assumption of E(F) is done in theorems using the following `def`s.
 
+/-- `ϕ_over_F_prop1` is the first property fulfilled by points in `E_over_F`.
+
+Original: Chapter "3.3 Inverting the map": Theorem 3
+-/
 noncomputable def ϕ_over_F_prop1
   (q : ℕ)
   (field_cardinality : Fintype.card F = q)
@@ -652,6 +678,10 @@ noncomputable def ϕ_over_F_prop1
   let y := point.snd
   y + 1 ≠ 0
 
+/-- `ϕ_over_F_prop2` is the second property fulfilled by points in `E_over_F`.
+
+Original: Chapter "3.3 Inverting the map": Theorem 3
+-/
 def ϕ_over_F_prop2
   (s : F)
   (s_h1 : s ≠ 0)
@@ -666,6 +696,10 @@ def ϕ_over_F_prop2
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   IsSquare ((1 + η_of_point * r_of_s)^2 - 1)
 
+/-- `ϕ_over_F_prop3` is the third property fulfilled by points in `E_over_F`.
+
+Original: Chapter "3.3 Inverting the map": Theorem 3
+-/
 def ϕ_over_F_prop3
   (s : F)
   (s_h1 : s ≠ 0)
@@ -683,6 +717,11 @@ def ϕ_over_F_prop3
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   η_of_point * r_of_s = -2 → x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
 
+/-- `ϕ_over_F_props` combines the previously defined properties which are fulfilled by points in `E_over_F`,
+i.e. `ϕ_over_F_prop1`, `ϕ_over_F_prop2` and `ϕ_over_F_prop3`.
+
+Original: Chapter "3.3 Inverting the map": Theorem 3
+-/
 def ϕ_over_F_props
   (s : F)
   (s_h1 : s ≠ 0)
@@ -698,7 +737,10 @@ def ϕ_over_F_props
   ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
 
--- Chapter 3.3 Theorem 3.2 definition
+/-- `ϕ_over_F` is the set of points produced by `ϕ`.
+
+Original: Chapter "3.2 The map": Definition 2
+-/
 noncomputable def ϕ_over_F
   (s : F)
   (s_h1 : s ≠ 0)

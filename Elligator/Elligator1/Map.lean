@@ -1,21 +1,43 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.EdwardsCurve
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.dProperties
-import Elligator.Elligator1.uProperties
-import Elligator.Elligator1.vProperties
-import Elligator.Elligator1.XProperties
-import Elligator.Elligator1.YProperties
-import Elligator.Elligator1.xProperties
-import Elligator.Elligator1.yProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.EdwardsCurve
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.uProperties
+public import Elligator.Elligator1.vProperties
+public import Elligator.Elligator1.XProperties
+public import Elligator.Elligator1.YProperties
+public import Elligator.Elligator1.xProperties
+public import Elligator.Elligator1.yProperties
+
+@[expose] public section
+
+/-!
+# Map
+
+In this file we collect the main results regarding the map of Elligator 1.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3 theorem 1.
+-/
 
 namespace Elligator.Elligator1
 
--- Original-Reference: Theorem 1
 section Map
 
 variable {F : Type*} [Field F] [Fintype F]
@@ -125,10 +147,11 @@ theorem map_fulfills_curve_equation
     intro x_of_t y_of_t d_of_s
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
--- Original:
--- Chapter "3.2 The map": Definition 2
--- In the situation of Theorem 1, the decoding function for the complete
--- Edwards curve E : x² + y² = 1 + dx²y² is the function ϕ : Fq → E(Fq) defined as follows: ϕ(±1) = (0, 1); if t ∉ {±1} then ϕ(t) = (x, y).
+/-- In the situation of Theorem 1, the decoding function for the complete
+Edwards curve E : x² + y² = 1 + dx²y² is the function ϕ : Fq → E(Fq) defined as follows: ϕ(±1) = (0, 1); if t ∉ {±1} then ϕ(t) = (x, y).
+
+Original: Chapter "3.2 The map": Definition 2
+-/
 noncomputable def ϕ
   (t : F)
   (s : F)

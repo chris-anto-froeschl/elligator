@@ -1,11 +1,34 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.rProperties
-import Elligator.Elligator1.uProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.rProperties
+public import Elligator.Elligator1.uProperties
+
+@[expose] public section
+
+/-!
+# v Variable Properties
+
+In this file we introduce some generally helpful lemmas for `v` as introduced in `Elligator.Elligator1.Variables`.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
 
 namespace Elligator.Elligator1
 
@@ -119,7 +142,7 @@ lemma v_h1_second_factor_ne_zero
       rw [FiniteField.isSquare_neg_one_iff] at h3_1_2
       rw [field_cardinality] at h3_1_2
       exact h3_1_2
-    contradiction    
+    contradiction
 
 lemma v_ne_zero
   (s : F)
@@ -137,7 +160,7 @@ lemma v_ne_zero
     apply mul_ne_zero
     · apply mul_ne_zero
       · apply u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
-      · exact (v_h1_second_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) 
+      · exact (v_h1_second_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
     · exact (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
@@ -337,4 +360,3 @@ lemma v_of_zero
     rw [u_of_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
     unfold r_of_s
     ring_nf
-

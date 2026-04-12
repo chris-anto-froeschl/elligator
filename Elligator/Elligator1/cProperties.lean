@@ -1,8 +1,17 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 

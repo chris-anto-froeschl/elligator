@@ -1,24 +1,47 @@
-import Mathlib
-import Mathlib.Data.Set.Basic
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.dProperties
-import Elligator.Elligator1.uProperties
-import Elligator.Elligator1.vProperties
-import Elligator.Elligator1.XProperties
-import Elligator.Elligator1.YProperties
-import Elligator.Elligator1.xProperties
-import Elligator.Elligator1.yProperties
-import Elligator.Elligator1.Map
-import Elligator.Elligator1.X2Properties
-import Elligator.Elligator1.u2Properties
-import Elligator.Elligator1.zProperties
-import Elligator.Elligator1.t2Properties
-import Elligator.Elligator1.phiProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Mathlib.Data.Set.Basic
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.uProperties
+public import Elligator.Elligator1.vProperties
+public import Elligator.Elligator1.XProperties
+public import Elligator.Elligator1.YProperties
+public import Elligator.Elligator1.xProperties
+public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.Map
+public import Elligator.Elligator1.X2Properties
+public import Elligator.Elligator1.u2Properties
+public import Elligator.Elligator1.zProperties
+public import Elligator.Elligator1.t2Properties
+public import Elligator.Elligator1.phiProperties
+
+@[expose] public section
+
+/-!
+# Inverted Map
+
+In this file we introduce the main results of the inverted map.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3 theorem 3.
+-/
 
 namespace Elligator.Elligator1
 

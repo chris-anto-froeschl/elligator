@@ -11,6 +11,11 @@ section DecodingFunction
 
 variable {F : Type*} [Field F] [Fintype F]
 
+/-- In the situation of Theorem 1, the decoding function for the complete
+Edwards curve E : x² + y² = 1 + dx²y² is the function ϕ : Fq → E(Fq) defined as follows: ϕ(±1) = (0, 1); if t ∉ {±1} then ϕ(t) = (x, y).
+
+Original: Chapter "3.2 The map": Definition 2
+-/
 noncomputable def DecodingFunction
   (t : F)
   (s : F)

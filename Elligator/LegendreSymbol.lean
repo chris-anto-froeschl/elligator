@@ -1,10 +1,39 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib.Algebra.Field.Defs
+public import Mathlib.FieldTheory.Finite.Basic
+public import Elligator.FiniteFieldBasic
+
+@[expose] public section
+
+/-!
+# Legendre Symbol
+
+In this file we introduce some a special case of the traditional Legendre Symbol.
+This definition differs from the normal textbook definition, and therefore of mathlib's existing
+`Mathlib.NumberTheory.LegendreSymbol.Basic` or `Mathlib.NumberTheory.LegendreSymbol.JacobiSymbol`
+by being bound to a finite field with `q` fulfilling `IsPrimePow`, `Fintype.card F = q` and `q % 4 = 3`.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.1 for the original account on this version of the Legendre Symbol.
+-/
 
 namespace LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
 
+-- Disabled here to restrict context of the q directly here
+set_option linter.unusedVariables false in
 /-- χ(a) is the quadratic character of a in the finite field F with q elements, where q is a prime congruent to 3 modulo 4.
 
 This function was added, since Mathlib.NumberTheory.LegendreSymbol.Basic is restricted to ℤ.
@@ -499,5 +528,5 @@ lemma a_eq_zero_of_χ_of_a_eq_zero
   χ_of_a = 0 → a = 0 := by
     intro χ_of_a h
     unfold χ_of_a χ at h
-    apply pow_eq_zero at h
+    apply eq_zero_of_pow_eq_zero at h
     exact h

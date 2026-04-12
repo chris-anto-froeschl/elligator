@@ -1,19 +1,43 @@
-import Mathlib
-import Elligator.FiniteFieldBasic
-import Elligator.LegendreSymbol
-import Elligator.Elligator1.Variables
-import Elligator.Elligator1.sProperties
-import Elligator.Elligator1.cProperties
-import Elligator.Elligator1.dProperties
-import Elligator.Elligator1.uProperties
-import Elligator.Elligator1.vProperties
-import Elligator.Elligator1.XProperties
-import Elligator.Elligator1.YProperties
-import Elligator.Elligator1.xProperties
-import Elligator.Elligator1.yProperties
-import Elligator.Elligator1.Map
-import Elligator.Elligator1.MapProperties
-import Elligator.Elligator1.etaProperties
+/-
+Copyright (c) 2026 Chris Anto Fröschl. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chris Anto Fröschl
+-/
+module
+
+public import Mathlib
+public import Elligator.FiniteFieldBasic
+public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Variables
+public import Elligator.Elligator1.sProperties
+public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.uProperties
+public import Elligator.Elligator1.vProperties
+public import Elligator.Elligator1.XProperties
+public import Elligator.Elligator1.YProperties
+public import Elligator.Elligator1.xProperties
+public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.Map
+public import Elligator.Elligator1.MapProperties
+public import Elligator.Elligator1.etaProperties
+
+@[expose] public section
+
+/-!
+# X2 Variable Properties
+
+In this file we introduce some generally helpful lemmas for `X2` as introduced in `Elligator.Elligator1.Variables`.
+
+## Main results
+
+- TODO
+
+## References
+
+See [bernstein2013a] chapter 3.
+-/
+
 
 namespace Elligator.Elligator1
 
@@ -606,6 +630,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         rw [div_mul_div_comm]
         ring_nf
 
+/-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def Y'
   (s : F)
   (s_h1 : s ≠ 0)
