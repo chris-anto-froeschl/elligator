@@ -255,6 +255,75 @@ lemma u2_h1
     · right
       exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h
 
+
+/-- The key step: rewriting `1 + u2(ϕ(t))` in the main case (t ≠ ±1) to show it is nonzero,
+    using `u2_h1` which gives `u2 = u(t)` or `u2 = u(-t)`. -/
+lemma one_add_u2_ne_zero_main_case
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  {s : F}
+  (s_h1 : (s : F) ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  {q : ℕ}
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let P := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).1
+  let u2 := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P
+  1 + u2 ≠ 0 := by
+    intro P u2
+    unfold u2
+    obtain h|h := u2_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · rw [h]
+      exact one_add_u_ne_zero t field_cardinality q_prime_power q_mod_4_congruent_3
+    · rw [h]
+      let t_h := FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+      exact one_add_u_ne_zero ⟨ -t.val, t_h ⟩ field_cardinality q_prime_power q_mod_4_congruent_3
+
+lemma one_add_u2_ne_zero_base_case
+  (t : {n : F // n = 1 ∨ n = -1})
+  {s : F}
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  {q : ℕ}
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let P := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).1
+  let u2 := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P
+  1 + u2 ≠ 0 := by
+    intro P u2
+    unfold u2
+    rw [u2_eq_zero, add_zero]
+    exact FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+
+lemma one_add_u2_ne_zero
+  {s : F}
+  (s_h1 : (s : F) ≠ 0)
+  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  {q : ℕ}
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  :
+  let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
+  (1 + u2_of_point) ≠ 0 := by
+    intro u2_of_point
+    let point_prop := point.prop
+    unfold ϕ_over_F at point_prop
+    rw [Set.mem_setOf_eq] at point_prop
+    obtain ⟨t, ht⟩ := point_prop
+    by_cases h : t ≠ 1 ∧ t ≠ -1
+    · let h2 := one_add_u2_ne_zero_main_case ⟨t, h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+      grind
+    · have h2 : t = 1 ∨ t = -1 := by
+        push_neg at h
+        grind
+      have h3 := one_add_u2_ne_zero_base_case ⟨t, h2⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+      grind
+
 -- Theorem 3 part C define
 noncomputable def u'
   (s : F)

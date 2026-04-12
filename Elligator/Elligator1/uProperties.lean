@@ -81,3 +81,20 @@ lemma u_of_zero
     intro h1 u_of_t
     unfold u_of_t u
     simp
+
+lemma one_add_u_ne_zero
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  {q : ℕ}
+  (field_cardinality : Fintype.card F = q)
+  (q_prime_power : IsPrimePow q)
+  (q_mod_4_congruent_3 : q % 4 = 3)
+  :
+  let u := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  1 + u ≠ 0 := by
+    intro u
+    unfold u Elligator1.u;
+    rw [add_div' _ _ _ (by exact FiniteFieldBasic.one_add_t_ne_zero t)]
+    norm_num
+    split_ands
+    · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3;
+    · exact FiniteFieldBasic.one_add_t_ne_zero t

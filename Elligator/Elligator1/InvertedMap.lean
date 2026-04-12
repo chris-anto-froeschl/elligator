@@ -165,7 +165,6 @@ theorem z_defined
   := by
     exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
 
--- TODO proof pot. implicit in paper?
 theorem t2_defined
   (s : F)
   (s_h1 : s ≠ 0)
@@ -178,49 +177,4 @@ theorem t2_defined
   :
   let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 + u2_of_point) ≠ 0 := by
-    intro u2_of_point h1
-    let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let z_of_point := z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ↑point;
-    let point_prop := point.prop
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    unfold ϕ_over_F at point_prop
-    rw [Set.mem_setOf_eq] at point_prop
-    rcases point_prop with ⟨t, point_origin⟩
-    let point_prop := point.prop
-    have point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 (ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val := by
-      apply (point_props_iff_point_in_ϕ_over_F_of_point t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).mpr
-      rw [point_origin]
-      exact point_prop
-    rw [point_origin] at point_props
-    let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩
-    simp at X2_equation
-    change X2_of_point^2 + 2 * (1 + η_of_point *r_of_s) * X2_of_point + 1 = 0 at X2_equation
-    have h2 : X2_of_point = 1 ∨ X2_of_point = -1 := by
-      rw [← add_left_inj (-1 : F)] at h1
-      simp at h1
-      unfold u2_of_point u2 at h1
-      change z_of_point * X2_of_point = -1 at h1
-      rw [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)] at h1
-      simp at h1
-      rw [← pow_one (-(z_of_point * X2_of_point))] at h1
-      have h2_1 : (-(z_of_point * X2_of_point))^2 = 1^2 := by
-        rw [pow_eq_pow_mod 2 h1]
-        grind
-      rw [neg_eq_neg_one_mul, mul_pow, mul_pow] at h2_1
-      unfold z_of_point z at h2_1
-      let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-      let a := ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.val.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2))
-      -- TODO where do we know? Or cases s.t. = 0 is contra?
-      have a_ne_zero : a ≠ 0 := by sorry
-      grind
-    -- TODO the whole proof might be wrong... but there is no other existing proof of t_bar being defined
-    rcases h2
-    · rename_i h3
-      rw [h3] at X2_equation
-      ring_nf at X2_equation
-      sorry
-    · rename_i h3
-      rw [h3] at X2_equation
-      ring_nf at X2_equation
-      sorry
+    exact one_add_u2_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
