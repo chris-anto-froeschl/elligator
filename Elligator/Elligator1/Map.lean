@@ -143,7 +143,7 @@ theorem map_fulfills_curve_equation
   let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   have d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  edwards_curve_equation x_of_t y_of_t ⟨d_of_s, d_h⟩ q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+  edwards_curve_equation x_of_t y_of_t ⟨d_of_s, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 

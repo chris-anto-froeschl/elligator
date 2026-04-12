@@ -510,7 +510,7 @@ theorem x'_and_y'_fulfill_curve_equation
   let y' := y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let d := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  edwards_curve_equation x' y' ⟨d, d_h⟩ q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+  edwards_curve_equation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
     let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
