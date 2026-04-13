@@ -58,7 +58,7 @@ lemma z_eq_zero
   z_of_point = 0 := by
     intro point z_of_point
     unfold z_of_point z
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     repeat rw [X2_eq_neg_one t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
     change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = 0
     simp
@@ -78,7 +78,7 @@ noncomputable def z'
   : F :=
   let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c := c s
   LegendreSymbol.χ (Y * (X^2 + 1 / c^2)) q field_cardinality q_prime_power q_mod_4_congruent_3
 
 lemma Y'_ne_zero
@@ -99,7 +99,7 @@ lemma Y'_ne_zero
     intro Y
     let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let x := point.val.1
-    let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c := c s
     let X2_add_one_ne_zero := X2_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
     let X2_ne_zero := X2_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩
     let c_sub_one_ne_zero := c_sub_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -119,7 +119,7 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c := c s
   X^2 + 1 / c^2 ≠ 0 := by
     intro X c h
     rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
@@ -149,7 +149,7 @@ lemma z'_argument_ne_zero
   :
   let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c := c s
   Y * (X^2 + 1 / c^2) ≠ 0 := by
     intro Y X c
     let h1 := Y'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
@@ -174,7 +174,7 @@ lemma z'_ne_zero
     intro z
     let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c := c s
     let z'_argument_ne_zero := z'_argument_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
     exact LegendreSymbol.χ_a_ne_zero a z'_argument_ne_zero  q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -197,7 +197,7 @@ lemma z'_eq_one_or_z'_eq_neg_one
     intro z
     let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c := c s
     let a := (Y * (X^2 + 1 / c^2))
     let χ_of_a := LegendreSymbol.χ a q field_cardinality q_prime_power q_mod_4_congruent_3
     have h1 := LegendreSymbol.χ_values a q field_cardinality q_prime_power q_mod_4_congruent_3

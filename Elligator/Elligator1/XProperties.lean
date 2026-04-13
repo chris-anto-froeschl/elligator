@@ -47,7 +47,7 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   X_of_t^2 + 1 / c_of_s^2 ≠ 0 := by
     intro X_of_t c_of_s h
     rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
@@ -75,8 +75,8 @@ lemma X_ne_zero
   :
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   X_of_t ≠ 0 := by
-    let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-    let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u_of_t := u t
+    let v_of_t := v t s
     apply mul_ne_zero
     · apply LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3
     · apply u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
@@ -98,10 +98,10 @@ lemma X_comparison
   let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   X2 = 1 / X1 := by
     intro t1 t2 h2_2 X1 X2
-    let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-    let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
-    let v1 := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let v2 := v ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u1 := u t
+    let u2 := u ⟨t2, h2_2⟩
+    let v1 := v t s
+    let v2 := v ⟨t2, h2_2⟩ s
     let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
     let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
@@ -137,8 +137,8 @@ lemma X_of_zero
   X_of_t = 1 := by
     intro h1 X_of_t
     unfold X_of_t X
-    let v_of_t := v ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let v_of_t := v ⟨(0 : F), h1⟩ s
+    let r_of_s := r s
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
     rw [u_of_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
     change χ_of_v_of_t * 1 = 1

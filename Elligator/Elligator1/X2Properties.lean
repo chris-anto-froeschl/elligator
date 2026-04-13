@@ -60,7 +60,7 @@ lemma X2_eq_neg_one
   X2_of_point = -1 := by
     intro point X2_of_point
     unfold X2_of_point X2
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
     change -(1 + η_of_point * r_of_s) + ((1 + η_of_point * r_of_s) ^ 2 - 1) ^ ((q + 1) / 4) = -1
     unfold η_of_point
@@ -80,7 +80,7 @@ lemma X2_h1
   (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
   :
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   (1 + η_of_point * r_of_s + X2_of_t)^2 = (1 + η_of_point * r_of_s)^2 - 1 := by
     intro η_of_point r_of_s X2_of_t
@@ -108,7 +108,7 @@ lemma X2_h2
   (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
   :
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   let X2_of_t := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   X2_of_t^2 + 2 * (1 + η_of_point *r_of_s) * X2_of_t + 1 = 0 := by
     intro η_of_point r_of_s X2_of_t
@@ -135,7 +135,7 @@ lemma X2_h3
   (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = 0 := by
     intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s
     let point_of_ϕ_fulfills_ϕ_over_F_props := point_of_ϕ_fulfills_ϕ_over_F_props t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     calc
       (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = X2_of_t^2 - (X_of_t + X'_of_t) * X2_of_t + X_of_t * X'_of_t := by grind
@@ -187,7 +187,7 @@ lemma X2_ne_zero
     intro X2_of_point
     let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s
     let point_prop := point.prop
     simp at X2_equation
     change X2_of_point^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_point + 1 = 0 at X2_equation
@@ -205,7 +205,7 @@ lemma y_divisor_ne_zero_with_X2_for_X
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
   :
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   r_of_s * X2_of_point + (1 + X2_of_point)^2 ≠ 0 := by
     intro r_of_s X2_of_point h1
@@ -247,7 +247,7 @@ lemma X2_ne_neg_one
     intro X2_of_point h1
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
     let X2_equation := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s
     let point_prop := point.prop
     let y := point.val.2
     simp at X2_equation
@@ -310,7 +310,7 @@ lemma y_with_X2
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   let y := point.val.2
   y = (r_of_s * X2_of_point - (1 + X2_of_point)^2) / (r_of_s * X2_of_point + (1 + X2_of_point)^2) := by
     intro X2_of_point r_of_s y
@@ -375,7 +375,7 @@ lemma y_with_X2_of_X2_eq_one
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   let y := point.val.2
   X2_of_point = 1 → y = (r_of_s - 4) / (r_of_s + 4) := by
     intro X2_of_point r_of_s y X2_h
@@ -394,7 +394,7 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
   :
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   X2_of_point = 1 → η_of_point * r_of_s = -2 := by
     intro η_of_point  X2_of_point r_of_s X2_h
     let h1 := X2_h2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -420,7 +420,7 @@ lemma X2_observation1_of_X2_ne_one
   :
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   let y := point.val.2
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   X2_of_point ≠ 1 → (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - y^2) = 4 * r_of_s * X2_of_point * (1 + X2_of_point)^2 := by
     intro X2_of_point y r_of_s X2_h
     let y_with_X2 := y_with_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one
@@ -451,8 +451,8 @@ lemma X2_observation2_of_X2_ne_one
   :
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val
   let y := point.val.2
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let r_of_s := r s
+  let d_of_s := d s;
   X2_of_point ≠ 1 → (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - d_of_s * y^2) = ((2 * r_of_s) / (r_of_s - 2)) * (X2_of_point^4 + (r_of_s^2 - 2) * X2_of_point^2 + 1) := by
     intro X2_of_point y r_of_s d_of_s X2_h
     let neg_d_eq_r_add_two_over_r_sub_two := neg_d_eq_r_add_two_over_r_sub_two s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -509,7 +509,7 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
   (point : {P : F × F // ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 P})
   :
   let y := point.val.2
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s;
   1 - d_of_s * y^2 ≠ 0 := by
     intro y d_of_s h1
     let d_nonsquare := d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -539,7 +539,7 @@ lemma x_pow_two_of_X2_ne_one_eq1
   :
   let x := point.val.1
   let y := point.val.2
-  let d := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d := d s;
   x^2 = (1 - y^2) / (1 - d*y^2) := by
     intro x y d
     have curve_equation := point.prop;
@@ -570,11 +570,11 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
   :
   let x := point.val.1
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let r := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r := r s
   X ≠ 1 → x^2 = (2 * (r -2) * X^2 * (1 + X)^2) / (X^5 + (r^2 - 2) * X^3 + X) := by
     intro x X r Xh
     let y := point.val.2
-    let d := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let d := d s;
     let x_pow_two_of_X2_ne_one_eq1 := x_pow_two_of_X2_ne_one_eq1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
     change x^2 = (1 - y^2) / (1 - d*y^2) at x_pow_two_of_X2_ne_one_eq1
     let y_with_X2 := y_with_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_eq_one
@@ -643,7 +643,7 @@ noncomputable def Y'
   (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
   : F :=
   let x := point.val.1
-  let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c := c s
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   -- This is just `def x` with the denominator `Y` replaced by `x` of point
   (c - 1) * s * X * (1 + X) / x
@@ -661,12 +661,12 @@ lemma Y'_pow_two_eq_of_X2_ne_one
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let r := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r := r s
   let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   -- This is just `def x` with the denominator `Y` replaced by `x` of point
   X ≠ 1 → Y^2 = X^5 + (r^2 - 2) * X^3 + X := by
     intro X r Y Xh
-    let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c := c s
     let x := point.val.1
     let h1 := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props y_eq_one
     let two_ne_zero := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3

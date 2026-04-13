@@ -92,7 +92,7 @@ lemma y_ne_one
   y ≠ 1 := by
     intro y h1
     let x := point.val.1
-    let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let d_of_s := d s
     have h2 : x = 0 := by
       have h2_1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by exact point.prop
       rw [h1] at h2_1
@@ -273,9 +273,9 @@ lemma ϕ_of_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let ϕ_of_zero := (ϕ (0 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let c_of_s := c s;
   let χ_of_c_of_s  := (LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
     intro ϕ_of_zero c_of_s χ_of_c_of_s r_of_s
     unfold ϕ_of_zero ϕ
@@ -340,9 +340,9 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     intro x y X2_of_point ϕ_of_zero' X2_h
     let y_with_X2 := y_with_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let r_of_s := r s
     let h2 := point.prop.2.2
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
     have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point X2_h
@@ -526,7 +526,7 @@ lemma point_in_ϕ_over_F_main_case_with_y_eq_one
     have h4_1 := point.prop;
     unfold E_over_F at h4_1
     rw [Set.mem_setOf_eq] at h4_1
-    let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let d_of_s := d s;
     rw [y_eq_one] at h4_1
     change x ^ 2 + 1 ^ 2 = 1 + d_of_s * x ^ 2 * 1 ^ 2  at h4_1
     rw [← add_right_inj (-1)] at h4_1

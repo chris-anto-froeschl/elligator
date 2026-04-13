@@ -43,7 +43,7 @@ lemma d_nonsquare
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s;
   ¬IsSquare d_of_s := by
     intro d_of_s
     rw [isSquare_iff_exists_mul_self d_of_s]
@@ -59,9 +59,9 @@ lemma d_nonsquare
     have h01 : (2 / s^2 + 1)^2 ≠ 0 := by
       rw [pow_two]
       apply mul_ne_zero
-      change c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 + 1 ≠ 0
+      change c s + 1 ≠ 0
       · intro h
-        have h' : (c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) = -1 := by
+        have h' : (c s) = -1 := by
           rw [← add_right_inj (-1)] at h
           rw [add_zero] at h
           rw [add_comm] at h
@@ -73,7 +73,7 @@ lemma d_nonsquare
         apply c_ne_neg_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 at h'
         exact h'
       · intro h
-        have h' : (c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) = -1 := by
+        have h' : (c s) = -1 := by
           rw [← add_right_inj (-1)] at h
           rw [add_zero] at h
           rw [add_comm] at h
@@ -123,7 +123,7 @@ lemma d_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s;
   d_of_s ≠ 0 := by
     intro d_of_s
     let d_nonsquare := d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -143,7 +143,7 @@ lemma one_over_d_nonsquare
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s;
   ¬IsSquare (1 / d_of_s) := by
       intro d_of_s h3_1
       unfold IsSquare at h3_1
@@ -176,7 +176,7 @@ lemma d_ne_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s;
   d_of_s ≠ 1 := by
     intro d_of_s
     let d_nonsquare := d_nonsquare s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -196,7 +196,7 @@ lemma d_ne_zero_and_d_ne_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let d_of_s := d s;
   d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by
     intro d_of_s
     split_ands
@@ -212,11 +212,11 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let r_of_s := r s;
+  let d_of_s := d s;
   -d_of_s = (r_of_s + 2) / (r_of_s - 2) := by
     intro r_of_s d_of_s
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     calc
       -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by
         change -(-(c_of_s + 1)^2 / (c_of_s - 1)^2) = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s)

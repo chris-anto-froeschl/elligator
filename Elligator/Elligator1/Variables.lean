@@ -33,82 +33,44 @@ section Variables
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
-/-- c(s) is a constant defined in the paper.
+/-- c(s) is a function defined in the paper.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def c
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F := 2 / s^2
+noncomputable def c (s : F) : F := 2 / s^2
 
-/-- r(s) is a constant defined in the paper.
+/-- r(s) is a function defined in the paper.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def r
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  c_of_s + 1 / c_of_s
+noncomputable def r (s : F) : F :=
+  let c := c s;
+  c + 1 / c
 
-/-- d(s) is a constant defined in the paper.
+/-- d(s) is a function defined in the paper.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def d
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  let c_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  (-(c_s + 1)^2 / (c_s - 1)^2)
+noncomputable def d (s : F) : F :=
+  let c := c s;
+  -(c + 1)^2 / (c - 1)^2
 
 /-- u(t) is a function defined in the paper.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def u
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  (1 - t.val) / (1 + t.val)
+noncomputable def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
+  let t := t.val;
+  (1 - t) / (1 + t)
 
 /-- v(t, s) is a function defined in the paper.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def v
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  (u_of_t)^5 + (r_of_s^2 - 2) * (u_of_t)^3 + u_of_t
+noncomputable def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
+  let u := u t
+  let r := r s
+  u^5 + (r^2 - 2) * u^3 + u
 
 /-- X(t, s) is a function defined in the paper.
 
@@ -124,8 +86,8 @@ noncomputable def X
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F :=
-  let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u_of_t := u t
+  let v_of_t := v t s
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
   χ_of_v_of_t * u_of_t
 
@@ -143,9 +105,9 @@ noncomputable def Y
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F :=
-  let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let v_of_t := v t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u_of_t := u t
+  let c_of_s := c s
+  let v_of_t := v t s
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
   let χ_of_sum := LegendreSymbol.χ ((u_of_t)^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3
   (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum
@@ -164,7 +126,7 @@ noncomputable def x
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F :=
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t
@@ -183,7 +145,7 @@ noncomputable def y
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : F :=
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2)
 
@@ -220,7 +182,7 @@ noncomputable def X2
   --(h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
   : F :=
   let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   (-(1 + η_of_point * r_of_s) + ((1 + η_of_point * r_of_s)^2 - 1)^((q + 1) / 4))
 
 /-- z is a function defined in the paper.
@@ -239,7 +201,7 @@ noncomputable def z
   : F
   :=
   let x := point.fst
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let a := (c_of_s - 1) * s * X2_of_point * (1 + X2_of_point) * x * (X2_of_point^2 + 1 / c_of_s^2)
   LegendreSymbol.χ a q field_cardinality q_prime_power q_mod_4_congruent_3

@@ -87,7 +87,7 @@ lemma t2_eq_t
   let t2_of_point := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   t2_of_point = t := by
     intro point t2_of_point
-    let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u_of_t := u t
     let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     have h1 : u2_of_t = u_of_t := by exact u2_eq_u t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
     unfold u_of_t u at h1
@@ -130,7 +130,7 @@ lemma t2_eq_t'
   t2_of_point = t' := by
     intro point t2_of_point t'
     have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-    let u'_of_t := u ⟨t', h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+    let u'_of_t := u ⟨t', h2_2⟩
     let u2_of_t := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
     unfold u'_of_t u at h1
@@ -295,7 +295,7 @@ lemma u'_eq_u
   let u' := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-  let u := u ⟨t, t_h⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u := u ⟨t, t_h⟩
   u' = u := by
     intro u' t t_h u
     let h1 := u'_eq_one_sub_t'_over_one_add_t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
@@ -324,7 +324,7 @@ lemma v'_eq_v
   let v' := v' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-  let v := v ⟨t, t_h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let v := v ⟨t, t_h⟩ s
   v' = v := by
     intro v' t t_h v
     let h1 := u'_eq_one_sub_t'_over_one_add_t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
@@ -408,7 +408,7 @@ noncomputable def x'
   (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
   : F :=
-  let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c := c s
   let X' := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val;
   let Y' := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   (c - 1) * s * X' * (1 + X') / Y'
@@ -456,7 +456,7 @@ noncomputable def y'
   (point_props : ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point)
   : F :=
   let X' := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val;
-  let r := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r := r s
   (r * X' - (1 + X')^2) / (r * X' + (1 + X')^2)
 
 lemma y'_eq_y
@@ -508,7 +508,7 @@ theorem x'_and_y'_fulfill_curve_equation
   :
   let x' := x' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let y' := y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
-  let d := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let d := d s
   have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   edwards_curve_equation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
@@ -581,7 +581,7 @@ lemma x_of_t_eq_x_of_point
   x_of_t = x_of_point := by
     intro t t_h x_of_t x_of_point
     let Y' := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
-    let c := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c := c s
     let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let Y'_ne_zero := Y'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     change x_of_point ≠ 0 at x_ne_zero

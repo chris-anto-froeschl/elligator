@@ -51,7 +51,7 @@ lemma x_ne_zero
   :
   let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
   x_of_t ≠ (0 : F) := by
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     change (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t ≠ 0
@@ -94,8 +94,8 @@ lemma x_comparison
   let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   x2 = x1 := by
     intro t1 t2 h2_2 x1 x2
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
+    let r_of_s := r s
     let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let Y1 := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -162,7 +162,7 @@ lemma x_y_eq_zero_sign_one
   (x_eq_zero : point.val.1 = 0)
   :
   point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
-    let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let d_of_s := d s
     let x := point.val.1
     let y := point.val.2
     unfold E_over_F at point

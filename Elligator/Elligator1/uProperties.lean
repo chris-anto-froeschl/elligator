@@ -42,7 +42,7 @@ lemma u_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  u t q field_cardinality q_prime_power q_mod_4_congruent_3 ≠ (0 : F) := by
+  u t ≠ (0 : F) := by
     change (1 - t.val) / (1 + t.val) ≠ 0
     apply div_ne_zero (FiniteFieldBasic.one_sub_t_ne_zero t) (FiniteFieldBasic.one_add_t_ne_zero t)
 
@@ -53,7 +53,7 @@ lemma u_pow_two_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let u_of_t := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u_of_t := u t
   u_of_t^2 ≠ (0 : F) := by
     intro u_of_t
     rw [pow_two]
@@ -74,12 +74,12 @@ lemma u_comparison
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let u1 := u t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let u2 := u ⟨t2, h2_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u1 := u t
+  let u2 := u ⟨t2, h2_2⟩
   u2 = 1 / u1 := by
     intro t1 t2 h2_2 u1 u2
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
+    let r_of_s := r s
     calc
       u2 = (1 - t2) / (1 + t2) := by
         unfold u2 u
@@ -99,7 +99,7 @@ lemma u_of_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let u_of_t := u ⟨(0 : F), h1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let u_of_t := u ⟨(0 : F), h1⟩
   u_of_t = 1 := by
     intro h1 u_of_t
     unfold u_of_t u
@@ -112,7 +112,7 @@ lemma one_add_u_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let u := u t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let u := u t
   1 + u ≠ 0 := by
     intro u
     unfold u Elligator1.u;

@@ -54,7 +54,7 @@ def E_over_F
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : Set (F × F) :=
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let d_of_s := d s
   have d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   {p | edwards_curve_equation p.fst p.snd ⟨d_of_s, d_h⟩}
 
@@ -67,7 +67,7 @@ lemma zero_one_fulfill_edwards_curve_equation
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let d_of_s := d s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let d_of_s := d s
   have d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   edwards_curve_equation (0 : F) (1 : F) ⟨d_of_s, d_h⟩ := by
     intro d_of_s d_h

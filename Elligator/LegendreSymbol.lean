@@ -32,8 +32,6 @@ namespace LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
 
--- Disabled here to restrict context of the q directly here
-set_option linter.unusedVariables false in
 /-- χ(a) is the quadratic character of a in the finite field F with q elements, where q is a prime congruent to 3 modulo 4.
 
 This function was added, since Mathlib.NumberTheory.LegendreSymbol.Basic is restricted to ℤ.
@@ -43,6 +41,7 @@ Paper definition at chapter 3.1.
 noncomputable def χ
   (a : F)
   (q : ℕ)
+  -- TODO remove context
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)

@@ -28,7 +28,7 @@ lemma c_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s ≠ 0 := by
   change 2 / s^2 ≠ 0
   apply div_ne_zero
@@ -45,7 +45,7 @@ lemma c_ne_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s ≠ 1 := by
   change 2 / s^2 ≠ 1
   apply div_ne_one_of_ne
@@ -61,7 +61,7 @@ lemma c_ne_neg_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s ≠ -1 := by
   change 2 / s^2 ≠ -1
   intro h
@@ -88,7 +88,7 @@ lemma c_add_one_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s + 1 ≠ 0 := by
     intro c_of_s
     intro h
@@ -119,7 +119,7 @@ lemma c_sub_one_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s - 1 ≠ 0 := by
     apply sub_ne_zero.2
     exact c_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -133,7 +133,7 @@ lemma c_h
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s * (c_of_s - 1) * (c_of_s + 1) ≠ 0 := by
     change (2 / s^2) * ((2 / s^2) - 1) * ((2 / s^2) + 1) ≠ 0
     apply mul_ne_zero
@@ -151,7 +151,7 @@ lemma c_pow_two_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let c_of_s := c s
   c_of_s^2 ≠ (0 : F) := by
     intro c_of_s
     rw [pow_two]

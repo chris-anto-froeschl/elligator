@@ -43,11 +43,11 @@ lemma r_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   r_of_s ≠ 0 := by
     change (2 / s^2) + 1 / (2 / s^2) ≠ 0
     intro h
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     have h1 : c_of_s  = (-1 : F) / c_of_s := by
       change c_of_s + 1 / c_of_s = 0 at h
       rw [← add_right_inj (-1 / c_of_s)] at h
@@ -103,9 +103,9 @@ lemma four_add_r_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   4 + r_of_s ≠ 0 := by
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     change 4 + (c_of_s + 1 / c_of_s) ≠ 0
     intro h
     have hc : c_of_s ≠ 0 := c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -137,8 +137,8 @@ lemma r_h1
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
+  let c_of_s := c s
   (r_of_s^2 - 2) = c_of_s^2 + 1 / c_of_s^2 := by
     intro r_of_s c_of_s
     calc
@@ -164,10 +164,10 @@ lemma r_sub_two_ne_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let r_of_s := r s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let r_of_s := r s
   r_of_s - 2 ≠ 0 := by
     intro r_of_s
-    let c_of_s := c s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let c_of_s := c s
     let c_ne_zero := c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let c_ne_one := c_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     unfold r_of_s r
