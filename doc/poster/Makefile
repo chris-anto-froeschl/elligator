@@ -17,8 +17,7 @@ abstract:
 	$(TEX) $(FLAGS) $(ABSTRACT).tex
 
 poster:
-	latexmk -pdflatex='lualatex -interaction nonstopmode' -pdf main.tex
-
+	latexmk -pdflatex='lualatex -interaction nonstopmode' -outdir=$(OUTDIR) -pdf main.tex
 
 clean:
 	latexmk -pdf -C
