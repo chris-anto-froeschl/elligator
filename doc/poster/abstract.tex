@@ -1,0 +1,75 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{orcidlink}
+
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+
+\addbibresource{ref.bib}
+
+\title{\textbf{Closing the Gap Between Proof and Implementation:\\
+Formalizing Elligator in Lean}}
+
+\author{
+Chris Anto Fröschl\orcidlink{0009-0006-3562-5395}\\
+Munich University of Applied Sciences\\
+Department of Computer Science and Mathematics\\
+Email: chris.froeschl@hm.edu
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Elliptic Curve Cryptography is widely used in modern secure systems, yet its security
+guarantees typically rely on paper proofs that are disconnected from concrete implementations.
+This separation makes it difficult to ensure that theoretical results are faithfully realized
+in practice.
+
+We present a formalization of Elligator \cite{bernstein2013a}
+in the Lean theorem prover \cite{demoura2021a}. Elligator encodes elliptic curve points as bit strings
+indistinguishable from uniform random data, enabling censorship-resistant key exchange.
+Our development provides a machine-checked implementation together with formal proofs
+of its correctness and indistinguishability properties.
+
+\section{Formalization Approach}
+
+The formalization covers the full stack of required mathematics, including finite field
+arithmetic, elliptic curve operations, and the encoding and decoding procedures underlying
+Elligator. Translating the original proof into a formal setting requires making implicit
+assumptions explicit, restructuring arguments into smaller verifiable steps, and resolving
+edge cases that are often omitted in informal presentations.
+
+In doing so, the original construction is not only reproduced but made fully explicit,
+yielding a precise and unambiguous specification of both the algorithm and its guarantees.
+This process highlights subtle dependencies between algebraic properties and correctness
+arguments that are not immediately visible in the paper proof.
+
+\section{Lean and Mathematical Foundations}
+
+The work builds on Lean’s mathematical library Mathlib \cite{mathlib2019a}, leveraging existing formalizations
+of algebraic structures and elliptic curves to ensure a robust and reusable foundation.
+It also aligns with the emerging CSLib ecosystem~\cite{demoura2026a}, which aims to provide
+a shared library of formalized computer science theory for the verification of software
+systems and cryptographic protocols.
+
+\section{Contribution and Impact}
+
+To the best of our knowledge, this constitutes the first fully machine-checked implementation
+of Elligator.
+
+This result demonstrates how formal methods can directly connect cryptographic theory with
+verified implementations of software and protocols. Moreover, it showcases that modern theorem
+provers are capable of handling formalizations of contemporary research mathematics at the level
+of current cryptographic constructions, strengthening confidence in their applicability to
+security-critical systems.
+
+\printbibliography
+
+\end{document}

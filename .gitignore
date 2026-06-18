@@ -1,1 +1,13 @@
 /.lake
+**/*.aux
+**/*.log
+**/*.toc
+**/*.blg
+**/*.blx.bib
+**/*.bcf
+**/*.run.xml
+**/*.nav
+**/*.bbl
+**/*.out
+**/*.snm
+**/*.fdb_latexmk
