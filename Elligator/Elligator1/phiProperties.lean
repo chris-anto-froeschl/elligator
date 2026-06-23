@@ -274,7 +274,7 @@ lemma ϕ_of_zero
   :
   let ϕ_of_zero := (ϕ (0 : F) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   let c_of_s := c s;
-  let χ_of_c_of_s  := (LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3)
+  let χ_of_c_of_s  := LegendreSymbol.χ c_of_s
   let r_of_s := r s
   ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
     intro ϕ_of_zero c_of_s χ_of_c_of_s r_of_s
@@ -343,7 +343,7 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     let r_of_s := r s
     let h2 := point.prop.2.2
     let c_of_s := c s
-    let χ_of_c_of_s := LegendreSymbol.χ c_of_s q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_c_of_s := LegendreSymbol.χ c_of_s
     let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
     have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point X2_h
     have h2 : x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by exact point.prop.2.2 h1

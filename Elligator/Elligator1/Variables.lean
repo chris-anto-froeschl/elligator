@@ -88,7 +88,7 @@ noncomputable def X
   : F :=
   let u_of_t := u t
   let v_of_t := v t s
-  let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_v_of_t := LegendreSymbol.χ v_of_t
   χ_of_v_of_t * u_of_t
 
 /-- Y(t, s) is a function defined in the paper.
@@ -108,8 +108,8 @@ noncomputable def Y
   let u_of_t := u t
   let c_of_s := c s
   let v_of_t := v t s
-  let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let χ_of_sum := LegendreSymbol.χ ((u_of_t)^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_v_of_t := LegendreSymbol.χ v_of_t
+  let χ_of_sum := LegendreSymbol.χ ((u_of_t)^2 + 1 / c_of_s^2)
   (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum
 
 /-- x(t, s) is a function defined in the paper. It is the x-coordinate of the point on the curve.
@@ -204,7 +204,7 @@ noncomputable def z
   let c_of_s := c s
   let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let a := (c_of_s - 1) * s * X2_of_point * (1 + X2_of_point) * x * (X2_of_point^2 + 1 / c_of_s^2)
-  LegendreSymbol.χ a q field_cardinality q_prime_power q_mod_4_congruent_3
+  LegendreSymbol.χ a
 
 /-- u2 is a function defined in the paper.
 

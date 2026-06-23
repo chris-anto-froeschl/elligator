@@ -60,9 +60,9 @@ lemma z_eq_zero
     unfold z_of_point z
     let c_of_s := c s
     repeat rw [X2_eq_neg_one t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
-    change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) q field_cardinality q_prime_power q_mod_4_congruent_3 = 0
+    change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) = 0
     simp
-    exact LegendreSymbol.χ_a_zero_eq_zero (0 : F) (rfl) q field_cardinality q_prime_power q_mod_4_congruent_3
+    exact LegendreSymbol.χ_a_zero_eq_zero (rfl) field_cardinality q_prime_power q_mod_4_congruent_3
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def z'
@@ -79,7 +79,7 @@ noncomputable def z'
   let Y := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props
   let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let c := c s
-  LegendreSymbol.χ (Y * (X^2 + 1 / c^2)) q field_cardinality q_prime_power q_mod_4_congruent_3
+  LegendreSymbol.χ (Y * (X^2 + 1 / c^2))
 
 lemma Y'_ne_zero
   (s : F)
@@ -177,7 +177,7 @@ lemma z'_ne_zero
     let c := c s
     let z'_argument_ne_zero := z'_argument_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
-    exact LegendreSymbol.χ_a_ne_zero a z'_argument_ne_zero  q field_cardinality q_prime_power q_mod_4_congruent_3
+    exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero field_cardinality
 
 lemma z'_eq_one_or_z'_eq_neg_one
   (s : F)
@@ -199,8 +199,8 @@ lemma z'_eq_one_or_z'_eq_neg_one
     let X := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let c := c s
     let a := (Y * (X^2 + 1 / c^2))
-    let χ_of_a := LegendreSymbol.χ a q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h1 := LegendreSymbol.χ_values a q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_a := LegendreSymbol.χ a
+    have h1 := @LegendreSymbol.χ_values _ _ _ a q field_cardinality q_prime_power q_mod_4_congruent_3
     change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1
     have h2 := z'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     change χ_of_a ≠ 0 at h2

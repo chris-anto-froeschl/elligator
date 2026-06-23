@@ -78,7 +78,7 @@ lemma X_ne_zero
     let u_of_t := u t
     let v_of_t := v t s
     apply mul_ne_zero
-    · apply LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3
+    · apply LegendreSymbol.χ_a_ne_zero (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
     · apply u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 lemma X_comparison
@@ -102,8 +102,8 @@ lemma X_comparison
     let u2 := u ⟨t2, h2_2⟩
     let v1 := v t s
     let v2 := v ⟨t2, h2_2⟩ s
-    let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v1 := LegendreSymbol.χ v1
+    let χ_of_v2 := LegendreSymbol.χ v2
     calc
       X2 = χ_of_v2 * u2 := by
         change χ_of_v2 * u2 = χ_of_v2 * u2
@@ -117,7 +117,7 @@ lemma X_comparison
         ring_nf
       _ = 1 / (χ_of_v1 * u1) := by
         unfold χ_of_v1
-        nth_rw 1 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a v1 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        nth_rw 1 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a field_cardinality q_prime_power q_mod_4_congruent_3]
         ring_nf
       _ = 1 / X1 := by
         change 1 / X1 = 1 / X1
@@ -139,11 +139,11 @@ lemma X_of_zero
     unfold X_of_t X
     let v_of_t := v ⟨(0 : F), h1⟩ s
     let r_of_s := r s
-    let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v_of_t := LegendreSymbol.χ v_of_t
     rw [u_of_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
     change χ_of_v_of_t * 1 = 1
     unfold χ_of_v_of_t v_of_t
     rw [v_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
-    change (LegendreSymbol.χ (r_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3) * 1 = 1
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one r_of_s (r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) q field_cardinality q_prime_power q_mod_4_congruent_3]
+    change (LegendreSymbol.χ (r_of_s^2)) * 1 = 1
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) field_cardinality q_prime_power q_mod_4_congruent_3]
     simp

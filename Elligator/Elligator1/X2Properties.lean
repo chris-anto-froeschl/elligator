@@ -95,7 +95,7 @@ lemma X2_h1
     rw [← pow_mul, FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
     unfold η_of_point
     nth_rw 2 [add_comm]
-    rw [field_cardinality, LegendreSymbol.a_pow_q_add_one_over_two_eq_a point.prop.2.1 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [field_cardinality, LegendreSymbol.a_pow_q_add_one_over_two_eq_a point.prop.2.1 field_cardinality q_prime_power q_mod_4_congruent_3]
 
 lemma X2_h2
   (s : F)

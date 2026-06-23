@@ -59,7 +59,7 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
     let c_of_s := c s
     let u_of_t := u t
     let v_of_t := v t s
-    let χ_of_v_of_t := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+    let χ_of_v_of_t := LegendreSymbol.χ v_of_t
     let v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
     intro r_of_s X_of_t Y_of_t
     have h1 : X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * v_of_t := by
@@ -74,17 +74,17 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
         have h1_2 : Odd 3 := by
           apply Nat.odd_iff.2
           norm_num
-        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h1_1⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
-        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h1_2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h1_1⟩ field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h1_2⟩ field_cardinality q_prime_power q_mod_4_congruent_3]
         change χ_of_v_of_t * u_of_t^5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t^3) + (χ_of_v_of_t * u_of_t) = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
         ring_nf
       _ = χ_of_v_of_t * v_of_t := by
         change χ_of_v_of_t * v_of_t = χ_of_v_of_t * v_of_t
         rfl
-    have h2 := LegendreSymbol.χ_a_mul_a_IsSquare v_of_t v_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2 := LegendreSymbol.χ_a_mul_a_IsSquare v_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 2) = χ_of_v_of_t * v_of_t := by
-      apply LegendreSymbol.square_of_a ⟨(χ_of_v_of_t * v_of_t), h2⟩ q field_cardinality q_prime_power q_mod_4_congruent_3
-    let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2) q field_cardinality q_prime_power q_mod_4_congruent_3
+      apply LegendreSymbol.square_of_a h2 field_cardinality q_mod_4_congruent_3
+    let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2)
     have h4 : Y_of_t^2 = χ_of_v_of_t * v_of_t := by
       calc
         Y_of_t^2 = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * χ_of_v_of_t^2 * χ_of_sum^2 := by
@@ -93,8 +93,8 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
           rw [← field_cardinality]
           rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
         _ = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * 1 := by
-          rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one v_of_t v_ne_zero ⟨2, even_two⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
-          rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one (u_of_t^2 + 1 / c_of_s^2) (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) ⟨2, even_two⟩ q field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one v_ne_zero ⟨2, even_two⟩ field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) ⟨2, even_two⟩ field_cardinality q_prime_power q_mod_4_congruent_3]
           rw [mul_one]
         _ = χ_of_v_of_t * v_of_t := by rw [h3, mul_one]
     rw [h1]

@@ -174,12 +174,12 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let v_of_t := v t s
-  let χ_of_v := LegendreSymbol.χ v_of_t q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_v := LegendreSymbol.χ v_of_t
   (χ_of_v * v_of_t)^((q + 1) / 4) ≠ 0 := by
     intro v_of_t χ_of_v
     rw [mul_pow χ_of_v v_of_t ((q + 1) / 4)]
     apply mul_ne_zero
-    · apply pow_ne_zero ((q + 1) / 4) (LegendreSymbol.χ_a_ne_zero v_of_t (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · apply pow_ne_zero ((q + 1) / 4) (LegendreSymbol.χ_a_ne_zero (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality)
     · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
 lemma v_comparison
@@ -302,16 +302,16 @@ lemma v_comparison_implication3
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let u1 := u t
-  let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6)
   χ_of_u1_pow_6 = 1 := by
     intro u1 χ_of_u1_pow_6
     have h2_7_1 : u1^6 = u1^2 * u1^2 * u1^2 := by ring_nf
     unfold χ_of_u1_pow_6
     rw [h2_7_1]
-    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1^2 * u1^2) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
-    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b (u1^2) (u1^2) q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
     have h2_7_2 : u1 ≠ 0 := by exact u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one u1 (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t) q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
 lemma v_comparison_implication4
@@ -330,15 +330,15 @@ lemma v_comparison_implication4
   let u1 := u t
   let v1 := v t s
   let v2 := v ⟨t2, h2_2⟩ s
-  let χ_of_v1 := LegendreSymbol.χ v1 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let χ_of_v2 := LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let χ_of_v1 := LegendreSymbol.χ v1
+  let χ_of_v2 := LegendreSymbol.χ v2
   χ_of_v2 = χ_of_v1 := by
     intro t1 t2 h2_2 u1 v1 v2 χ_of_v1 χ_of_v2
     unfold χ_of_v2 χ_of_v1 v1
     rw [← v_comparison_implication1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
-    change LegendreSymbol.χ v2 q field_cardinality q_prime_power q_mod_4_congruent_3 = LegendreSymbol.χ (v2 * u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
-    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b v2 (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3]
-    let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6) q field_cardinality q_prime_power q_mod_4_congruent_3
+    change LegendreSymbol.χ v2= LegendreSymbol.χ (v2 * u1^6)
+    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+    let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6)
     rw [v_comparison_implication3 t q field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
