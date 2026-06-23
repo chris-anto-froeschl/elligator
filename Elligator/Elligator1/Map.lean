@@ -69,7 +69,7 @@ theorem x_defined
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ≠ 0 := by
+  ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, Y t s q ≠ 0 := by
     intro t
     exact Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
@@ -83,10 +83,7 @@ theorem y_defined
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
-  ((r s)
-  * (X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
-  + (1 + (X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3))^2)
-  ≠ 0 := by
+  ((r s) * (X t s) + (1 + (X t s))^2) ≠ 0 := by
     intro t
     exact y_divisor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
 
@@ -102,8 +99,8 @@ theorem map_fulfills_helper_equation
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let r_of_s := r s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
+  let Y_of_t := Y t s q
   Y_of_t ^2 = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t := by
     intro r_of_s X_of_t Y_of_t
     exact Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
@@ -121,10 +118,10 @@ theorem variable_mul_ne_zero
   :
   let u_of_t := u t
   let v_of_t := v t s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
+  let Y_of_t := Y t s q
+  let x_of_t := x t s q
+  let y_of_t := y t s
   u_of_t * v_of_t * X_of_t  * Y_of_t * x_of_t * (y_of_t + 1) ≠ 0 := by
   exact u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 
@@ -139,8 +136,8 @@ theorem map_fulfills_curve_equation
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x_of_t := x t s q
+  let y_of_t := y t s
   let d_of_s := d s
   have d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
   edwards_curve_equation x_of_t y_of_t ⟨d_of_s, d_h⟩ := by
@@ -163,7 +160,7 @@ noncomputable def ϕ
   (q_mod_4_congruent_3 : q % 4 = 3)
   : {P : F × F // P ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3} :=
   open scoped Classical in let P := if h : t ≠ 1 ∧ t ≠ -1
-    then (x ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3, y ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+    then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s)
     else (0, 1)
   have P_in_E_over_F : P ∈ (E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) := by
     unfold E_over_F

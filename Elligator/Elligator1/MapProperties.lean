@@ -57,9 +57,9 @@ lemma y_h1
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let y_of_t := y t s
   let r_of_s := r s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
   X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 = 0 := by
     intro y_of_t r_of_s X_of_t
     rw [← mul_left_inj' (y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
@@ -110,12 +110,12 @@ lemma y_h2
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let r_of_s := r s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η point
   X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = 0 := by
     intro r_of_s X_of_t point η_of_point
-    let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let y_of_t := y t s
     calc
       X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = X_of_t^2 + 2 * (1 + 1 / 2 * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 := by
         -- Unfold until reaching the y which is equivalent to y_of_t for comparison
@@ -147,9 +147,9 @@ lemma y_h3
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let r_of_s := r s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η point
   X_of_t + 1 / X_of_t = -2 * (1 + η_of_point * r_of_s) := by
     intro r_of_s X_of_t point η_of_point
     rw [← add_right_inj (2 * (1 + η_of_point * r_of_s))]
@@ -175,10 +175,10 @@ lemma X_comparison_implication
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X1 := X t s
+  let X2 := X ⟨t2, h2_2⟩ s
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η point
   let r_of_s := r s
   X1 + X2 = -2 * (1 + η_of_point * r_of_s) := by
     intro t1 t2 h2_2 X1 X2 point η_of_point r_of_s
@@ -205,8 +205,8 @@ lemma X_comparison_implication2
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X1 := X t s
+  let X2 := X ⟨t2, h2_2⟩ s
   X2 * X1 = 1 := by
     intro t1 t2 h2_2 X1 X2
     unfold X2
@@ -248,14 +248,14 @@ lemma y_comparison
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y1 := y t s
+  let y2 := y ⟨t2, h2_2⟩ s
   y2 = y1 := by
     intro t1 t2 h2_2 y1 y2
     let c_of_s := c s
     let r_of_s := r s
-    let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X1 := X t s
+    let X2 := X ⟨t2, h2_2⟩ s
     calc
       y2 = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2) := by
         change (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2) = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2)
@@ -305,10 +305,10 @@ lemma point_comparison
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let y1 := y t s
+  let y2 := y ⟨t2, h2_2⟩ s
+  let x1 := x t s q
+  let x2 := x ⟨t2, h2_2⟩ s q
   (x1, y1) = (x2, y2) := by
     intro t1 t2 h2_2 y1 y2 x1 x2
     unfold x2 y2
@@ -328,16 +328,16 @@ lemma X_η_h1
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point
     η_of_point * r_of_s = -2
   )
   :
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let X_of_t := X t s
   (X_of_t - 1)^2 = 0 := by
     intro X_of_t
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point.val
     have h1_1 : X_of_t + 1 / X_of_t = -2 * (1 + η_of_point * r_of_s) := by exact (y_h3 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
     rw [η_h1] at h1_1
     ring_nf at h1_1
@@ -364,11 +364,11 @@ lemma X_η_h2
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point.val
     η_of_point * r_of_s = -2
   )
   :
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let X_of_t := X t s
   X_of_t = 1 := by
     intro X_of_t
     have h1 : (X_of_t - 1)^2 = 0 := by exact (X_η_h1 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1)
@@ -392,15 +392,15 @@ lemma u_η_h1
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point
     η_of_point * r_of_s = -2
   )
   :
   let u_of_t := u t;
   u_of_t = 1 := by
     intro u_of_t
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-    let v_of_t := v t s;
+    let X_of_t := X t s
+    let v_of_t := v t s
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t
     have v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
     have h1 : X_of_t = χ_of_v_of_t * u_of_t := by
@@ -456,7 +456,7 @@ lemma t_η_h1
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point
     η_of_point * r_of_s = -2
   )
   :
@@ -487,7 +487,7 @@ lemma v_η_h1
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point
     η_of_point * r_of_s = -2
   )
   :
@@ -513,12 +513,12 @@ lemma Y_η_h1
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point
     η_of_point * r_of_s = -2
   )
   :
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let c_of_s := c s;
+  let Y_of_t := Y t s q
+  let c_of_s := c s
   let χ_of_c_of_s := LegendreSymbol.χ c_of_s
   let r_of_s := r s
   Y_of_t = r_of_s * χ_of_c_of_s := by
@@ -586,16 +586,16 @@ lemma y_η_h1
   (η_h1 :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
     let r_of_s := r s
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let η_of_point := η point
     η_of_point * r_of_s = -2
   )
   :
   let r_of_s := r s
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let y_of_t := y t s
   y_of_t = (r_of_s - 4) / (r_of_s + 4) := by
     intro r_of_s y_of_t
     unfold y_of_t y
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X_of_t := X t s
     change (r_of_s * X_of_t - (1 + X_of_t) ^ 2) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2) = (r_of_s - 4) / (r_of_s + 4)
     unfold X_of_t
     rw [X_η_h2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 η_h1]
@@ -611,7 +611,7 @@ lemma y_of_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let y_of_t := y ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let y_of_t := y ⟨(0 : F), h1⟩ s
   let r_of_s := r s
   y_of_t = (r_of_s - 4) / (r_of_s + 4) := by
     intro h1 y_of_t r_of_s
@@ -682,16 +682,10 @@ Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
 def ϕ_over_F_prop2
   (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
   (point : F × F)
   : Prop :=
   let r_of_s := r s
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η point
   IsSquare ((1 + η_of_point * r_of_s)^2 - 1)
 
 /-- `ϕ_over_F_prop3` is the third property fulfilled by points in `E_over_F`.
@@ -700,19 +694,13 @@ Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
 def ϕ_over_F_prop3
   (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
   (point : F × F)
   : Prop :=
   let x := point.fst
   let c_of_s := c s
   let χ_of_c_of_s := LegendreSymbol.χ c_of_s
   let r_of_s := r s
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η point
   η_of_point * r_of_s = -2 → x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
 
 /-- `ϕ_over_F_props` combines the previously defined properties which are fulfilled by points in `E_over_F`,
@@ -720,20 +708,8 @@ i.e. `ϕ_over_F_prop1`, `ϕ_over_F_prop2` and `ϕ_over_F_prop3`.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
-def ϕ_over_F_props
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : F × F)
-  : Prop
-  :=
-    ϕ_over_F_prop1 point
-  ∧ ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  ∧ ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+def ϕ_over_F_props (s : F) (point : F × F) : Prop :=
+    ϕ_over_F_prop1 point ∧ ϕ_over_F_prop2 s point ∧ ϕ_over_F_prop3 s point
 
 /-- `ϕ_over_F` is the set of points produced by `ϕ`.
 
@@ -831,7 +807,7 @@ lemma point_in_ϕ_over_F_with_prop2_base_case
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop2 s point := by
     intro point
     unfold ϕ_over_F_prop2
     intro r_of_s η_of_point
@@ -860,15 +836,15 @@ lemma point_in_ϕ_over_F_with_prop2_main_case
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop2 s point := by
     intro point
     unfold ϕ_over_F_prop2
     intro r_of_s η_of_point
-    let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let y_of_t := y t s
     let c_of_s := c s
     let r_of_s := r s
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let X_of_t := X t s
+    let η_of_point := η point.val
     have h1 : X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = 0 := by
       exact (y_h2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
     have h2 : NeZero (2 : F) := by
@@ -899,7 +875,7 @@ lemma point_in_ϕ_over_F_with_prop2
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop2 s point := by
     intro point
     unfold ϕ_over_F_prop2
     intro y
@@ -922,7 +898,7 @@ lemma point_in_ϕ_over_F_with_prop3_base_case
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop3 s point := by
     intro point
     unfold ϕ_over_F_prop3
     intro x c_of_s χ_of_c_of_s r_of_s η_of_point h1
@@ -951,12 +927,12 @@ lemma point_in_ϕ_over_F_with_prop3_main_case
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop3 s point := by
     intro point
     unfold ϕ_over_F_prop3
     intro x_of_point c_of_s χ_of_c_of_s r_of_s η_of_point h1
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X_of_t := X t s
+    let Y_of_t := Y t s q
     let v_of_t := v t s
     let χ_of_c_of_s := LegendreSymbol.χ c_of_s
     let χ_of_v_of_s := LegendreSymbol.χ v_of_t
@@ -988,7 +964,7 @@ lemma point_in_ϕ_over_F_with_prop3
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_prop3 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point := by
+  ϕ_over_F_prop3 s point := by
     intro point
     unfold ϕ_over_F_prop3
     intro y
@@ -1012,7 +988,7 @@ theorem point_props_of_point_in_ϕ_over_F
   :
   let point := (ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   point ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  → ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  → ϕ_over_F_props s point
   := by
     intro point h1
     constructor
@@ -1049,7 +1025,7 @@ lemma point_of_ϕ_fulfills_ϕ_over_F_props
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point.val := by
+  ϕ_over_F_props s point.val := by
       intro point
       let h1 := point_of_ϕ_in_ϕ_over_F t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
       apply point_props_of_point_in_ϕ_over_F t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h1

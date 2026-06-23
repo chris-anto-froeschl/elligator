@@ -46,9 +46,9 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let c_of_s := c s
-  X_of_t^2 + 1 / c_of_s^2 ≠ 0 := by
+  let X := X t s
+  let c := c s
+  X^2 + 1 / c^2 ≠ 0 := by
     intro X_of_t c_of_s h
     rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
     rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
@@ -73,8 +73,8 @@ lemma X_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  X_of_t ≠ 0 := by
+  let X := X t s
+  X ≠ 0 := by
     let u_of_t := u t
     let v_of_t := v t s
     apply mul_ne_zero
@@ -94,8 +94,8 @@ lemma X_comparison
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X1 := X t s
+  let X2 := X ⟨t2, h2_2⟩ s
   X2 = 1 / X1 := by
     intro t1 t2 h2_2 X1 X2
     let u1 := u t
@@ -133,7 +133,7 @@ lemma X_of_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
-  let X_of_t := X ⟨(0 : F), h1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let X_of_t := X ⟨(0 : F), h1⟩ s
   X_of_t = 1 := by
     intro h1 X_of_t
     unfold X_of_t X

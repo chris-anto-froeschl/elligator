@@ -47,7 +47,7 @@ lemma Y_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let Y_of_t := Y t s q
   Y_of_t ≠ 0 := by
     let u_of_t := u t
     let v_of_t := v t s
@@ -79,8 +79,8 @@ lemma X_mul_Y_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
+  let Y_of_t := Y t s q
   X_of_t * Y_of_t ≠ 0 := by
     apply mul_ne_zero
     · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
@@ -96,7 +96,7 @@ lemma one_add_X_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let X_of_t := X t s
   (1 + X_of_t) ≠ (0 : F) := by
     let u_of_t := u t
     let v_of_t := v t s
@@ -198,10 +198,10 @@ lemma Y_comparison
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y1 := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y2 := Y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X1 := X t s
+  let X2 := X ⟨t2, h2_2⟩ s
+  let Y1 := Y t s q
+  let Y2 := Y ⟨t2, h2_2⟩ s q
   Y2 = Y1 / X1^3 := by
     intro t1 t2 h2_2 X1 X2 Y1 Y2
     let c_of_s := c s
@@ -210,10 +210,10 @@ lemma Y_comparison
     let u2 := u ⟨t2, h2_2⟩
     let v1 := v t s
     let v2 := v ⟨t2, h2_2⟩ s
-    let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let y1 := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let y2 := y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let x1 := x t s q
+    let x2 := x ⟨t2, h2_2⟩ s q
+    let y1 := y t s
+    let y2 := y ⟨t2, h2_2⟩ s
     let χ_of_u1 := LegendreSymbol.χ u1
     let χ_of_u2 := LegendreSymbol.χ u2
     let χ_of_v1 := LegendreSymbol.χ v1

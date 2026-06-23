@@ -92,7 +92,7 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  ϕ_over_F_props s point
   ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
     intro point
     constructor
@@ -120,7 +120,7 @@ theorem ϕ_of_t2_eq_x_y
   let x_of_t := point.1
   let y_of_t := point.2
   -- t2 defined (and used to build ϕ(t2))
-  let t' := t2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t' := t2 s point q
   let ϕ_of_t' := (ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro point x_of_point y_of_point t' ϕ_of_t'
@@ -198,6 +198,6 @@ theorem t2_defined
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
   :
-  let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let u2_of_point := u2 s point.val q
   (1 + u2_of_point) ≠ 0 := by
     exact one_add_u2_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point

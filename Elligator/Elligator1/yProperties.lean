@@ -53,8 +53,8 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let r_of_s := r s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
+  let Y_of_t := Y t s q
   Y_of_t ^2 = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t := by
     let c_of_s := c s
     let u_of_t := u t
@@ -111,13 +111,11 @@ lemma y_divisor_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let r_of_s := r s;
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let X_of_t := X t s
   (r_of_s * X_of_t + (1 + X_of_t)^2) ≠ 0 := by
-    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let Y_of_t := Y t s q
     let c_of_s := c s
-    intro r_of_s
-    intro X_of_t
-    intro h
+    intro r_of_s X_of_t h
     have h1 : r_of_s * X_of_t = -(1 + X_of_t)^2 := by
       rw [← add_left_inj ((1 + X_of_t)^2)]
       have h1_1 : -((1 + X_of_t)^2) + ((1 + X_of_t)^2) = 0 := by
@@ -232,12 +230,11 @@ lemma y_add_one_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let y_of_t := y t s
   y_of_t + 1 ≠ (0 : F) := by
     let r_of_s := r s;
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-    intro y_of_t
-    intro h
+    let X_of_t := X t s
+    intro y_of_t h
     have h1 : y_of_t = -1 := by
       rw [← add_left_inj (-1)] at h
       have h1_1 : (1 : F) + (-1 : F) = 0 := by ring
@@ -283,10 +280,10 @@ lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   :
   let u_of_t := u t
   let v_of_t := v t s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let X_of_t := X t s
+  let Y_of_t := Y t s q
+  let x_of_t := x t s q
+  let y_of_t := y t s
   u_of_t * v_of_t * X_of_t  * Y_of_t * x_of_t * (y_of_t + 1) ≠ 0 := by
     apply mul_ne_zero
     · apply mul_ne_zero
@@ -311,15 +308,15 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let y_of_t := y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x_of_t := x t s q
+  let y_of_t := y t s
   let d_of_s := d s
   x_of_t^2 + y_of_t^2 = 1 + d_of_s * x_of_t^2 * y_of_t^2 := by
     let c_of_s := c s
     let d_of_s := d s;
     let r_of_s := r s;
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
-    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+    let X_of_t := X t s
+    let Y_of_t := Y t s q
     intro x_of_t y_of_t d_of_s
     have h1 : (c_of_s - 1)^2 * s^2 = 2 * (r_of_s - 2):=
       calc

@@ -49,11 +49,11 @@ lemma x_ne_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let x_of_t := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  let x_of_t := x t s q
   x_of_t ≠ (0 : F) := by
     let c_of_s := c s
-    let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X_of_t := X t s
+    let Y_of_t := Y t s q
     change (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t ≠ 0
     apply div_ne_zero
     · apply mul_ne_zero
@@ -90,16 +90,16 @@ lemma x_comparison
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x1 := x t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let x2 := x ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let x1 := x t s q
+  let x2 := x ⟨t2, h2_2⟩ s q
   x2 = x1 := by
     intro t1 t2 h2_2 x1 x2
     let c_of_s := c s
     let r_of_s := r s
-    let X1 := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let X2 := X ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let Y1 := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let Y2 := Y ⟨t2, h2_2⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let X1 := X t s
+    let X2 := X ⟨t2, h2_2⟩ s
+    let Y1 := Y t s q
+    let Y2 := Y ⟨t2, h2_2⟩ s q
     have X_pow_three_ne_zero : X1^3 ≠ 0 := by
       apply pow_ne_zero 3 (X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t)
     calc

@@ -54,7 +54,7 @@ lemma η_eq_zero
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let η_of_point := η point
   η_of_point = 0 := by
     intro point η_of_point
     unfold η_of_point η

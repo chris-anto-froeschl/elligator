@@ -70,7 +70,7 @@ lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
       use Fin.cons false τ;
       simp +decide [ ← hτ, Fin.sum_univ_succ, bitsToNat ] ; ring_nf;
       rw [ Finset.sum_mul _ _ _ ] ; congr ; ext ; aesop;
-    · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith ) ; use Fin.cons true τ; simp +decide [ *, bitsToNat ] ; ring;
+    · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith ) ; use Fin.cons true τ; simp +decide [ *, bitsToNat ]
       simp +decide [ ← hτ, Fin.sum_univ_succ ] ; ring_nf;
       simp +decide [ bitsToNat, Finset.sum_mul _ _ _ ]
 

@@ -31,7 +31,6 @@ namespace Elligator.Elligator1
 section Variables
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 /-- c(s) is a function defined in the paper.
 
@@ -76,16 +75,7 @@ noncomputable def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def X
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
+noncomputable def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u_of_t := u t
   let v_of_t := v t s
   let χ_of_v_of_t := LegendreSymbol.χ v_of_t
@@ -93,73 +83,44 @@ noncomputable def X
 
 /-- Y(t, s) is a function defined in the paper.
 
+`q` is still unrelated to the cardinality F here by intention. The theorems using
+`Y` will build the necessary context to show useful properties of `Y` by creating
+the relation of Field cardinality and `q`.
+
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def Y
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  let u_of_t := u t
-  let c_of_s := c s
-  let v_of_t := v t s
-  let χ_of_v_of_t := LegendreSymbol.χ v_of_t
-  let χ_of_sum := LegendreSymbol.χ ((u_of_t)^2 + 1 / c_of_s^2)
-  (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum
+noncomputable def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
+  let u := u t
+  let c := c s
+  let v := v t s
+  let χ_of_v := LegendreSymbol.χ v
+  let χ_of_sum := LegendreSymbol.χ (u^2 + 1 / c^2)
+  (χ_of_v * v)^((q+ 1) / 4) * χ_of_v * χ_of_sum
 
 /-- x(t, s) is a function defined in the paper. It is the x-coordinate of the point on the curve.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def x
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  let c_of_s := c s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  let Y_of_t := Y t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t
+noncomputable def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
+  let c := c s
+  let X := X t s
+  let Y := Y t s q
+  (c - 1) * s * X * (1 + X) / Y
 
 /-- y(t, s) is a function defined in the paper. It is the y-coordinate of the point on the curve.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
-noncomputable def y
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : F :=
-  let r_of_s := r s
-  let X_of_t := X t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-  (r_of_s * X_of_t - (1 + X_of_t)^2) / (r_of_s * X_of_t + (1 + X_of_t)^2)
+noncomputable def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
+  let r := r s
+  let X := X t s
+  (r * X - (1 + X)^2) / (r * X + (1 + X)^2)
 
 /-- η(s, q, point) is a function defined in the paper.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
-noncomputable def η
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : F × F)
-  : F :=
+noncomputable def η (point : F × F) : F :=
   let y := point.snd
   (y - 1) / (2 * (y + 1))
 
@@ -167,87 +128,44 @@ noncomputable def η
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
-noncomputable def X2
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : F × F)
-  -- TODO decide if defs should already require everything to guarantee well definedness
-  -- PRO: always well defined; CON: hard calling convention, not as general
-  --(point : {p : (F) × (F) // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
-  --(h : point.val ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
-  : F :=
-  let η_of_point := η q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let r_of_s := r s
-  (-(1 + η_of_point * r_of_s) + ((1 + η_of_point * r_of_s)^2 - 1)^((q + 1) / 4))
+noncomputable def X2 (s : F) (P : F × F) (q : ℕ) : F :=
+  let η := η P
+  let r := r s
+  (-(1 + η * r) + ((1 + η * r)^2 - 1)^((q + 1) / 4))
 
 /-- z is a function defined in the paper.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
-noncomputable def z
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : F × F)
-  : F
-  :=
-  let x := point.fst
-  let c_of_s := c s
-  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let a := (c_of_s - 1) * s * X2_of_point * (1 + X2_of_point) * x * (X2_of_point^2 + 1 / c_of_s^2)
+noncomputable def z (s : F) (P : F × F) (q : ℕ) : F :=
+  let x := P.fst
+  let c := c s
+  let X2 := X2 s P q
+  let a := (c - 1) * s * X2 * (1 + X2) * x * (X2^2 + 1 / c^2)
   LegendreSymbol.χ a
 
 /-- u2 is a function defined in the paper.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
-noncomputable def u2
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : F × F)
-  : F
-  :=
-  let X2_of_point := X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let z_of_point := z s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  z_of_point * X2_of_point
+noncomputable def u2 (s : F) (P : F × F) (q : ℕ) : F :=
+  let X2 := X2 s P q
+  let z := z s P q
+  z * X2
 
 /-- t2 is a function defined in the paper.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
-noncomputable def t2
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : F × F)
-  : F
-  :=
-  let u2_of_point := u2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  (1 - u2_of_point) / (1 + u2_of_point)
+noncomputable def t2 (s : F) (P : F × F) (q : ℕ) : F :=
+  let u2 := u2 s P q
+  (1 - u2) / (1 + u2)
 
 /-- `b q` is `⌊log₂ q⌋`, the number of bits needed.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
-noncomputable def b : ℕ := Nat.log 2 q
+noncomputable def b (q : ℕ): ℕ := Nat.log 2 q
 
 /-- Convert a bit vector (τ₀, τ₁, ..., τ_{b-1}) to a natural number via binary
 expansion: bitsToNat(τ) = Σᵢ τᵢ · 2^i.
@@ -260,12 +178,12 @@ def bitsToNat {n : ℕ} (τ : Fin n → Bool) : ℕ :=
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
-noncomputable def σ (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)
+noncomputable def σ {q : ℕ} (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)
 
 /-- S = σ⁻¹({0, 1, 2, ..., (q-1)/2}), the set of bit vectors whose binary value
 falls in the lower half {0, 1, ..., (q-1)/2} of F_q.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
-noncomputable def S : Finset (Fin (@b q) → Bool) :=
+noncomputable def S {q : ℕ} : Finset (Fin (@b q) → Bool) :=
   Finset.univ.filter (fun τ => (bitsToNat τ) ≤ (q - 1) / 2)
