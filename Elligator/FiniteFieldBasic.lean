@@ -28,28 +28,18 @@ See [bernstein2013a] for the original account on this specifc finite field.
 -/
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 namespace FiniteFieldBasic
 
-lemma q_ne_two
-  {q : ℕ}
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : q ≠ 2 := by omega
+lemma q_ne_two (q_mod_4_congruent_3 : q % 4 = 3) : q ≠ 2 := by omega
 
-lemma q_mod_two_congruent_one
-  {q : ℕ}
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : q % 2 = 1 := by omega
+lemma q_mod_two_congruent_one (q_mod_4_congruent_3 : q % 4 = 3) : q % 2 = 1 := by omega
 
-lemma q_odd
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  Odd (Fintype.card F) := by
+omit [Field F] in
+lemma q_odd (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 4 = 3)
+  : Odd (Fintype.card F) := by
     rw [field_cardinality]
-    rw [IsPrimePow] at q_prime_power
     have hq: q % 2 = 1 := by apply q_mod_two_congruent_one q_mod_4_congruent_3
     have hq1: ∃ k, q = 2 * k + 1 := by
       apply Nat.mod_eq_iff.1 at hq
@@ -59,30 +49,26 @@ lemma q_odd
     rw [Odd]
     exact hq1
 
+omit [Field F] in
 lemma q_add_one_even
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  Even (q + 1) := by
+  : Even (q + 1) := by
     refine Nat.even_add_one.mpr ?_
     have h0: Odd (Fintype.card F) := by
-      apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
+      apply q_odd field_cardinality q_mod_4_congruent_3
     rw [field_cardinality] at h0
     exact Nat.not_even_iff_odd.mpr h0
 
+omit [Field F] in
 lemma q_sub_one_even
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  Even (Fintype.card F - 1) := by
+  : Even (Fintype.card F - 1) := by
     rw [field_cardinality]
     have hq: Odd q := by
       rw [<- field_cardinality]
-      apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
+      apply q_odd field_cardinality q_mod_4_congruent_3
     rw [Odd] at hq
     rw [Even]
     cases hq
@@ -91,18 +77,16 @@ lemma q_sub_one_even
     simp_all
     linarith
 
+omit [Field F] in
 lemma q_sub_one_dvd_two
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : 2 ∣ Fintype.card F - 1 := by
-    apply Even.two_dvd (q_sub_one_even q field_cardinality q_prime_power q_mod_4_congruent_3)
+    apply Even.two_dvd (q_sub_one_even field_cardinality q_mod_4_congruent_3)
 
+omit [Field F] in
 lemma q_not_dvd_two
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : ¬(2 ∣ q) := by
     intro h
@@ -114,7 +98,7 @@ lemma q_not_dvd_two
     --contradiction
     have hq: Odd q := by
       rw [<- field_cardinality]
-      apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
+      apply q_odd field_cardinality q_mod_4_congruent_3
     have hq': Even q := by
       exact (even_iff_exists_two_nsmul q).mpr h
     have hq'': Odd q → ¬ Even q := by
@@ -140,12 +124,8 @@ lemma power_odd_p_odd
       have h': Odd (p^k) ∧ Odd p := by apply h hp
       simp_all
 
-lemma odd_prime_power_gt_two
-  (q : ℕ)
-  (q_prime_power : IsPrimePow q)
-  (hq: Odd q)
-  :
-  q > 2 := by
+lemma odd_prime_power_gt_two (q_prime_power : IsPrimePow q) (hq: Odd q)
+  : q > 2 := by
     rw [IsPrimePow] at q_prime_power
     cases q_prime_power
     rename_i p hk
@@ -183,41 +163,26 @@ lemma odd_prime_power_gt_two
         exact lt_mul_of_one_le_of_lt p_k_gt_zero hp1
     simp_all
 
-lemma one_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (1 : F) ≠ 0 := by
-    have he: Odd (-1 : F) := by
-      rw [Odd]
-      use (-1)
-      ring
-    have hne: Even (0 : F) := by
-      rw [Even]
-      use 0
-      simp
-    simp_all
+omit [Fintype F] in
+lemma one_ne_zero : (1 : F) ≠ 0 := by
+  have he: Odd (-1 : F) := by
+    rw [Odd]
+    use (-1)
+    ring
+  have hne: Even (0 : F) := by
+    rw [Even]
+    use 0
+    simp
+  simp_all
 
-lemma q_add_one_over_four_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (1 + q) / 4 ≠ 0 := by
+lemma q_add_one_over_four_ne_zero (q_mod_4_congruent_3 : q % 4 = 3)
+  : (1 + q) / 4 ≠ 0 := by
     apply Nat.div_ne_zero_iff.2
     constructor
     · norm_num
     · grind
 
-lemma q_add_one_over_two_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
+lemma q_add_one_over_two_ne_zero (q_mod_4_congruent_3 : q % 4 = 3) :
   (1 + q) / 2 ≠ 0 := by
     apply Nat.div_ne_zero_iff.2
     constructor
@@ -225,24 +190,19 @@ lemma q_add_one_over_two_ne_zero
     · grind
 
 lemma char_ne_two
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  Fintype.card F ≠ 2 := by
+  : Fintype.card F ≠ 2 := by
     have h1 := FiniteField.card F ( ringChar F )
     simp_all +decide ;
     rintro h
     simp_all +decide
 
 lemma ring_char_ne_two
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ringChar F ≠ 2 := by
+  : ringChar F ≠ 2 := by
     have h1 := FiniteField.card F ( ringChar F )
     simp_all +decide ;
     rintro h
@@ -250,57 +210,46 @@ lemma ring_char_ne_two
     rcases h1 with ⟨ x, rfl ⟩ ; rcases x with ( _ | _ | x ) <;> norm_num [ Nat.pow_succ', ← mul_assoc, Nat.mul_mod ] at *;
 
 lemma two_ne_zero
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (2 : F) ≠ 0 := by
-  let char_ne_two := ring_char_ne_two q field_cardinality q_prime_power q_mod_4_congruent_3
-  let h1 := FiniteField.card F ( ringChar F )
-  intro h2
-  apply char_ne_two
-  have h3 := ringChar.spec F;
-  specialize h3 2 ; simp_all +decide [ Nat.dvd_prime ];
-  exact not_subsingleton _ h3
+  : (2 : F) ≠ 0 := by
+    let char_ne_two := ring_char_ne_two field_cardinality q_prime_power q_mod_4_congruent_3
+    let h1 := FiniteField.card F ( ringChar F )
+    intro h2
+    apply char_ne_two
+    have h3 := ringChar.spec F;
+    specialize h3 2 ; simp_all +decide [ Nat.dvd_prime ];
+    exact not_subsingleton _ h3
 
 lemma four_ne_zero
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (4 : F) ≠ 0 := by
+  : (4 : F) ≠ 0 := by
     have h1 : (4 : F) = 2 * 2 := by norm_num
     rw [h1]
     apply mul_ne_zero
-    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
-    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
 
-lemma neg_one_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (-1 : F) ≠ 0 := by
-    have he: Odd (-1 : F) := by
-      rw [Odd]
-      use (-1)
-      ring
-    have hne: Even (0 : F) := by
-      rw [Even]
-      use 0
-      simp
-    simp_all
+omit [Fintype F] in
+lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by
+  have he: Odd (-1 : F) := by
+    rw [Odd]
+    use (-1)
+    ring
+  have hne: Even (0 : F) := by
+    rw [Even]
+    use 0
+    simp
+  simp_all
 
 lemma neg_one_non_square
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  ¬IsSquare (-1 : F) := by
+  : ¬IsSquare (-1 : F) := by
     have h_neg_one_not_square : IsSquare (-1 : F) ↔ Fintype.card F % 4 ≠ 3 := by
       apply_rules [ FiniteField.isSquare_neg_one_iff ];
     aesop
@@ -308,8 +257,7 @@ lemma neg_one_non_square
 lemma p_odd_power_odd
   (p k : ℕ)
   (hp: Odd p)
-  :
-  Odd (p^k) := by
+  : Odd (p^k) := by
     induction' k
     · simp
     · rename_i n hn
@@ -329,15 +277,13 @@ lemma p_odd_power_odd
       simp_all
 
 lemma q_sub_one_over_two_ne_zero
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (q - 1) / 2 ≠ 0 := by
+  : (q - 1) / 2 ≠ 0 := by
     have q_odd: Odd q := by
         rw [<- field_cardinality]
-        apply q_odd q field_cardinality q_prime_power q_mod_4_congruent_3
+        apply q_odd field_cardinality q_mod_4_congruent_3
     apply Nat.div_ne_zero_iff.2
     constructor
     · norm_num
@@ -353,17 +299,15 @@ lemma q_sub_one_over_two_ne_zero
       have p_power_odd: Odd (p^k) := by
         rw [<- hpk] at q_odd
         exact q_odd
-
       have p_odd: Odd p := by
         apply power_odd_p_odd p k hk p_power_odd
-
       have q_gte_q: q ≥ p := by
         simp_all
         rw [<- hpk]
         exact Nat.le_pow hk
       have p_gt_2: p > 2 := by
         simp_all
-        refine odd_prime_power_gt_two p ?_ p_odd
+        refine odd_prime_power_gt_two ?_ p_odd
         rw [IsPrimePow]
         use p, 1
         simp_all
@@ -374,6 +318,7 @@ lemma q_sub_one_over_two_ne_zero
         simp_all
       · exact Nat.lt_of_lt_of_le p_gt_2 q_gte_q
 
+omit [Fintype F] in
 lemma pow_two_ne_zero
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -384,60 +329,46 @@ lemma pow_two_ne_zero
     · exact a_ne_zero
     · exact a_ne_zero
 
-lemma one_sub_t_ne_zero
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
-  (1 : F) - t.val ≠ 0 := by
-    intro h
-    have h1 : t.val = 1 := by
-      rw [← add_right_inj t.val] at h
-      rw [add_zero] at h
-      rw [add_comm] at h
-      have h' : t.val - t.val = 0 := by ring
-      rw [sub_add] at h
-      rw [h'] at h
-      rw [sub_zero] at h
-      symm at h
-      exact h
-    have h2 : t.val ≠ 1 := by
-      apply And.left
-      exact t.property
-    contradiction
+omit [Fintype F] in
+lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 := by
+  intro h
+  have h1 : t.val = 1 := by
+    rw [← add_right_inj t.val] at h
+    rw [add_zero] at h
+    rw [add_comm] at h
+    have h' : t.val - t.val = 0 := by ring
+    rw [sub_add] at h
+    rw [h'] at h
+    rw [sub_zero] at h
+    symm at h
+    exact h
+  have h2 : t.val ≠ 1 := by
+    apply And.left
+    exact t.property
+  contradiction
 
-lemma one_add_t_ne_zero
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
-  (1 : F) + t.val ≠ 0 := by
-    intro h
-    have h1 : t.val = -1 := by
-      rw [← add_left_inj (-1 : F)] at h
-      ring_nf at h
-      exact h
-    have h2 : t.val ≠ -1 := by
-      apply And.right
-      exact t.property
-    contradiction
+omit [Fintype F] in
+lemma one_add_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) + t.val ≠ 0 := by
+  intro h
+  have h1 : t.val = -1 := by
+    rw [← add_left_inj (-1 : F)] at h
+    ring_nf at h
+    exact h
+  have h2 : t.val ≠ -1 := by
+    apply And.right
+    exact t.property
+  contradiction
 
-lemma zero_h1
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
-    constructor
-    · symm
-      exact FiniteFieldBasic.one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
-    · symm
-      exact FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+omit [Fintype F] in
+lemma zero_h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
+  constructor
+  · symm
+    exact FiniteFieldBasic.one_ne_zero
+  · symm
+    exact FiniteFieldBasic.neg_one_ne_zero
 
-lemma neg_t_ne_one_and_neg_t_ne_neg_one
-  (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
+omit [Fintype F] in
+lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
   t2 ≠ 1 ∧ t2 ≠ -1 := by
@@ -460,42 +391,40 @@ lemma neg_t_ne_one_and_neg_t_ne_neg_one
       have h2_2_1_2 : t1 ≠ 1 := by exact t.property.left
       contradiction
 
+omit [Field F] in
 lemma one_add_card_mod_four_eq_zero
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  (1 + Fintype.card F) % 4 = 0 := by
+  : (1 + Fintype.card F) % 4 = 0 := by
     omega
 
+omit [Field F] in
 lemma four_dvd_one_add_card
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  4 ∣ (1 + Fintype.card F) := by
-    exact Nat.dvd_of_mod_eq_zero (one_add_card_mod_four_eq_zero q field_cardinality q_mod_4_congruent_3)
+  : 4 ∣ (1 + Fintype.card F) := by
+    exact Nat.dvd_of_mod_eq_zero (one_add_card_mod_four_eq_zero field_cardinality q_mod_4_congruent_3)
 
+omit [Field F] in
 lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let card := Fintype.card F
   ((1 + card) / 4 * 2) = (1 + card) / 2 := by
     intro card
-    obtain ⟨k, hk⟩ := four_dvd_one_add_card q field_cardinality q_mod_4_congruent_3
+    obtain ⟨k, hk⟩ := four_dvd_one_add_card field_cardinality q_mod_4_congruent_3
     rw [hk]
     nth_rw 3 [mul_comm]
     simp_all
     rw [Nat.mul_div_assoc]
     simp_all
 
+omit [Fintype F] in
 lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
-  (a : F)
+  {a : F}
   (a_ne_zero : a ≠ 0)
-  :
-  1 + 1 / a^2 = (a + 1 / a) / a := by
+  : 1 + 1 / a^2 = (a + 1 / a) / a := by
     ring_nf
     rw [mul_inv_cancel₀ a_ne_zero]
 
@@ -526,24 +455,24 @@ lemma exists_nat_cast_eq
   (q_prime : Prime q)
   (t : F)
   : ∃ (n : ℕ), n < q ∧ (n : F) = t := by
-  have h_nat_cast : Function.Surjective (fun n : ℕ => (n : F)) := by
-    intro t
-    have h_order : ringChar F = q := by
-      have := FiniteField.card F ( ringChar F ) ; aesop;
-    have h_order : Function.Injective (fun n : Fin (Fintype.card F) => (n : F)) := by
-      intro a b hab;
-      have := ringChar.spec F;
-      specialize this ( a - b |> Int.natAbs ) ; simp_all +decide [ sub_eq_iff_eq_add ] ;
-      cases abs_cases ( ( a : ℤ ) - b ) <;> simp_all +decide [ sub_eq_iff_eq_add ];
-      · exact Fin.ext ( Nat.le_antisymm ( Nat.le_of_not_lt fun h => by have := Nat.le_of_dvd ( by omega ) this; omega ) ‹_› );
-      · exact absurd this ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) );
-    have h_order : Function.Surjective (fun n : Fin (Fintype.card F) => (n : F)) := by
-      exact ( Fintype.bijective_iff_injective_and_card _ ).mpr ⟨ h_order, by simp +decide [ Fintype.card_fin ] ⟩ |>.2;
-    exact Exists.elim ( h_order t ) fun n hn => ⟨ n, hn ⟩;
-  cases' h_nat_cast t with n hn;
-  refine' ⟨ n % q, Nat.mod_lt _ q_prime.nat_prime.pos, _ ⟩;
-  rw [ ← hn, Nat.mod_def ];
-  rw [ Nat.cast_sub ( Nat.mul_div_le _ _ ) ] ; aesop
+    have h_nat_cast : Function.Surjective (fun n : ℕ => (n : F)) := by
+      intro t
+      have h_order : ringChar F = q := by
+        have := FiniteField.card F ( ringChar F ) ; aesop;
+      have h_order : Function.Injective (fun n : Fin (Fintype.card F) => (n : F)) := by
+        intro a b hab;
+        have := ringChar.spec F;
+        specialize this ( a - b |> Int.natAbs ) ; simp_all +decide
+        cases abs_cases ( ( a : ℤ ) - b ) <;> simp_all +decide
+        · exact Fin.ext ( Nat.le_antisymm ( Nat.le_of_not_lt fun h => by have := Nat.le_of_dvd ( by omega ) this; omega ) ‹_› );
+        · exact absurd this ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) );
+      have h_order : Function.Surjective (fun n : Fin (Fintype.card F) => (n : F)) := by
+        exact ( Fintype.bijective_iff_injective_and_card _ ).mpr ⟨ h_order, by simp +decide [ Fintype.card_fin ] ⟩ |>.2;
+      exact Exists.elim ( h_order t ) fun n hn => ⟨ n, hn ⟩;
+    cases' h_nat_cast t with n hn;
+    refine' ⟨ n % q, Nat.mod_lt _ q_prime.nat_prime.pos, _ ⟩;
+    rw [ ← hn, Nat.mod_def ];
+    rw [ Nat.cast_sub ( Nat.mul_div_le _ _ ) ] ; aesop
 
 /-
 In a prime field with `q ≡ 3 (mod 4)` (hence `q` odd), for any `n < q`, either
@@ -555,7 +484,7 @@ lemma nat_or_neg_in_lower_half
   (q_mod_4_congruent_3 : q % 4 = 3)
   (n : ℕ) (hn : n < q)
   : n ≤ (q - 1) / 2 ∨ (q - n ≤ (q - 1) / 2 ∧ 0 < n) := by
-  cases Nat.Prime.eq_two_or_odd q_prime.nat_prime <;> omega;
+    cases Nat.Prime.eq_two_or_odd q_prime.nat_prime <;> omega
 
 /-
 Negation in `F_q` for a natural number cast: `-(n : F) = (q - n : F)` when
@@ -564,7 +493,7 @@ Negation in `F_q` for a natural number cast: `-(n : F) = (q - n : F)` when
 lemma neg_natCast_eq
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
-  (n : ℕ) (hn : 0 < n) (hn' : n < q)
+  (n : ℕ) (hn' : n < q)
   : -(n : F) = ((q - n : ℕ) : F) := by
-  rw [ Nat.cast_sub hn'.le ];
-  rw [ neg_eq_iff_add_eq_zero ] ; aesop
+    rw [ Nat.cast_sub hn'.le ];
+    rw [ neg_eq_iff_add_eq_zero ] ; aesop

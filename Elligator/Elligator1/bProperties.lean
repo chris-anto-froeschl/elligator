@@ -45,7 +45,7 @@ lemma two_pow_b_gt_q_over_two
   :
   2^(@b q) > q / 2 := by
     let h1 := two_pow_b_le_q q_mod_4_congruent_3
-    let h2 := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    let h2 := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     unfold b
     let h3 := @q_lt_two_pow_b_succ q
     have h4 : 2^(@b q) > q / 2 ↔ q < 2^((@b q) + 1) := by grind

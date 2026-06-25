@@ -103,7 +103,7 @@ lemma t2_eq_t
     have h2 : ((1 + t.val) * 2) ≠ 0 := by
       apply mul_ne_zero
       · exact FiniteFieldBasic.one_add_t_ne_zero t
-      · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+      · exact FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     rw [← two_mul t.val, mul_comm 2 t.val, mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
 
@@ -118,7 +118,7 @@ lemma t2_eq_t'
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
     let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let X'_of_t := X ⟨-t.val, h2_2⟩ s
     let X2_of_t := X2 s point q
     X2_of_t = X'_of_t
@@ -129,7 +129,7 @@ lemma t2_eq_t'
   let t' := -t.val
   t2_of_point = t' := by
     intro point t2_of_point t'
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let u'_of_t := u ⟨t', h2_2⟩
     let u2_of_t := u2 s point q
     have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
@@ -146,7 +146,7 @@ lemma t2_eq_t'
     have h2 : ((1 + t') * 2) ≠ 0 := by
       apply mul_ne_zero
       · exact FiniteFieldBasic.one_add_t_ne_zero ⟨t', h2_2⟩
-      · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+      · exact FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     rw [← two_mul t', mul_comm 2 t', mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
 
@@ -176,7 +176,7 @@ lemma t2_in_t_or_neg_t
       unfold t2_of_point t'
       rw [t2_eq_one ⟨t, h'⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
       have h'' : 1 = t ∨ 1 = -t := by
-        nth_rw 2 [← mul_left_inj' (FiniteFieldBasic.neg_one_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)]
+        nth_rw 2 [← mul_left_inj' FiniteFieldBasic.neg_one_ne_zero]
         simp
         nth_rw 1 [eq_comm]
         nth_rw 2 [eq_comm]
@@ -192,7 +192,7 @@ noncomputable def t'
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   : F :=
   let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 - u) / (1 + u)
@@ -205,7 +205,7 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -221,7 +221,7 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
     change (1 - u) / (1 + u) ≠ 1 ∧ (1 - u) / (1 + u) ≠ -1
     let one_add_u'_ne_zero := one_add_u'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     let u'_ne_zero := u'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
-    let two_ne_zero := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    let two_ne_zero := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     and_intros
     · intro h2
       have h3 : 2 = 0 := by grind
@@ -238,7 +238,7 @@ lemma one_add_t'_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -258,7 +258,7 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -271,7 +271,7 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
     unfold t t'
     let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
     let one_add_u'_ne_zero := one_add_u'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
-    let two_ne_zero := FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3
+    let two_ne_zero := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     grind
 
 lemma u'_eq_u
@@ -282,7 +282,7 @@ lemma u'_eq_u
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -311,7 +311,7 @@ lemma v'_eq_v
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -340,7 +340,7 @@ lemma X'_eq_X
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -372,7 +372,7 @@ lemma Y'_eq_Y
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -404,7 +404,7 @@ noncomputable def x'
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   : F :=
   let c := c s
   let X' := X2 s point q
@@ -419,7 +419,7 @@ lemma x'_eq_x
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -450,7 +450,7 @@ noncomputable def y'
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   : F :=
   let X' := X2 s point q
   let r := r s
@@ -464,7 +464,7 @@ lemma y'_eq_y
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -494,7 +494,7 @@ theorem x'_and_y'_fulfill_curve_equation
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -506,7 +506,7 @@ theorem x'_and_y'_fulfill_curve_equation
   let x' := x' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let y' := y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
   let d := d s
-  have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   edwards_curve_equation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
     let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
@@ -515,7 +515,7 @@ theorem x'_and_y'_fulfill_curve_equation
     let y := y ⟨t, t_h⟩ s
     let x'_eq_x := x'_eq_x s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     let y'_eq_y := y'_eq_y s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h1 := x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let h1 := x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     unfold edwards_curve_equation x' y'
     rw [x'_eq_x, y'_eq_y]
     change x^2 + y^2 = 1 + d * x^2 * y^2
@@ -532,7 +532,7 @@ lemma y_of_t_eq_y_of_point
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -562,7 +562,7 @@ lemma x_of_t_eq_x_of_point
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -606,7 +606,7 @@ lemma x_y_of_point_eq_x_y_of_t
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (point_props : ϕ_over_F_props s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)

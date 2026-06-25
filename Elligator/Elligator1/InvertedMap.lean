@@ -162,16 +162,16 @@ theorem X2_defined
         let h1_4 := congrArg Prod.snd h1_2
         simp at h1_4
         rw [← h1_4]
-        exact y_add_one_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h1_3⟩
+        exact y_add_one_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 ⟨t, h1_3⟩
       · simp only [] at h1_2
         rw [dif_neg h1_3] at h1_2
         let h1_4 := congrArg Prod.snd h1_2
         simp at h1_4
         rw [← h1_4]
         ring_nf
-        exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+        exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
     apply mul_ne_zero
-    · exact (FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
     · exact h1
 
 theorem z_defined
@@ -186,7 +186,7 @@ theorem z_defined
   let c_of_s := c s
   c_of_s^2 ≠ 0
   := by
-    exact (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)
+    exact (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
 
 theorem t2_defined
   (s : F)

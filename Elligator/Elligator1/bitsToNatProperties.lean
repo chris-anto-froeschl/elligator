@@ -52,7 +52,8 @@ lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n →
   · decide
   · intro τ τ' h1;
     have h_bitsToNat_succ : ∀ (τ : Fin (n + 1) → Bool), bitsToNat τ = 2 * bitsToNat (fun i => τ (Fin.succ i)) + if τ 0 then 1 else 0 := by
-      intro τ; unfold bitsToNat; simp +decide [ Fin.sum_univ_succ, pow_succ' ] ; ring;
+      intro τ; unfold bitsToNat; simp +decide [ Fin.sum_univ_succ, pow_succ' ]
+      ring_nf
       rw [ Finset.sum_mul _ _ _ ] ; congr ; ext ; aesop;
     have h_bitsToNat_succ_eq : bitsToNat (fun i => τ (Fin.succ i)) = bitsToNat (fun i => τ' (Fin.succ i)) := by
       grind +ring;
@@ -75,7 +76,7 @@ lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
       simp +decide [ bitsToNat, Finset.sum_mul _ _ _ ]
 
 lemma natCast_injective_of_prime_card
-  (q : ℕ)
+  {q : ℕ}
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
   (a b : ℕ) (ha : a < q) (hb : b < q) (h : (a : F) = (b : F))
@@ -114,7 +115,7 @@ lemma σ_injective
       lt_of_lt_of_le (bitsToNat_lt_two_pow_n a) (two_pow_b_le_q q_mod_4_congruent_3)
     have h2 : bitsToNat b < q :=
       lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q q_mod_4_congruent_3)
-    exact natCast_injective_of_prime_card q field_cardinality q_prime _ _ h1 h2 h_eq
+    exact natCast_injective_of_prime_card field_cardinality q_prime _ _ h1 h2 h_eq
 
 /-
 PROBLEM

@@ -52,7 +52,7 @@ noncomputable def ι
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (τ : (@S q))
-  : {P : F × F // P ∈ E_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3}
+  : {P : F × F // P ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3}
   :=
   ϕ (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
 

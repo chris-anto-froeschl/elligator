@@ -32,6 +32,7 @@ namespace Elligator.Elligator1
 section EdwardsCurve
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 -- TODO generalize to actual characteristic ≠ 2
 /-- An \emph{Edwards curve} over a field $K$ (with $\mathrm{char}(K) \neq 2$) is a plane algebraic curve defined by an equation of the form
@@ -46,29 +47,25 @@ def edwards_curve_equation
 
 /-- `E_over_F` is the set of points fulfilling the `edwards_curve_equation`. -/
 def E_over_F
-  (s : F)
-  (s_h1 : s ≠ 0)
+  {s : F}
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   : Set (F × F) :=
   let d_of_s := d s
-  have d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   {p | edwards_curve_equation p.fst p.snd ⟨d_of_s, d_h⟩}
 
 lemma zero_one_fulfill_edwards_curve_equation
-  (s : F)
-  (s_h1 : s ≠ 0)
+  {s : F}
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let d_of_s := d s
-  have d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by exact d_ne_zero_and_d_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   edwards_curve_equation (0 : F) (1 : F) ⟨d_of_s, d_h⟩ := by
     intro d_of_s d_h
     unfold edwards_curve_equation

@@ -32,15 +32,10 @@ namespace Elligator.Elligator1
 section sProperties
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 
-lemma s_pow_two_ne_two
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+omit [Fintype F] in
+lemma s_pow_two_ne_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   : s^2 ≠ 2 := by
   have h1 : s^2 - 2 ≠ 0 := by
     intro h
@@ -50,15 +45,8 @@ lemma s_pow_two_ne_two
   rw [h] at h1
   norm_num at h1
 
-lemma s_pow_two_ne_neg_two
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  : s^2 ≠ -2 := by
+omit [Fintype F] in
+lemma s_pow_two_ne_neg_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) : s^2 ≠ -2 := by
   have h1 : s^2 + 2 ≠ 0 := by
     intro h
     rw [h] at s_h2

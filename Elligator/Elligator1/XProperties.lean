@@ -35,12 +35,11 @@ namespace Elligator.Elligator1
 section XProperties
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 lemma X_pow_two_add_one_over_c_pow_two_ne_zero
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -50,24 +49,20 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   let c := c s
   X^2 + 1 / c^2 ≠ 0 := by
     intro X_of_t c_of_s h
-    rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
-    rw [← mul_left_inj' (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+    rw [← mul_left_inj' (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+    rw [← mul_left_inj' (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h
     ring_nf at h
     change X_of_t^2 * c_of_s^2 + c_of_s⁻¹^2 * c_of_s^2 = 0 at h
-    rw [inv_pow c_of_s 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)), ← add_left_inj (-1 : F), ← mul_pow] at h
+    rw [inv_pow c_of_s 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)), ← add_left_inj (-1 : F), ← mul_pow] at h
     simp at h
-
-    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q field_cardinality q_prime_power q_mod_4_congruent_3
+    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square field_cardinality q_prime_power q_mod_4_congruent_3
     have h' : IsSquare (-1 : F) := by
       rw [← h, pow_two]
       apply IsSquare.mul_self
     contradiction
 
 lemma X_ne_zero
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -78,22 +73,18 @@ lemma X_ne_zero
     let u_of_t := u t
     let v_of_t := v t s
     apply mul_ne_zero
-    · apply LegendreSymbol.χ_a_ne_zero (v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
-    · apply u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    · apply LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
+    · apply u_ne_zero t
 
 lemma X_comparison
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
-  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let X1 := X t s
   let X2 := X ⟨t2, h2_2⟩ s
   X2 = 1 / X1 := by
@@ -110,9 +101,9 @@ lemma X_comparison
         rfl
       _ = χ_of_v1 / u1 := by
         unfold χ_of_v2 v2 t2
-        rw [v_comparison_implication4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [v_comparison_implication4 t field_cardinality q_mod_4_congruent_3]
         unfold u2
-        rw [u_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [u_comparison t s]
         change χ_of_v1 * (1 / u1) = χ_of_v1 / u1
         ring_nf
       _ = 1 / (χ_of_v1 * u1) := by
@@ -124,15 +115,12 @@ lemma X_comparison
         rfl
 
 lemma X_of_zero
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1
   let X_of_t := X ⟨(0 : F), h1⟩ s
   X_of_t = 1 := by
     intro h1 X_of_t
@@ -140,10 +128,10 @@ lemma X_of_zero
     let v_of_t := v ⟨(0 : F), h1⟩ s
     let r_of_s := r s
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t
-    rw [u_of_zero q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [u_of_zero]
     change χ_of_v_of_t * 1 = 1
     unfold χ_of_v_of_t v_of_t
-    rw [v_of_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [v_of_zero]
     change (LegendreSymbol.χ (r_of_s^2)) * 1 = 1
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (r_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3) field_cardinality q_mod_4_congruent_3]
     simp

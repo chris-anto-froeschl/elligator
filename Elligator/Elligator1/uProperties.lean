@@ -34,46 +34,27 @@ namespace Elligator.Elligator1
 section uProperties
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
-lemma u_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
-  u t ≠ (0 : F) := by
-    change (1 - t.val) / (1 + t.val) ≠ 0
-    apply div_ne_zero (FiniteFieldBasic.one_sub_t_ne_zero t) (FiniteFieldBasic.one_add_t_ne_zero t)
+omit [Fintype F] in
+lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) := by
+  change (1 - t.val) / (1 + t.val) ≠ 0
+  apply div_ne_zero (FiniteFieldBasic.one_sub_t_ne_zero t) (FiniteFieldBasic.one_add_t_ne_zero t)
 
-lemma u_pow_two_ne_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
-  let u_of_t := u t
-  u_of_t^2 ≠ (0 : F) := by
-    intro u_of_t
+omit [Fintype F] in
+lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  : (u t)^2 ≠ (0 : F) := by
     rw [pow_two]
     apply mul_ne_zero
-    · exact (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)
-    · exact (u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)
+    · exact (u_ne_zero t)
+    · exact (u_ne_zero t)
 
-lemma u_comparison
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (s : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
+omit [Fintype F] in
+lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) :
   let t1 := t.val
   let t2 := -t1
-  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let u1 := u t
   let u2 := u ⟨t2, h2_2⟩
   u2 = 1 / u1 := by
@@ -92,13 +73,9 @@ lemma u_comparison
        unfold u1 u
        simp
 
-lemma u_of_zero
-  (q : ℕ)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1 q field_cardinality q_prime_power q_mod_4_congruent_3;
+omit [Fintype F] in
+lemma u_of_zero :
+  let h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := FiniteFieldBasic.zero_h1
   let u_of_t := u ⟨(0 : F), h1⟩
   u_of_t = 1 := by
     intro h1 u_of_t
@@ -107,7 +84,6 @@ lemma u_of_zero
 
 lemma one_add_u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  {q : ℕ}
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -119,5 +95,5 @@ lemma one_add_u_ne_zero
     rw [add_div' _ _ _ (by exact FiniteFieldBasic.one_add_t_ne_zero t)]
     norm_num
     split_ands
-    · exact FiniteFieldBasic.two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3;
+    · exact FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3;
     · exact FiniteFieldBasic.one_add_t_ne_zero t

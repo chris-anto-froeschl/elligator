@@ -36,12 +36,11 @@ namespace Elligator.Elligator1
 section YProperties
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 lemma Y_ne_zero
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -57,7 +56,7 @@ lemma Y_ne_zero
     let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2)
     intro Y_of_t
     change (χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum ≠ 0
-    let v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    let v_ne_zero := v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
     apply mul_ne_zero
     · apply mul_ne_zero
       · rw [mul_pow (χ_of_v_of_t) (v_of_t) ((q + 1) / 4)]
@@ -67,13 +66,10 @@ lemma Y_ne_zero
         · apply pow_ne_zero (((q + 1) / 4) : ℕ)
           apply v_ne_zero
       · apply LegendreSymbol.χ_a_ne_zero v_ne_zero field_cardinality
-    · apply LegendreSymbol.χ_a_ne_zero (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
+    · apply LegendreSymbol.χ_a_ne_zero (v_h1_third_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
 
 lemma X_mul_Y_ne_zero
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -83,14 +79,11 @@ lemma X_mul_Y_ne_zero
   let Y_of_t := Y t s q
   X_of_t * Y_of_t ≠ 0 := by
     apply mul_ne_zero
-    · apply X_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
-    · apply Y_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    · apply X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
+    · apply Y_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 lemma one_add_X_ne_zero
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -102,7 +95,7 @@ lemma one_add_X_ne_zero
     let v_of_t := v t s
     let r_of_s := r s
     let χ_of_v_of_t := LegendreSymbol.χ v_of_t
-    let v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    let v_ne_zero := v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
     intro X
     change 1 + χ_of_v_of_t * u_of_t ≠ 0
     intro h
@@ -162,12 +155,12 @@ lemma one_add_X_ne_zero
       have h5_1 : r_of_s^2 ≠ 0 := by
         rw [pow_two]
         apply mul_ne_zero
-        · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-        · apply r_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+        · apply r_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
+        · apply r_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
       have h5_2 : IsSquare (r_of_s^2) := by
         rw [pow_two]
         apply IsSquare.mul_self r_of_s
-      rw [LegendreSymbol.χ_a_eq_one h5_1 h5_2 field_cardinality q_prime_power q_mod_4_congruent_3] at h1
+      rw [LegendreSymbol.χ_a_eq_one h5_1 h5_2 field_cardinality q_mod_4_congruent_3] at h1
       rw [mul_one] at h1
       rw [neg_one_mul] at h1
       have h5_3 : χ_of_v_of_t ≠ 0 := LegendreSymbol.χ_a_ne_zero v_ne_zero field_cardinality
@@ -187,23 +180,19 @@ lemma one_add_X_ne_zero
 
 lemma Y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
-  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t q field_cardinality q_prime_power q_mod_4_congruent_3
+  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let X1 := X t s
-  let X2 := X ⟨t2, h2_2⟩ s
   let Y1 := Y t s q
   let Y2 := Y ⟨t2, h2_2⟩ s q
   Y2 = Y1 / X1^3 := by
-    intro t1 t2 h2_2 X1 X2 Y1 Y2
+    intro t1 t2 h2_2 X1 Y1 Y2
     let c_of_s := c s
     let r_of_s := r s
     let u1 := u t
@@ -219,13 +208,13 @@ lemma Y_comparison
     let χ_of_v1 := LegendreSymbol.χ v1
     let χ_of_v2 := LegendreSymbol.χ v2
     let χ_of_u1_mul_v1  := LegendreSymbol.χ (u1 * v1)
-    let u_ne_zero := u_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t
+    let u_ne_zero := @u_ne_zero F _ t
     have first_factor : (χ_of_v2 * v2)^((q + 1) / 4) = (χ_of_v1 * v1)^((q + 1) / 4) * χ_of_u1 / u1^3:= by
       have h1_1 : χ_of_v2 * v2 = χ_of_v1 * v1 / u1^6 := by
         unfold χ_of_v2
-        rw [v_comparison_implication4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [v_comparison_implication4 t field_cardinality q_mod_4_congruent_3]
         unfold v2
-        rw [v_comparison_implication2 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [v_comparison_implication2 t]
         change χ_of_v1 * (v1 / u1^6) = χ_of_v1 * v1 / u1 ^ 6
         rw [← mul_div_assoc]
       have h1_2 : IsSquare (χ_of_u1 * u1^3) := by
@@ -233,7 +222,7 @@ lemma Y_comparison
           apply mul_ne_zero
           · apply LegendreSymbol.χ_a_ne_zero u_ne_zero field_cardinality
           · apply pow_ne_zero 3 u_ne_zero
-        apply (LegendreSymbol.χ_a_eq_one_iff_a_square h1_2_1 field_cardinality q_prime_power q_mod_4_congruent_3).mp
+        apply (LegendreSymbol.χ_a_eq_one_iff_a_square h1_2_1 field_cardinality q_mod_4_congruent_3).mp
         have h : (3 : ℕ) = 1 + 2 := by norm_num
         rw [h, pow_add u1 1 2, ← mul_assoc, pow_one]
         rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
@@ -244,7 +233,7 @@ lemma Y_comparison
           rw [pow_two]
           apply IsSquare.mul_self u1
         have h'' : LegendreSymbol.χ (u1 ^ 2) = 1 := by
-          apply (LegendreSymbol.χ_a_eq_one_iff_a_square (FiniteFieldBasic.pow_two_ne_zero u_ne_zero) field_cardinality q_prime_power q_mod_4_congruent_3).mpr
+          apply (LegendreSymbol.χ_a_eq_one_iff_a_square (FiniteFieldBasic.pow_two_ne_zero u_ne_zero) field_cardinality q_mod_4_congruent_3).mpr
           exact h'
         rw [h'']
         simp
@@ -252,7 +241,7 @@ lemma Y_comparison
         have h1_3_1 : 6 = 3 * 2 := by norm_num
         rw [h1_3_1, ← pow_mul, mul_assoc, mul_comm, pow_mul, mul_comm]
         rw [← field_cardinality, add_comm]
-        rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q field_cardinality q_mod_4_congruent_3]
+        rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two field_cardinality q_mod_4_congruent_3]
         rw [field_cardinality, add_comm, LegendreSymbol.a_pow_q_add_one_over_two_eq_χ_of_a_mul_a field_cardinality q_mod_4_congruent_3]
         change (χ_of_u1 * u1)^3 = χ_of_u1 * u1^3
         have h1_3_2 : Odd 3 := by trivial
@@ -266,21 +255,21 @@ lemma Y_comparison
           unfold χ_of_u1
           nth_rw 2 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a field_cardinality q_prime_power q_mod_4_congruent_3]
           ring_nf
-    have second_factor : χ_of_v2 = χ_of_v1 := by exact v_comparison_implication4 t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    have second_factor : χ_of_v2 = χ_of_v1 := by exact v_comparison_implication4 t field_cardinality q_mod_4_congruent_3
     have third_factor : LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) := by
       calc
         LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = LegendreSymbol.χ ((c_of_s^2 * u1^4 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) := by
-          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) field_cardinality q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3) field_cardinality q_mod_4_congruent_3]
           rw [mul_comm]
-          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero t) field_cardinality q_mod_4_congruent_3]
           rw [mul_comm]
-          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (v_h1_third_factor_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality q_mod_4_congruent_3]
+          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (v_h1_third_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality q_mod_4_congruent_3]
           change LegendreSymbol.χ ((u1^2)^2 * (c_of_s^2 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) = LegendreSymbol.χ (c_of_s ^ 2 * u1 ^ 4 * (u2 ^ 2 + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2)
           ring_nf
         _ = LegendreSymbol.χ ((u1^2 * (c_of_s^2 + u1^2)) * (u1^2 + 1 / c_of_s^2)^2) := by
           rw [pow_two u2]
           unfold u2
-          rw [u_comparison t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [u_comparison t s]
           change LegendreSymbol.χ (c_of_s ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2) = LegendreSymbol.χ (u1 ^ 2 * (c_of_s ^ 2 + u1 ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2)
           have h1 : c_of_s ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c_of_s ^ 2) = u1^2 * (c_of_s^2 + u1^2) := by
             rw [mul_add]
@@ -288,10 +277,10 @@ lemma Y_comparison
             simp
             nth_rw 4 [mul_comm]
             rw [mul_assoc (u1 ^ 4) (c_of_s ^ 2) ((c_of_s ^ 2)⁻¹)]
-            rw [mul_inv_cancel₀ (c_pow_two_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3)]
+            rw [mul_inv_cancel₀ (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)]
             have h1_2 : 4 = 2 + 2 := by norm_num
             rw [h1_2, pow_add, ← mul_assoc _ (u1^2) (u1^2), mul_assoc (c_of_s^2 * u1^2) (u1^2) _]
-            rw [mul_inv_cancel₀ (u_pow_two_ne_zero q field_cardinality q_prime_power q_mod_4_congruent_3 t)]
+            rw [mul_inv_cancel₀ (u_pow_two_ne_zero t)]
             ring_nf
           rw [h1]
         _ = LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) := by
@@ -300,7 +289,7 @@ lemma Y_comparison
           repeat rw [← mul_assoc]
           rw [add_comm]
           unfold v1
-          rw [v_h1 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+          rw [v_h1 s_h1 field_cardinality q_prime_power q_mod_4_congruent_3]
           change LegendreSymbol.χ (u1 * u1 * (u1 ^ 2 + c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2)) = LegendreSymbol.χ (u1 * (u1 * (u1 ^ 2 + c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2)) * (u1 ^ 2 + 1 / c_of_s ^ 2))
           repeat rw [← mul_assoc]
     calc
@@ -320,12 +309,12 @@ lemma Y_comparison
         rw [← mul_assoc, mul_assoc Y1 (LegendreSymbol.χ u1) (LegendreSymbol.χ u1)]
         rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
         rw [← pow_two]
-        rw [LegendreSymbol.χ_of_a_pow_two_eq_one u_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [LegendreSymbol.χ_of_a_pow_two_eq_one u_ne_zero field_cardinality q_mod_4_congruent_3]
         rw [← LegendreSymbol.one_over_χ_of_a_eq_χ_a field_cardinality q_prime_power q_mod_4_congruent_3]
         have h2 : Odd 3 := by
           apply Nat.odd_iff.mpr
           norm_num
-        let v_ne_zero := v_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 t
+        let v_ne_zero := v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
         rw [← LegendreSymbol.χ_of_a_pow_n_eq_χ_a v1 ⟨3, h2⟩ field_cardinality q_prime_power q_mod_4_congruent_3]
         change Y1 * 1 * (1 / χ_of_v1^3) / u1 ^ 3 = Y1 / (χ_of_v1 * u1) ^ 3
         simp

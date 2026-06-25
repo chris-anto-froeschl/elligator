@@ -3,10 +3,10 @@
 all: build lint lint-style
 
 build:
-	lake build
+	LEAN_NUM_THREADS=64 lake build
 
 lint:
-	lake lint
+	LEAN_NUM_THREADS=64 lake lint
 
 lint-style:
 	lake exe lint-style
