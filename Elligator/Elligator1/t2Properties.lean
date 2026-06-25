@@ -39,19 +39,18 @@ In this file we introduce some generally helpful lemmas for `t2` as introduced i
 See [bernstein2013a] chapter 3.
 -/
 
-
 namespace Elligator.Elligator1
 
 section t2Properties
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 lemma t2_eq_one
   (t : { t : F // t = 1 ∨ t = -1})
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -64,15 +63,13 @@ lemma t2_eq_one
     let u2_of_point := u2 s point q
     change (1 - u2_of_point) / (1 + u2_of_point) = 1
     unfold u2_of_point
-    rw [u2_eq_zero t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [u2_eq_zero t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
 lemma t2_eq_t
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -89,7 +86,7 @@ lemma t2_eq_t
     intro point t2_of_point
     let u_of_t := u t
     let u2_of_t := u2 s point q
-    have h1 : u2_of_t = u_of_t := by exact u2_eq_u t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
+    have h1 : u2_of_t = u_of_t := by exact u2_eq_u t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 X_h
     unfold u_of_t u at h1
     unfold t2_of_point t2
     change (1 - u2_of_t) / (1 + u2_of_t) = t.val
@@ -109,10 +106,8 @@ lemma t2_eq_t
 
 lemma t2_eq_t'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -132,7 +127,7 @@ lemma t2_eq_t'
     have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let u'_of_t := u ⟨t', h2_2⟩
     let u2_of_t := u2 s point q
-    have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 X_h
+    have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 X_h
     unfold u'_of_t u at h1
     unfold t2_of_point t2
     change (1 - u2_of_t) / (1 + u2_of_t) = t'
@@ -151,10 +146,9 @@ lemma t2_eq_t'
     simp
 
 lemma t2_in_t_or_neg_t
-  (t s : F)
+  (t : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -165,16 +159,16 @@ lemma t2_in_t_or_neg_t
   t2_of_point = t ∨ t2_of_point = t' := by
     intro point t' t2_of_point
     by_cases h : t ≠ 1 ∧ t ≠ -1
-    · rcases (X2_h4 ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3) with h1 | h1
+    · rcases (X2_h4 ⟨t, h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3) with h1 | h1
       · left
-        exact t2_eq_t ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h1
+        exact t2_eq_t ⟨t, h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 h1
       · right
-        exact t2_eq_t' ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 h1
+        exact t2_eq_t' ⟨t, h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 h1
     · have h' : t = 1 ∨ t = -1 := by
         rw [← not_ne_iff, ← not_ne_iff, ← Lean.Grind.not_and]
         exact h
       unfold t2_of_point t'
-      rw [t2_eq_one ⟨t, h'⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+      rw [t2_eq_one ⟨t, h'⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
       have h'' : 1 = t ∨ 1 = -t := by
         nth_rw 2 [← mul_left_inj' FiniteFieldBasic.neg_one_ne_zero]
         simp
@@ -185,23 +179,18 @@ lemma t2_in_t_or_neg_t
 
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def t'
-  (s : F)
-  (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   : F :=
-  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let u := u' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 - u) / (1 + u)
 
 lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -211,16 +200,16 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
   (y_ne_one : point.val.2 ≠ 1)
   :
   let X := X2 s point q
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   X ≠ 1 → t ≠ 1 ∧ t ≠ -1 := by
     intro X t h1
     unfold t t'
-    let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let u'_eq_X2_or_u'_eq_neg_X2 := u'_eq_X2_or_u'_eq_neg_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let u := u' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let u'_eq_X2_or_u'_eq_neg_X2 := u'_eq_X2_or_u'_eq_neg_X2 s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     change u = X ∨ u = -X at u'_eq_X2_or_u'_eq_neg_X2
     change (1 - u) / (1 + u) ≠ 1 ∧ (1 - u) / (1 + u) ≠ -1
-    let one_add_u'_ne_zero := one_add_u'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
-    let u'_ne_zero := u'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
+    let one_add_u'_ne_zero := one_add_u'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
+    let u'_ne_zero := u'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     let two_ne_zero := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     and_intros
     · intro h2
@@ -231,10 +220,8 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
       contradiction
 
 lemma one_add_t'_ne_zero
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -244,17 +231,15 @@ lemma one_add_t'_ne_zero
   (y_ne_one : point.val.2 ≠ 1)
   :
   let X := X2 s point q
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   X ≠ 1 → t + 1 ≠ 0 := by
     intro X t h1
-    let t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
+    let t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     grind
 
 lemma u'_eq_one_sub_t'_over_one_add_t'
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -264,21 +249,19 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
   (y_ne_one : point.val.2 ≠ 1)
   :
   let X := X2 s point.val q
-  let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let u := u' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   X ≠ 1 → u = (1 - t) / (1 + t) := by
     intro X u t h1
     unfold t t'
-    let u := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let one_add_u'_ne_zero := one_add_u'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
+    let u := u' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let one_add_u'_ne_zero := one_add_u'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     let two_ne_zero := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     grind
 
 lemma u'_eq_u
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -291,23 +274,21 @@ lemma u'_eq_u
     X ≠ 1
   )
   :
-  let u' := u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let u' := u' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let u := u ⟨t, t_h⟩
   u' = u := by
     intro u' t t_h u
-    let h1 := u'_eq_one_sub_t'_over_one_add_t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h1 := u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     unfold u' u
     rw [h1]
     unfold Elligator1.u
     grind
 
 lemma v'_eq_v
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -320,23 +301,21 @@ lemma v'_eq_v
     X ≠ 1
   )
   :
-  let v' := v' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let v' := v' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let v := v ⟨t, t_h⟩ s
   v' = v := by
     intro v' t t_h v
-    let h1 := u'_eq_one_sub_t'_over_one_add_t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := u'_eq_u s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h1 := u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := u'_eq_u s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     unfold v' v Elligator1.v' Elligator1.v
     rw [h1]
     grind
 
 lemma X'_eq_X
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -350,25 +329,23 @@ lemma X'_eq_X
   )
   :
   let X' := X2 s point q
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let X := X ⟨t, t_h⟩ s
   X' = X := by
     intro X' t t_h X
-    let h1 := u'_eq_one_sub_t'_over_one_add_t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := u'_eq_u s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h3 := v'_eq_v s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h4 := X'_eq_χ_of_v'_mul_u' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h1 := u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := u'_eq_u s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h3 := v'_eq_v s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h4 := X'_eq_χ_of_v'_mul_u' s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     unfold X'
     rw [h4, h2, h3]
     change X = X
     rfl
 
 lemma Y'_eq_Y
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -381,15 +358,15 @@ lemma Y'_eq_Y
     X ≠ 1
   )
   :
-  let Y' := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let Y' := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let Y := Y ⟨t, t_h⟩ s q
   Y' = Y := by
     intro Y' t t_h Y
-    let h2 := u'_eq_u s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h3 := v'_eq_v s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h4 := Y'_observation2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := u'_eq_u s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h3 := v'_eq_v s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h4 := Y'_observation2 s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     unfold Y'
     rw [h4, h2, h3]
     change Y = Y
@@ -397,10 +374,7 @@ lemma Y'_eq_Y
 
 /-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def x'
-  (s : F)
-  (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -408,14 +382,12 @@ noncomputable def x'
   : F :=
   let c := c s
   let X' := X2 s point q
-  let Y' := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let Y' := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   (c - 1) * s * X' * (1 + X') / Y'
 
 lemma x'_eq_x
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -428,25 +400,22 @@ lemma x'_eq_x
     X' ≠ 1
   )
   :
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let x := x ⟨t, t_h⟩ s q
-  let x' := x' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let x' := x' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   x' = x := by
     intro t t_h x x'
     unfold x' Elligator1.x' x Elligator1.x
-    let h1 := u'_eq_u s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := v'_eq_v s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := Y'_eq_Y s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := X'_eq_X s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h1 := u'_eq_u s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := v'_eq_v s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := Y'_eq_Y s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := X'_eq_X s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind
 
 /-- `y'` is the `y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def y'
-  (s : F)
-  (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -457,10 +426,8 @@ noncomputable def y'
   (r * X' - (1 + X')^2) / (r * X' + (1 + X')^2)
 
 lemma y'_eq_y
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -473,24 +440,22 @@ lemma y'_eq_y
     X' ≠ 1
   )
   :
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let y := y ⟨t, t_h⟩ s
-  let y' := y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let y' := y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   y' = y := by
     intro t t_h y y'
     unfold y' Elligator1.y' y Elligator1.y
-    let h1 := u'_eq_u s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := v'_eq_v s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := Y'_eq_Y s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := X'_eq_X s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h1 := u'_eq_u s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := v'_eq_v s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := Y'_eq_Y s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := X'_eq_X s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind
 
 theorem x'_and_y'_fulfill_curve_equation
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -503,18 +468,18 @@ theorem x'_and_y'_fulfill_curve_equation
     X' ≠ 1
   )
   :
-  let x' := x' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let y' := y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let x' := x' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let y' := y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   let d := d s
   have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   edwards_curve_equation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
-    let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     let x := x ⟨t, t_h⟩ s q
     let y := y ⟨t, t_h⟩ s
-    let x'_eq_x := x'_eq_x s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let y'_eq_y := y'_eq_y s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let x'_eq_x := x'_eq_x s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let y'_eq_y := y'_eq_y s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     let h1 := x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     unfold edwards_curve_equation x' y'
     rw [x'_eq_x, y'_eq_y]
@@ -525,10 +490,8 @@ theorem x'_and_y'_fulfill_curve_equation
 -- They have the same formulas (i.e x'/y' = x/y), but always only using point as a builder
 
 lemma y_of_t_eq_y_of_point
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -541,24 +504,22 @@ lemma y_of_t_eq_y_of_point
     X' ≠ 1
   )
   :
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let y_of_t := y ⟨t, t_h⟩ s
   let y_of_point := point.val.2
   y_of_t = y_of_point := by
     intro t t_h y_of_t y_of_point
-    let y_with_X2 := y_with_X2 s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
+    let y_with_X2 := y_with_X2 s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
     unfold y_of_point
     rw [y_with_X2]
     unfold y_of_t Elligator1.y
-    let h2 := X'_eq_X s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := X'_eq_X s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind
 
 lemma x_of_t_eq_x_of_point
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -571,16 +532,16 @@ lemma x_of_t_eq_x_of_point
     X' ≠ 1
   )
   :
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let x_of_t := x ⟨t, t_h⟩ s q
   let x_of_point := point.val.1
   x_of_t = x_of_point := by
     intro t t_h x_of_t x_of_point
-    let Y' := Y' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let Y' := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
     let c := c s
     let X := X2 s point q
-    let Y'_ne_zero := Y'_ne_zero s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let Y'_ne_zero := Y'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     change x_of_point ≠ 0 at x_ne_zero
     have h1 : Y' = (c - 1) * s * X * (1 + X) / x_of_point := by
       unfold Y' Elligator1.Y'
@@ -591,18 +552,16 @@ lemma x_of_t_eq_x_of_point
       change x_of_point / x_of_point * Y' = (c - 1) * s * X * (1 + X) / Y' / x_of_point * Y'
       grind
     rw [h2]
-    let h3 := Y'_eq_Y s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h4 := X'_eq_X s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h3 := Y'_eq_Y s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h4 := X'_eq_X s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     unfold Y' X
     rw [h3, h4]
     change x_of_t = x_of_t
     rfl
 
 lemma x_y_of_point_eq_x_y_of_t
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -615,14 +574,14 @@ lemma x_y_of_point_eq_x_y_of_t
     X' ≠ 1
   )
   :
-  let t := t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+  let t := t' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
   let y_of_t := y ⟨t, t_h⟩ s
   let y_of_point := point.val.2
   let x_of_t := x ⟨t, t_h⟩ s q
   let x_of_point := point.val.1
   (x_of_t, y_of_t) = (x_of_point, y_of_point) := by
     intro t t_h y_of_t y_of_point
-    let h1 := x_of_t_eq_x_of_point s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
-    let h2 := y_of_t_eq_y_of_point s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h1 := x_of_t_eq_x_of_point s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
+    let h2 := y_of_t_eq_y_of_point s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind

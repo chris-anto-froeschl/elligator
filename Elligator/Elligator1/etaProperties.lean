@@ -42,13 +42,13 @@ namespace Elligator.Elligator1
 section etaProperties
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 lemma η_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -61,5 +61,5 @@ lemma η_eq_zero
     let y_of_t := point.2
     change (y_of_t - 1) / (2 * (y_of_t + 1)) = 0
     unfold y_of_t point
-    rw [ϕ_of_t_eq_zero_one t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [ϕ_of_t_eq_zero_one t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     simp

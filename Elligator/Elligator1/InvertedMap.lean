@@ -49,15 +49,16 @@ namespace Elligator.Elligator1
 section InvertedMap
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.1 :
 --
 -- "If t ∈ Fq then the set of preimages of ϕ(t) under ϕ is {t, −t}"
 theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
-  (t s : F)
+  (t : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -69,9 +70,9 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
     intro ϕ_of_t ϕ_of_neg_t
     constructor
     · intro h
-      exact ϕ_preimages t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      exact ϕ_preimages t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     · intro h
-      exact ϕ_of_t_eq_ϕ_of_neg_t t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      exact ϕ_of_t_eq_ϕ_of_neg_t t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.2 :
 --
@@ -83,21 +84,20 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
 -- Note: Original statement does not read like an iff. Only the proof explanation
 -- makes this more concrete
 theorem point_props_iff_point_in_ϕ_over_F_of_point
-  (t s : F)
+  (t : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   ϕ_over_F_props s point
-  ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
+  ↔ point.val ∈ ϕ_over_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 := by
     intro point
     constructor
-    · exact point_in_ϕ_over_F_of_point_props s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 point
-    · exact point_props_of_point_in_ϕ_over_F t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact point_in_ϕ_over_F_of_point_props s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    · exact point_props_of_point_in_ϕ_over_F t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.3
 -- If (x, y) ∈ ϕ(Fq) then the following elements X_bar, z, u_bar, t_bar of Fq are defined and ϕ(t_bar) = (x, y):
@@ -107,10 +107,9 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
 --    t_bar = (1 − u_bar)/(1 + u_bar)
 theorem ϕ_of_t2_eq_x_y
   -- Fix t ∈ F_q
-  (t s : F)
+  (t : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -128,23 +127,21 @@ theorem ϕ_of_t2_eq_x_y
     simp only []
     split
     · rename_i h
-      exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     · rename_i h
       have h1_1 : t = 1 ∨ t = -1 := by
         rw [← not_ne_iff, ← not_ne_iff, ← Lean.Grind.not_and]
         exact h
       simp
-      exact ϕ_of_t2_eq_x_y_base_case ⟨t, h1_1⟩ s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      exact ϕ_of_t2_eq_x_y_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 theorem X2_defined
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ ϕ_over_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let y := point.val.snd
   2 * (y + 1) ≠ 0 := by
@@ -175,10 +172,7 @@ theorem X2_defined
     · exact h1
 
 theorem z_defined
-  (s : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -189,14 +183,12 @@ theorem z_defined
     exact (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
 
 theorem t2_defined
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ ϕ_over_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let u2_of_point := u2 s point.val q
   (1 + u2_of_point) ≠ 0 := by

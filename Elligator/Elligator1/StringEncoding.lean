@@ -38,6 +38,7 @@ namespace Elligator.Elligator1
 section StringEncoding
 
 variable {F : Type*} [Field F] [Fintype F]
+variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 /-- `ι` maps an element of `S` to `E_over_F` via `ι(τ) = ϕ(σ(τ))`.
@@ -45,7 +46,6 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
 noncomputable def ι
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -53,8 +53,7 @@ noncomputable def ι
   (q_mod_4_congruent_3 : q % 4 = 3)
   (τ : (@S q))
   : {P : F × F // P ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3}
-  :=
-  ϕ (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+  := ϕ (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- 1. statement of Theorem 4:
 -- Then #S = (q + 1) / 2;
@@ -70,7 +69,7 @@ theorem ι_injective
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   have q_prime_power := by grind
-  let ι := ι s s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+  let ι := ι s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   Function.Injective ι := by
     unfold Function.Injective
     intro q_prime_power ι τ τ' h1
@@ -82,11 +81,11 @@ theorem ι_injective
     change ϕ_of_τ = ϕ_of_τ' at h1
     have h2 : ϕ_of_τ = ϕ_of_neg_τ  := by
       unfold ϕ_of_τ ϕ_of_neg_τ
-      let h2_1 := ϕ_of_t_eq_ϕ_of_neg_t (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+      let h2_1 := ϕ_of_t_eq_ϕ_of_neg_t (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
       grind
     have h3 : ϕ_of_neg_τ = ϕ_of_τ' := by grind
     have h4 : ¬ (∃ (p : { n : F // n ≠ (σ τ.1) ∧ n ≠ -(σ τ.1)}), ϕ p.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_τ) := by
-        let h4_1 := (ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).mp
+        let h4_1 := (ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).mp
         unfold ϕ_of_τ ϕ_of_neg_τ at h2
         convert h4_1 ( congr_arg Subtype.val h2 ) using 1
         simp +decide [ Subtype.ext_iff ]
@@ -111,42 +110,37 @@ theorem ι_injective
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
 noncomputable def ι_over_S
-  {s : F}
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   Set (F × F) :=
-  { P | ∃ (τ : (@S q)), P = ι s s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 τ }
+  { P | ∃ (τ : (@S q)), P = ι s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 τ }
 
 /-- `ι_over_S` is the set of points produced by `ι`.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
 noncomputable def ι_over_S'
-  {s : F}
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   -- TODO if range works out do this with φ_of_F aswell
-  := Set.range (ι s s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3)
+  := Set.range (ι s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3)
 
 theorem ϕ_over_F_eq_ι_over_S'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let ϕ_over_F := ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
-  let ι_over_S := ι_over_S' s_h1 s_h2 q field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
+  let ϕ_over_F := ϕ_over_F s_h1 s_h2 field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
+  let ι_over_S := ι_over_S' s_h1 s_h2 field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
   ϕ_over_F = ι_over_S := by
     --intro ϕ_over_F ι_over_S
     --unfold ϕ_over_F Elligator1.ϕ_over_F ι_over_S ι_over_S' Set.range

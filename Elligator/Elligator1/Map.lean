@@ -144,6 +144,7 @@ noncomputable def ϕ
   open scoped Classical in let P := if h : t ≠ 1 ∧ t ≠ -1
     then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s)
     else (0, 1)
+  -- TODO writeable as type?
   have P_in_E_over_F : P ∈ (E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3) := by
     unfold E_over_F
     rw [Set.mem_setOf_eq]
