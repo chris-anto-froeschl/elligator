@@ -54,7 +54,7 @@ noncomputable def ι
   (τ : (@S q))
   : {P : F × F // P ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3}
   :=
-  ϕ (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  ϕ (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- 1. statement of Theorem 4:
 -- Then #S = (q + 1) / 2;
@@ -76,16 +76,16 @@ theorem ι_injective
     intro q_prime_power ι τ τ' h1
     unfold ι Elligator1.ι at h1
     let σ_injective := σ_injective field_cardinality q_prime q_mod_4_congruent_3
-    let ϕ_of_τ := ϕ (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let ϕ_of_τ' := ϕ (σ τ'.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
-    let ϕ_of_neg_τ := ϕ (-σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let ϕ_of_τ := ϕ (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    let ϕ_of_τ' := ϕ (σ τ'.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    let ϕ_of_neg_τ := ϕ (-σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     change ϕ_of_τ = ϕ_of_τ' at h1
     have h2 : ϕ_of_τ = ϕ_of_neg_τ  := by
       unfold ϕ_of_τ ϕ_of_neg_τ
       let h2_1 := ϕ_of_t_eq_ϕ_of_neg_t (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
       grind
     have h3 : ϕ_of_neg_τ = ϕ_of_τ' := by grind
-    have h4 : ¬ (∃ (p : { n : F // n ≠ (σ τ.1) ∧ n ≠ -(σ τ.1)}), ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_τ) := by
+    have h4 : ¬ (∃ (p : { n : F // n ≠ (σ τ.1) ∧ n ≠ -(σ τ.1)}), ϕ p.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_τ) := by
         let h4_1 := (ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages (σ τ.1) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).mp
         unfold ϕ_of_τ ϕ_of_neg_τ at h2
         convert h4_1 ( congr_arg Subtype.val h2 ) using 1

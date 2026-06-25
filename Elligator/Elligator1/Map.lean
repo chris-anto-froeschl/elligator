@@ -135,14 +135,12 @@ Original: Chapter "3.2 The map": Definition 2
 -/
 noncomputable def ϕ
   (t : F)
-  (s : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (q : ℕ)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : {P : F × F // P ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3} :=
+  : E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 :=
   open scoped Classical in let P := if h : t ≠ 1 ∧ t ≠ -1
     then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s)
     else (0, 1)

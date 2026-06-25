@@ -55,7 +55,7 @@ lemma X2_eq_neg_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let X2_of_point := X2 s point q
   X2_of_point = -1 := by
     intro point X2_of_point
@@ -124,7 +124,7 @@ lemma X2_h3
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let X_of_t := X t s
   let X'_of_t := X ⟨t2, h2_2⟩ s
   let X2_of_t := X2 s point.val q
@@ -155,7 +155,7 @@ lemma X2_h4
   let t1 := t.val
   let t2 := -t1
   have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let X_of_t := X t s
   let X'_of_t := X ⟨t2, h2_2⟩ s
   let X2_of_t := X2 s point q

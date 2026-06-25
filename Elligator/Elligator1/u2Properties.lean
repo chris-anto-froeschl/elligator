@@ -54,7 +54,7 @@ lemma u2_eq_zero
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
   let u2_of_point := u2 s point q
   u2_of_point = 0 := by
     intro point u2_of_point
@@ -72,13 +72,13 @@ lemma u2_eq_u
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
-    let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+    let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
     let X_of_t := X t s
     let X2_of_t := X2 s point q
     X2_of_t = X_of_t
   )
   :
-  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
   let u_of_t := u t
   let u2_of_t := u2 s point q
   u2_of_t = u_of_t := by
@@ -165,7 +165,7 @@ lemma u2_eq_u'
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
-    let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+    let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
     have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let X'_of_t := X ⟨-t.val, h2_2⟩ s
     let X2_of_t := X2 s point q
@@ -173,7 +173,7 @@ lemma u2_eq_u'
   )
   :
   have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
-  let point := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
   let u'_of_t := u ⟨-t.val, h2_2⟩
   let u2_of_t := u2 s point q
   u2_of_t = u'_of_t := by
@@ -265,7 +265,7 @@ lemma u2_h1
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let u_of_t := u t
   have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let u'_of_t := u ⟨-t.val, h2_2⟩
@@ -291,7 +291,7 @@ lemma one_add_u2_ne_zero_main_case
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let P := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).1
+  let P := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).1
   let u2 := u2 s P q
   1 + u2 ≠ 0 := by
     intro P u2
@@ -313,7 +313,7 @@ lemma one_add_u2_ne_zero_base_case
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let P := (ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).1
+  let P := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).1
   let u2 := u2 s P q
   1 + u2 ≠ 0 := by
     intro P u2

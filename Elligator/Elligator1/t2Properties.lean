@@ -56,7 +56,7 @@ lemma t2_eq_one
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let t2_of_point := t2 s point q
   t2_of_point = 1 := by
     intro point t2_of_point
@@ -77,13 +77,13 @@ lemma t2_eq_t
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
-    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     let X_of_t := X t s
     let X2_of_t := X2 s point q
     X2_of_t = X_of_t
   )
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let t2_of_point := t2 s point q
   t2_of_point = t := by
     intro point t2_of_point
@@ -117,14 +117,14 @@ lemma t2_eq_t'
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (X_h :
-    let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+    let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let X'_of_t := X ⟨-t.val, h2_2⟩ s
     let X2_of_t := X2 s point q
     X2_of_t = X'_of_t
   )
   :
-  let point := ϕ t.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let t2_of_point := t2 s point q
   let t' := -t.val
   t2_of_point = t' := by
@@ -159,7 +159,7 @@ lemma t2_in_t_or_neg_t
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   let t' := -t
   let t2_of_point := t2 s point q
   t2_of_point = t ∨ t2_of_point = t' := by

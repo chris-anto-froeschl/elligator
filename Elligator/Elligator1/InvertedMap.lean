@@ -62,10 +62,10 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let ϕ_of_t := (ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
-  let ϕ_of_neg_t := (ϕ (-t) s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let ϕ_of_t := (ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let ϕ_of_neg_t := (ϕ (-t) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
   ϕ_of_t = ϕ_of_neg_t
-  ↔ ¬ (∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), ϕ p.val s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
+  ↔ ¬ (∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), ϕ p.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 = ϕ_of_t) := by
     intro ϕ_of_t ϕ_of_neg_t
     constructor
     · intro h
@@ -91,7 +91,7 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let point := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  let point := ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   ϕ_over_F_props s point
   ↔ point.val ∈ ϕ_over_F s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3 := by
     intro point
@@ -116,12 +116,12 @@ theorem ϕ_of_t2_eq_x_y
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   -- Define (x, y) = ϕ(t)
-  let point := (ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let point := (ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
   let x_of_t := point.1
   let y_of_t := point.2
   -- t2 defined (and used to build ϕ(t2))
   let t' := t2 s point q
-  let ϕ_of_t' := (ϕ t' s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let ϕ_of_t' := (ϕ t' s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro point x_of_point y_of_point t' ϕ_of_t'
     unfold x_of_point y_of_point point ϕ

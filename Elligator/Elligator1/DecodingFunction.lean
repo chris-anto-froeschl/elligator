@@ -25,4 +25,4 @@ noncomputable def DecodingFunction
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : F × F := ϕ t s s_h1 s_h2 q field_cardinality q_prime_power q_mod_4_congruent_3
+  : F × F := ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
