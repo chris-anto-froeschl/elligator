@@ -1,4 +1,5 @@
 import Mathlib
+import Architect
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 --import Elligator.Elligator1.Variables
@@ -18,6 +19,7 @@ Edwards curve E : x² + y² = 1 + dx²y² is the function ϕ : Fq → E(Fq) defi
 
 Original: Chapter "3.2 The map": Definition 2
 -/
+@[blueprint "def:def2"]
 noncomputable def DecodingFunction
   (t : F)
   (s_h1 : s ≠ 0)

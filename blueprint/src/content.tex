@@ -1,7 +1,20 @@
-% In this file you should put the actual content of the blueprint.
-% It will be used both by the web and the print version.
-% It should *not* include the \begin{document}
-%
-% If you want to split the blueprint content into several files then
-% the current file can be a simple sequence of \input. Otherwise It
-% can start with a \section or \chapter for instance.
+% This makes the macros `\inputleanmodule` and `\inputleannode` available.
+\input{../../.lake/build/blueprint/library/Elligator}
+
+\inputleannode{thm:thm1-1}.
+\inputleannode{thm:thm1-2}.
+\inputleannode{thm:thm1-3}.
+
+\inputleannode{def:def2}.
+
+\inputleannode{thm:thm3-1}.
+\inputleannode{thm:thm3-2}.
+\inputleannode{thm:thm3-3}.
+
+\inputleannode{def:def4}.
+\inputleannode{thm:thm4-1}.
+\inputleannode{thm:thm4-2}.
+\inputleannode{thm:thm4-3}.
+
+% You may also input an entire module:
+% \inputleanmodule{Example.MyNat}

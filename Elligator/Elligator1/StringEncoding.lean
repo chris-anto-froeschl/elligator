@@ -6,6 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Mathlib
+public import Architect
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
@@ -45,6 +46,7 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
+@[blueprint "def:def4"]
 noncomputable def ι
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -57,10 +59,12 @@ noncomputable def ι
 
 -- 1. statement of Theorem 4:
 -- Then #S = (q + 1) / 2;
+@[blueprint "thm:thm4-1"]
 theorem S_card (q_mod_4_congruent_3 : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
     exact S_card_eq_q_add_one_over_two q_mod_4_congruent_3
 
+@[blueprint "thm:thm4-2"]
 theorem ι_injective
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -132,6 +136,7 @@ noncomputable def ιOverS'
   -- TODO if range works out do this with φ_of_F aswell
   := Set.range (ι s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3)
 
+@[blueprint "thm:thm4-3"]
 theorem ϕOverF_eq_ιOverS'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

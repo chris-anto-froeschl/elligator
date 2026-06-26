@@ -6,6 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Mathlib
+public import Architect
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
 public import Elligator.EdwardsCurve
@@ -79,6 +80,7 @@ theorem y_defined
     exact y_divisor_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
+@[blueprint "thm:thm1-1"]
 theorem map_fulfills_helper_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -94,6 +96,7 @@ theorem map_fulfills_helper_equation
     exact Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
+@[blueprint "thm:thm1-2"]
 theorem variable_mul_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -112,6 +115,7 @@ theorem variable_mul_ne_zero
   exact u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
+@[blueprint "thm:thm1-3"]
 theorem map_fulfills_curve_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)

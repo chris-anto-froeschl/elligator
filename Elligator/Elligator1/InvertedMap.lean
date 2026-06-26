@@ -6,6 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Mathlib
+public import Architect
 public import Mathlib.Data.Set.Basic
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
@@ -55,6 +56,7 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.1 :
 --
 -- "If t ∈ Fq then the set of preimages of ϕ(t) under ϕ is {t, −t}"
+@[blueprint "thm:thm3-1"]
 theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
   (t : F)
   (s_h1 : s ≠ 0)
@@ -83,6 +85,7 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
 --
 -- Note: Original statement does not read like an iff. Only the proof explanation
 -- makes this more concrete
+@[blueprint "thm:thm3-2"]
 theorem point_props_iff_point_in_ϕOverF_of_point
   (t : F)
   (s_h1 : s ≠ 0)
@@ -105,6 +108,7 @@ theorem point_props_iff_point_in_ϕOverF_of_point
 --    z = χ((c − 1)s * X_bar * (1 + X_bar) * x * (X_bar² + 1/c²)),
 --    u_bar = z * X_bar,
 --    t_bar = (1 − u_bar)/(1 + u_bar)
+@[blueprint "thm:thm3-3"]
 theorem ϕ_of_t2_eq_x_y
   -- Fix t ∈ F_q
   (t : F)

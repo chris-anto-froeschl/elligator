@@ -11,15 +11,13 @@ name = "elligator"
 root = "Elligator"
 
 [[require]]
-name = "mathlib"
-scope = "leanprover-community"
-
-[[require]]
-scope = "leanprover"
-name = "doc-gen4"
+name = "LeanArchitect"
+git = "https://github.com/hanwenzhu/LeanArchitect.git"
 rev = "main"
 
-
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
 
 [[require]]
 name = "checkdecls"
@@ -29,3 +27,4 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 name = "«doc-gen4»"
 git = "https://github.com/leanprover/doc-gen4"
 rev = "main"
+
