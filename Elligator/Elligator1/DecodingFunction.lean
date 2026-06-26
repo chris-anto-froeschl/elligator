@@ -14,12 +14,21 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
-/-- In the situation of Theorem 1, the decoding function for the complete
-Edwards curve E : x² + y² = 1 + dx²y² is the function ϕ : Fq → E(Fq) defined as follows: ϕ(±1) = (0, 1); if t ∉ {±1} then ϕ(t) = (x, y).
+@[blueprint
+  (title := "The Map")
+  (statement := /--
+  Definition 2. In the situation of Theorem 1, the decoding function for the complete Edwards curve $E : x^2 + y^2 = 1 + d x^2 y^2$
+  is the function $\varphi : \mathbb{F}_q \to E(\mathbb{F}_q)$ defined as follows:
+  $$
+  \varphi(\pm 1) = (0, 1);
+  $$
+  if $t \notin \{\pm 1\}$ then
+  $$
+  \varphi(t) = (x, y).
+  $$
 
-Original: Chapter "3.2 The map": Definition 2
--/
-@[blueprint "def:def2"]
+  Original: Chapter "3.2 The map": Definition 2
+  -/)]
 noncomputable def DecodingFunction
   (t : F)
   (s_h1 : s ≠ 0)

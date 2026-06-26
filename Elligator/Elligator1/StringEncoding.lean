@@ -42,11 +42,26 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
-/-- `ι` maps an element of `S` to `EOverF` via `ι(τ) = ϕ(σ(τ))`.
+@[blueprint
+  (title := "The Encoding Function")
+  (statement := /--
+  In the situation of Definition 2, assume that $q$ is prime, and define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  $$
+  \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
+  $$
 
-Original: Chapter "3.4 Encoding as strings": Theorem 4
--/
-@[blueprint "def:def4"]
+  Define
+  $$
+  S = \sigma^{-1}(\{0, 1, 2, \ldots, (q - 1)/2\}).
+  $$
+
+  Define $\iota : S \to E(\mathbb{F}_q)$ as follows:
+  $$
+  \iota(\tau) = \varphi(\sigma(\tau)).
+  $$
+
+  Original: Chapter "3.4 Encoding as strings": Theorem 4
+  -/)]
 noncomputable def ι
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -57,14 +72,49 @@ noncomputable def ι
   : {P : F × F // P ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3}
   := ϕ (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
--- 1. statement of Theorem 4:
--- Then #S = (q + 1) / 2;
-@[blueprint "thm:thm4-1"]
+@[blueprint
+  (title := "Cardinality of S")
+  (statement := /--
+  In the situation of Definition 2, assume that $q$ is prime, and define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  $$
+  \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
+  $$
+
+  Define
+  $$
+  S = \sigma^{-1}(\{0, 1, 2, \ldots, (q - 1)/2\}).
+  $$
+
+  Then $\#S = (q + 1)/2$;
+
+  Original: Chapter "3.4 Encoding as strings": 1. statement of Theorem 4
+  -/)]
 theorem S_card (q_mod_4_congruent_3 : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
     exact S_card_eq_q_add_one_over_two q_mod_4_congruent_3
 
-@[blueprint "thm:thm4-2"]
+@[blueprint
+  (title := "Cardinality of S")
+  (statement := /--
+  In the situation of Definition 2, assume that $q$ is prime, and define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  $$
+  \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
+  $$
+
+  Define
+  $$
+  S = \sigma^{-1}(\{0, 1, 2, \ldots, (q - 1)/2\}).
+  $$
+
+  Define $\iota : S \to E(\mathbb{F}_q)$ as follows:
+  $$
+  \iota(\tau) = \varphi(\sigma(\tau)).
+  $$
+
+  Then $\#S = (q + 1)/2$;
+
+  Original: Chapter "3.4 Encoding as strings": 1. statement of Theorem 4
+  -/)]
 theorem ι_injective
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

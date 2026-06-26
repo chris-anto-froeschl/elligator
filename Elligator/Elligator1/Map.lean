@@ -46,11 +46,27 @@ variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 omit [Fintype F] in
+@[blueprint
+  (title := "u defined")
+  (statement := /--
+  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  $$
+  u = (1 - t)/(1 + t),
+  $$
+  -/)]
 theorem u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
     intro t
     exact FiniteFieldBasic.one_add_t_ne_zero t
 
+@[blueprint
+  (title := "Y defined")
+  (statement := /--
+  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  $$
+  Y = (\chi(v)v)^{(q+1)/4}\chi(v)\chi(u^2 + 1/c^2),
+  $$
+  -/)]
 theorem Y_defined
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -59,6 +75,14 @@ theorem Y_defined
   : (c s)^2 ≠ 0 := by
     exact c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint
+  (title := "x defined")
+  (statement := /--
+  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  $$
+  x = (c - 1)sX(1 + X)/Y,
+  $$
+  -/)]
 theorem x_defined
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -68,6 +92,14 @@ theorem x_defined
     intro t
     exact Y_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
+@[blueprint
+  (title := "y defined")
+  (statement := /--
+  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  $$
+  y = (rX - (1 + X)^2)/(rX + (1 + X)^2).
+  $$
+  -/)]
 theorem y_defined
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -80,7 +112,13 @@ theorem y_defined
     exact y_divisor_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
-@[blueprint "thm:thm1-1"]
+@[blueprint
+  (title := "Fulfill Helper Curve Equation")
+  (statement := /--
+  Let r, X and Y as defined above.
+
+  Then $Y^2 = X^5 + (r^2 - 2)X^3 + X$ holds.
+  -/)]
 theorem map_fulfills_helper_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -96,7 +134,13 @@ theorem map_fulfills_helper_equation
     exact Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
-@[blueprint "thm:thm1-2"]
+@[blueprint
+  (title := "Non zero helper variables")
+  (statement := /--
+  Let u, v, X, Y, x, y as defined above.
+
+  Then $uvXYx(y + 1) \neq 0$.
+  -/)]
 theorem variable_mul_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -115,7 +159,13 @@ theorem variable_mul_ne_zero
   exact u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Chapter 3.2 Theorem 1
-@[blueprint "thm:thm1-3"]
+@[blueprint
+  (title := "Fulfill Curve Equation")
+  (statement := /--
+  Let x and y as defined above.
+
+  Then $x^2 + y^2 = 1 + d x^2 y^2$ holds.
+  -/)]
 theorem map_fulfills_curve_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -132,11 +182,6 @@ theorem map_fulfills_curve_equation
     intro x_of_t y_of_t d_of_s
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
-/-- In the situation of Theorem 1, the decoding function for the complete
-Edwards curve E : x² + y² = 1 + dx²y² is the function ϕ : Fq → E(Fq) defined as follows: ϕ(±1) = (0, 1); if t ∉ {±1} then ϕ(t) = (x, y).
-
-Original: Chapter "3.2 The map": Definition 2
--/
 noncomputable def ϕ
   (t : F)
   (s_h1 : s ≠ 0)
