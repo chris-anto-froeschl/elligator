@@ -1,0 +1,22 @@
+name = "elligator"
+version = "0.1.0"
+defaultTargets = ["Elligator"]
+lintDriver = "batteries/runLinter"
+
+[[lean_lib]]
+name = "Elligator"
+
+[[lean_exe]]
+name = "elligator"
+root = "Elligator"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+
+[[require]]
+scope = "leanprover"
+name = "doc-gen4"
+rev = "main"
+
+
