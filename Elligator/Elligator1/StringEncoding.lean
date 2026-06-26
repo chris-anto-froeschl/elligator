@@ -42,6 +42,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+/-- Original: Chapter "3.4 Encoding as strings": Theorem 4 -/
 @[blueprint
   (title := "The Encoding Function")
   (statement := /--
