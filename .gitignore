@@ -12,3 +12,4 @@
 **/*.snm
 **/*.fdb_latexmk
 **/*.fls
+venv
