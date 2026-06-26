@@ -194,7 +194,7 @@ lemma char_ne_two
   (q_mod_4_congruent_3 : q % 4 = 3)
   : Fintype.card F ≠ 2 := by
     have h1 := FiniteField.card F ( ringChar F )
-    simp_all +decide ;
+    simp_all +decide;
     rintro h
     simp_all +decide
 
@@ -204,10 +204,10 @@ lemma ring_char_ne_two
   (q_mod_4_congruent_3 : q % 4 = 3)
   : ringChar F ≠ 2 := by
     have h1 := FiniteField.card F ( ringChar F )
-    simp_all +decide ;
+    simp_all +decide;
     rintro h
     simp_all +decide
-    rcases h1 with ⟨ x, rfl ⟩ ; rcases x with ( _ | _ | x ) <;> norm_num [ Nat.pow_succ', ← mul_assoc, Nat.mul_mod ] at *;
+    rcases h1 with ⟨ x, rfl ⟩; rcases x with ( _ | _ | x ) <;> norm_num [ Nat.pow_succ', ← mul_assoc, Nat.mul_mod ] at *;
 
 lemma two_ne_zero
   (field_cardinality : Fintype.card F = q)
@@ -219,7 +219,7 @@ lemma two_ne_zero
     intro h2
     apply char_ne_two
     have h3 := ringChar.spec F;
-    specialize h3 2 ; simp_all +decide [ Nat.dvd_prime ];
+    specialize h3 2; simp_all +decide [ Nat.dvd_prime ];
     exact not_subsingleton _ h3
 
 lemma four_ne_zero
@@ -458,11 +458,11 @@ lemma exists_nat_cast_eq
     have h_nat_cast : Function.Surjective (fun n : ℕ => (n : F)) := by
       intro t
       have h_order : ringChar F = q := by
-        have := FiniteField.card F ( ringChar F ) ; aesop;
+        have := FiniteField.card F ( ringChar F ); aesop;
       have h_order : Function.Injective (fun n : Fin (Fintype.card F) => (n : F)) := by
         intro a b hab;
         have := ringChar.spec F;
-        specialize this ( a - b |> Int.natAbs ) ; simp_all +decide
+        specialize this ( a - b |> Int.natAbs ); simp_all +decide
         cases abs_cases ( ( a : ℤ ) - b ) <;> simp_all +decide
         · exact Fin.ext ( Nat.le_antisymm ( Nat.le_of_not_lt fun h => by have := Nat.le_of_dvd ( by omega ) this; omega ) ‹_› );
         · exact absurd this ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) );
@@ -472,7 +472,7 @@ lemma exists_nat_cast_eq
     cases' h_nat_cast t with n hn;
     refine' ⟨ n % q, Nat.mod_lt _ q_prime.nat_prime.pos, _ ⟩;
     rw [ ← hn, Nat.mod_def ];
-    rw [ Nat.cast_sub ( Nat.mul_div_le _ _ ) ] ; aesop
+    rw [ Nat.cast_sub ( Nat.mul_div_le _ _ ) ]; aesop
 
 /-
 In a prime field with `q ≡ 3 (mod 4)` (hence `q` odd), for any `n < q`, either
@@ -496,4 +496,4 @@ lemma neg_natCast_eq
   (n : ℕ) (hn' : n < q)
   : -(n : F) = ((q - n : ℕ) : F) := by
     rw [ Nat.cast_sub hn'.le ];
-    rw [ neg_eq_iff_add_eq_zero ] ; aesop
+    rw [ neg_eq_iff_add_eq_zero ]; aesop

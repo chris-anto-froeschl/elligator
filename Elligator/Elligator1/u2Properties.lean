@@ -328,9 +328,7 @@ lemma one_add_u2_ne_zero
     by_cases h : t ≠ 1 ∧ t ≠ -1
     · let h2 := one_add_u2_ne_zero_main_case ⟨t, h⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
       grind
-    · have h2 : t = 1 ∨ t = -1 := by
-        push_neg at h
-        grind
+    · have h2 : t = 1 ∨ t = -1 := by grind
       have h3 := one_add_u2_ne_zero_base_case ⟨t, h2⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
       grind
 

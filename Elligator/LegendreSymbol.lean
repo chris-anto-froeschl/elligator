@@ -205,10 +205,10 @@ lemma χ_of_a_pow_two_eq_one
   :
   let χ_of_a := χ (a^2)
   χ_of_a = 1 := by
-    convert FiniteField.pow_card_sub_one_eq_one _ _ using 1;
-    convert pow_right_comm _ _ _ using 1;
-    rw [ ← pow_mul, Nat.div_mul_cancel ( even_iff_two_dvd.mp ( FiniteFieldBasic.q_sub_one_even field_cardinality q_mod_4_congruent_3 ) ) ];
-    exact a_nonzero
+    intro χ_of_a
+    unfold χ_of_a χ
+    rw [← pow_mul, mul_comm, Nat.div_mul_cancel ( even_iff_two_dvd.mp ( FiniteFieldBasic.q_sub_one_even field_cardinality q_mod_4_congruent_3 ))]
+    rw [FiniteField.pow_card_sub_one_eq_one a a_nonzero]
 
 lemma χ_of_a_eq_neg_one
   {a : F}
@@ -219,6 +219,7 @@ lemma χ_of_a_eq_neg_one
   :
   let χ_of_a := χ a
   χ_of_a = -1 := by
+    intro χ_of_a
     field_simp;
     -- By Euler's criterion, since $a$ is not a square, we have $a^{(q-1)/2} \equiv -1 \pmod{q}$.
     have h_euler : a ^ ((Fintype.card F - 1) / 2) = -1 ∨ a ^ ((Fintype.card F - 1) / 2) = 1 := by
@@ -228,6 +229,7 @@ lemma χ_of_a_eq_neg_one
         · exact FiniteField.pow_card_sub_one_eq_one a a_nonzero;
         · omega;
       exact Or.symm ( sq_eq_one_iff.mp h_euler );
+    unfold χ_of_a χ
     convert h_euler.resolve_right _;
     contrapose! a_nonsquare;
     -- If $a^{(q-1)/2} = 1$, then $a$ is a square in $F$.
@@ -254,6 +256,7 @@ lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} :
   let χ_of_b := χ b
   let χ_of_a_mul_b := χ (a * b)
   χ_of_a_mul_b = χ_of_a * χ_of_b := by
+    unfold χ
     convert mul_pow _ _ _
 
 lemma χ_of_a_even_pow_n_eq_one
@@ -294,7 +297,7 @@ lemma χ_of_a_pow_n_eq_χ_a
       have hχ_sq : χ a ^ 2 = a ^ (q - 1) := by
         unfold χ
         ring_nf
-        rw [ Nat.div_mul_cancel ( even_iff_two_dvd.mp ( by rw [ field_cardinality ] ; exact Nat.even_iff.mpr ( by omega ) ) ), field_cardinality ];
+        rw [ Nat.div_mul_cancel ( even_iff_two_dvd.mp ( by rw [ field_cardinality ]; exact Nat.even_iff.mpr ( by omega ) ) ), field_cardinality ];
       have := FiniteField.pow_card_sub_one_eq_one a; aesop;
 
 lemma χ_of_χ_of_a_eq_χ_of_a
@@ -357,7 +360,7 @@ lemma square_of_a
   a^((q + 1) / 2) = a := by
     obtain ⟨ r, hr ⟩ := a_square;
     by_cases hr : r = 0 <;> simp_all +decide [ mul_pow ]
-    · exact field_cardinality ▸ Fintype.card_pos_iff.mpr ⟨ 0 ⟩;
+    · grind
     · rw [ ← pow_add, ← two_mul, Nat.mul_div_cancel' ];
       · have := FiniteField.pow_card_sub_one_eq_one r hr; simp_all +decide [ pow_succ' ] ;
         rw [ ← Nat.sub_add_cancel ( show 1 ≤ q from field_cardinality ▸ Fintype.card_pos ), pow_add, pow_one, this, one_mul ];
@@ -376,7 +379,7 @@ lemma χ_of_a_eq_χ_a_mul_b_pow_two
   χ_of_a = χ_of_a_mul_b_pow_two := by
     -- By definition of χ, we know that χ(a * b^2) = (a * b^2)^((q - 1) / 2).
     simp [χ];
-    rw [ mul_pow, show ( b ^ 2 ) ^ ( ( Fintype.card F - 1 ) / 2 ) = 1 from ?_ ] ; ring;
+    rw [ mul_pow, show ( b ^ 2 ) ^ ( ( Fintype.card F - 1 ) / 2 ) = 1 from ?_ ]; ring;
     rw [ ← pow_mul, Nat.mul_div_cancel' ];
     · exact FiniteField.pow_card_sub_one_eq_one b b_nonzero;
     · omega

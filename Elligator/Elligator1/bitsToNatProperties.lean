@@ -54,7 +54,7 @@ lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n →
     have h_bitsToNat_succ : ∀ (τ : Fin (n + 1) → Bool), bitsToNat τ = 2 * bitsToNat (fun i => τ (Fin.succ i)) + if τ 0 then 1 else 0 := by
       intro τ; unfold bitsToNat; simp +decide [ Fin.sum_univ_succ, pow_succ' ]
       ring_nf
-      rw [ Finset.sum_mul _ _ _ ] ; congr ; ext ; aesop;
+      rw [ Finset.sum_mul _ _ _ ]; congr; ext; aesop;
     have h_bitsToNat_succ_eq : bitsToNat (fun i => τ (Fin.succ i)) = bitsToNat (fun i => τ' (Fin.succ i)) := by
       grind +ring;
     ext i; induction i using Fin.inductionOn <;> simp_all +singlePass ;
@@ -69,10 +69,10 @@ lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
     rcases Nat.even_or_odd' m with ⟨ k, rfl | rfl ⟩;
     · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith );
       use Fin.cons false τ;
-      simp +decide [ ← hτ, Fin.sum_univ_succ, bitsToNat ] ; ring_nf;
-      rw [ Finset.sum_mul _ _ _ ] ; congr ; ext ; aesop;
-    · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith ) ; use Fin.cons true τ; simp +decide [ *, bitsToNat ]
-      simp +decide [ ← hτ, Fin.sum_univ_succ ] ; ring_nf;
+      simp +decide [ ← hτ, Fin.sum_univ_succ, bitsToNat ]; ring_nf;
+      rw [ Finset.sum_mul _ _ _ ]; congr; ext; aesop;
+    · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith ); use Fin.cons true τ; simp +decide [ *, bitsToNat ]
+      simp +decide [ ← hτ, Fin.sum_univ_succ ]; ring_nf;
       simp +decide [ bitsToNat, Finset.sum_mul _ _ _ ]
 
 lemma natCast_injective_of_prime_card
@@ -130,7 +130,7 @@ lemma exists_S_elem_of_le
   have h_surj : ∃ τ : Fin (@b q) → Bool, bitsToNat τ = n := by
     apply bitsToNat_surj;
     have h_log : q ≤ 2 ^ (Nat.log 2 q) * 2 := by
-      rw [ ← pow_succ ] ; exact Nat.le_of_lt ( Nat.lt_pow_succ_log_self ( by decide ) _ );
+      rw [ ← pow_succ ]; exact Nat.le_of_lt ( Nat.lt_pow_succ_log_self ( by decide ) _ );
     unfold b; omega;
   unfold S; aesop;
 
@@ -155,4 +155,4 @@ lemma exists_σ_preimage_or_neg
       omega) (by
       omega);
     use τ; simp_all +decide [ σ ] ;
-    rw [ Nat.cast_sub hn.le ] ; aesop
+    rw [ Nat.cast_sub hn.le ]; aesop

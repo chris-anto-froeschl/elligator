@@ -316,6 +316,8 @@ lemma y_with_X2
         have h2_2_2 : η_of_point = -(X2_of_point + 1)^2 / (2 * r_of_s * X2_of_point) := by
           have h2_2_2_1 : (2 * X2_of_point) / (2 * X2_of_point) = 1 := by grind
           rw [← h2_2_2_1] at h2_2_1
+          rw [h2_2_1]
+          ring_nf
           grind
         rw [← mul_left_inj' two_ne_zero] at h2_2_2
         simp_all
@@ -623,6 +625,7 @@ lemma Y'_pow_two_eq_of_X2_ne_one
     _ = 2 * (r - 2) * X^2 * (1 + X)^2 / (x^2) := by
       have h : (c - 1)^2 * s^2 = 2 * (r - 2) := by
         unfold r Elligator1.r c Elligator1.c
+        ring_nf
         grind
       grind
     _ = X^5 + (r^2 - 2) * X^3 + X := by

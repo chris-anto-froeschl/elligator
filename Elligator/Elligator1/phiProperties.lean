@@ -328,7 +328,6 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one field_cardinality q_prime_power q_mod_4_congruent_3 point X2_h
     have h2 : x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by exact point.prop.2.2 h1
     have h3 : y = (r_of_s - 4) / (r_of_s + 4) := by exact y_with_X2_of_X2_eq_one s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one X2_h
-    simp at h3
     rw [h2, h3]
     let ϕ_of_zero'' := ϕ_of_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     grind

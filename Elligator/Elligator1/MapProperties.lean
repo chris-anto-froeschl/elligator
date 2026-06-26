@@ -90,7 +90,7 @@ lemma y_h1
     rw [add_assoc, ← mul_add y_of_t, add_comm (X_of_t^2) 1, ← add_assoc, add_comm (X_of_t * 2) 1]
     rw [mul_comm X_of_t 2]
     have h3 : 1 + 2 * X_of_t + X_of_t^2 = (1 + X_of_t)^2 := by ring_nf
-    have h4 : -1 + r_of_s * X_of_t + (-(2 * X_of_t) - X_of_t ^ 2) = r_of_s * X_of_t - (1 + 2 * X_of_t + X_of_t^2) := by ring_nf
+    have h4 : -1 + r_of_s * X_of_t - 2 * X_of_t - X_of_t ^ 2 = r_of_s * X_of_t - (1 + 2 * X_of_t + X_of_t^2) := by ring_nf
     rw [h4, h3]
     rw [← mul_assoc, mul_comm, ← mul_add]
     rw [← div_left_inj' (y_divisor_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 t)]

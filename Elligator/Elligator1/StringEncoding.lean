@@ -154,4 +154,4 @@ theorem ϕ_over_F_eq_ι_over_S'
         unfold ι;
         rw [ hτ, ϕ_of_t_eq_ϕ_of_neg_t ];
         norm_num +zetaDelta at *;
-    · rintro ⟨ y, ⟨ τ, rfl ⟩, rfl ⟩ ; exact ⟨ _, rfl ⟩ ;
+    · rintro ⟨ y, ⟨ τ, rfl ⟩, rfl ⟩; exact ⟨ _, rfl ⟩;
