@@ -124,7 +124,7 @@ theorem map_fulfills_curve_equation
   let y := y t s
   let d := d s
   have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
-  edwards_curve_equation x y ⟨d, d_h⟩ := by
+  edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
@@ -140,19 +140,19 @@ noncomputable def ϕ
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 :=
+  : EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 :=
   open scoped Classical in let P := if h : t ≠ 1 ∧ t ≠ -1
     then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s)
     else (0, 1)
   -- TODO writeable as type?
-  have P_in_E_over_F : P ∈ (E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3) := by
-    unfold E_over_F
+  have P_in_EOverF : P ∈ (EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3) := by
+    unfold EOverF
     rw [Set.mem_setOf_eq]
     unfold P
     by_cases h1 : t ≠ 1 ∧ t ≠ -1
     · rw [dif_pos h1]
       exact map_fulfills_curve_equation ⟨t, h1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     · rw [dif_neg h1]
-      unfold edwards_curve_equation
+      unfold edwardsCurveEquation
       ring_nf
-  ⟨P, P_in_E_over_F⟩
+  ⟨P, P_in_EOverF⟩

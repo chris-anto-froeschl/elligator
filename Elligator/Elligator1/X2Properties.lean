@@ -72,7 +72,7 @@ lemma X2_eq_neg_one
 lemma X2_h1
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   :
   let η_of_point := η point.val
   let r_of_s := r s
@@ -95,7 +95,7 @@ lemma X2_h1
 lemma X2_h2
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   :
   let η_of_point := η point.val
   let r_of_s := r s
@@ -124,7 +124,7 @@ lemma X2_h3
     intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t
     let η_of_point := η point.val
     let r_of_s := r s
-    let point_of_ϕ_fulfills_ϕ_over_F_props := point_of_ϕ_fulfills_ϕ_over_F_props t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    let point_of_ϕ_fulfills_ϕOverFProps := point_of_ϕ_fulfills_ϕOverFProps t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     calc
       (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = X2_of_t^2 - (X_of_t + X'_of_t) * X2_of_t + X_of_t * X'_of_t := by grind
       _ = X2_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_t + 1 := by
@@ -132,7 +132,7 @@ lemma X2_h3
         change X2_of_t ^ 2 - -2 * (1 + η_of_point * r_of_s) * X2_of_t + X_of_t * X'_of_t = X2_of_t ^ 2 + 2 * (1 + η_of_point * r_of_s) * X2_of_t + 1
         rw [mul_add, mul_comm X_of_t _, X_comparison_implication2 t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3]
         grind
-      _ = 0 := by exact X2_h2 field_cardinality q_mod_4_congruent_3 ⟨point.val, point_of_ϕ_fulfills_ϕ_over_F_props⟩
+      _ = 0 := by exact X2_h2 field_cardinality q_mod_4_congruent_3 ⟨point.val, point_of_ϕ_fulfills_ϕOverFProps⟩
 
 lemma X2_h4
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
@@ -161,7 +161,7 @@ lemma X2_h4
 lemma X2_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   :
   let X2_of_point := X2 s point q
   X2_of_point ≠ 0 := by
@@ -181,7 +181,7 @@ lemma y_divisor_ne_zero_with_X2_for_X
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   :
   let r_of_s := r s
   let X2_of_point := X2 s point q
@@ -214,7 +214,7 @@ lemma X2_ne_neg_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point q
@@ -248,7 +248,7 @@ lemma X2_ne_neg_one
       have h3_2 : 2 * (y + 1) ≠ 0 := by
         intro h3_2_1
         let y_add_one_ne_zero := point_prop.1
-        unfold ϕ_over_F_prop1 at y_add_one_ne_zero
+        unfold ϕOverFProp1 at y_add_one_ne_zero
         rw [← div_left_inj' (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)] at h3_2_1
         ring_nf at h3_2_1
         rw [inv_mul_cancel₀ (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)] at h3_2_1
@@ -261,7 +261,7 @@ lemma X2_add_one_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_ne_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point q
@@ -275,7 +275,7 @@ lemma y_with_X2
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point.val q
@@ -339,7 +339,7 @@ lemma y_with_X2_of_X2_eq_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point.val q
@@ -354,7 +354,7 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   :
   let η_of_point := η point
   let X2_of_point := X2 s point q
@@ -376,7 +376,7 @@ lemma X2_observation1_of_X2_ne_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point.val q
@@ -405,7 +405,7 @@ lemma X2_observation2_of_X2_ne_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point.val q
@@ -462,7 +462,7 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   :
   let y := point.val.2
   let d_of_s := d s;
@@ -487,8 +487,8 @@ lemma x_pow_two_of_X2_ne_one_eq1
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
-  (point_props : ϕ_over_F_props s point)
+  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕOverFProps s point)
   :
   let x := point.val.1
   let y := point.val.2
@@ -496,7 +496,7 @@ lemma x_pow_two_of_X2_ne_one_eq1
   x^2 = (1 - y^2) / (1 - d*y^2) := by
     intro x y d
     have curve_equation := point.prop;
-    unfold E_over_F edwards_curve_equation at curve_equation
+    unfold EOverF edwardsCurveEquation at curve_equation
     let one_sub_d_mul_y_pow_two_ne_zero := one_sub_d_mul_y_pow_two_ne_zero s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩;
     change 1 - d * y^2 ≠ 0 at one_sub_d_mul_y_pow_two_ne_zero
     rw [Set.mem_setOf_eq] at curve_equation
@@ -515,8 +515,8 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
-  (point_props : ϕ_over_F_props s point)
+  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕOverFProps s point)
   (y_eq_one : point.val.2 ≠ 1)
   :
   let x := point.val.1
@@ -587,7 +587,7 @@ noncomputable def Y'
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   : F :=
   let x := point.val.1
   let c := c s
@@ -601,8 +601,8 @@ lemma Y'_pow_two_eq_of_X2_ne_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
-  (point_props : ϕ_over_F_props s point)
+  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point_props : ϕOverFProps s point)
   (y_eq_one : point.val.2 ≠ 1)
   :
   let X := X2 s point q
@@ -651,7 +651,7 @@ lemma X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {P : F × F // ϕ_over_F_props s P})
+  (point : {P : F × F // ϕOverFProps s P})
   (y_ne_one : point.val.2 ≠ 1)
   :
   let X2_of_point := X2 s point q

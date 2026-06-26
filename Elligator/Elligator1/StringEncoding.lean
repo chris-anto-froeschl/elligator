@@ -41,7 +41,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
-/-- `ι` maps an element of `S` to `E_over_F` via `ι(τ) = ϕ(σ(τ))`.
+/-- `ι` maps an element of `S` to `EOverF` via `ι(τ) = ϕ(σ(τ))`.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
@@ -52,7 +52,7 @@ noncomputable def ι
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (τ : (@S q))
-  : {P : F × F // P ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3}
+  : {P : F × F // P ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3}
   := ϕ (σ τ.1) s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- 1. statement of Theorem 4:
@@ -105,11 +105,11 @@ theorem ι_injective
     grind
 
 -- TODO remove this since prime version is better
-/-- `ι_over_S` is the set of points produced by `ι`.
+/-- `ιOverS` is the set of points produced by `ι`.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
-noncomputable def ι_over_S
+noncomputable def ιOverS
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -119,11 +119,11 @@ noncomputable def ι_over_S
   Set (F × F) :=
   { P | ∃ (τ : (@S q)), P = ι s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 τ }
 
-/-- `ι_over_S` is the set of points produced by `ι`.
+/-- `ιOverS` is the set of points produced by `ι`.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
-noncomputable def ι_over_S'
+noncomputable def ιOverS'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -132,18 +132,18 @@ noncomputable def ι_over_S'
   -- TODO if range works out do this with φ_of_F aswell
   := Set.range (ι s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3)
 
-theorem ϕ_over_F_eq_ι_over_S'
+theorem ϕOverF_eq_ιOverS'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
-  let ϕ_over_F := ϕ_over_F s_h1 s_h2 field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
-  let ι_over_S := ι_over_S' s_h1 s_h2 field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
-  ϕ_over_F = ι_over_S := by
-    --intro ϕ_over_F ι_over_S
-    --unfold ϕ_over_F Elligator1.ϕ_over_F ι_over_S ι_over_S' Set.range
+  let ϕOverF := ϕOverF s_h1 s_h2 field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
+  let ιOverS := ιOverS' s_h1 s_h2 field_cardinality q_prime.isPrimePow q_mod_4_congruent_3
+  ϕOverF = ιOverS := by
+    --intro ϕOverF ιOverS
+    --unfold ϕOverF Elligator1.ϕOverF ιOverS ιOverS' Set.range
     --apply Set.Subset.antisymm
     refine' Set.ext fun x => ⟨ _, _ ⟩;
     · rintro ⟨ t, rfl ⟩;

@@ -152,13 +152,13 @@ lemma x_y_eq_zero_sign_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ E_over_F s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   (x_eq_zero : point.val.1 = 0)
   : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
     let d_of_s := d s
     let x := point.val.1
     let y := point.val.2
-    unfold E_over_F at point
+    unfold EOverF at point
     change (x, y) = (0, 1) ∨ (x, y) = (0, -1)
     change x = 0 at x_eq_zero
     rw [← x_eq_zero]

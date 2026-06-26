@@ -83,7 +83,7 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
 --
 -- Note: Original statement does not read like an iff. Only the proof explanation
 -- makes this more concrete
-theorem point_props_iff_point_in_ϕ_over_F_of_point
+theorem point_props_iff_point_in_ϕOverF_of_point
   (t : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -92,12 +92,12 @@ theorem point_props_iff_point_in_ϕ_over_F_of_point
   (q_mod_4_congruent_3 : q % 4 = 3)
   :
   let point := ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
-  ϕ_over_F_props s point
-  ↔ point.val ∈ ϕ_over_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 := by
+  ϕOverFProps s point
+  ↔ point.val ∈ ϕOverF s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 := by
     intro point
     constructor
-    · exact point_in_ϕ_over_F_of_point_props s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
-    · exact point_props_of_point_in_ϕ_over_F t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact point_in_ϕOverF_of_point_props s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    · exact point_props_of_point_in_ϕOverF t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.3
 -- If (x, y) ∈ ϕ(Fq) then the following elements X_bar, z, u_bar, t_bar of Fq are defined and ϕ(t_bar) = (x, y):
@@ -141,7 +141,7 @@ theorem X2_defined
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ ϕ_over_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ ϕOverF s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let y := point.val.snd
   2 * (y + 1) ≠ 0 := by
@@ -149,7 +149,7 @@ theorem X2_defined
     have h1 : y + 1 ≠ 0 := by
       unfold y
       let h1_1 := point.prop
-      unfold ϕ_over_F at h1_1
+      unfold ϕOverF at h1_1
       rw [Set.mem_setOf_eq] at h1_1
       rcases h1_1 with ⟨t, h1_2⟩
       unfold ϕ at h1_2
@@ -188,7 +188,7 @@ theorem t2_defined
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ ϕ_over_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (point : {p : F × F // p ∈ ϕOverF s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
   :
   let u2_of_point := u2 s point.val q
   (1 + u2_of_point) ≠ 0 := by
