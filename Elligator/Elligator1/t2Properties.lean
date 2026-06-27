@@ -47,6 +47,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:t"]
 lemma t2_eq_one
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -66,6 +67,7 @@ lemma t2_eq_one
     rw [u2_eq_zero t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
+@[blueprint "lemma:t"]
 lemma t2_eq_t
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -104,6 +106,7 @@ lemma t2_eq_t
     rw [← two_mul t.val, mul_comm 2 t.val, mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
 
+@[blueprint "lemma:t"]
 lemma t2_eq_t'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -145,6 +148,7 @@ lemma t2_eq_t'
     rw [← two_mul t', mul_comm 2 t', mul_assoc, mul_comm 2, mul_div_assoc, div_self h2]
     simp
 
+@[blueprint "lemma:t"]
 lemma t2_in_t_or_neg_t
   (t : F)
   (s_h1 : s ≠ 0)
@@ -178,6 +182,7 @@ lemma t2_in_t_or_neg_t
       exact h''
 
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:t'"]
 noncomputable def t'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -188,6 +193,7 @@ noncomputable def t'
   let u := u' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   (1 - u) / (1 + u)
 
+@[blueprint "lemma:t"]
 lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -219,6 +225,7 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
       have h3 : 2 = 0 := by grind
       contradiction
 
+@[blueprint "lemma:one_add_t"]
 lemma one_add_t'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -237,6 +244,7 @@ lemma one_add_t'_ne_zero
     let t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     grind
 
+@[blueprint "lemma:u"]
 lemma u'_eq_one_sub_t'_over_one_add_t'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -259,6 +267,7 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
     let two_ne_zero := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     grind
 
+@[blueprint "lemma:u"]
 lemma u'_eq_u
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -286,6 +295,7 @@ lemma u'_eq_u
     unfold Elligator1.u
     grind
 
+@[blueprint "lemma:v"]
 lemma v'_eq_v
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -313,6 +323,7 @@ lemma v'_eq_v
     rw [h1]
     grind
 
+@[blueprint "lemma:X"]
 lemma X'_eq_X
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -343,6 +354,7 @@ lemma X'_eq_X
     change X = X
     rfl
 
+@[blueprint "lemma:Y'_eq_Y"]
 lemma Y'_eq_Y
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -373,6 +385,7 @@ lemma Y'_eq_Y
     rfl
 
 /-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:x'"]
 noncomputable def x'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -385,6 +398,7 @@ noncomputable def x'
   let Y' := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   (c - 1) * s * X' * (1 + X') / Y'
 
+@[blueprint "lemma:x"]
 lemma x'_eq_x
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -414,6 +428,7 @@ lemma x'_eq_x
     grind
 
 /-- `y'` is the `y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:y'"]
 noncomputable def y'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -425,6 +440,7 @@ noncomputable def y'
   let r := r s
   (r * X' - (1 + X')^2) / (r * X' + (1 + X')^2)
 
+@[blueprint "lemma:y"]
 lemma y'_eq_y
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -489,6 +505,7 @@ theorem x'_and_y'_fulfill_curve_equation
 -- TODO how to do jump to point.val.(1|2) = (x'|y')?
 -- They have the same formulas (i.e x'/y' = x/y), but always only using point as a builder
 
+@[blueprint "lemma:y_of_t_eq_y_of_point"]
 lemma y_of_t_eq_y_of_point
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -517,6 +534,7 @@ lemma y_of_t_eq_y_of_point
     let h2 := X'_eq_X s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind
 
+@[blueprint "lemma:x_of_t_eq_x_of_point"]
 lemma x_of_t_eq_x_of_point
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -559,6 +577,7 @@ lemma x_of_t_eq_x_of_point
     change x_of_t = x_of_t
     rfl
 
+@[blueprint "lemma:x_y_of_point_eq_x_y_of_t"]
 lemma x_y_of_point_eq_x_y_of_t
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

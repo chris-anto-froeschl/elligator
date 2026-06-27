@@ -36,6 +36,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:r_ne_zero"]
 lemma r_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -75,6 +76,7 @@ lemma r_ne_zero
       exact h3
     contradiction
 
+@[blueprint "lemma:four_add_r_ne_zero"]
 lemma four_add_r_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -105,6 +107,7 @@ lemma four_add_r_ne_zero
       omega
     exact h_not_sq h_neg_sq
 
+@[blueprint "lemma:r_h"]
 lemma r_h1
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -129,6 +132,7 @@ lemma r_h1
       _ = c_of_s^2 + 1 / c_of_s^2 := by
         ring_nf
 
+@[blueprint "lemma:r_sub_two_ne_zero"]
 lemma r_sub_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

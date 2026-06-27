@@ -46,6 +46,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:u"]
 lemma u2_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -62,6 +63,7 @@ lemma u2_eq_zero
     rw [z_eq_zero t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
+@[blueprint "lemma:u"]
 lemma u2_eq_u
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -153,6 +155,7 @@ lemma u2_eq_u
     rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)) h6 field_cardinality q_mod_4_congruent_3]
     simp
 
+@[blueprint "lemma:u"]
 lemma u2_eq_u'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -251,6 +254,7 @@ lemma u2_eq_u'
     rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t.val, h2_2⟩)) h6 field_cardinality q_mod_4_congruent_3]
     simp
 
+@[blueprint "lemma:u"]
 lemma u2_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -274,6 +278,7 @@ lemma u2_h1
 
 /-- The key step: rewriting `1 + u2(ϕ(t))` in the main case (t ≠ ±1) to show it is nonzero,
     using `u2_h1` which gives `u2 = u(t)` or `u2 = u(-t)`. -/
+@[blueprint "lemma:one_add_u"]
 lemma one_add_u2_ne_zero_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : (s : F) ≠ 0)
@@ -294,6 +299,7 @@ lemma one_add_u2_ne_zero_main_case
       let t_h := FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
       exact one_add_u_ne_zero ⟨ -t.val, t_h ⟩ field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:one_add_u"]
 lemma one_add_u2_ne_zero_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -310,6 +316,7 @@ lemma one_add_u2_ne_zero_base_case
     rw [u2_eq_zero, add_zero]
     exact FiniteFieldBasic.one_ne_zero
 
+@[blueprint "lemma:one_add_u"]
 lemma one_add_u2_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -333,6 +340,7 @@ lemma one_add_u2_ne_zero
       grind
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:u'"]
 noncomputable def u'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -344,6 +352,7 @@ noncomputable def u'
   let X := X2 s point q
   z * X
 
+@[blueprint "lemma:u"]
 lemma u'_pow_two_eq_X_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -364,6 +373,7 @@ lemma u'_pow_two_eq_X_pow_two
     unfold u u'
     grind
 
+@[blueprint "lemma:u"]
 lemma u'_eq_X2_or_u'_eq_neg_X2
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -384,6 +394,7 @@ lemma u'_eq_X2_or_u'_eq_neg_X2
     unfold u u'
     grind
 
+@[blueprint "lemma:u"]
 lemma u'_ne_neg_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -405,6 +416,7 @@ lemma u'_ne_neg_one
     unfold u u'
     grind
 
+@[blueprint "lemma:one_add_u"]
 lemma one_add_u'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -426,6 +438,7 @@ lemma one_add_u'_ne_zero
     unfold u u'
     grind
 
+@[blueprint "lemma:u"]
 lemma u'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -450,6 +463,7 @@ lemma u'_ne_zero
     grind
 
 /-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:v'"]
 noncomputable def v'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -462,6 +476,7 @@ noncomputable def v'
   -- Note: this is just the definition of v as in theorem 1
   u^5 + (r^2 - 2) * u^3 + u
 
+@[blueprint "lemma:v"]
 lemma v'_eq_z'_mul_Y'_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -494,6 +509,7 @@ lemma v'_eq_z'_mul_Y'_pow_two
       grind
     grind
 
+@[blueprint "lemma:v"]
 lemma v'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -518,6 +534,7 @@ lemma v'_ne_zero
     let z_ne_zero := z'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     grind
 
+@[blueprint "lemma:χ_of_v'_eq_χ_of_z'"]
 lemma χ_of_v'_eq_χ_of_z'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -544,6 +561,7 @@ lemma χ_of_v'_eq_χ_of_z'
     rw [← LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two h2 field_cardinality q_mod_4_congruent_3]
     grind
 
+@[blueprint "lemma:χ_of_z'_eq_z'"]
 lemma χ_of_z'_eq_z'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -564,6 +582,7 @@ lemma χ_of_z'_eq_z'
     let c := c s
     exact LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:χ_of_v'_eq_z'"]
 lemma χ_of_v'_eq_z'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -585,6 +604,7 @@ lemma χ_of_v'_eq_z'
     let χ_of_z'_eq_z' := χ_of_z'_eq_z' s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props y_ne_one
     grind
 
+@[blueprint "lemma:X'_eq_χ_of_v'_mul_u'"]
 lemma X'_eq_χ_of_v'_mul_u'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -619,6 +639,7 @@ lemma X'_eq_χ_of_v'_mul_u'
     rw [mul_div_assoc, LegendreSymbol.one_over_χ_of_a_eq_χ_a field_cardinality q_prime_power q_mod_4_congruent_3]
     grind
 
+@[blueprint "lemma:Y'_pow_two_eq_χ_of_v'_mul_v'"]
 lemma Y'_pow_two_eq_χ_of_v'_mul_v'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -657,6 +678,7 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
     rw [χ_of_v'_eq_z' h1]
     grind
 
+@[blueprint "lemma:χ_of_v'_eq_z'_unfold_of_X'_ne_1"]
 lemma χ_of_v'_eq_z'_unfold_of_X'_ne_1
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -684,6 +706,7 @@ lemma χ_of_v'_eq_z'_unfold_of_X'_ne_1
     rw [χ_of_v'_eq_z' h1]
     rfl
 
+@[blueprint "lemma:χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two"]
 lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -709,6 +732,7 @@ lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two
     let u'_pow_two_eq_X_pow_two := u'_pow_two_eq_X_pow_two s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
     grind
 
+@[blueprint "lemma:u'_pow_two_add_one_over_c_pow_two_ne_zero"]
 lemma u'_pow_two_add_one_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -744,6 +768,7 @@ lemma u'_pow_two_add_one_over_c_pow_two_ne_zero
       exact h1_2
     contradiction
 
+@[blueprint "lemma:Y'_observation1"]
 lemma Y'_observation1
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -783,6 +808,7 @@ lemma Y'_observation1
       rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one term1_ne_zero ⟨2, even_two⟩ field_cardinality q_mod_4_congruent_3]
     grind
 
+@[blueprint "lemma:Y'_observation2"]
 lemma Y'_observation2
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

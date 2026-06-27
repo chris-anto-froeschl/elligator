@@ -49,6 +49,7 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 
 -- Used in Theorem 3 Proof B part as implication for point_in_ϕOverF_with_prop2_main_case
 -- argument.
+@[blueprint "lemma:y_h"]
 lemma y_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -99,6 +100,7 @@ lemma y_h1
     simp
 
 -- Implicated by y_h1. Saved for further proof arguments in Theorem 3 Proof B
+@[blueprint "lemma:y_h"]
 lemma y_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -134,6 +136,7 @@ lemma y_h2
         rw [y_h1 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
 
 -- Implicated by y_h2.
+@[blueprint "lemma:y_h"]
 lemma y_h3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -158,6 +161,7 @@ lemma y_h3
     rw [mul_inv_cancel₀ (X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)]
     ring_nf
 
+@[blueprint "lemma:X_comparison_implication"]
 lemma X_comparison_implication
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -186,6 +190,7 @@ lemma X_comparison_implication
     rw [X_comparison t field_cardinality q_prime_power q_mod_4_congruent_3]
     exact (y_h3 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3)
 
+@[blueprint "lemma:X_comparison_implication"]
 lemma X_comparison_implication2
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -205,6 +210,7 @@ lemma X_comparison_implication2
     rw [← inv_eq_one_div]
     rw [inv_mul_cancel₀ (X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)]
 
+@[blueprint "lemma:χ_IsSquare_h1"]
 lemma χ_IsSquare_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -223,6 +229,7 @@ lemma χ_IsSquare_h1
     rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
     apply IsSquare.sq
 
+@[blueprint "lemma:y_comparison"]
 lemma y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -277,6 +284,7 @@ lemma y_comparison
         simp
         rfl
 
+@[blueprint "lemma:point_comparison"]
 lemma point_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -298,6 +306,7 @@ lemma point_comparison
     rw [y_comparison t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3]
 
 -- Used in the main case of Theorem 3 Proof part B
+@[blueprint "lemma:X_"]
 lemma X_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -332,6 +341,7 @@ lemma X_η_h1
     exact h1_1
 
 -- Used in the main case of Theorem 3 Proof part B
+@[blueprint "lemma:X_"]
 lemma X_η_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -358,6 +368,7 @@ lemma X_η_h2
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
+@[blueprint "lemma:u_"]
 lemma u_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -421,6 +432,7 @@ lemma u_η_h1
 
 -- Used in the main case of Theorem 3 Proof part B
 -- TODO really?
+@[blueprint "lemma:t_"]
 lemma t_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -450,6 +462,7 @@ lemma t_η_h1
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
+@[blueprint "lemma:v_"]
 lemma v_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -474,6 +487,7 @@ lemma v_η_h1
     rfl
 
 -- Used in the main case of Theorem 3 Proof part B
+@[blueprint "lemma:Y_η_h1"]
 lemma Y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -545,6 +559,7 @@ lemma Y_η_h1
             rw [mul_one]
 
 -- Implicated by main case of Theorem 3 proof part B.
+@[blueprint "lemma:y_"]
 lemma y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -570,6 +585,7 @@ lemma y_η_h1
     rw [X_η_h2 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 η_h1]
     ring_nf
 
+@[blueprint "lemma:y_of_zero"]
 lemma y_of_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -586,6 +602,7 @@ lemma y_of_zero
     change (r_of_s * 1 - (1 + 1) ^ 2) / (r_of_s * 1 + (1 + 1) ^ 2) = (r_of_s - 4) / (r_of_s + 4)
     ring_nf
 
+@[blueprint "lemma:ϕ_of_t_eq_zero_one"]
 lemma ϕ_of_t_eq_zero_one
   (t : { n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -604,6 +621,7 @@ lemma ϕ_of_t_eq_zero_one
     · rw [h]
       simp
 
+@[blueprint "lemma:y_add_one_eq_two"]
 lemma y_add_one_eq_two
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -632,6 +650,7 @@ This restriction is defined during the context evolution.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:ϕOverFProp1"]
 noncomputable def ϕOverFProp1 (point : F × F) : Prop :=
   let y := point.snd
   y + 1 ≠ 0
@@ -640,6 +659,7 @@ noncomputable def ϕOverFProp1 (point : F × F) : Prop :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:ϕOverFProp2"]
 def ϕOverFProp2 (s : F) (point : F × F) : Prop :=
   let r_of_s := r s
   let η_of_point := η point
@@ -649,6 +669,7 @@ def ϕOverFProp2 (s : F) (point : F × F) : Prop :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:ϕOverFProp3"]
 def ϕOverFProp3 (s : F) (point : F × F) : Prop :=
   let x := point.fst
   let c := c s
@@ -662,6 +683,7 @@ i.e. `ϕOverFProp1`, `ϕOverFProp2` and `ϕOverFProp3`.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:ϕOverFProps"]
 def ϕOverFProps (s : F) (point : F × F) : Prop :=
     ϕOverFProp1 point ∧ ϕOverFProp2 s point ∧ ϕOverFProp3 s point
 
@@ -669,6 +691,7 @@ def ϕOverFProps (s : F) (point : F × F) : Prop :=
 
 Original: Chapter "3.2 The map": Definition 2
 -/
+@[blueprint "def:ϕOverF"]
 noncomputable def ϕOverF
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -678,6 +701,7 @@ noncomputable def ϕOverF
   : Set (F × F)
   := {P | ∃ t : F, (ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3) = P}
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -703,6 +727,7 @@ lemma point_in_ϕOverF_with_prop1_base_case
     ring_nf
     exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop1_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -722,6 +747,7 @@ lemma point_in_ϕOverF_with_prop1_main_case
     exact y_add_one_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Original: Theorem 3.2 Proof B prop 1 argumentation
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop1
   (t : F)
   (s_h1 : s ≠ 0)
@@ -743,6 +769,7 @@ lemma point_in_ϕOverF_with_prop1
         exact h1
       exact point_in_ϕOverF_with_prop1_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop2_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -770,6 +797,7 @@ lemma point_in_ϕOverF_with_prop2_base_case
     use 0
     simp
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -807,6 +835,7 @@ lemma point_in_ϕOverF_with_prop2_main_case
     apply IsSquare.sq
 
 -- Original: Theorem 3.2 Proof B prop 2 argumentation
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop2
   (t : F)
   (s_h1 : s ≠ 0)
@@ -828,6 +857,7 @@ lemma point_in_ϕOverF_with_prop2
         exact h1
       exact point_in_ϕOverF_with_prop2_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop3_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -855,6 +885,7 @@ lemma point_in_ϕOverF_with_prop3_base_case
     have h3 : (2 : F) ≠ 0 := by apply FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -890,6 +921,7 @@ lemma point_in_ϕOverF_with_prop3_main_case
     ring_nf
 
 -- Original: Theorem 3.2 Proof B prop 3 argumentation
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_with_prop3
   (t : F)
   (s_h1 : s ≠ 0)
@@ -931,6 +963,7 @@ theorem point_props_of_point_in_ϕOverF
       · exact point_in_ϕOverF_with_prop2 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
       · exact point_in_ϕOverF_with_prop3 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:point_of_"]
 lemma point_of_ϕ_in_ϕOverF
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -946,6 +979,7 @@ lemma point_of_ϕ_in_ϕOverF
       rw [Set.mem_setOf_eq]
       use t.val
 
+@[blueprint "lemma:point_of_"]
 lemma point_of_ϕ_fulfills_ϕOverFProps
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)

@@ -35,6 +35,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 
 omit [Fintype F] in
+@[blueprint "lemma:s_pow_two_ne_two"]
 lemma s_pow_two_ne_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   : s^2 ≠ 2 := by
   have h1 : s^2 - 2 ≠ 0 := by
@@ -46,6 +47,7 @@ lemma s_pow_two_ne_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   norm_num at h1
 
 omit [Fintype F] in
+@[blueprint "lemma:s_pow_two_ne_neg_two"]
 lemma s_pow_two_ne_neg_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) : s^2 ≠ -2 := by
   have h1 : s^2 + 2 ≠ 0 := by
     intro h

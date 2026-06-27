@@ -37,6 +37,7 @@ section SProperties
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two"]
 lemma image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two
   : Finset.image bitsToNat (@S q) = Finset.Icc 0 ((q - 1) / 2) := by
     unfold S
@@ -51,10 +52,12 @@ lemma image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two
       use τ
       aesop
 
+@[blueprint "lemma:S_card_eq_icc_zero_to_q_sub_one_over_two_card"]
 lemma S_card_eq_icc_zero_to_q_sub_one_over_two_card
   : (@S q).card = (Finset.Icc 0 ((q - 1) / 2)).card := by
     rw [← image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two, Finset.card_image_of_injective _ bitsToNat_injective];
 
+@[blueprint "lemma:S_card_eq_q_add_one_over_two"]
 lemma S_card_eq_q_add_one_over_two (q_mod_4_congruent_3 : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
     rw [S_card_eq_icc_zero_to_q_sub_one_over_two_card]

@@ -44,6 +44,7 @@ variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 -- Chapter 3.2 Theorem 1
+@[blueprint "lemma:Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_"]
 lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -99,6 +100,7 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
     rw [h1]
     exact h4
 
+@[blueprint "lemma:y_divisor_ne_zero"]
 lemma y_divisor_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -217,6 +219,7 @@ lemma y_divisor_ne_zero
       exact h4
     contradiction
 
+@[blueprint "lemma:y_add_one_ne_zero"]
 lemma y_add_one_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -263,6 +266,7 @@ lemma y_add_one_ne_zero
     contradiction
 
 -- Chapter 3.2 Theorem 1
+@[blueprint "lemma:u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero"]
 lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -291,6 +295,7 @@ lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
     · apply y_add_one_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Chapter 3.2 Theorem 1
+@[blueprint "lemma:x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two"]
 lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)

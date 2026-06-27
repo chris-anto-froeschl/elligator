@@ -40,13 +40,13 @@ See [bernstein2013a] chapter 3.
 
 namespace Elligator.Elligator1
 
--- TODO some defs/lemma are probably better placed in MapProperties.lean
 section phiProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:x_y_eq_zero_one"]
 lemma x_y_eq_zero_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -75,6 +75,7 @@ lemma x_y_eq_zero_one
         exact h4.right
       contradiction
 
+@[blueprint "lemma:y_ne_one"]
 lemma y_ne_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -107,6 +108,7 @@ lemma y_ne_one
       contradiction
     contradiction
 
+@[blueprint "lemma:η_ne_zero"]
 lemma η_ne_zero
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -136,6 +138,7 @@ lemma η_ne_zero
       · exact FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
       · exact point_props.1
 
+@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t_base_case"]
 lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -157,6 +160,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
       unfold ϕ
       simp
 
+@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t_main_case"]
 lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -185,6 +189,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
     rw [h2_10, h2_12]
 
 -- Original: Theorem 3.1 forward statement, Proof A
+@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t"]
 lemma ϕ_of_t_eq_ϕ_of_neg_t
   (t : F)
   (s_h1 : s ≠ 0)
@@ -205,6 +210,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t
         exact h2
       exact ϕ_of_t_eq_ϕ_of_neg_t_main_case ⟨t, h2_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "thm:ϕ_preimages"]
 -- Original: Theorem 3.1 backward statement (Original: Proof B as the very last argument)
 theorem ϕ_preimages
   (t : F)
@@ -248,6 +254,7 @@ theorem ϕ_preimages
     · contradiction
 
 -- Implicated by main case of Theorem 3 Proof part B
+@[blueprint "lemma:ϕ_of_zero"]
 lemma ϕ_of_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -304,6 +311,7 @@ lemma ϕ_of_zero
     ring_nf
 
 -- Used in theorem 3 proof part C
+@[blueprint "lemma:x_y_eq_ϕ_of_zero_of_X2_eq_one"]
 lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -333,6 +341,7 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     grind
 
 -- Used in theorem 3 proof part C
+@[blueprint "lemma:x_y_eq_ϕ_of_t_of_X2_ne_one"]
 lemma x_y_eq_ϕ_of_t_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -361,6 +370,7 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
     let h3 := x_y_of_point_eq_x_y_of_t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     grind
 
+@[blueprint "lemma:ϕ_of_t2_eq_x_y_base_case"]
 lemma ϕ_of_t2_eq_x_y_base_case
   (t : { n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -382,6 +392,7 @@ lemma ϕ_of_t2_eq_x_y_base_case
     simp only []
     rw [dif_neg h1]
 
+@[blueprint "lemma:ϕ_of_t2_eq_x_y_main_case"]
 lemma ϕ_of_t2_eq_x_y_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -412,6 +423,7 @@ lemma ϕ_of_t2_eq_x_y_main_case
       symm
       exact point_comparison t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:ϕ_of_one_eq_zero_one"]
 lemma ϕ_of_one_eq_zero_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -425,6 +437,7 @@ lemma ϕ_of_one_eq_zero_one
     unfold ϕ_of_one ϕ
     simp
 
+@[blueprint "lemma:ϕ_of_neg_one_eq_zero_one"]
 lemma ϕ_of_neg_one_eq_zero_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -438,6 +451,7 @@ lemma ϕ_of_neg_one_eq_zero_one
     unfold ϕ_of_neg_one ϕ
     simp
 
+@[blueprint "lemma:ϕ_of_one_in_ϕ_of_F"]
 lemma ϕ_of_one_in_ϕ_of_F
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -452,6 +466,7 @@ lemma ϕ_of_one_in_ϕ_of_F
     rw [Set.mem_setOf_eq]
     use (1 : F)
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_base_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -468,6 +483,7 @@ lemma point_in_ϕOverF_base_case
     rw [← ϕ_of_one_eq_zero_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     exact ϕ_of_one_in_ϕ_of_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_main_case_with_y_eq_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -500,6 +516,7 @@ lemma point_in_ϕOverF_main_case_with_y_eq_one
     symm at h4_1
     contradiction
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_main_case_with_y_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -527,6 +544,7 @@ lemma point_in_ϕOverF_main_case_with_y_ne_one
     · use t
       exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X2_h
 
+@[blueprint "lemma:point_in_"]
 lemma point_in_ϕOverF_main_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

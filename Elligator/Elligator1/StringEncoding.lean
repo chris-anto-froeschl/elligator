@@ -164,6 +164,7 @@ theorem ι_injective
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
+@[blueprint "def:ιOverS"]
 noncomputable def ιOverS
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

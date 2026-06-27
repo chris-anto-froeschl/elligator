@@ -139,6 +139,7 @@ theorem ϕ_of_t2_eq_x_y
       simp
       exact ϕ_of_t2_eq_x_y_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "thm:X2_defined"]
 theorem X2_defined
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -175,6 +176,7 @@ theorem X2_defined
     · exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
     · exact h1
 
+@[blueprint "thm:z_defined"]
 theorem z_defined
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -186,6 +188,7 @@ theorem z_defined
   := by
     exact (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
 
+@[blueprint "thm:t2_defined"]
 theorem t2_defined
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

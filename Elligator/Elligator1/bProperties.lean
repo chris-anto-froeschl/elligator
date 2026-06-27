@@ -33,13 +33,16 @@ section bProperties
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:two_pow_b_le_q"]
 lemma two_pow_b_le_q (q_mod_4_congruent_3 : q % 4 = 3) : 2^(@b q) ≤ q := by
     apply Nat.pow_log_le_self
     grind
 
+@[blueprint "lemma:q_lt_two_pow_b_succ"]
 lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) :=
   Nat.lt_pow_succ_log_self (by decide) _
 
+@[blueprint "lemma:two_pow_b_gt_q_over_two"]
 lemma two_pow_b_gt_q_over_two
   (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
   :
@@ -52,6 +55,7 @@ lemma two_pow_b_gt_q_over_two
     apply h4.mpr
     grind
 
+@[blueprint "lemma:half_q_lt_two_pow_b"]
 lemma half_q_lt_two_pow_b :
     (q - 1) / 2 < 2^(@b q) := by
       rw [ Nat.div_lt_iff_lt_mul (by norm_num), mul_comm];

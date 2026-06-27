@@ -21,6 +21,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:c_ne_zero"]
 lemma c_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -34,12 +35,14 @@ lemma c_ne_zero
       apply mul_ne_zero s_h1 s_h1
 
 omit [Fintype F] in
+@[blueprint "lemma:c_ne_one"]
 lemma c_ne_one (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) : (c s) ≠ 1 := by
     change 2 / s^2 ≠ 1
     apply div_ne_one_of_ne
     apply Ne.symm
     apply s_pow_two_ne_two s_h2
 
+@[blueprint "lemma:c_ne_neg_one"]
 lemma c_ne_neg_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -62,6 +65,7 @@ lemma c_ne_neg_one
   apply s_pow_two_ne_neg_two s_h2 at h1
   exact h1
 
+@[blueprint "lemma:c_add_one_ne_zero"]
 lemma c_add_one_ne_zero
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -88,11 +92,13 @@ lemma c_add_one_ne_zero
     exact h2
 
 omit [Fintype F] in
+@[blueprint "lemma:c_sub_one_ne_zero"]
 lemma c_sub_one_ne_zero (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) :
   (c s) - 1 ≠ 0 := by
     apply sub_ne_zero.2
     exact c_ne_one s_h2
 
+@[blueprint "lemma:c_h"]
 lemma c_h
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -109,6 +115,7 @@ lemma c_h
       · exact c_sub_one_ne_zero s_h2
     · exact c_add_one_ne_zero s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:c_pow_two_ne_zero"]
 lemma c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)

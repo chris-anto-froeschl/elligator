@@ -183,6 +183,7 @@ theorem map_fulfills_curve_equation
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 /-- Original: Chapter "3.2 The map": Definition 2-/
+@[blueprint "def:ϕ"]
 noncomputable def ϕ
   (t : F)
   (s_h1 : s ≠ 0)

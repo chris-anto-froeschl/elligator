@@ -34,19 +34,23 @@ section bitsToNatProperties
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:bitsToNat_le_full_range"]
 lemma bitsToNat_le_full_range {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ ≤ ∑ i ∈ Finset.range n, 2^i := by
   rw [ Finset.sum_range ];
   exact Finset.sum_le_sum fun i _ => by aesop;
 
 /-- Every bit-vector of length `n` has binary value less than `2^n`. -/
+@[blueprint "lemma:bitsToNat_lt_two_pow_n"]
 lemma bitsToNat_lt_two_pow_n {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ < 2 ^ n := by
   let h1 := bitsToNat_le_full_range τ
   exact lt_of_le_of_lt h1 (Nat.geomSum_lt (by norm_num) (by norm_num))
 
+@[blueprint "lemma:bitsToNat_le_q_sub_one_over_two"]
 lemma bitsToNat_le_q_sub_one_over_two (τ : (@S q)) : bitsToNat τ.1 ≤ (q - 1) / 2 := by
     exact Finset.mem_filter.mp τ.2 |>.2
 
 /-- `bitsToNat` is injective: distinct bit-vectors give distinct natural numbers. -/
+@[blueprint "lemma:bitsToNat_injective"]
 lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n → Bool) → ℕ) := by
   induction' n with n ih;
   · decide
@@ -63,6 +67,7 @@ lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n →
 
 /-- Every natural number less than `2^n` is the binary value of some bit-vector. -/
 -- TODO use Function.surjective possible, i.e. have to get hm into ∀ m value somehow
+@[blueprint "lemma:bitsToNat_surj"]
 lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
   ∃ τ : Fin n → Bool, bitsToNat τ = m := by
     induction' n with n ih generalizing m <;> simp_all +decide [ pow_succ' ];
@@ -75,6 +80,7 @@ lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
       simp +decide [ ← hτ, Fin.sum_univ_succ ]; ring_nf;
       simp +decide [ bitsToNat, Finset.sum_mul _ _ _ ]
 
+@[blueprint "lemma:natCast_injective_of_prime_card"]
 lemma natCast_injective_of_prime_card
   {q : ℕ}
   (field_cardinality : Fintype.card F = q)
@@ -89,6 +95,7 @@ lemma natCast_injective_of_prime_card
     · exact le_antisymm ( le_of_not_gt fun h => by have := Nat.le_of_dvd ( by omega ) h3; omega ) ‹_›;
     · exact absurd h3 ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) )
 
+@[blueprint "lemma:lower_half_neg_eq"]
 lemma lower_half_neg_eq
   (field_cardinality : Fintype.card F = q) (hq : Prime q)
   {a b : ℕ} (ha : a ≤ (q - 1) / 2) (hb : b ≤ (q - 1) / 2)
@@ -103,6 +110,7 @@ lemma lower_half_neg_eq
     rcases k with (_ | _ | k) <;> norm_num at hk <;>
       nlinarith [Nat.div_mul_le_self (q - 1) 2, Nat.sub_add_cancel hq.nat_prime.pos]
 
+@[blueprint "lemma:σ_injective"]
 lemma σ_injective
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
@@ -122,6 +130,7 @@ PROBLEM
 If `n < q` and `n ≤ (q-1)/2`, there exists a bit-vector `τ ∈ S` with
 `bitsToNat τ = n`.
 -/
+@[blueprint "lemma:exists_S_elem_of_le"]
 lemma exists_S_elem_of_le
   (q_mod_4_congruent_3 : q % 4 = 3)
   (n : ℕ) (hn : n < q) (hle : n ≤ (q - 1) / 2)
@@ -139,6 +148,7 @@ For any `t ∈ F_q` (with `q` prime, `q ≡ 3 mod 4`), there exists `τ ∈ S` s
 that `σ(τ) = t` or `σ(τ) = -t`. This is the key encoding lemma: at least one of
 `{t, -t}` lies in the image of `σ` restricted to `S`.
 -/
+@[blueprint "lemma:exists_"]
 lemma exists_σ_preimage_or_neg
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)

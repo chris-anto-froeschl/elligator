@@ -38,11 +38,13 @@ variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
 omit [Fintype F] in
+@[blueprint "lemma:u_ne_zero"]
 lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) := by
   change (1 - t.val) / (1 + t.val) ≠ 0
   apply div_ne_zero (FiniteFieldBasic.one_sub_t_ne_zero t) (FiniteFieldBasic.one_add_t_ne_zero t)
 
 omit [Fintype F] in
+@[blueprint "lemma:u_pow_two_ne_zero"]
 lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (u t)^2 ≠ (0 : F) := by
     rw [pow_two]
@@ -51,6 +53,7 @@ lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     · exact (u_ne_zero t)
 
 omit [Fintype F] in
+@[blueprint "lemma:u_comparison"]
 lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) :
   let t1 := t.val
   let t2 := -t1
@@ -74,6 +77,7 @@ lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) :
        simp
 
 omit [Fintype F] in
+@[blueprint "lemma:u_of_zero"]
 lemma u_of_zero :
   let h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := FiniteFieldBasic.zero_h1
   let u_of_t := u ⟨(0 : F), h1⟩
@@ -82,6 +86,7 @@ lemma u_of_zero :
     unfold u_of_t u
     simp
 
+@[blueprint "lemma:one_add_u_ne_zero"]
 lemma one_add_u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (field_cardinality : Fintype.card F = q)

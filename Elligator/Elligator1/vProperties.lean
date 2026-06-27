@@ -38,6 +38,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:v_h"]
 lemma v_h1_third_factor_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -72,6 +73,7 @@ lemma v_h1_third_factor_ne_zero
       exact h1_2
     contradiction
 
+@[blueprint "lemma:v_h"]
 lemma v_h1
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -100,6 +102,7 @@ lemma v_h1
     rw [mul_assoc, mul_inv_cancel₀ h1]
     ring_nf
 
+@[blueprint "lemma:v_h"]
 lemma v_h1_second_factor_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -137,6 +140,7 @@ lemma v_h1_second_factor_ne_zero
       exact h3_1_2
     contradiction
 
+@[blueprint "lemma:v_ne_zero"]
 lemma v_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -153,6 +157,7 @@ lemma v_ne_zero
       · exact (v_h1_second_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
     · exact (v_h1_third_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
+@[blueprint "lemma:χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero"]
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -170,6 +175,7 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
     · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
 
 omit [Fintype F] in
+@[blueprint "lemma:v_comparison"]
 lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -190,6 +196,7 @@ lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
         ring_nf
 
 omit [Fintype F] in
+@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication1 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -232,6 +239,7 @@ lemma v_comparison_implication1 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
         rw [add_comm]
 
 omit [Fintype F] in
+@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -257,6 +265,7 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     simp
     rw [mul_comm]
 
+@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (field_cardinality : Fintype.card F = q)
@@ -275,6 +284,7 @@ lemma v_comparison_implication3
     rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) field_cardinality q_mod_4_congruent_3]
     simp
 
+@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication4
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (field_cardinality : Fintype.card F = q)
@@ -299,6 +309,7 @@ lemma v_comparison_implication4
     simp
 
 omit [Fintype F] in
+@[blueprint "lemma:v_of_zero"]
 lemma v_of_zero :
   have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1
   let v_of_t := v ⟨(0 : F), h1⟩ s

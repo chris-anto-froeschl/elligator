@@ -41,6 +41,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:x_ne_zero"]
 lemma x_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -77,6 +78,7 @@ lemma x_ne_zero
       · apply one_add_X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
     · apply Y_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
+@[blueprint "lemma:x_comparison"]
 lemma x_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -147,6 +149,7 @@ lemma x_comparison
         simp
         rfl
 
+@[blueprint "lemma:x_y_eq_zero_sign_one"]
 lemma x_y_eq_zero_sign_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)

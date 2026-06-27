@@ -36,12 +36,14 @@ variable {F : Type*} [Field F] [Fintype F]
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:c"]
 noncomputable def c (s : F) : F := 2 / s^2
 
 /-- r(s) is a function defined in the paper.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:r"]
 noncomputable def r (s : F) : F :=
   let c := c s;
   c + 1 / c
@@ -50,6 +52,7 @@ noncomputable def r (s : F) : F :=
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:d"]
 noncomputable def d (s : F) : F :=
   let c := c s;
   -(c + 1)^2 / (c - 1)^2
@@ -58,6 +61,7 @@ noncomputable def d (s : F) : F :=
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:u"]
 noncomputable def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
   let t := t.val;
   (1 - t) / (1 + t)
@@ -66,6 +70,7 @@ noncomputable def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:v"]
 noncomputable def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u := u t
   let r := r s
@@ -75,6 +80,7 @@ noncomputable def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:X"]
 noncomputable def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u_of_t := u t
   let v_of_t := v t s
@@ -89,6 +95,7 @@ the relation of Field cardinality and `q`.
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:Y"]
 noncomputable def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
   let u := u t
   let c := c s
@@ -101,6 +108,7 @@ noncomputable def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F 
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:x"]
 noncomputable def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
   let c := c s
   let X := X t s
@@ -111,6 +119,7 @@ noncomputable def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F 
 
 Original: Chapter "3.2 The map": Theorem 1
 -/
+@[blueprint "def:y"]
 noncomputable def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let r := r s
   let X := X t s
@@ -120,6 +129,7 @@ noncomputable def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:η"]
 noncomputable def η (point : F × F) : F :=
   let y := point.snd
   (y - 1) / (2 * (y + 1))
@@ -128,6 +138,7 @@ noncomputable def η (point : F × F) : F :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:X2"]
 noncomputable def X2 (s : F) (P : F × F) (q : ℕ) : F :=
   let η := η P
   let r := r s
@@ -137,6 +148,7 @@ noncomputable def X2 (s : F) (P : F × F) (q : ℕ) : F :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:z"]
 noncomputable def z (s : F) (P : F × F) (q : ℕ) : F :=
   let x := P.fst
   let c := c s
@@ -148,6 +160,7 @@ noncomputable def z (s : F) (P : F × F) (q : ℕ) : F :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:u2"]
 noncomputable def u2 (s : F) (P : F × F) (q : ℕ) : F :=
   let X2 := X2 s P q
   let z := z s P q
@@ -157,6 +170,7 @@ noncomputable def u2 (s : F) (P : F × F) (q : ℕ) : F :=
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
 -/
+@[blueprint "def:t2"]
 noncomputable def t2 (s : F) (P : F × F) (q : ℕ) : F :=
   let u2 := u2 s P q
   (1 - u2) / (1 + u2)
@@ -165,11 +179,13 @@ noncomputable def t2 (s : F) (P : F × F) (q : ℕ) : F :=
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
+@[blueprint "def:b"]
 noncomputable def b (q : ℕ): ℕ := Nat.log 2 q
 
 /-- Convert a bit vector (τ₀, τ₁, ..., τ_{b-1}) to a natural number via binary
 expansion: bitsToNat(τ) = Σᵢ τᵢ · 2^i.
 -/
+@[blueprint "def:bitsToNat"]
 def bitsToNat {n : ℕ} (τ : Fin n → Bool) : ℕ :=
   ∑ i : Fin n, if τ i then 2^(i : ℕ) else 0
 
@@ -178,6 +194,7 @@ def bitsToNat {n : ℕ} (τ : Fin n → Bool) : ℕ :=
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
+@[blueprint "def:σ"]
 noncomputable def σ {q : ℕ} (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)
 
 /-- S = σ⁻¹({0, 1, 2, ..., (q-1)/2}), the set of bit vectors whose binary value
@@ -185,5 +202,6 @@ falls in the lower half {0, 1, ..., (q-1)/2} of F_q.
 
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
+@[blueprint "def:S"]
 noncomputable def S {q : ℕ} : Finset (Fin (@b q) → Bool) :=
   Finset.univ.filter (fun τ => (bitsToNat τ) ≤ (q - 1) / 2)

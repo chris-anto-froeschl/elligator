@@ -5,6 +5,7 @@ Authors: Chris Anto Fröschl, Matthias Güdemann
 -/
 module
 
+public import Architect
 public import Mathlib.Algebra.Field.Defs
 public import Mathlib.FieldTheory.Finite.Basic
 public import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
@@ -32,11 +33,14 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 
 namespace FiniteFieldBasic
 
+@[blueprint "lemma:q_ne_two"]
 lemma q_ne_two (q_mod_4_congruent_3 : q % 4 = 3) : q ≠ 2 := by omega
 
+@[blueprint "lemma:q_mod_two_congruent_one"]
 lemma q_mod_two_congruent_one (q_mod_4_congruent_3 : q % 4 = 3) : q % 2 = 1 := by omega
 
 omit [Field F] in
+@[blueprint "lemma:q_odd"]
 lemma q_odd (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 4 = 3)
   : Odd (Fintype.card F) := by
     rw [field_cardinality]
@@ -50,6 +54,7 @@ lemma q_odd (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 
     exact hq1
 
 omit [Field F] in
+@[blueprint "lemma:q_add_one_even"]
 lemma q_add_one_even
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -61,6 +66,7 @@ lemma q_add_one_even
     exact Nat.not_even_iff_odd.mpr h0
 
 omit [Field F] in
+@[blueprint "lemma:q_sub_one_even"]
 lemma q_sub_one_even
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -78,6 +84,7 @@ lemma q_sub_one_even
     linarith
 
 omit [Field F] in
+@[blueprint "lemma:q_sub_one_dvd_two"]
 lemma q_sub_one_dvd_two
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -85,6 +92,7 @@ lemma q_sub_one_dvd_two
     apply Even.two_dvd (q_sub_one_even field_cardinality q_mod_4_congruent_3)
 
 omit [Field F] in
+@[blueprint "lemma:q_not_dvd_two"]
 lemma q_not_dvd_two
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -106,6 +114,7 @@ lemma q_not_dvd_two
       exact Nat.not_even_iff_odd.mpr hq
     simp_all
 
+@[blueprint "lemma:power_odd_p_odd"]
 lemma power_odd_p_odd
   (p k : ℕ)
   (hk: 0 < k)
@@ -124,6 +133,7 @@ lemma power_odd_p_odd
       have h': Odd (p^k) ∧ Odd p := by apply h hp
       simp_all
 
+@[blueprint "lemma:odd_prime_power_gt_two"]
 lemma odd_prime_power_gt_two (q_prime_power : IsPrimePow q) (hq: Odd q)
   : q > 2 := by
     rw [IsPrimePow] at q_prime_power
@@ -164,6 +174,7 @@ lemma odd_prime_power_gt_two (q_prime_power : IsPrimePow q) (hq: Odd q)
     simp_all
 
 omit [Fintype F] in
+@[blueprint "lemma:one_ne_zero"]
 lemma one_ne_zero : (1 : F) ≠ 0 := by
   have he: Odd (-1 : F) := by
     rw [Odd]
@@ -175,6 +186,7 @@ lemma one_ne_zero : (1 : F) ≠ 0 := by
     simp
   simp_all
 
+@[blueprint "lemma:q_add_one_over_four_ne_zero"]
 lemma q_add_one_over_four_ne_zero (q_mod_4_congruent_3 : q % 4 = 3)
   : (1 + q) / 4 ≠ 0 := by
     apply Nat.div_ne_zero_iff.2
@@ -182,6 +194,7 @@ lemma q_add_one_over_four_ne_zero (q_mod_4_congruent_3 : q % 4 = 3)
     · norm_num
     · grind
 
+@[blueprint "lemma:q_add_one_over_two_ne_zero"]
 lemma q_add_one_over_two_ne_zero (q_mod_4_congruent_3 : q % 4 = 3) :
   (1 + q) / 2 ≠ 0 := by
     apply Nat.div_ne_zero_iff.2
@@ -189,6 +202,7 @@ lemma q_add_one_over_two_ne_zero (q_mod_4_congruent_3 : q % 4 = 3) :
     · norm_num
     · grind
 
+@[blueprint "lemma:char_ne_two"]
 lemma char_ne_two
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -198,6 +212,7 @@ lemma char_ne_two
     rintro h
     simp_all +decide
 
+@[blueprint "lemma:ring_char_ne_two"]
 lemma ring_char_ne_two
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -209,6 +224,7 @@ lemma ring_char_ne_two
     simp_all +decide
     rcases h1 with ⟨ x, rfl ⟩; rcases x with ( _ | _ | x ) <;> norm_num [ Nat.pow_succ', ← mul_assoc, Nat.mul_mod ] at *;
 
+@[blueprint "lemma:two_ne_zero"]
 lemma two_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -222,6 +238,7 @@ lemma two_ne_zero
     specialize h3 2; simp_all +decide [ Nat.dvd_prime ];
     exact not_subsingleton _ h3
 
+@[blueprint "lemma:four_ne_zero"]
 lemma four_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -234,6 +251,7 @@ lemma four_ne_zero
     · exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
 
 omit [Fintype F] in
+@[blueprint "lemma:neg_one_ne_zero"]
 lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by
   have he: Odd (-1 : F) := by
     rw [Odd]
@@ -245,6 +263,7 @@ lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by
     simp
   simp_all
 
+@[blueprint "lemma:neg_one_non_square"]
 lemma neg_one_non_square
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -254,6 +273,7 @@ lemma neg_one_non_square
       apply_rules [ FiniteField.isSquare_neg_one_iff ];
     aesop
 
+@[blueprint "lemma:p_odd_power_odd"]
 lemma p_odd_power_odd
   (p k : ℕ)
   (hp: Odd p)
@@ -276,6 +296,7 @@ lemma p_odd_power_odd
       use 2*k*k1 + k + k1
       simp_all
 
+@[blueprint "lemma:q_sub_one_over_two_ne_zero"]
 lemma q_sub_one_over_two_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -319,6 +340,7 @@ lemma q_sub_one_over_two_ne_zero
       · exact Nat.lt_of_lt_of_le p_gt_2 q_gte_q
 
 omit [Fintype F] in
+@[blueprint "lemma:pow_two_ne_zero"]
 lemma pow_two_ne_zero
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -330,6 +352,7 @@ lemma pow_two_ne_zero
     · exact a_ne_zero
 
 omit [Fintype F] in
+@[blueprint "lemma:one_sub_t_ne_zero"]
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 := by
   intro h
   have h1 : t.val = 1 := by
@@ -348,6 +371,7 @@ lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val 
   contradiction
 
 omit [Fintype F] in
+@[blueprint "lemma:one_add_t_ne_zero"]
 lemma one_add_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) + t.val ≠ 0 := by
   intro h
   have h1 : t.val = -1 := by
@@ -360,6 +384,7 @@ lemma one_add_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) + t.val 
   contradiction
 
 omit [Fintype F] in
+@[blueprint "lemma:zero_h"]
 lemma zero_h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
   constructor
   · symm
@@ -368,6 +393,7 @@ lemma zero_h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
     exact FiniteFieldBasic.neg_one_ne_zero
 
 omit [Fintype F] in
+@[blueprint "lemma:neg_t_ne_one_and_neg_t_ne_neg_one"]
 lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -392,6 +418,7 @@ lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
       contradiction
 
 omit [Field F] in
+@[blueprint "lemma:one_add_card_mod_four_eq_zero"]
 lemma one_add_card_mod_four_eq_zero
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -399,6 +426,7 @@ lemma one_add_card_mod_four_eq_zero
     omega
 
 omit [Field F] in
+@[blueprint "lemma:four_dvd_one_add_card"]
 lemma four_dvd_one_add_card
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -406,6 +434,7 @@ lemma four_dvd_one_add_card
     exact Nat.dvd_of_mod_eq_zero (one_add_card_mod_four_eq_zero field_cardinality q_mod_4_congruent_3)
 
 omit [Field F] in
+@[blueprint "lemma:one_add_card_over_four_mul_two_eq_one_add_card_over_two"]
 lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -421,6 +450,7 @@ lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
     simp_all
 
 omit [Fintype F] in
+@[blueprint "lemma:one_add_one_a_pow_two_eq_a_add_one_over_a_over_a"]
 lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -428,10 +458,12 @@ lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
     ring_nf
     rw [mul_inv_cancel₀ a_ne_zero]
 
+@[blueprint "lemma:card_sub_one_over_four_mul_two_eq_one_add_card_over_two"]
 lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two :
   (q - 1) / 2 = (q + 1) / 2 - 1 := by
     omega
 
+@[blueprint "lemma:ringChar_of_F_eq_q"]
 lemma ringChar_of_F_eq_q
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
@@ -439,6 +471,7 @@ lemma ringChar_of_F_eq_q
       have := FiniteField.card F (ringChar F)
       aesop
 
+@[blueprint "lemma:CharP_of_F_eq_q"]
 lemma CharP_of_F_eq_q
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
@@ -450,6 +483,7 @@ lemma CharP_of_F_eq_q
 Every element of F can be written as (n : F) for some n < q because Fintype.card F = q and the natural cast n ↦ (n : F) has period equal to ringChar F
 = q (since q is prime), so {(0 : F), (1 : F), ..., (q-1 : F)} gives all q distinct elements.
 -/
+@[blueprint "lemma:exists_nat_cast_eq"]
 lemma exists_nat_cast_eq
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
@@ -479,6 +513,7 @@ In a prime field with `q ≡ 3 (mod 4)` (hence `q` odd), for any `n < q`, either
 `n ≤ (q-1)/2` or `q - n ≤ (q-1)/2` (i.e., `n` or its "negation" `q-n` lies in the
 lower half).
 -/
+@[blueprint "lemma:nat_or_neg_in_lower_half"]
 lemma nat_or_neg_in_lower_half
   (q_prime : Prime q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -490,6 +525,7 @@ lemma nat_or_neg_in_lower_half
 Negation in `F_q` for a natural number cast: `-(n : F) = (q - n : F)` when
 `q = Fintype.card F` is the characteristic.
 -/
+@[blueprint "lemma:neg_natCast_eq"]
 lemma neg_natCast_eq
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)

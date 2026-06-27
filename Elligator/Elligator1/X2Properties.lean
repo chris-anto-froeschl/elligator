@@ -47,6 +47,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:X"]
 lemma X2_eq_neg_one
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -69,6 +70,7 @@ lemma X2_eq_neg_one
     rw [zero_pow, add_zero]
     exact FiniteFieldBasic.q_add_one_over_four_ne_zero q_mod_4_congruent_3
 
+@[blueprint "lemma:X"]
 lemma X2_h1
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -92,6 +94,7 @@ lemma X2_h1
     nth_rw 2 [add_comm]
     rw [field_cardinality, LegendreSymbol.a_pow_q_add_one_over_two_eq_a point.prop.2.1 field_cardinality q_mod_4_congruent_3]
 
+@[blueprint "lemma:X"]
 lemma X2_h2
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -105,6 +108,7 @@ lemma X2_h2
     have h : (1 + η_of_point * r_of_s + X2_of_t)^2 = (1 + η_of_point * r_of_s)^2 - 1 := by exact X2_h1 field_cardinality q_mod_4_congruent_3 point
     grind
 
+@[blueprint "lemma:X"]
 lemma X2_h3
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -134,6 +138,7 @@ lemma X2_h3
         grind
       _ = 0 := by exact X2_h2 field_cardinality q_mod_4_congruent_3 ⟨point.val, point_of_ϕ_fulfills_ϕOverFProps⟩
 
+@[blueprint "lemma:X"]
 lemma X2_h4
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -158,6 +163,7 @@ lemma X2_h4
     ring_nf
     exact h1
 
+@[blueprint "lemma:X"]
 lemma X2_ne_zero
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
@@ -176,6 +182,7 @@ lemma X2_ne_zero
     rw [h] at X2_equation
     simp at X2_equation
 
+@[blueprint "lemma:y_divisor_ne_zero_with_X"]
 lemma y_divisor_ne_zero_with_X2_for_X
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -209,6 +216,7 @@ lemma y_divisor_ne_zero_with_X2_for_X
     have h5 : y - 1 ≠ y + 1 := by grind
     contradiction
 
+@[blueprint "lemma:X"]
 lemma X2_ne_neg_one
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -256,6 +264,7 @@ lemma X2_ne_neg_one
       apply div_ne_zero h3_1 h3_2
     contradiction
 
+@[blueprint "lemma:X"]
 lemma X2_add_one_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -270,6 +279,7 @@ lemma X2_add_one_ne_zero
     let h1 := X2_ne_neg_one s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 point y_ne_one
     grind
 
+@[blueprint "lemma:y_with_X"]
 lemma y_with_X2
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -334,6 +344,7 @@ lemma y_with_X2
     rw [← h3]
     exact h1
 
+@[blueprint "lemma:y_with_X"]
 lemma y_with_X2_of_X2_eq_one
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -350,6 +361,7 @@ lemma y_with_X2_of_X2_eq_one
     let y_with_X2 := y_with_X2 s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 point y_eq_one
     grind
 
+@[blueprint "lemma:η_mul_r_eq_neg_two_of_X2_eq_one"]
 lemma η_mul_r_eq_neg_two_of_X2_eq_one
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
@@ -371,6 +383,7 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
     simp_all
     grind
 
+@[blueprint "lemma:X"]
 lemma X2_observation1_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -399,6 +412,7 @@ lemma X2_observation1_of_X2_ne_one
       grind
     grind
 
+@[blueprint "lemma:X"]
 lemma X2_observation2_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -457,6 +471,7 @@ lemma X2_observation2_of_X2_ne_one
     have const_term : 1 + (r_of_s + 2) / (r_of_s - 2) = (2 * r_of_s) / (r_of_s - 2) := by grind
     grind
 
+@[blueprint "lemma:one_sub_d_mul_y_pow_two_ne_zero"]
 lemma one_sub_d_mul_y_pow_two_ne_zero
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -482,6 +497,7 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
     change ¬IsSquare (1 / d_of_s) at h3
     contradiction
 
+@[blueprint "lemma:x_pow_two_of_X"]
 lemma x_pow_two_of_X2_ne_one_eq1
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -509,6 +525,7 @@ lemma x_pow_two_of_X2_ne_one_eq1
     rw [← div_left_inj' one_sub_d_mul_y_pow_two_ne_zero] at curve_equation
     grind
 
+@[blueprint "lemma:x_pow_two_of_X"]
 lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -582,6 +599,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         ring_nf
 
 /-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:Y'"]
 noncomputable def Y'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -595,6 +613,7 @@ noncomputable def Y'
   -- This is just `def x` with the denominator `Y` replaced by `x` of point
   (c - 1) * s * X * (1 + X) / x
 
+@[blueprint "lemma:Y'_pow_two_eq_of_X2_ne_one"]
 lemma Y'_pow_two_eq_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -646,6 +665,7 @@ lemma Y'_pow_two_eq_of_X2_ne_one
       rw [div_div_div_comm, div_self h]
       grind
 
+@[blueprint "lemma:X"]
 lemma X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)

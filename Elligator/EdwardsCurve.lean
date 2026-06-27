@@ -40,12 +40,14 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 x^2 + y^2 = 1 + d x^2 y^2,
 \]
 where $d \in K \setminus \{0,1\}$. -/
+@[blueprint "def:edwardsCurveEquation"]
 def edwardsCurveEquation
   (x y : F)
   (d : {d : F // d ≠ 0 ∧ d ≠ 1})
   : Prop := x^2 + y^2 = 1 + d * x^2 * y^2
 
 /-- `EOverF` is the set of points fulfilling the `edwardsCurveEquation`. -/
+@[blueprint "def:EOverF"]
 def EOverF
   {s : F}
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -57,6 +59,7 @@ def EOverF
   let d_h : d_of_s ≠ 0 ∧ d_of_s ≠ 1 := d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
   {p | edwardsCurveEquation p.fst p.snd ⟨d_of_s, d_h⟩}
 
+@[blueprint "lemma:zero_one_fulfill_edwardsCurveEquation"]
 lemma zero_one_fulfill_edwardsCurveEquation
   {s : F}
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

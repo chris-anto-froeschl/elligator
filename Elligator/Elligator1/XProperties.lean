@@ -38,6 +38,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:X_pow_two_add_one_over_c_pow_two_ne_zero"]
 lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -61,6 +62,7 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
       apply IsSquare.mul_self
     contradiction
 
+@[blueprint "lemma:X_ne_zero"]
 lemma X_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -76,6 +78,7 @@ lemma X_ne_zero
     · apply LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
     · apply u_ne_zero t
 
+@[blueprint "lemma:X_comparison"]
 lemma X_comparison
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (field_cardinality : Fintype.card F = q)
@@ -114,6 +117,7 @@ lemma X_comparison
         change 1 / X1 = 1 / X1
         rfl
 
+@[blueprint "lemma:X_of_zero"]
 lemma X_of_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)

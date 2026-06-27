@@ -36,6 +36,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:d_nonsquare"]
 lemma d_nonsquare
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -113,6 +114,7 @@ lemma d_nonsquare
       exact h2
     contradiction
 
+@[blueprint "lemma:d_ne_zero"]
 lemma d_ne_zero
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -130,6 +132,7 @@ lemma d_ne_zero
       grind
     contradiction
 
+@[blueprint "lemma:one_over_d_nonsquare"]
 lemma one_over_d_nonsquare
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -160,6 +163,7 @@ lemma one_over_d_nonsquare
           grind
         contradiction
 
+@[blueprint "lemma:d_ne_one"]
 lemma d_ne_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -177,6 +181,7 @@ lemma d_ne_one
       grind
     contradiction
 
+@[blueprint "lemma:d_ne_zero_and_d_ne_one"]
 lemma d_ne_zero_and_d_ne_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -190,6 +195,7 @@ lemma d_ne_zero_and_d_ne_one
     · exact d_ne_zero s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
     · exact d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
+@[blueprint "lemma:neg_d_eq_r_add_two_over_r_sub_two"]
 lemma neg_d_eq_r_add_two_over_r_sub_two
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)

@@ -39,6 +39,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:Y_ne_zero"]
 lemma Y_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -68,6 +69,7 @@ lemma Y_ne_zero
       · apply LegendreSymbol.χ_a_ne_zero v_ne_zero field_cardinality
     · apply LegendreSymbol.χ_a_ne_zero (v_h1_third_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality
 
+@[blueprint "lemma:X_mul_Y_ne_zero"]
 lemma X_mul_Y_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -82,6 +84,7 @@ lemma X_mul_Y_ne_zero
     · apply X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
     · apply Y_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
+@[blueprint "lemma:one_add_X_ne_zero"]
 lemma one_add_X_ne_zero
   (s_h1 : s ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -178,6 +181,7 @@ lemma one_add_X_ne_zero
     have h6 : χ_of_v_of_t ≠ -χ_of_v_of_t := LegendreSymbol.neg_χ_a_ne_χ_a v_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
 
+@[blueprint "lemma:Y_comparison"]
 lemma Y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)

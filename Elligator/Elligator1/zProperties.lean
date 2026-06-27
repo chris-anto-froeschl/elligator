@@ -45,6 +45,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
+@[blueprint "lemma:z_eq_zero"]
 lemma z_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -65,6 +66,7 @@ lemma z_eq_zero
     exact LegendreSymbol.χ_a_zero_eq_zero (rfl) field_cardinality q_prime_power q_mod_4_congruent_3
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
+@[blueprint "def:z'"]
 noncomputable def z'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
   (field_cardinality : Fintype.card F = q)
@@ -77,6 +79,7 @@ noncomputable def z'
   let c := c s
   LegendreSymbol.χ (Y * (X^2 + 1 / c^2))
 
+@[blueprint "lemma:Y'_ne_zero"]
 lemma Y'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -102,6 +105,7 @@ lemma Y'_ne_zero
     rw [add_comm]
     grind
 
+@[blueprint "lemma:X_pow_two_add_"]
 lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -126,6 +130,7 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
       apply IsSquare.mul_self
     contradiction
 
+@[blueprint "lemma:z"]
 lemma z'_argument_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -146,6 +151,7 @@ lemma z'_argument_ne_zero
     let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
     grind
 
+@[blueprint "lemma:z"]
 lemma z'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -167,6 +173,7 @@ lemma z'_ne_zero
     let a := (Y * (X^2 + 1 / c^2))
     exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero field_cardinality
 
+@[blueprint "lemma:z"]
 lemma z'_eq_one_or_z'_eq_neg_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
