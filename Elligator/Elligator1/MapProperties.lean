@@ -49,7 +49,7 @@ variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsP
 
 -- Used in Theorem 3 Proof B part as implication for point_in_ϕOverF_with_prop2_main_case
 -- argument.
-@[blueprint "lemma:y_h"]
+@[blueprint "lemma:y_h1"]
 lemma y_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -100,7 +100,7 @@ lemma y_h1
     simp
 
 -- Implicated by y_h1. Saved for further proof arguments in Theorem 3 Proof B
-@[blueprint "lemma:y_h"]
+@[blueprint "lemma:y_h2"]
 lemma y_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -136,7 +136,7 @@ lemma y_h2
         rw [y_h1 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
 
 -- Implicated by y_h2.
-@[blueprint "lemma:y_h"]
+@[blueprint "lemma:y_h3"]
 lemma y_h3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -306,7 +306,7 @@ lemma point_comparison
     rw [y_comparison t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3]
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:X_"]
+@[blueprint "lemma:X_η_h1"]
 lemma X_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -341,7 +341,7 @@ lemma X_η_h1
     exact h1_1
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:X_"]
+@[blueprint "lemma:X_η_h2"]
 lemma X_η_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -368,7 +368,7 @@ lemma X_η_h2
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:u_"]
+@[blueprint "lemma:u_η_h1"]
 lemma u_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -432,7 +432,7 @@ lemma u_η_h1
 
 -- Used in the main case of Theorem 3 Proof part B
 -- TODO really?
-@[blueprint "lemma:t_"]
+@[blueprint "lemma:t_η_h1"]
 lemma t_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -462,7 +462,7 @@ lemma t_η_h1
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:v_"]
+@[blueprint "lemma:v_η_h1"]
 lemma v_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -559,7 +559,7 @@ lemma Y_η_h1
             rw [mul_one]
 
 -- Implicated by main case of Theorem 3 proof part B.
-@[blueprint "lemma:y_"]
+@[blueprint "lemma:y_η_h1"]
 lemma y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -701,7 +701,7 @@ noncomputable def ϕOverF
   : Set (F × F)
   := {P | ∃ t : F, (ϕ t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3) = P}
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop1_base_case"]
 lemma point_in_ϕOverF_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -727,7 +727,7 @@ lemma point_in_ϕOverF_with_prop1_base_case
     ring_nf
     exact (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop1_main_case"]
 lemma point_in_ϕOverF_with_prop1_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -747,7 +747,7 @@ lemma point_in_ϕOverF_with_prop1_main_case
     exact y_add_one_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 t
 
 -- Original: Theorem 3.2 Proof B prop 1 argumentation
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop1"]
 lemma point_in_ϕOverF_with_prop1
   (t : F)
   (s_h1 : s ≠ 0)
@@ -769,7 +769,7 @@ lemma point_in_ϕOverF_with_prop1
         exact h1
       exact point_in_ϕOverF_with_prop1_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop2_base_case"]
 lemma point_in_ϕOverF_with_prop2_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -797,7 +797,7 @@ lemma point_in_ϕOverF_with_prop2_base_case
     use 0
     simp
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop2_main_case"]
 lemma point_in_ϕOverF_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -835,7 +835,7 @@ lemma point_in_ϕOverF_with_prop2_main_case
     apply IsSquare.sq
 
 -- Original: Theorem 3.2 Proof B prop 2 argumentation
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop2"]
 lemma point_in_ϕOverF_with_prop2
   (t : F)
   (s_h1 : s ≠ 0)
@@ -857,7 +857,7 @@ lemma point_in_ϕOverF_with_prop2
         exact h1
       exact point_in_ϕOverF_with_prop2_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop3_base_case"]
 lemma point_in_ϕOverF_with_prop3_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -885,7 +885,7 @@ lemma point_in_ϕOverF_with_prop3_base_case
     have h3 : (2 : F) ≠ 0 := by apply FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     contradiction
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop3_main_case"]
 lemma point_in_ϕOverF_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -921,7 +921,7 @@ lemma point_in_ϕOverF_with_prop3_main_case
     ring_nf
 
 -- Original: Theorem 3.2 Proof B prop 3 argumentation
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_with_prop3"]
 lemma point_in_ϕOverF_with_prop3
   (t : F)
   (s_h1 : s ≠ 0)
@@ -944,6 +944,7 @@ lemma point_in_ϕOverF_with_prop3
       exact point_in_ϕOverF_with_prop3_base_case ⟨t, h1_1⟩ s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
 -- Original: Theorem 3.2 Proof B (3.2 forward statement)
+@[blueprint "thm:point_props_of_point_in_ϕOverF"]
 theorem point_props_of_point_in_ϕOverF
   (t : F)
   (s_h1 : s ≠ 0)
@@ -963,7 +964,7 @@ theorem point_props_of_point_in_ϕOverF
       · exact point_in_ϕOverF_with_prop2 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
       · exact point_in_ϕOverF_with_prop3 t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
-@[blueprint "lemma:point_of_"]
+@[blueprint "lemma:point_of_ϕ_in_ϕOverF"]
 lemma point_of_ϕ_in_ϕOverF
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -979,7 +980,7 @@ lemma point_of_ϕ_in_ϕOverF
       rw [Set.mem_setOf_eq]
       use t.val
 
-@[blueprint "lemma:point_of_"]
+@[blueprint "lemma:point_of_ϕ_fulfills_ϕOverFProps"]
 lemma point_of_ϕ_fulfills_ϕOverFProps
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)

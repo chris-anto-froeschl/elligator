@@ -466,7 +466,7 @@ lemma ϕ_of_one_in_ϕ_of_F
     rw [Set.mem_setOf_eq]
     use (1 : F)
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_base_case"]
 lemma point_in_ϕOverF_base_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -483,7 +483,7 @@ lemma point_in_ϕOverF_base_case
     rw [← ϕ_of_one_eq_zero_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     exact ϕ_of_one_in_ϕ_of_F s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_main_case_with_y_eq_one"]
 lemma point_in_ϕOverF_main_case_with_y_eq_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -516,7 +516,7 @@ lemma point_in_ϕOverF_main_case_with_y_eq_one
     symm at h4_1
     contradiction
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_main_case_with_y_ne_one"]
 lemma point_in_ϕOverF_main_case_with_y_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -544,7 +544,7 @@ lemma point_in_ϕOverF_main_case_with_y_ne_one
     · use t
       exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X2_h
 
-@[blueprint "lemma:point_in_"]
+@[blueprint "lemma:point_in_ϕOverF_main_case"]
 lemma point_in_ϕOverF_main_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -565,6 +565,7 @@ lemma point_in_ϕOverF_main_case
     · exact point_in_ϕOverF_main_case_with_y_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_h
 
 -- Original: Theorem 3.2 Proof C (3.2 reverse statement)
+@[blueprint "thm:point_in_ϕOverF_of_point_props"]
 theorem point_in_ϕOverF_of_point_props
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

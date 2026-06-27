@@ -244,7 +244,7 @@ lemma one_add_t'_ne_zero
     let t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one h1
     grind
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u'_eq_one_sub_t'_over_one_add_t'"]
 lemma u'_eq_one_sub_t'_over_one_add_t'
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -267,7 +267,7 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
     let two_ne_zero := FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     grind
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u'_eq_u"]
 lemma u'_eq_u
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -295,7 +295,7 @@ lemma u'_eq_u
     unfold Elligator1.u
     grind
 
-@[blueprint "lemma:v"]
+@[blueprint "lemma:v'_eq_v"]
 lemma v'_eq_v
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -323,7 +323,7 @@ lemma v'_eq_v
     rw [h1]
     grind
 
-@[blueprint "lemma:X"]
+@[blueprint "lemma:X'_eq_X"]
 lemma X'_eq_X
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -398,7 +398,7 @@ noncomputable def x'
   let Y' := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
   (c - 1) * s * X' * (1 + X') / Y'
 
-@[blueprint "lemma:x"]
+@[blueprint "lemma:x'_eq_x"]
 lemma x'_eq_x
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -440,7 +440,7 @@ noncomputable def y'
   let r := r s
   (r * X' - (1 + X')^2) / (r * X' + (1 + X')^2)
 
-@[blueprint "lemma:y"]
+@[blueprint "lemma:y'_eq_y"]
 lemma y'_eq_y
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -469,6 +469,7 @@ lemma y'_eq_y
     let h2 := X'_eq_X s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one X_h
     grind
 
+@[blueprint "thm:x'_and_y'_fulfill_curve_equation"]
 theorem x'_and_y'_fulfill_curve_equation
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

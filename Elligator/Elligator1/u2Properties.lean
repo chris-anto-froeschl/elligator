@@ -46,7 +46,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u2_eq_zero"]
 lemma u2_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -63,7 +63,7 @@ lemma u2_eq_zero
     rw [z_eq_zero t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
     simp
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u2_eq_u"]
 lemma u2_eq_u
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -155,7 +155,7 @@ lemma u2_eq_u
     rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)) h6 field_cardinality q_mod_4_congruent_3]
     simp
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u2_eq_u'"]
 lemma u2_eq_u'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -254,7 +254,7 @@ lemma u2_eq_u'
     rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 ⟨-t.val, h2_2⟩)) h6 field_cardinality q_mod_4_congruent_3]
     simp
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u2_h1"]
 lemma u2_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -299,7 +299,7 @@ lemma one_add_u2_ne_zero_main_case
       let t_h := FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
       exact one_add_u_ne_zero ⟨ -t.val, t_h ⟩ field_cardinality q_prime_power q_mod_4_congruent_3
 
-@[blueprint "lemma:one_add_u"]
+@[blueprint "lemma:one_add_u2_ne_zero_base_case"]
 lemma one_add_u2_ne_zero_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -316,7 +316,7 @@ lemma one_add_u2_ne_zero_base_case
     rw [u2_eq_zero, add_zero]
     exact FiniteFieldBasic.one_ne_zero
 
-@[blueprint "lemma:one_add_u"]
+@[blueprint "lemma:one_add_u2_ne_zero"]
 lemma one_add_u2_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -352,7 +352,7 @@ noncomputable def u'
   let X := X2 s point q
   z * X
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u'_pow_two_eq_X_pow_two"]
 lemma u'_pow_two_eq_X_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -373,7 +373,7 @@ lemma u'_pow_two_eq_X_pow_two
     unfold u u'
     grind
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u'_eq_X2_or_u'_eq_neg_X2"]
 lemma u'_eq_X2_or_u'_eq_neg_X2
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -394,7 +394,7 @@ lemma u'_eq_X2_or_u'_eq_neg_X2
     unfold u u'
     grind
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u'_ne_neg_one"]
 lemma u'_ne_neg_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -416,7 +416,7 @@ lemma u'_ne_neg_one
     unfold u u'
     grind
 
-@[blueprint "lemma:one_add_u"]
+@[blueprint "lemma:one_add_u'_ne_zero"]
 lemma one_add_u'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -438,7 +438,7 @@ lemma one_add_u'_ne_zero
     unfold u u'
     grind
 
-@[blueprint "lemma:u"]
+@[blueprint "lemma:u'_ne_zero"]
 lemma u'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -476,7 +476,7 @@ noncomputable def v'
   -- Note: this is just the definition of v as in theorem 1
   u^5 + (r^2 - 2) * u^3 + u
 
-@[blueprint "lemma:v"]
+@[blueprint "lemma:v'_eq_z'_mul_Y'_pow_two"]
 lemma v'_eq_z'_mul_Y'_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -509,7 +509,7 @@ lemma v'_eq_z'_mul_Y'_pow_two
       grind
     grind
 
-@[blueprint "lemma:v"]
+@[blueprint "lemma:v'_ne_zero"]
 lemma v'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)

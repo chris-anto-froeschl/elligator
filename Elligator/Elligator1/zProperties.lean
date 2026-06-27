@@ -130,7 +130,7 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
       apply IsSquare.mul_self
     contradiction
 
-@[blueprint "lemma:z"]
+@[blueprint "lemma:z'_argument_ne_zero"]
 lemma z'_argument_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -151,7 +151,7 @@ lemma z'_argument_ne_zero
     let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
     grind
 
-@[blueprint "lemma:z"]
+@[blueprint "lemma:z'_ne_zero"]
 lemma z'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
@@ -173,7 +173,7 @@ lemma z'_ne_zero
     let a := (Y * (X^2 + 1 / c^2))
     exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero field_cardinality
 
-@[blueprint "lemma:z"]
+@[blueprint "lemma:z'_eq_one_or_z'_eq_neg_one"]
 lemma z'_eq_one_or_z'_eq_neg_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
