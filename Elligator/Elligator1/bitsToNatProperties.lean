@@ -10,8 +10,6 @@ public import Elligator.FiniteFieldBasic
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.bProperties
 
-@[expose] public section
-
 /-!
 # bitsToNat Properties
 
@@ -26,6 +24,7 @@ In this file we introduce some generally helpful lemmas for `bitsToNat `.
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -164,5 +163,10 @@ lemma exists_σ_preimage_or_neg
       apply exists_S_elem_of_le q_mod_4_congruent_3 (q - n) (by
       omega) (by
       omega);
-    use τ; simp_all +decide [ σ ] ;
-    rw [ Nat.cast_sub hn.le ]; aesop
+    use τ
+    simp_all +decide only [not_le, σ, Nat.cast_sub hn.le ]
+    aesop
+
+end bitsToNatProperties
+
+end Elligator.Elligator1

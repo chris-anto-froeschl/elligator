@@ -9,63 +9,57 @@ public import Mathlib.Algebra.Field.Defs
 public import Mathlib.FieldTheory.Finite.Basic
 public import Elligator.FiniteFieldBasic
 
-@[expose] public section
-
 /-!
 # Legendre Symbol
 
 In this file we introduce some a special case of the traditional Legendre Symbol.
 This definition differs from the normal textbook definition, and therefore of mathlib's existing
 `Mathlib.NumberTheory.LegendreSymbol.Basic` or `Mathlib.NumberTheory.LegendreSymbol.JacobiSymbol`
-by being bound to a finite field with `q` fulfilling `IsPrimePow`, `Fintype.card F = q` and `q % 4 = 3`.
-
-## Main results
-
-- TODO
+by being bound to a finite field with `q` fulfilling `IsPrimePow`, `Fintype.card F = q` and
+`q % 4 = 3`.
 
 ## References
 
 See [bernstein2013a] chapter 3.1 for the original account on this version of the Legendre Symbol.
 -/
 
+@[expose] public section
+
 namespace LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ}
 
-/-- χ(a) is the quadratic character of a in the finite field F with q elements, where q is a prime congruent to 3 modulo 4.
+/-- χ(a) is the quadratic character of a in the finite field F with q elements, where q is a
+prime congruent to 3 modulo 4.
 
 This function was added, since Mathlib.NumberTheory.LegendreSymbol.Basic is restricted to ℤ.
 
-Paper definition at chapter 3.1.
+Original: definition at chapter 3.1.
 -/
 @[blueprint "def:χ"]
 noncomputable def χ (a : F) : F := a^((Fintype.card F - 1) / 2)
 
-@[blueprint "lemma:χ_a_zero_eq_zero"]
+@[simp, blueprint "lemma:χ_a_zero_eq_zero"]
 lemma χ_a_zero_eq_zero
   {a : F}
   (a_eq_zero : a = 0)
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a
-  χ_of_a = 0 := by
-    change a^((Fintype.card F -1)/2) = 0
-    rw [field_cardinality]
-    rw [a_eq_zero]
-    apply zero_pow (FiniteFieldBasic.q_sub_one_over_two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)
+  : χ a = 0 := by
+    unfold χ
+    rw [field_cardinality, a_eq_zero]
+    apply zero_pow (FiniteFieldBasic.q_sub_one_over_two_ne_zero
+      field_cardinality q_prime_power q_mod_4_congruent_3)
 
 @[blueprint "lemma:χ_a_ne_zero"]
 lemma χ_a_ne_zero
   {a : F}
   (a_nonzero : a ≠ 0)
   (field_cardinality : Fintype.card F = q)
-  :
-  let χ_of_a := χ a
-  χ_of_a ≠ 0 := by
-    change a^((Fintype.card F -1)/2) ≠ 0
+  : χ a ≠ 0 := by
+    unfold χ
     rw [field_cardinality]
     apply pow_ne_zero ((q - 1) / 2) at a_nonzero
     exact a_nonzero
@@ -77,54 +71,44 @@ lemma neg_χ_a_ne_χ_a
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  : let χ_of_a := χ a
-  χ_of_a ≠ -χ_of_a := by
-    intro χ_of_a
-    change a^((Fintype.card F -1)/2) ≠ -a^((Fintype.card F -1)/2)
+  : χ a ≠ -(χ a) := by
+    unfold χ
     rw [field_cardinality]
     intro h
     rw [← add_right_inj (a ^ ((q - 1) / 2))] at h
     ring_nf at h
-    rw [← field_cardinality] at h
-    change χ_of_a * 2 = 0 at h
-    apply mul_ne_zero at h
-    · exact h
-    · exact χ_a_ne_zero a_nonzero field_cardinality
-    · exact FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
+    have h1 : a ^ ((q - 1) / 2) * 2 ≠ 0 := by
+      simp_all
+      grind [FiniteFieldBasic.two_ne_zero]
+    contradiction
 
-@[blueprint "lemma:χ_a_eq_one"]
+@[simp, blueprint "lemma:χ_a_eq_one"]
 lemma χ_a_eq_one
   {a : F}
   (a_nonzero : a ≠ 0)
   (a_square : IsSquare a)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a
-  χ_of_a = 1 := by
-    change a^((Fintype.card F - 1)/2) = 1
+  : χ a = 1 := by
+    unfold χ
     have h1 : ∃ r, a = r * r := by apply IsSquare.exists_mul_self a a_square
     rcases h1 with ⟨r, h1_1⟩
     rw [h1_1, ← pow_two]
     ring_nf
     have h2 : (Fintype.card F - 1) / 2 * 2 = Fintype.card F - 1 := by
-      apply Nat.div_two_mul_two_of_even (FiniteFieldBasic.q_sub_one_even field_cardinality q_mod_4_congruent_3)
+      apply Nat.div_two_mul_two_of_even
+        (FiniteFieldBasic.q_sub_one_even field_cardinality q_mod_4_congruent_3)
     rw [h2]
-    have h3 : r ≠ 0 := by
-      intro h3_1
-      rw [h3_1, mul_zero] at h1_1
-      contradiction
+    have h3 : r ≠ 0 := by grind
     apply FiniteField.pow_card_sub_one_eq_one r h3
 
 @[blueprint "lemma:a_IsSquare"]
 lemma a_IsSquare
   {a : F}
-  (a_nonzero : a ≠ 0)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
   (χ_a_eq_one : χ a = 1)
-  :
-  IsSquare a := by
+  : IsSquare a := by
     let χ_of_a := χ a
     unfold χ at χ_a_eq_one
     unfold IsSquare
@@ -132,17 +116,11 @@ lemma a_IsSquare
     use b
     unfold b
     rw [← pow_two, ← pow_mul, add_comm]
-    rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two field_cardinality q_mod_4_congruent_3]
-    have h : (1 + Fintype.card F) / 2 = (Fintype.card F - 1 + 2) / 2 := by
-      omega
-    rw [h]
-    rw [Nat.add_div_of_dvd_right (FiniteFieldBasic.q_sub_one_dvd_two field_cardinality q_mod_4_congruent_3) , pow_add]
-    simp
-    change a = χ_of_a * a
-    rw [← mul_left_inj' a_nonzero] at χ_a_eq_one
-    simp at χ_a_eq_one
-    symm
-    trivial
+    rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two
+      field_cardinality q_mod_4_congruent_3]
+    have h : (1 + Fintype.card F) / 2 = (Fintype.card F - 1 + 2) / 2 := by omega
+    simp_all
+    grind
 
 @[blueprint "lemma:χ_a_eq_one_iff_a_square"]
 lemma χ_a_eq_one_iff_a_square
@@ -150,13 +128,10 @@ lemma χ_a_eq_one_iff_a_square
   (a_nonzero : a ≠ 0)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a
-  χ_of_a = 1 ↔ IsSquare a := by
-    intro χ_of_a
+  : χ a = 1 ↔ IsSquare a := by
     constructor
     · intro χ_a_eq_one
-      exact a_IsSquare a_nonzero field_cardinality q_mod_4_congruent_3 χ_a_eq_one
+      exact a_IsSquare field_cardinality q_mod_4_congruent_3 χ_a_eq_one
     · intro a_square
       exact χ_a_eq_one a_nonzero a_square field_cardinality q_mod_4_congruent_3
 
@@ -165,11 +140,8 @@ lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
   {a : F}
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a
-  a ^ ((q + 1) / 2) = χ_of_a * a := by
-    intro χ_of_a
-    unfold χ_of_a χ
+  : a^((q + 1) / 2) = (χ a) * a := by
+    unfold χ
     rw [field_cardinality]
     rw [FiniteFieldBasic.card_sub_one_over_four_mul_two_eq_one_add_card_over_two]
     nth_rw 3 [← pow_one a]
@@ -177,48 +149,41 @@ lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
     have h'' : (q + 1) / 2 - 1 + 1 = (q + 1) / 2 := by omega
     rw [h'']
 
-@[blueprint "lemma:χ_a_mul_a_eq_a"]
+@[simp, blueprint "lemma:χ_a_mul_a_eq_a"]
 lemma χ_a_mul_a_eq_a
   {a : F}
   (a_nonzero : a ≠ 0)
   (a_square : IsSquare a)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a
-  χ_of_a * a = a := by
+  : (χ a) * a = a := by
     have h := (χ_a_eq_one_iff_a_square a_nonzero field_cardinality q_mod_4_congruent_3).mpr
-    rw [h a_square]
-    intro χ_of_a
-    unfold χ_of_a
-    simp
+    simp_all
 
-@[blueprint "lemma:a_pow_q_add_one_over_two_eq_a"]
+@[simp, blueprint "lemma:a_pow_q_add_one_over_two_eq_a"]
 lemma a_pow_q_add_one_over_two_eq_a
   {a : F}
   (a_square : IsSquare a)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  a^((q + 1) / 2) = a := by
+  : a^((q + 1) / 2) = a := by
     by_cases h : a = 0
     · rw [h, add_comm, zero_pow,]
       exact FiniteFieldBasic.q_add_one_over_two_ne_zero q_mod_4_congruent_3
     · rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a field_cardinality q_mod_4_congruent_3]
       rw [χ_a_mul_a_eq_a h a_square field_cardinality q_mod_4_congruent_3]
 
-@[blueprint "lemma:χ_of_a_pow_two_eq_one"]
+@[simp, blueprint "lemma:χ_of_a_pow_two_eq_one"]
 lemma χ_of_a_pow_two_eq_one
   {a : F}
   (a_nonzero : a ≠ 0)
   (field_cardinality : Fintype.card F = q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ (a^2)
-  χ_of_a = 1 := by
-    intro χ_of_a
-    unfold χ_of_a χ
-    rw [← pow_mul, mul_comm, Nat.div_mul_cancel ( even_iff_two_dvd.mp ( FiniteFieldBasic.q_sub_one_even field_cardinality q_mod_4_congruent_3 ))]
+  : χ (a^2) = 1 := by
+    unfold χ
+    rw [← pow_mul, mul_comm]
+    rw [Nat.div_mul_cancel (even_iff_two_dvd.mp
+        (FiniteFieldBasic.q_sub_one_even field_cardinality q_mod_4_congruent_3))]
     rw [FiniteField.pow_card_sub_one_eq_one a a_nonzero]
 
 @[blueprint "lemma:χ_of_a_eq_neg_one"]
@@ -293,7 +258,6 @@ lemma χ_of_a_even_pow_n_eq_one
     rw [χ_of_a_pow_two_eq_one a_nonzero field_cardinality q_mod_4_congruent_3]
     rw [one_pow]
 
--- TODO adjust API after cleanup
 @[blueprint "lemma:χ_of_a_pow_n_eq_χ_a"]
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)
@@ -301,20 +265,14 @@ lemma χ_of_a_pow_n_eq_χ_a
   (field_cardinality : Fintype.card F = q)
   (q_prime_power : IsPrimePow q)
   (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  let χ_of_a := χ a
-  χ_of_a^(n.val) = χ_of_a := by
-    -- TODO cleanup
-    obtain ⟨ k, hk ⟩ := n.2;
-    by_cases ha : a = 0 <;> simp_all +decide [ pow_add, pow_mul ];
-    · unfold χ;
-      by_cases h : ( Fintype.card F - 1 ) / 2 = 0 <;> simp +decide [ h ];
-    · -- By definition of χ, we know that χ(a)^2 = a^(q-1).
-      have hχ_sq : χ a ^ 2 = a ^ (q - 1) := by
-        unfold χ
-        ring_nf
-        rw [ Nat.div_mul_cancel ( even_iff_two_dvd.mp ( by rw [ field_cardinality ]; exact Nat.even_iff.mpr ( by omega ) ) ), field_cardinality ];
-      have := FiniteField.pow_card_sub_one_eq_one a; aesop;
+  : (χ a)^(n.val) = χ a := by
+    obtain ⟨k, hk⟩ := n.2
+    rw [hk, pow_add]
+    have h : Even (2 * k) := by simp only [even_two, Even.mul_right]
+    by_cases h_a : a = 0
+    · simp_all
+    · rw [χ_of_a_even_pow_n_eq_one h_a ⟨2 * k, h⟩  field_cardinality q_mod_4_congruent_3]
+      simp
 
 @[blueprint "lemma:χ_of_χ_of_a_eq_χ_of_a"]
 lemma χ_of_χ_of_a_eq_χ_of_a
@@ -369,22 +327,6 @@ lemma one_over_χ_of_a_eq_χ_a
         unfold χ; rw [ ← pow_mul, Nat.div_mul_cancel ] ; norm_num [ Nat.dvd_iff_mod_eq_zero, Nat.add_mod, Nat.mul_mod, field_cardinality ] ; rw [ ← Nat.mod_add_div q 4, q_mod_4_congruent_3 ] ; norm_num;
         norm_num [ Nat.mul_mod ];
       rw [ div_eq_iff ] <;> aesop
-
-@[blueprint "lemma:square_of_a"]
-lemma square_of_a
-  {a : F}
-  (a_square : IsSquare a)
-  (field_cardinality : Fintype.card F = q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  :
-  a^((q + 1) / 2) = a := by
-    obtain ⟨ r, hr ⟩ := a_square;
-    by_cases hr : r = 0 <;> simp_all +decide [ mul_pow ]
-    · grind
-    · rw [ ← pow_add, ← two_mul, Nat.mul_div_cancel' ];
-      · have := FiniteField.pow_card_sub_one_eq_one r hr; simp_all +decide [ pow_succ' ] ;
-        rw [ ← Nat.sub_add_cancel ( show 1 ≤ q from field_cardinality ▸ Fintype.card_pos ), pow_add, pow_one, this, one_mul ];
-      · omega
 
   -- Introduced in paper theory theorem 3.A proof
 @[blueprint "lemma:χ_of_a_eq_χ_a_mul_b_pow_two"]

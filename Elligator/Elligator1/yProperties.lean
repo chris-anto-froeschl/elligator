@@ -83,7 +83,7 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
         rfl
     have h2 := LegendreSymbol.χ_a_mul_a_IsSquare v_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
     have h3 : (χ_of_v_of_t * v_of_t)^((q + 1) / 2) = χ_of_v_of_t * v_of_t := by
-      apply LegendreSymbol.square_of_a h2 field_cardinality q_mod_4_congruent_3
+      apply LegendreSymbol.a_pow_q_add_one_over_two_eq_a h2 field_cardinality q_mod_4_congruent_3
     let χ_of_sum := LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2)
     have h4 : Y_of_t^2 = χ_of_v_of_t * v_of_t := by
       calc
