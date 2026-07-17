@@ -37,6 +37,14 @@ lemma q_odd (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 
     omega
 
 omit [Field F] in
+@[blueprint "lemma:q_sub_one_over_two_odd"]
+lemma q_sub_one_over_two_odd
+  (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 4 = 3)
+  : Odd ((Fintype.card F - 1) / 2) := by
+    rw [Nat.odd_iff]
+    omega
+
+omit [Field F] in
 @[blueprint "lemma:q_sub_one_even"]
 lemma q_sub_one_even (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 4 = 3)
   : Even (Fintype.card F - 1) := by
@@ -75,13 +83,6 @@ lemma q_add_one_over_four_ne_zero (q_mod_4_congruent_3 : q % 4 = 3) : (1 + q) / 
 
 @[blueprint "lemma:q_add_one_over_two_ne_zero"]
 lemma q_add_one_over_two_ne_zero (q_mod_4_congruent_3 : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by grind
-
-omit [Field F] in
-@[blueprint "lemma:char_ne_two"]
-lemma char_ne_two (field_cardinality : Fintype.card F = q) (q_mod_4_congruent_3 : q % 4 = 3)
-  : Fintype.card F ≠ 2 := by
-    rw [field_cardinality]
-    omega
 
 @[blueprint "lemma:ring_char_ne_two"]
 lemma ring_char_ne_two
@@ -276,30 +277,49 @@ lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
 lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two :
   (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
 
+lemma q_h1 (q_mod_4_congruent_3 : q % 4 = 3)
+  : (q + 1) / 4 * 2 = (q - 1) / 2 + 1 := by grind
+
 @[blueprint "lemma:ringChar_of_F_eq_q"]
 lemma ringChar_of_F_eq_q (field_cardinality : Fintype.card F = q) (q_prime : Prime q)
   : ringChar F = q := by
     have := FiniteField.card F (ringChar F)
     aesop
 
--- TODO remove or above
 @[simp, blueprint "lemma:ringChar_to_q"]
 lemma ringChar_to_q (field_cardinality : Fintype.card F = q) (q_prime : Prime q)
   : ringChar F = q := by
     have := FiniteField.card F (ringChar F)
     aesop
 
-@[blueprint "lemma:nat_to_finfield_func_surjective"]
+-- TODO ugly proof, this is just type coercion issues which I do not know how to solve
+@[blueprint "lemma:fin_to_finfield_func_injective"]
 lemma fin_to_finfield_func_injective
   (field_cardinality : Fintype.card F = q)
   (q_prime : Prime q)
   : Function.Injective (fun n : Fin (Fintype.card F) => (n : F)) := by
-    intro a b hab
-    have := ringChar.spec F;
-    specialize this ( a - b |> Int.natAbs )
-    cases abs_cases ( ( a : ℤ ) - b ) <;> simp_all +decide
-    · exact Fin.ext ( Nat.le_antisymm ( Nat.le_of_not_lt fun h => by have := Nat.le_of_dvd ( by omega ) this; omega ) ‹_› );
-    · exact absurd this ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) );
+    unfold Function.Injective
+    rw [field_cardinality]
+    intro a b h1
+    let h2 := ringChar.spec F
+    specialize h2 (Int.natAbs (a - b))
+    cases abs_cases (( a : ℤ ) - b)
+    · rename_i h3
+      simp_all only [Nat.cast_natAbs, Int.cast_sub, Int.cast_natCast,
+        sub_self, ringChar_to_q, true_iff, abs_eq_self, Int.sub_nonneg,
+        Nat.cast_le, Fin.val_fin_le, and_self]
+      apply Fin.ext
+      have h4 : a ≤ b := by
+        apply Nat.le_of_not_lt
+        intro h1
+        have := Nat.le_of_dvd (by omega) h2
+        omega
+      apply Nat.le_antisymm h4 h3
+    · simp_all only [Nat.cast_natAbs, neg_sub, Int.cast_sub,
+        Int.cast_natCast, sub_self, ringChar_to_q, true_iff,
+        sub_neg, Nat.cast_lt, Fin.val_fin_lt]
+      apply absurd h2
+      apply (Nat.not_dvd_of_pos_of_lt (by omega) (by omega))
 
 @[blueprint "lemma:fin_to_finfield_func_surjective"]
 lemma fin_to_finfield_func_surjective

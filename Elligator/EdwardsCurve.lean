@@ -30,6 +30,7 @@ section EdwardsCurve
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ}
 
+/-- `edwardsCurveEquation` is the standard edwards curve equation. -/
 @[blueprint "def:edwardsCurveEquation"]
 def edwardsCurveEquation (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1})
   : Prop := x^2 + y^2 = 1 + d * x^2 * y^2
