@@ -36,14 +36,14 @@ section vProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:v_h"]
 lemma v_h1_third_factor_ne_zero
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let u_of_t := u t
@@ -53,9 +53,9 @@ lemma v_h1_third_factor_ne_zero
     have h1_1 : -1 = (u_of_t * c_of_s)^2 := by
       ring_nf
       have h1_1_1 : c_of_s^2 = c_of_s^2 := by rfl
-      rw [← div_left_inj' (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)]
+      rw [← div_left_inj' (c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3)]
       rw [mul_div_assoc]
-      rw [← div_eq_one_iff_eq (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h1_1_1
+      rw [← div_eq_one_iff_eq (c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3)] at h1_1_1
       rw [h1_1_1, mul_one]
       rw [← add_left_inj (1 / c_of_s^2)]
       have h1_1_3 : 1 / c_of_s^2 = 1 / c_of_s^2 := by rfl
@@ -69,16 +69,16 @@ lemma v_h1_third_factor_ne_zero
       apply IsSquare.mul_self (u_of_t * c_of_s)
     have h1_3 : q % 4 ≠ 3 := by
       rw [FiniteField.isSquare_neg_one_iff] at h1_2
-      rw [field_cardinality] at h1_2
+      rw [q_h1] at h1_2
       exact h1_2
     contradiction
 
 @[blueprint "lemma:v_h"]
 lemma v_h1
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let v_of_t := v t s
@@ -89,7 +89,7 @@ lemma v_h1
     unfold v_of_t v
     let r_of_s := r s
     change u_of_t ^ 5 + (r_of_s ^ 2 - 2) * u_of_t ^ 3 + u_of_t = u_of_t * (u_of_t ^ 2 + c_of_s ^ 2) * (u_of_t ^ 2 + 1 / c_of_s ^ 2)
-    rw [r_h1 s_h1 field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [r_h1 s_h1 q_h1 q_h2 q_h3]
     rw [mul_add, mul_add, add_mul, add_mul]
     ring_nf
     change u_of_t + u_of_t ^ 3 * c_of_s ^ 2 + u_of_t ^ 3 * c_of_s⁻¹ ^ 2 + u_of_t ^ 5 = u_of_t * c_of_s ^ 2 * c_of_s⁻¹ ^ 2 + u_of_t ^ 3 * c_of_s ^ 2 + u_of_t ^ 3 * c_of_s⁻¹ ^ 2 + u_of_t ^ 5
@@ -97,17 +97,17 @@ lemma v_h1
     have h1 : c_of_s^2 ≠ 0 := by
       rw [pow_two]
       apply mul_ne_zero
-      · exact (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
-      · exact (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
+      · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
+      · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
     rw [mul_assoc, mul_inv_cancel₀ h1]
     ring_nf
 
 @[blueprint "lemma:v_h"]
 lemma v_h1_second_factor_ne_zero
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let c_of_s := c s
@@ -123,9 +123,9 @@ lemma v_h1_second_factor_ne_zero
       rw [add_zero] at h3_1
       rw [← neg_one_mul] at h3_1
       rw [div_pow u_of_t c_of_s 2]
-      rw [← div_left_inj' (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h3_1
+      rw [← div_left_inj' (c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3)] at h3_1
       rw [mul_div_assoc] at h3_1
-      rw [← div_eq_one_iff_eq (c_pow_two_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h3_1_1_1
+      rw [← div_eq_one_iff_eq (c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3)] at h3_1_1_1
       rw [h3_1_1_1] at h3_1
       rw [mul_one] at h3_1
       symm at h3_1
@@ -136,34 +136,34 @@ lemma v_h1_second_factor_ne_zero
       apply IsSquare.mul_self (u_of_t / c_of_s)
     have h3_1_3 : q % 4 ≠ 3 := by
       rw [FiniteField.isSquare_neg_one_iff] at h3_1_2
-      rw [field_cardinality] at h3_1_2
+      rw [q_h1] at h3_1_2
       exact h3_1_2
     contradiction
 
 @[blueprint "lemma:v_ne_zero"]
 lemma v_ne_zero
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let v_of_t := v t s
   v_of_t ≠ (0 : F) := by
-    rw [v_h1 s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t]
+    rw [v_h1 s_h1 q_h1 q_h2 q_h3 t]
     apply mul_ne_zero
     · apply mul_ne_zero
       · apply u_ne_zero t
-      · exact (v_h1_second_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
-    · exact (v_h1_third_factor_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
+      · exact (v_h1_second_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t)
+    · exact (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t)
 
 @[blueprint "lemma:χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero"]
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let v_of_t := v t s
   let χ_of_v := LegendreSymbol.χ v_of_t
@@ -171,8 +171,8 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
     intro v_of_t χ_of_v
     rw [mul_pow χ_of_v v_of_t ((q + 1) / 4)]
     apply mul_ne_zero
-    · apply pow_ne_zero ((q + 1) / 4) (LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t) field_cardinality)
-    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
+    · apply pow_ne_zero ((q + 1) / 4) (LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1)
+    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)
 
 omit [Fintype F] in
 @[blueprint "lemma:v_comparison"]
@@ -268,8 +268,8 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
 @[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (field_cardinality : Fintype.card F = q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h3 : q % 4 = 3)
   :
   let u1 := u t
   let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6)
@@ -281,14 +281,14 @@ lemma v_comparison_implication3
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
     have h2_7_2 : u1 ≠ 0 := by exact u_ne_zero t
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) field_cardinality q_mod_4_congruent_3]
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) q_h1 q_h3]
     simp
 
 @[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication4
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (field_cardinality : Fintype.card F = q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h3 : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
@@ -305,7 +305,7 @@ lemma v_comparison_implication4
     change LegendreSymbol.χ v2= LegendreSymbol.χ (v2 * u1^6)
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
     let χ_of_u1_pow_6 := LegendreSymbol.χ (u1^6)
-    rw [v_comparison_implication3 t field_cardinality q_mod_4_congruent_3]
+    rw [v_comparison_implication3 t q_h1 q_h3]
     simp
 
 omit [Fintype F] in

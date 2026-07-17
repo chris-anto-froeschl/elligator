@@ -19,18 +19,18 @@ section cProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:c_ne_zero"]
 lemma c_ne_zero
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   : (c s) ≠ 0 := by
     change 2 / s^2 ≠ 0
     apply div_ne_zero
-    · apply FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3
+    · apply FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
     · rw [pow_two]
       apply mul_ne_zero s_h1 s_h1
 
@@ -45,9 +45,9 @@ lemma c_ne_one (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) : (c s) ≠ 1 := by
 @[blueprint "lemma:c_ne_neg_one"]
 lemma c_ne_neg_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   : (c s) ≠ -1 := by
   change 2 / s^2 ≠ -1
   intro h
@@ -59,7 +59,7 @@ lemma c_ne_neg_one
         rw [inv_inv]
         rw [mul_assoc]
         rw [mul_comm (2⁻¹) 2]
-        rw [mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)]
+        rw [mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)]
         rw [mul_one]
       _ = -2 := by norm_num
   apply s_pow_two_ne_neg_two s_h2 at h1
@@ -68,9 +68,9 @@ lemma c_ne_neg_one
 @[blueprint "lemma:c_add_one_ne_zero"]
 lemma c_add_one_ne_zero
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   : (c s) + 1 ≠ 0 := by
     intro h
     change 2 / s^2 + 1 = 0 at h
@@ -85,7 +85,7 @@ lemma c_add_one_ne_zero
           rw [inv_inv]
           rw [mul_assoc]
           rw [mul_comm (2⁻¹) 2]
-          rw [mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3)]
+          rw [mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)]
           rw [mul_one]
         _ = -2 := by norm_num
     apply s_pow_two_ne_neg_two s_h2 at h2
@@ -102,27 +102,27 @@ lemma c_sub_one_ne_zero (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) :
 lemma c_h
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let c := c s
   c * (c - 1) * (c + 1) ≠ 0 := by
     change (2 / s^2) * ((2 / s^2) - 1) * ((2 / s^2) + 1) ≠ 0
     apply mul_ne_zero
     · apply mul_ne_zero
-      · exact c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
+      · exact c_ne_zero s_h1 q_h1 q_h2 q_h3
       · exact c_sub_one_ne_zero s_h2
-    · exact c_add_one_ne_zero s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact c_add_one_ne_zero s_h2 q_h1 q_h2 q_h3
 
 @[blueprint "lemma:c_pow_two_ne_zero"]
 lemma c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   : (c s)^2 ≠ (0 : F) := by
     rw [pow_two]
     apply mul_ne_zero
-    · exact (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
-    · exact (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)
+    · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
+    · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)

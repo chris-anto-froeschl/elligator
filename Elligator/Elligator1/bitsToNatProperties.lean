@@ -31,7 +31,7 @@ namespace Elligator.Elligator1
 section bitsToNatProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:bitsToNat_le_full_range"]
 lemma bitsToNat_le_full_range {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ ≤ ∑ i ∈ Finset.range n, 2^i := by
@@ -82,11 +82,11 @@ lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
 @[blueprint "lemma:natCast_injective_of_prime_card"]
 lemma natCast_injective_of_prime_card
   {q : ℕ}
-  (field_cardinality : Fintype.card F = q)
+  (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
   (a b : ℕ) (ha : a < q) (hb : b < q) (h : (a : F) = (b : F))
   : a = b := by
-    let h1 := FiniteFieldBasic.ringChar_of_F_eq_q field_cardinality q_prime
+    let h1 := FiniteFieldBasic.ringChar_of_F_eq_q q_h1 q_prime
     have h2 := ringChar.spec F;
     have h3 := h2 ( a - b |> Int.natAbs )
     simp_all
@@ -96,14 +96,14 @@ lemma natCast_injective_of_prime_card
 
 @[blueprint "lemma:lower_half_neg_eq"]
 lemma lower_half_neg_eq
-  (field_cardinality : Fintype.card F = q) (hq : Prime q)
+  (q_h1 : Fintype.card F = q) (hq : Prime q)
   {a b : ℕ} (ha : a ≤ (q - 1) / 2) (hb : b ≤ (q - 1) / 2)
   (heq : (a : F) = -(b : F))
   : a = b := by
     obtain ⟨k, hk⟩ : ∃ k : ℕ, a + b = k * q := by
       have h_div : q ∣ (a + b : ℕ) := by
         have h_char : ringChar F = q :=
-          FiniteFieldBasic.ringChar_of_F_eq_q field_cardinality hq
+          FiniteFieldBasic.ringChar_of_F_eq_q q_h1 hq
         rw [← h_char, ← CharP.cast_eq_zero_iff F]; aesop
       exact exists_eq_mul_left_of_dvd h_div
     rcases k with (_ | _ | k) <;> norm_num at hk <;>
@@ -111,18 +111,18 @@ lemma lower_half_neg_eq
 
 @[blueprint "lemma:σ_injective"]
 lemma σ_injective
-  (field_cardinality : Fintype.card F = q)
+  (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h3 : q % 4 = 3)
   :
   Function.Injective (@σ F _ q) := by
     intro a b h_eq
     apply bitsToNat_injective
     have h1 : bitsToNat a < q :=
-      lt_of_lt_of_le (bitsToNat_lt_two_pow_n a) (two_pow_b_le_q q_mod_4_congruent_3)
+      lt_of_lt_of_le (bitsToNat_lt_two_pow_n a) (two_pow_b_le_q q_h3)
     have h2 : bitsToNat b < q :=
-      lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q q_mod_4_congruent_3)
-    exact natCast_injective_of_prime_card field_cardinality q_prime _ _ h1 h2 h_eq
+      lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q q_h3)
+    exact natCast_injective_of_prime_card q_h1 q_prime _ _ h1 h2 h_eq
 
 /-
 PROBLEM
@@ -131,7 +131,7 @@ If `n < q` and `n ≤ (q-1)/2`, there exists a bit-vector `τ ∈ S` with
 -/
 @[blueprint "lemma:exists_S_elem_of_le"]
 lemma exists_S_elem_of_le
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h3 : q % 4 = 3)
   (n : ℕ) (hn : n < q) (hle : n ≤ (q - 1) / 2)
   : ∃ (τ : (@S q)), bitsToNat τ.1 = n := by
   -- By `bitsToNat_surj`, there exists a bit-vector `τ` such that `bitsToNat τ = n`.
@@ -149,18 +149,18 @@ that `σ(τ) = t` or `σ(τ) = -t`. This is the key encoding lemma: at least one
 -/
 @[blueprint "lemma:exists_"]
 lemma exists_σ_preimage_or_neg
-  (field_cardinality : Fintype.card F = q)
+  (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h3 : q % 4 = 3)
   (t : F)
   : ∃ (τ : (@S q)), (@σ F _ q τ.1) = t ∨ (@σ F _ q τ.1) = -t := by
-  obtain ⟨ n, hn, rfl ⟩ := FiniteFieldBasic.exists_nat_cast_eq field_cardinality q_prime t;
+  obtain ⟨ n, hn, rfl ⟩ := FiniteFieldBasic.exists_nat_cast_eq q_h1 q_prime t;
   by_cases h : n ≤ ( q - 1 ) / 2;
-  · obtain ⟨ τ, hτ ⟩ := exists_S_elem_of_le q_mod_4_congruent_3 n hn h;
+  · obtain ⟨ τ, hτ ⟩ := exists_S_elem_of_le q_h3 n hn h;
     unfold σ; aesop;
   · -- Since $q - n \leq (q - 1) / 2$, we can find a $\tau \in S$ such that $\sigma(\tau) = q - n$.
     obtain ⟨τ, hτ⟩ : ∃ τ : @S q, bitsToNat τ.1 = q - n := by
-      apply exists_S_elem_of_le q_mod_4_congruent_3 (q - n) (by
+      apply exists_S_elem_of_le q_h3 (q - n) (by
       omega) (by
       omega);
     use τ

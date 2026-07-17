@@ -43,38 +43,38 @@ section zProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:z_eq_zero"]
 lemma z_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
-  let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
   let z := z s point q
   z = 0 := by
     intro point z_of_point
     unfold z_of_point z
     let c_of_s := c s
-    repeat rw [X2_eq_neg_one t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
+    repeat rw [X2_eq_neg_one t s_h1 s_h2 q_h1 q_h2 q_h3]
     change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) = 0
     simp
-    exact LegendreSymbol.χ_a_zero_eq_zero (rfl) field_cardinality q_prime_power q_mod_4_congruent_3
+    exact LegendreSymbol.χ_a_zero_eq_zero (rfl) q_h1 q_h2 q_h3
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 @[blueprint "def:z'"]
 noncomputable def z'
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   : F :=
-  let Y := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let Y := Y' s_h2 q_h1 q_h2 q_h3 point
   let X := X2 s point q
   let c := c s
   LegendreSymbol.χ (Y * (X^2 + 1 / c^2))
@@ -83,22 +83,22 @@ noncomputable def z'
 lemma Y'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
   :
-  let Y := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let Y := Y' s_h2 q_h1 q_h2 q_h3 point
   Y ≠ 0 := by
     intro Y
     let X := X2 s point q
     let x := point.val.1
     let c := c s
-    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 ⟨point.val, point_props⟩ y_ne_one
-    let X2_ne_zero := X2_ne_zero field_cardinality q_mod_4_congruent_3 ⟨point.val, point_props⟩
+    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
+    let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨point.val, point_props⟩
     let c_sub_one_ne_zero := c_sub_one_ne_zero s_h2
     unfold Y Y'
     change (c - 1) * s * X * (1 + X) / x ≠ 0
@@ -109,22 +109,22 @@ lemma Y'_ne_zero
 lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   :
   let X := X2 s point q
   let c := c s
   X^2 + 1 / c^2 ≠ 0 := by
     intro X c h
-    rw [← mul_left_inj' (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h
-    rw [← mul_left_inj' (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)] at h
+    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
+    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
     ring_nf at h
     change X^2 * c^2 + c⁻¹^2 * c^2 = 0 at h
-    rw [inv_pow c 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3)), ← add_left_inj (-1 : F), ← mul_pow] at h
+    rw [inv_pow c 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)), ← add_left_inj (-1 : F), ← mul_pow] at h
     simp at h
-    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square field_cardinality q_prime_power q_mod_4_congruent_3
+    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q_h1 q_h2 q_h3
     have h' : IsSquare (-1 : F) := by
       rw [← h, pow_two]
       apply IsSquare.mul_self
@@ -134,68 +134,68 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
 lemma z'_argument_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
   :
-  let Y := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let Y := Y' s_h2 q_h1 q_h2 q_h3 point
   let X := X2 s point q
   let c := c s
   Y * (X^2 + 1 / c^2) ≠ 0 := by
     intro Y X c
-    let h1 := Y'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
-    let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let h1 := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point
     grind
 
 @[blueprint "lemma:z'_ne_zero"]
 lemma z'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
   :
-  let z :=z' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let z :=z' s_h2 q_h1 q_h2 q_h3 point
   z ≠ 0 := by
     intro z
-    let Y := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let Y := Y' s_h2 q_h1 q_h2 q_h3 point
     let X := X2 s point q
     let c := c s
-    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
-    exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero field_cardinality
+    exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero q_h1
 
 @[blueprint "lemma:z'_eq_one_or_z'_eq_neg_one"]
 lemma z'_eq_one_or_z'_eq_neg_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
   :
-  let z :=z' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+  let z :=z' s_h2 q_h1 q_h2 q_h3 point
   z = 1 ∨ z = -1 := by
     intro z
-    let Y := Y' s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point
+    let Y := Y' s_h2 q_h1 q_h2 q_h3 point
     let X := X2 s point q
     let c := c s
     let a := (Y * (X^2 + 1 / c^2))
     let χ_of_a := LegendreSymbol.χ a
-    have h1 := @LegendreSymbol.χ_values _ _ _ q a field_cardinality q_prime_power q_mod_4_congruent_3
+    have h1 := @LegendreSymbol.χ_values _ _ _ q a q_h1 q_h2 q_h3
     change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1
-    have h2 := z'_ne_zero s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 point point_props x_ne_zero y_ne_one
+    have h2 := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     change χ_of_a ≠ 0 at h2
     change χ_of_a = 1 ∨ χ_of_a = -1
     simp_all

@@ -35,7 +35,7 @@ namespace Elligator.Elligator1
 section SProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two"]
 lemma image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two
@@ -58,7 +58,7 @@ lemma S_card_eq_icc_zero_to_q_sub_one_over_two_card
     rw [← image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two, Finset.card_image_of_injective _ bitsToNat_injective];
 
 @[blueprint "lemma:S_card_eq_q_add_one_over_two"]
-lemma S_card_eq_q_add_one_over_two (q_mod_4_congruent_3 : q % 4 = 3)
+lemma S_card_eq_q_add_one_over_two (q_h3 : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
     rw [S_card_eq_icc_zero_to_q_sub_one_over_two_card]
     simp_all

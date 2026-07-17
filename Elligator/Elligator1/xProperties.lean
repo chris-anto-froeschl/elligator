@@ -39,15 +39,15 @@ section xProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:x_ne_zero"]
 lemma x_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let x_of_t := x t s q
@@ -74,17 +74,17 @@ lemma x_ne_zero
             have h1_2 : c_of_s ≠ 1 := c_ne_one s_h2
             contradiction
           · apply s_h1
-        · apply X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
-      · apply one_add_X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
-    · apply Y_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t
+        · apply X_ne_zero s_h1 q_h1 q_h2 q_h3 t
+      · apply one_add_X_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    · apply Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
 @[blueprint "lemma:x_comparison"]
 lemma x_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
@@ -100,16 +100,16 @@ lemma x_comparison
     let Y1 := Y t s q
     let Y2 := Y ⟨t2, h2_2⟩ s q
     have X_pow_three_ne_zero : X1^3 ≠ 0 := by
-      apply pow_ne_zero 3 (X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)
+      apply pow_ne_zero 3 (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)
     calc
       x2 = (c_of_s - 1) * s * X2 * (1 + X2) / Y2 := by
         change (c_of_s - 1) * s * X2 * (1 + X2) / Y2 = (c_of_s - 1) * s * X2 * (1 + X2) / Y2
         rfl
       _ = (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by
         unfold X2
-        rw [X_comparison t field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [X_comparison t q_h1 q_h2 q_h3]
         unfold Y2
-        rw [Y_comparison t s_h1 field_cardinality q_prime_power q_mod_4_congruent_3]
+        rw [Y_comparison t s_h1 q_h1 q_h2 q_h3]
         change (c_of_s - 1) * s * (1 / X1) * (1 + 1 / X1) / (Y1 / X1^3) = (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3)
         ring_nf
       _ = (c_of_s - 1) * s * X1 * (1 + X1) / Y1 := by
@@ -129,13 +129,13 @@ lemma x_comparison
             _ = (c_of_s - 1) * s * X1^2 * (1 + 1 / X1) := by
               have h2_12_2_1 : X1^3 = X1^2 * X1 := by ring_nf
               rw [h2_12_2_1, mul_div_assoc, mul_div_assoc]
-              rw [div_self (X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)]
+              rw [div_self (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
               rw [mul_one]
             _ = (c_of_s - 1) * s * X1 * (1 + X1) := by
               have h2_12_2_1 : X1^2 * (1 + 1 / X1) = X1 * (1 + X1) := by
                 rw [pow_two, mul_assoc, mul_add, ← mul_div_assoc]
                 rw [mul_one]
-                rw [div_self (X_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3 t)]
+                rw [div_self (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
                 nth_rw 1 [add_comm]
               rw [mul_assoc ((c_of_s - 1) * s), h2_12_2_1]
               repeat rw [← mul_assoc]
@@ -152,10 +152,10 @@ lemma x_comparison
 @[blueprint "lemma:x_y_eq_zero_sign_one"]
 lemma x_y_eq_zero_sign_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 field_cardinality q_prime_power q_mod_4_congruent_3})
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
   (x_eq_zero : point.val.1 = 0)
   : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
     let d_of_s := d s

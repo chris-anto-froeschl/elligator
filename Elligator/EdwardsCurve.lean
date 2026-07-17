@@ -40,26 +40,26 @@ def edwardsCurveEquation (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1})
 def EOverF
   {s : F}
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   : Set (F × F) :=
   let d := d s
   let d_h : d ≠ 0 ∧ d ≠ 1 :=
-    d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    d_ne_zero_and_d_ne_one s_h2 q_h1 q_h2 q_h3
   {p | edwardsCurveEquation p.fst p.snd ⟨d, d_h⟩}
 
 @[blueprint "lemma:zero_one_fulfill_edwardsCurveEquation"]
 lemma zero_one_fulfill_edwardsCurveEquation
   {s : F}
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let d := d s
   let d_h : d ≠ 0 ∧ d ≠ 1 :=
-    d_ne_zero_and_d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    d_ne_zero_and_d_ne_one s_h2 q_h1 q_h2 q_h3
   edwardsCurveEquation (0 : F) (1 : F) ⟨d, d_h⟩ := by
     intro d_of_s d_h
     unfold edwardsCurveEquation

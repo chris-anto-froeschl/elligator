@@ -35,7 +35,7 @@ section uProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 omit [Fintype F] in
 @[blueprint "lemma:u_ne_zero"]
@@ -89,9 +89,9 @@ lemma u_of_zero :
 @[blueprint "lemma:one_add_u_ne_zero"]
 lemma one_add_u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let u := u t
   1 + u ≠ 0 := by
@@ -100,5 +100,5 @@ lemma one_add_u_ne_zero
     rw [add_div' _ _ _ (by exact FiniteFieldBasic.one_add_t_ne_zero t)]
     norm_num
     split_ands
-    · exact FiniteFieldBasic.two_ne_zero field_cardinality q_prime_power q_mod_4_congruent_3;
+    · exact FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3;
     · exact FiniteFieldBasic.one_add_t_ne_zero t

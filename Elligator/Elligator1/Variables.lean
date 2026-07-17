@@ -9,22 +9,17 @@ public import Mathlib
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
 
-@[expose] public section
-
 /-!
 # Elligator 1 Variables
 
-In this file we introduce all the independent variables introduced in the definition of
-Elligator 1.
-
-## Main results
-
-- TODO
+In this file we introduce all the independent variables introduced in the definition of Elligator 1.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -82,10 +77,10 @@ Original: Chapter "3.2 The map": Theorem 1
 -/
 @[blueprint "def:X"]
 noncomputable def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
-  let u_of_t := u t
-  let v_of_t := v t s
-  let χ_of_v_of_t := LegendreSymbol.χ v_of_t
-  χ_of_v_of_t * u_of_t
+  let u := u t
+  let v := v t s
+  let χ_of_v := LegendreSymbol.χ v
+  χ_of_v * u
 
 /-- Y(t, s) is a function defined in the paper.
 
@@ -180,7 +175,7 @@ noncomputable def t2 (s : F) (P : F × F) (q : ℕ) : F :=
 Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
 @[blueprint "def:b"]
-noncomputable def b (q : ℕ): ℕ := Nat.log 2 q
+noncomputable def b (q : ℕ) : ℕ := Nat.log 2 q
 
 /-- Convert a bit vector (τ₀, τ₁, ..., τ_{b-1}) to a natural number via binary
 expansion: bitsToNat(τ) = Σᵢ τᵢ · 2^i.
@@ -205,3 +200,7 @@ Original: Chapter "3.4 Encoding as strings": Theorem 4
 @[blueprint "def:S"]
 noncomputable def S {q : ℕ} : Finset (Fin (@b q) → Bool) :=
   Finset.univ.filter (fun τ => (bitsToNat τ) ≤ (q - 1) / 2)
+
+end Variables
+
+end Elligator.Elligator1

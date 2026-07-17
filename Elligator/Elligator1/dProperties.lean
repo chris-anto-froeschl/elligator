@@ -34,14 +34,14 @@ section dProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:d_nonsquare"]
 lemma d_nonsquare
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let d_of_s := d s;
   ¬IsSquare d_of_s := by
@@ -70,7 +70,7 @@ lemma d_nonsquare
           rw [h8] at h
           rw [add_zero] at h
           exact h
-        apply c_ne_neg_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 at h'
+        apply c_ne_neg_one s_h2 q_h1 q_h2 q_h3 at h'
         exact h'
       · intro h
         have h' : (c s) = -1 := by
@@ -82,7 +82,7 @@ lemma d_nonsquare
           rw [h8] at h
           rw [add_zero] at h
           exact h
-        apply c_ne_neg_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3 at h'
+        apply c_ne_neg_one s_h2 q_h1 q_h2 q_h3 at h'
         exact h'
     have h1 : w^2 * ((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2 = -1 := by
       rw [pow_two, ← Pw]
@@ -110,21 +110,21 @@ lemma d_nonsquare
       apply IsSquare.mul h3 h4
     have h5 : q % 4 ≠ 3 := by
       rw [FiniteField.isSquare_neg_one_iff] at h2
-      rw [field_cardinality] at h2
+      rw [q_h1] at h2
       exact h2
     contradiction
 
 @[blueprint "lemma:d_ne_zero"]
 lemma d_ne_zero
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let d_of_s := d s;
   d_of_s ≠ 0 := by
     intro d_of_s
-    let d_nonsquare := d_nonsquare s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
     intro h
     have h1 : IsSquare d_of_s := by
       unfold IsSquare
@@ -135,16 +135,16 @@ lemma d_ne_zero
 @[blueprint "lemma:one_over_d_nonsquare"]
 lemma one_over_d_nonsquare
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let d_of_s := d s;
   ¬IsSquare (1 / d_of_s) := by
       intro d_of_s h3_1
       unfold IsSquare at h3_1
-      let d_nonsquare := d_nonsquare s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
-      let d_ne_zero := d_ne_zero s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+      let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
+      let d_ne_zero := d_ne_zero s_h2 q_h1 q_h2 q_h3
       rcases h3_1 with ⟨a, ah⟩
       rw [← pow_two, ← mul_left_inj' d_ne_zero] at ah
       ring_nf at ah
@@ -166,14 +166,14 @@ lemma one_over_d_nonsquare
 @[blueprint "lemma:d_ne_one"]
 lemma d_ne_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let d_of_s := d s;
   d_of_s ≠ 1 := by
     intro d_of_s
-    let d_nonsquare := d_nonsquare s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
     intro h
     have h1 : IsSquare d_of_s := by
       unfold IsSquare
@@ -184,23 +184,23 @@ lemma d_ne_one
 @[blueprint "lemma:d_ne_zero_and_d_ne_one"]
 lemma d_ne_zero_and_d_ne_one
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let d_of_s := d s;
   d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by
     intro d_of_s
     split_ands
-    · exact d_ne_zero s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
-    · exact d_ne_one s_h2 field_cardinality q_prime_power q_mod_4_congruent_3
+    · exact d_ne_zero s_h2 q_h1 q_h2 q_h3
+    · exact d_ne_one s_h2 q_h1 q_h2 q_h3
 
 @[blueprint "lemma:neg_d_eq_r_add_two_over_r_sub_two"]
 lemma neg_d_eq_r_add_two_over_r_sub_two
   (s_h1 : s ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
   let r_of_s := r s;
   let d_of_s := d s;
@@ -217,7 +217,7 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
         have h3_1 : 1 / c_of_s ≠ 0 := by
           rw [← inv_eq_one_div]
           apply inv_ne_zero
-          apply c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3
+          apply c_ne_zero s_h1 q_h1 q_h2 q_h3
         have h3_2 : (1 / c_of_s) / (1 / c_of_s) = 1 := by
           rw [div_self h3_1]
         have h3_3 : (-1 : F) * (-1) = 1 := by ring
@@ -225,9 +225,9 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
         nth_rw 1 [← h3_2]
         rw [← mul_div_mul_comm]
         rw [mul_add, mul_add, mul_add, mul_sub, pow_two, ← mul_assoc]
-        rw [← inv_eq_one_div, inv_mul_cancel₀ (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
+        rw [← inv_eq_one_div, inv_mul_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3), one_mul]
         rw [mul_one, ← mul_assoc, mul_comm, ← mul_assoc]
-        rw [mul_inv_cancel₀ (c_ne_zero s_h1 field_cardinality q_prime_power q_mod_4_congruent_3), one_mul]
+        rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3), one_mul]
         ring_nf
       _ = (r_of_s + 2) / (r_of_s - 2) := by
         rw [add_assoc, add_comm 2 (1 / c_of_s), ← add_assoc]

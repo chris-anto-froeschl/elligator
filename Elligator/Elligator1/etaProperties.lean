@@ -43,18 +43,18 @@ section etaProperties
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (field_cardinality : Fintype.card F = q) (q_prime_power : IsPrimePow q) (q_mod_4_congruent_3 : q % 4 = 3)
+variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:η_eq_zero"]
 lemma η_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
   (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-  (field_cardinality : Fintype.card F = q)
-  (q_prime_power : IsPrimePow q)
-  (q_mod_4_congruent_3 : q % 4 = 3)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
   :
-  let point := (ϕ t.val s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3).val
+  let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
   let η_of_point := η point
   η_of_point = 0 := by
     intro point η_of_point
@@ -62,5 +62,5 @@ lemma η_eq_zero
     let y_of_t := point.2
     change (y_of_t - 1) / (2 * (y_of_t + 1)) = 0
     unfold y_of_t point
-    rw [ϕ_of_t_eq_zero_one t s_h1 s_h2 field_cardinality q_prime_power q_mod_4_congruent_3]
+    rw [ϕ_of_t_eq_zero_one t s_h1 s_h2 q_h1 q_h2 q_h3]
     simp
