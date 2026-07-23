@@ -24,8 +24,10 @@ public import Elligator.Elligator1.Map
 /-!
 # Map Properties
 
-In this file we introduce lemmas, which are directly derivable from the main results in `Elligator.Elligator1.Map`.
-These results are mainly used for Theorem 3 proof part A, i.e. results only proofable right in between Theorem 1 and proof part B.
+In this file we introduce lemmas, which are directly derivable from the main results in
+`Elligator.Elligator1.Map`.
+These results are mainly used for Theorem 3 proof part A, i.e. results only proofable right in
+between Theorem 1 and proof part B.
 This hierarchy allows to have a linear dependence hierarchy without polluting major result files.
 
 ## Main results
@@ -66,13 +68,18 @@ lemma y_h1
   X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 = 0 := by
     intro y_of_t r_of_s X_of_t
     rw [← mul_left_inj' (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
-    change (X_of_t ^ 2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1) * (y_of_t + 1) = 0 * (y_of_t + 1)
+    change (X_of_t ^ 2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1) * (y_of_t + 1)
+      = 0 * (y_of_t + 1)
     repeat rw [add_mul]
     rw [zero_mul]
-    have h1 : (2 * X_of_t * (y_of_t + 1) + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) = (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) * X_of_t := by
+    have h1 : (2 * X_of_t * (y_of_t + 1)
+        + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1))
+        = (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) * X_of_t := by
       rw [add_mul _ _ X_of_t]
       rw [← div_left_inj' (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
-      change (2 * X_of_t * (y_of_t + 1) + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) / (y_of_t + 1) = (2 * (y_of_t + 1) * X_of_t + r_of_s * (y_of_t - 1) * X_of_t) / (y_of_t + 1)
+      change (2 * X_of_t * (y_of_t + 1)
+            + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) / (y_of_t + 1)
+        = (2 * (y_of_t + 1) * X_of_t + r_of_s * (y_of_t - 1) * X_of_t) / (y_of_t + 1)
       repeat rw [add_div]
       repeat rw [mul_div_assoc, div_self (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
       rw [mul_comm (2 * (y_of_t + 1)) X_of_t, ← mul_assoc]
@@ -80,7 +87,8 @@ lemma y_h1
       rw [div_self (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
       ring_nf
     rw [h1]
-    have h2 : (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) = (y_of_t * r_of_s - r_of_s + 2 * y_of_t + 2) := by ring_nf
+    have h2 : (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) =
+        (y_of_t * r_of_s - r_of_s + 2 * y_of_t + 2) := by ring_nf
     rw [h2]
     rw [mul_add, add_mul]
     ring_nf
@@ -93,11 +101,13 @@ lemma y_h1
     rw [add_assoc, ← mul_add y_of_t, add_comm (X_of_t^2) 1, ← add_assoc, add_comm (X_of_t * 2) 1]
     rw [mul_comm X_of_t 2]
     have h3 : 1 + 2 * X_of_t + X_of_t^2 = (1 + X_of_t)^2 := by ring_nf
-    have h4 : -1 + r_of_s * X_of_t - 2 * X_of_t - X_of_t ^ 2 = r_of_s * X_of_t - (1 + 2 * X_of_t + X_of_t^2) := by ring_nf
+    have h4 : -1 + r_of_s * X_of_t - 2 * X_of_t - X_of_t ^ 2 =
+        r_of_s * X_of_t - (1 + 2 * X_of_t + X_of_t^2) := by ring_nf
     rw [h4, h3]
     rw [← mul_assoc, mul_comm, ← mul_add]
     rw [← div_left_inj' (y_divisor_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
-    change (y_of_t * (r_of_s * X_of_t + (1 + X_of_t) ^ 2)) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2) = y_of_t
+    change (y_of_t * (r_of_s * X_of_t + (1 + X_of_t) ^ 2)) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2)
+      = y_of_t
     rw [mul_div_assoc, div_self (y_divisor_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
     simp
 
@@ -119,12 +129,14 @@ lemma y_h2
     intro r_of_s X_of_t point η_of_point
     let y_of_t := y t s
     calc
-      X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 = X_of_t^2 + 2 * (1 + 1 / 2 * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 := by
+      X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1 =
+        X_of_t^2 + 2 * (1 + 1 / 2 * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1 := by
         -- Unfold until reaching the y which is equivalent to y_of_t for comparison
         unfold η_of_point η point ϕ
         simp only [Subtype.coe_eta, dite_eq_ite, one_div]
         rw [if_pos t.prop]
-        change X_of_t ^ 2 + 2 * (1 + (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s) * X_of_t + 1 = X_of_t ^ 2 + 2 * (1 + 2⁻¹ * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1
+        change X_of_t ^ 2 + 2 * (1 + (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s) * X_of_t + 1
+          = X_of_t ^ 2 + 2 * (1 + 2⁻¹ * ((y_of_t - 1) / (y_of_t + 1)) * r_of_s) * X_of_t + 1
         rw [inv_eq_one_div]
         rw [← mul_div_mul_comm]
         ring_nf
@@ -155,10 +167,13 @@ lemma y_h3
     intro r_of_s X_of_t point η_of_point
     rw [← add_right_inj (2 * (1 + η_of_point * r_of_s))]
     rw [← mul_left_inj' (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
-    change (2 * (1 + η_of_point * r_of_s) + (X_of_t + 1 / X_of_t)) * X_of_t = (2 * (1 + η_of_point * r_of_s) + -2 * (1 + η_of_point * r_of_s)) * X_of_t
-    have h1 : (2 * (1 + η_of_point * r_of_s) + -2 * (1 + η_of_point * r_of_s)) * X_of_t = 0 := by ring_nf
+    change (2 * (1 + η_of_point * r_of_s) + (X_of_t + 1 / X_of_t)) * X_of_t
+      = (2 * (1 + η_of_point * r_of_s) + -2 * (1 + η_of_point * r_of_s)) * X_of_t
+    have h1 : (2 * (1 + η_of_point * r_of_s) + -2 * (1 + η_of_point * r_of_s)) * X_of_t = 0 := by
+      ring_nf
     rw [h1, ← y_h2 t s_h1 s_h2 q_h1 q_h2 q_h3]
-    change (2 * (1 + η_of_point * r_of_s) + (X_of_t + 1 / X_of_t)) * X_of_t = X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1
+    change (2 * (1 + η_of_point * r_of_s) + (X_of_t + 1 / X_of_t)) * X_of_t
+      = X_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X_of_t + 1
     ring_nf
     rw [mul_inv_cancel₀ (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
     ring_nf
@@ -252,7 +267,8 @@ lemma y_comparison
     let X2 := X ⟨t2, h2_2⟩ s
     calc
       y2 = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2) := by
-        change (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2) = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2)
+        change (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2)
+          = (r_of_s * X2 - (1 + X2)^2) / (r_of_s * X2 + (1 + X2)^2)
         rfl
       _ = (r_of_s * (1 / X1) - (1 + (1 / X1))^2) / (r_of_s * (1 / X1) + (1 + (1 / X1))^2) := by
         unfold X2
@@ -265,7 +281,8 @@ lemma y_comparison
             · apply X_ne_zero s_h1 q_h1 q_h2 q_h3 t
             · apply X_ne_zero s_h1 q_h1 q_h2 q_h3 t
           apply div_self h2_10_1_1
-        rw [← mul_one ((r_of_s * (1 / X1) - (1 + 1 / X1) ^ 2) / (r_of_s * (1 / X1) + (1 + 1 / X1) ^ 2))]
+        rw [← mul_one
+          ((r_of_s * (1 / X1) - (1 + 1 / X1) ^ 2) / (r_of_s * (1 / X1) + (1 + 1 / X1) ^ 2))]
         nth_rw 7 [← h2_10_1]
         rw [← mul_div_mul_comm]
         rw [sub_mul, add_mul]
@@ -329,7 +346,8 @@ lemma X_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point.val
-    have h1_1 : X_of_t + 1 / X_of_t = -2 * (1 + η_of_point * r_of_s) := by exact (y_h3 t s_h1 s_h2 q_h1 q_h2 q_h3)
+    have h1_1 : X_of_t + 1 / X_of_t = -2 * (1 + η_of_point * r_of_s) := by
+      exact (y_h3 t s_h1 s_h2 q_h1 q_h2 q_h3)
     rw [η_h1] at h1_1
     ring_nf at h1_1
     rw [← mul_left_inj' (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)] at h1_1
@@ -524,7 +542,9 @@ lemma Y_η_h1
         unfold Y_of_t Y
         rw [(v_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1)]
         rw [(u_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1)]
-        change (χ_of_r_of_s_pow_two  * r_of_s^2) ^ ((q + 1) / 4) * χ_of_r_of_s_pow_two * (χ (1 ^ 2 + 1 / c_of_s ^ 2)) = (r_of_s ^ 2) ^ ((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two
+        change (χ_of_r_of_s_pow_two  * r_of_s^2) ^ ((q + 1) / 4) * χ_of_r_of_s_pow_two
+            * (χ (1 ^ 2 + 1 / c_of_s ^ 2))
+          = (r_of_s ^ 2) ^ ((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two
         have h1 : r_of_s^2 ≠ 0 := by
           rw [pow_two]
           apply mul_ne_zero
@@ -538,18 +558,21 @@ lemma Y_η_h1
       _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by
         unfold χ_of_one_add_one_div_c_of_s_pow_two
         rw [FiniteFieldBasic.one_add_one_a_pow_two_eq_a_add_one_over_a_over_a c_ne_zero]
-        change (r_of_s ^ 2) ^ ((q + 1) / 4) * χ (r_of_s / c_of_s) = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s
+        change (r_of_s ^ 2) ^ ((q + 1) / 4) * χ (r_of_s / c_of_s)
+          = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s
         rw [b_pow_q_add_one_over_four_eq_χ_of_a_mul_a q_h1 q_h3]
       _ = r_of_s * χ_of_c_of_s := by
         have r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
         let χ_of_one_over_c_of_s := χ (1 / c_of_s)
         calc
-          χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s := by
+          χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s =
+            r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s := by
             have h : r_of_s / c_of_s = r_of_s * (1 / c_of_s) := by ring_nf
             unfold χ_of_r_of_s_div_c_of_s
             rw [h]
             rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-            change χ_of_r_of_s * r_of_s * (χ_of_r_of_s * χ_of_one_over_c_of_s) = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s
+            change χ_of_r_of_s * r_of_s * (χ_of_r_of_s * χ_of_one_over_c_of_s)
+              = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s
             ring_nf
           _ = r_of_s * 1 * χ_of_one_over_c_of_s := by
             rw [mul_assoc r_of_s, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
@@ -582,7 +605,8 @@ lemma y_η_h1
     intro r_of_s y_of_t
     unfold y_of_t y
     let X_of_t := X t s
-    change (r_of_s * X_of_t - (1 + X_of_t) ^ 2) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2) = (r_of_s - 4) / (r_of_s + 4)
+    change (r_of_s * X_of_t - (1 + X_of_t) ^ 2) / (r_of_s * X_of_t + (1 + X_of_t) ^ 2)
+      = (r_of_s - 4) / (r_of_s + 4)
     unfold X_of_t
     rw [X_η_h2 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1]
     ring_nf
@@ -680,7 +704,8 @@ def ϕOverFProp3 (s : F) (point : F × F) : Prop :=
   let η_of_point := η point
   η_of_point * r = -2 → x = 2 * s * (c - 1) * χ_of_c / r
 
-/-- `ϕOverFProps` combines the previously defined properties which are fulfilled by points in `EOverF`,
+/-- `ϕOverFProps` combines the previously defined properties which are fulfilled by points in
+`EOverF`,
 i.e. `ϕOverFProp1`, `ϕOverFProp2` and `ϕOverFProp3`.
 
 Original: Chapter "3.3 Inverting the map": Theorem 3
@@ -825,7 +850,8 @@ lemma point_in_ϕOverF_with_prop2_main_case
       apply (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)
     rw [pow_two] at h1
     nth_rw 1 [← one_mul X_of_t, mul_assoc] at h1
-    apply (@quadratic_eq_zero_iff_discrim_eq_sq F _ 1 (2 * (1 + η_of_point * r_of_s)) 1 h2 _ FiniteFieldBasic.one_ne_zero X_of_t).mp at h1
+    apply (@quadratic_eq_zero_iff_discrim_eq_sq F _ 1 (2 * (1 + η_of_point * r_of_s)) 1 h2 _
+      FiniteFieldBasic.one_ne_zero X_of_t).mp at h1
     unfold discrim at h1
     rw [mul_pow 2 _ 2] at h1
     have h3 : 2^2 = (4 : F) := by norm_num
@@ -911,7 +937,8 @@ lemma point_in_ϕOverF_with_prop3_main_case
     rw [dif_pos t.prop]
     unfold x
     simp
-    change (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
+    change (c_of_s - 1) * s * X_of_t * (1 + X_of_t) / Y_of_t
+      = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s
     unfold X_of_t Y_of_t
     rw [(X_η_h2 t s_h1 s_h2 q_h1 q_h2 q_h3 h1)]
     rw [(Y_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 h1)]
@@ -919,7 +946,8 @@ lemma point_in_ϕOverF_with_prop3_main_case
     nth_rw 2 [mul_div_assoc]
     unfold χ_of_c_of_s
     nth_rw 2 [one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
-    change (c_of_s - 1) * s * (1 + 1) / (r_of_s * χ_of_c_of_s) = 2 * s * (c_of_s - 1) * (1 / χ_of_c_of_s / r_of_s)
+    change (c_of_s - 1) * s * (1 + 1) / (r_of_s * χ_of_c_of_s)
+      = 2 * s * (c_of_s - 1) * (1 / χ_of_c_of_s / r_of_s)
     ring_nf
 
 -- Original: Theorem 3.2 Proof B prop 3 argumentation
@@ -996,3 +1024,7 @@ lemma point_of_ϕ_fulfills_ϕOverFProps
       intro point
       let h1 := point_of_ϕ_in_ϕOverF t s_h1 s_h2 q_h1 q_h2 q_h3
       apply point_props_of_point_in_ϕOverF t.val s_h1 s_h2 q_h1 q_h2 q_h3 h1
+
+end MapProperties
+
+end Elligator.Elligator1

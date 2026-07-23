@@ -19,12 +19,11 @@ public import Elligator.Elligator1.XProperties
 public import Elligator.Elligator1.YProperties
 public import Elligator.Elligator1.xProperties
 
-@[expose] public section
-
 /-!
 # y Variable Properties
 
-In this file we introduce some generally helpful lemmas for `y` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `y` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -34,6 +33,8 @@ In this file we introduce some generally helpful lemmas for `y` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -64,8 +65,11 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
     intro r_of_s X_of_t Y_of_t
     have h1 : X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * v_of_t := by
       calc
-      X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t) := by
-        change (χ_of_v_of_t * u_of_t) ^ 5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t) ^ 3 + (χ_of_v_of_t * u_of_t) = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
+      X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t =
+        χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t) := by
+        change (χ_of_v_of_t * u_of_t) ^ 5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t) ^ 3
+            + (χ_of_v_of_t * u_of_t)
+          = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
         rw [mul_pow (χ_of_v_of_t) (u_of_t) 5]
         rw [mul_pow (χ_of_v_of_t) (u_of_t) 3]
         have h1_1 : Odd 5 := by
@@ -76,7 +80,9 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
           norm_num
         rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨5, h1_1⟩ q_h1 q_h2 q_h3]
         rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h1_2⟩ q_h1 q_h2 q_h3]
-        change χ_of_v_of_t * u_of_t^5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t^3) + (χ_of_v_of_t * u_of_t) = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
+        change χ_of_v_of_t * u_of_t^5 + (r_of_s ^ 2 - 2) * (χ_of_v_of_t * u_of_t^3)
+            + (χ_of_v_of_t * u_of_t)
+          = χ_of_v_of_t * (u_of_t^5 + (r_of_s^2 -2 ) * u_of_t^3 + u_of_t)
         ring_nf
       _ = χ_of_v_of_t * v_of_t := by
         change χ_of_v_of_t * v_of_t = χ_of_v_of_t * v_of_t
@@ -88,13 +94,15 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
     have h4 : Y_of_t^2 = χ_of_v_of_t * v_of_t := by
       calc
         Y_of_t^2 = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * χ_of_v_of_t^2 * χ_of_sum^2 := by
-          change ((χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum)^2 = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * χ_of_v_of_t^2 * χ_of_sum^2
+          change ((χ_of_v_of_t * v_of_t)^((q + 1) / 4) * χ_of_v_of_t * χ_of_sum)^2
+            = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * χ_of_v_of_t^2 * χ_of_sum^2
           ring_nf
           rw [← q_h1]
           rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
         _ = (χ_of_v_of_t * v_of_t)^((q + 1) / 2) * 1 := by
           rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one v_ne_zero ⟨2, even_two⟩ q_h1 q_h3]
-          rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) ⟨2, even_two⟩ q_h1 q_h3]
+          rw [LegendreSymbol.χ_of_a_even_pow_n_eq_one
+            (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) ⟨2, even_two⟩ q_h1 q_h3]
           rw [mul_one]
         _ = χ_of_v_of_t * v_of_t := by rw [h3, mul_one]
     rw [h1]
@@ -138,9 +146,11 @@ lemma y_divisor_ne_zero
         Y_of_t^2 = X_of_t * (X_of_t^4 + (r_of_s^2 - 2) * X_of_t^2 + 1) := by
           rw [mul_add, mul_one]
           rw [mul_add]
-          rw [Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 q_h1 q_h2 q_h3]
+          rw [Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
+            t s_h1 q_h1 q_h2 q_h3]
           ring_nf
-          change X_of_t - X_of_t ^ 3 * 2 + X_of_t ^ 3 * r_of_s ^ 2 + X_of_t ^ 5 = X_of_t - X_of_t ^ 3 * 2 + X_of_t ^ 3 * r_of_s ^ 2 + X_of_t ^ 5
+          change X_of_t - X_of_t ^ 3 * 2 + X_of_t ^ 3 * r_of_s ^ 2 + X_of_t ^ 5
+            = X_of_t - X_of_t ^ 3 * 2 + X_of_t ^ 3 * r_of_s ^ 2 + X_of_t ^ 5
           rfl
         _ = X_of_t^3 * (2 * r_of_s^2 + 4 * r_of_s) := by
           rw [sub_mul (r_of_s^2) 2 (X_of_t^2)]
@@ -151,7 +161,8 @@ lemma y_divisor_ne_zero
           rw [h1, mul_assoc (-(1 + X_of_t)^2) r_of_s X_of_t, h1]
           rw [← neg_one_mul]
           have h3_1 : (-1 : F) * (-1) = 1 := by ring
-          nth_rw 1 [mul_comm (-1) ((1 + X_of_t)^2), ← mul_assoc, mul_assoc ((1 + X_of_t)^2) (-1) (-1)]
+          nth_rw 1 [mul_comm (-1) ((1 + X_of_t)^2), ← mul_assoc,
+            mul_assoc ((1 + X_of_t)^2) (-1) (-1)]
           rw [h3_1, mul_one]
           have h3_2 : 2 + 2 = 4 := by norm_num
           rw [← pow_add (1 + X_of_t) 2 2]
@@ -171,8 +182,10 @@ lemma y_divisor_ne_zero
         _ = r_of_s * X_of_t * X_of_t^2 * (2 * r_of_s + 4) := by ring_nf
         _ = -(1 + X_of_t)^2 * X_of_t^2 * (s + 2 / s)^2 := by
           rw [← h1]
-          change r_of_s * X_of_t * X_of_t ^ 2 * (2 * (c_of_s + 1 / c_of_s) + 4) = r_of_s * X_of_t * X_of_t ^ 2 * (s + 2 / s) ^ 2
-          change r_of_s * X_of_t * X_of_t ^ 2 * (2 * (2 / s^2 + 1 / (2 / s^2)) + 4) = r_of_s * X_of_t * X_of_t ^ 2 * (s + 2 / s) ^ 2
+          change r_of_s * X_of_t * X_of_t ^ 2 * (2 * (c_of_s + 1 / c_of_s) + 4)
+            = r_of_s * X_of_t * X_of_t ^ 2 * (s + 2 / s) ^ 2
+          change r_of_s * X_of_t * X_of_t ^ 2 * (2 * (2 / s^2 + 1 / (2 / s^2)) + 4)
+            = r_of_s * X_of_t * X_of_t ^ 2 * (s + 2 / s) ^ 2
           have h3_4 : (2 * (2 / s^2 + 1 / (2 / s^2)) + 4) = (s + 2 / s)^2 := by
             ring_nf
             rw [inv_inv, mul_inv_cancel₀ s_h1, one_mul]
@@ -244,7 +257,8 @@ lemma y_add_one_ne_zero
       change y_of_t = -1
       exact h1
     have h3 : r_of_s * X_of_t - (1 + X_of_t)^2 = -(r_of_s * X_of_t + (1 + X_of_t)^2) := by
-      have h3_1 : (r_of_s * X_of_t + (1 + X_of_t)^2) ≠ 0 := y_divisor_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t
+      have h3_1 : (r_of_s * X_of_t + (1 + X_of_t)^2) ≠ 0 :=
+        y_divisor_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t
       rw [← div_left_inj' h3_1]
       rw [← neg_one_mul]
       rw [mul_div_assoc]
@@ -340,8 +354,10 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
           ring_nf
     have h2 : Y_of_t^2 * (1 - x_of_t^2) = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by
       calc
-        Y_of_t^2 * (1 - x_of_t^2) = Y_of_t^2 - (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 := by
-          change Y_of_t^2 * (1 - (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) / Y_of_t)^2) = Y_of_t^2 - (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2
+        Y_of_t^2 * (1 - x_of_t^2) =
+          Y_of_t^2 - (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 := by
+          change Y_of_t^2 * (1 - (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) / Y_of_t)^2)
+            = Y_of_t^2 - (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2
           rw [mul_sub, mul_one]
           have h2_1 : Y_of_t^2 ≠ 0 := by
             rw [pow_two]
@@ -350,8 +366,10 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
             · apply Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
           rw [div_pow, ← mul_div_assoc, mul_comm, mul_div_assoc, div_self h2_1]
           ring_nf
-       _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t - 2 * (r_of_s - 2) * X_of_t^2 * (1 + X_of_t)^2 := by
-          rw [h1, Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 q_h1 q_h2 q_h3]
+       _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t
+            - 2 * (r_of_s - 2) * X_of_t^2 * (1 + X_of_t)^2 := by
+          rw [h1,
+            Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 q_h1 q_h2 q_h3]
        _ = X_of_t * (r_of_s * X_of_t - (1 + X_of_t)^2)^2 := by
           ring_nf
     let h3 := neg_d_eq_r_add_two_over_r_sub_two s_h1 q_h1 q_h2 q_h3
@@ -371,10 +389,13 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
             apply s_h1
         contradiction
       rw [mul_div_assoc, div_self h4_1, mul_one]
-    have h5 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) = X_of_t * (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by
+    have h5 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) =
+        X_of_t * (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by
       calc
-        Y_of_t^2 * (1 - d_of_s * x_of_t^2) = Y_of_t^2 - d_of_s * (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 := by
-          change Y_of_t^2 * (1 - d_of_s * (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) / Y_of_t)^2) = Y_of_t^2 - d_of_s * (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2
+        Y_of_t^2 * (1 - d_of_s * x_of_t^2) =
+          Y_of_t^2 - d_of_s * (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2 := by
+          change Y_of_t^2 * (1 - d_of_s * (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) / Y_of_t)^2)
+            = Y_of_t^2 - d_of_s * (c_of_s - 1)^2 * s^2 * X_of_t^2 * (1 + X_of_t)^2
           rw [mul_sub, mul_one]
           have h2_1 : Y_of_t^2 ≠ 0 := by
             rw [pow_two]
@@ -385,7 +406,8 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
           rw [mul_comm (Y_of_t ^ 2) (((c_of_s - 1) * s * X_of_t * (1 + X_of_t)) ^ 2)]
           rw [← mul_assoc, mul_div_assoc, div_self h2_1]
           ring_nf
-       _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t + 2 * (r_of_s + 2) * X_of_t^2 * (1 + X_of_t)^2 := by
+       _ = X_of_t^5 + (r_of_s^2 - 2) * X_of_t^3 + X_of_t
+            + 2 * (r_of_s + 2) * X_of_t^2 * (1 + X_of_t)^2 := by
           rw [← neg_add_eq_sub, ← neg_one_mul]
           rw [← mul_assoc (-1 : F)]
           rw [← mul_assoc (-1 : F)]
@@ -394,7 +416,8 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
           rw [neg_one_mul]
           rw [add_comm]
           rw [h4]
-          rw [Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 q_h1 q_h2 q_h3]
+          rw [Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
+            t s_h1 q_h1 q_h2 q_h3]
        _ = X_of_t * (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by
           grind
     have h6 : (1 - d_of_s * x_of_t^2) ≠ 0 := by
@@ -424,7 +447,8 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
       · exact h6
     have h8 : (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = y_of_t^2 := by
       calc
-        (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) = (r_of_s * X_of_t - (1 + X_of_t)^2)^2 / (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by
+        (1 - x_of_t^2) / (1 - d_of_s * x_of_t^2) =
+          (r_of_s * X_of_t - (1 + X_of_t)^2)^2 / (r_of_s * X_of_t + (1 + X_of_t)^2)^2 := by
           have h8_1 : Y_of_t^2 / Y_of_t^2 = 1 := by
             have h7_2 : Y_of_t^2 ≠ 0 := by
               rw [pow_two]
@@ -451,3 +475,7 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
     symm at h8
     rw [mul_assoc (d_of_s) (x_of_t ^ 2) (y_of_t ^ 2), mul_comm (d_of_s) (x_of_t ^ 2 * y_of_t ^ 2)]
     exact h8
+
+end yProperties
+
+end Elligator.Elligator1

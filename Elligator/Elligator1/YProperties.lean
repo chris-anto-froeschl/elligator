@@ -15,12 +15,11 @@ public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
 
-@[expose] public section
-
 /-!
 # Y Variable Properties
 
-In this file we introduce some generally helpful lemmas for `Y` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `Y` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -30,6 +29,8 @@ In this file we introduce some generally helpful lemmas for `Y` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -132,7 +133,8 @@ lemma one_add_X_ne_zero
         apply Nat.odd_iff.2
         norm_num
       rw [LegendreSymbol.χ_of_a_pow_n_eq_χ_a v_of_t ⟨3, h3_2⟩ q_h1 q_h2 q_h3]
-      change (-1) ^ 5 * χ_of_v_of_t + (r_of_s ^ 2 - 2) * ((-1) ^ 3 * χ_of_v_of_t) + -1 * χ_of_v_of_t = -1 * χ_of_v_of_t * (1 + r_of_s ^ 2 - 2 + 1)
+      change (-1) ^ 5 * χ_of_v_of_t + (r_of_s ^ 2 - 2) * ((-1) ^ 3 * χ_of_v_of_t)
+        + -1 * χ_of_v_of_t = -1 * χ_of_v_of_t * (1 + r_of_s ^ 2 - 2 + 1)
       ring
     have h4 : v_of_t = -χ_of_v_of_t * r_of_s^2 := by
       rw [add_comm] at h3
@@ -213,7 +215,8 @@ lemma Y_comparison
     let χ_of_v2 := LegendreSymbol.χ v2
     let χ_of_u1_mul_v1  := LegendreSymbol.χ (u1 * v1)
     let u_ne_zero := @u_ne_zero F _ t
-    have first_factor : (χ_of_v2 * v2)^((q + 1) / 4) = (χ_of_v1 * v1)^((q + 1) / 4) * χ_of_u1 / u1^3:= by
+    have first_factor : (χ_of_v2 * v2)^((q + 1) / 4) =
+        (χ_of_v1 * v1)^((q + 1) / 4) * χ_of_u1 / u1^3 := by
       have h1_1 : χ_of_v2 * v2 = χ_of_v1 * v1 / u1^6 := by
         unfold χ_of_v2
         rw [v_comparison_implication4 t q_h1 q_h3]
@@ -237,7 +240,8 @@ lemma Y_comparison
           rw [pow_two]
           apply IsSquare.mul_self u1
         have h'' : LegendreSymbol.χ (u1 ^ 2) = 1 := by
-          apply (LegendreSymbol.χ_a_eq_one_iff_a_square (FiniteFieldBasic.pow_two_ne_zero u_ne_zero) q_h1 q_h3).mpr
+          apply (LegendreSymbol.χ_a_eq_one_iff_a_square
+            (FiniteFieldBasic.pow_two_ne_zero u_ne_zero) q_h1 q_h3).mpr
           exact h'
         rw [h'']
         simp
@@ -260,22 +264,30 @@ lemma Y_comparison
           nth_rw 2 [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
           ring_nf
     have second_factor : χ_of_v2 = χ_of_v1 := by exact v_comparison_implication4 t q_h1 q_h3
-    have third_factor : LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) := by
+    have third_factor : LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) =
+        LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) := by
       calc
-        LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = LegendreSymbol.χ ((c_of_s^2 * u1^4 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) := by
-          rw [← LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+        LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) =
+          LegendreSymbol.χ ((c_of_s^2 * u1^4 * (u2^2 + 1 / c_of_s^2))
+            * (u1^2 + 1 / c_of_s^2)^2) := by
+          rw [← LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two
+            (c_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
           rw [mul_comm]
           rw [← LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero t) q_h1 q_h3]
           rw [mul_comm]
-          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1 q_h3]
+          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two
+            (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1 q_h3]
           simp_all +decide
           grind
         _ = LegendreSymbol.χ ((u1^2 * (c_of_s^2 + u1^2)) * (u1^2 + 1 / c_of_s^2)^2) := by
           rw [pow_two u2]
           unfold u2
           rw [u_comparison t s]
-          change LegendreSymbol.χ (c_of_s ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2) = LegendreSymbol.χ (u1 ^ 2 * (c_of_s ^ 2 + u1 ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2)
-          have h1 : c_of_s ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c_of_s ^ 2) = u1^2 * (c_of_s^2 + u1^2) := by
+          change LegendreSymbol.χ (c_of_s ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c_of_s ^ 2)
+              * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2)
+            = LegendreSymbol.χ (u1 ^ 2 * (c_of_s ^ 2 + u1 ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2)
+          have h1 : c_of_s ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c_of_s ^ 2) =
+            u1^2 * (c_of_s^2 + u1^2) := by
             rw [mul_add]
             ring_nf
             simp
@@ -294,16 +306,27 @@ lemma Y_comparison
           rw [add_comm]
           unfold v1
           rw [v_h1 s_h1 q_h1 q_h2 q_h3]
-          change LegendreSymbol.χ (u1 * u1 * (u1 ^ 2 + c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2)) = LegendreSymbol.χ (u1 * (u1 * (u1 ^ 2 + c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2)) * (u1 ^ 2 + 1 / c_of_s ^ 2))
+          change LegendreSymbol.χ
+              (u1 * u1 * (u1 ^ 2 + c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2)
+                * (u1 ^ 2 + 1 / c_of_s ^ 2))
+            = LegendreSymbol.χ
+              (u1 * (u1 * (u1 ^ 2 + c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2))
+                * (u1 ^ 2 + 1 / c_of_s ^ 2))
           repeat rw [← mul_assoc]
     calc
       Y2 = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1^3 := by
         unfold Y2 Y
-        change (χ_of_v2 * v2)^((q + 1) / 4) * χ_of_v2 * LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
+        change (χ_of_v2 * v2)^((q + 1) / 4) * χ_of_v2 * LegendreSymbol.χ (u2^2 + 1 / c_of_s^2)
+          = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
         rw [first_factor, second_factor, third_factor]
         rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-        change (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1 * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) )) = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
-        have h1 : (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1 * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2))) = (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2)) * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 := by ring_nf
+        change (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1
+            * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2) ))
+          = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
+        have h1 : (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1
+            * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2)))
+            = (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2))
+              * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 := by ring_nf
         rw [h1]
         change Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
         rfl
@@ -326,3 +349,7 @@ lemma Y_comparison
       _ = Y1 / X1^3 := by
         change Y1 / X1^3 = Y1 / X1^3
         rfl
+
+end YProperties
+
+end Elligator.Elligator1

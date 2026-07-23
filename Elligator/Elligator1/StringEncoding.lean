@@ -17,8 +17,6 @@ public import Elligator.Elligator1.bProperties
 public import Elligator.Elligator1.bitsToNatProperties
 public import Elligator.Elligator1.SProperties
 
-@[expose] public section
-
 /-!
 # String Encoding
 
@@ -33,6 +31,8 @@ In this file we collect the main results regarding the string encoding logic of 
 See [bernstein2013a] chapter 3 theorem 4.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
 -- Original-Reference: Theorem 4
@@ -46,7 +46,8 @@ variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q %
 @[blueprint
   (title := "The Encoding Function")
   (statement := /--
-  In the situation of Definition 2, assume that $q$ is prime, and define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  In the situation of Definition 2, assume that $q$ is prime, and define
+  $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
   $$
   \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
   $$
@@ -76,7 +77,8 @@ noncomputable def ι
 @[blueprint
   (title := "Cardinality of S")
   (statement := /--
-  In the situation of Definition 2, assume that $q$ is prime, and define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  In the situation of Definition 2, assume that $q$ is prime, and define
+  $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
   $$
   \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
   $$
@@ -97,7 +99,8 @@ theorem S_card (q_h3 : q % 4 = 3)
 @[blueprint
   (title := "Cardinality of S")
   (statement := /--
-  In the situation of Definition 2, assume that $q$ is prime, and define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  In the situation of Definition 2, assume that $q$ is prime, and define
+  $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
   $$
   \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
   $$
@@ -139,7 +142,8 @@ theorem ι_injective
       let h2_1 := ϕ_of_t_eq_ϕ_of_neg_t (σ τ.1) s_h1 s_h2 q_h1 q_h2 q_h3
       grind
     have h3 : ϕ_of_neg_τ = ϕ_of_τ' := by grind
-    have h4 : ¬ (∃ (p : { n : F // n ≠ (σ τ.1) ∧ n ≠ -(σ τ.1)}), ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3 = ϕ_of_τ) := by
+    have h4 : ¬ (∃ (p : { n : F // n ≠ (σ τ.1) ∧ n ≠ -(σ τ.1)}),
+        ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3 = ϕ_of_τ) := by
         let h4_1 := (ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages (σ τ.1) s_h1 s_h2 q_h1 q_h2 q_h3).mp
         unfold ϕ_of_τ ϕ_of_neg_τ at h2
         convert h4_1 ( congr_arg Subtype.val h2 ) using 1
@@ -152,7 +156,8 @@ theorem ι_injective
     have h6 : (@σ F _ q τ.1) = (@σ F _ q τ'.1) := by
       cases' h5 with h6_1 h6_1 <;> simp_all +decide [ σ ];
       have h6_2 : bitsToNat τ.val = bitsToNat τ'.val := by
-        have h6_2_1 : bitsToNat τ.val ≤ (q - 1) / 2 ∧ bitsToNat τ'.val ≤ (q - 1) / 2 := by exact ⟨bitsToNat_le_q_sub_one_over_two τ , bitsToNat_le_q_sub_one_over_two τ'⟩
+        have h6_2_1 : bitsToNat τ.val ≤ (q - 1) / 2 ∧ bitsToNat τ'.val ≤ (q - 1) / 2 := by
+          exact ⟨bitsToNat_le_q_sub_one_over_two τ , bitsToNat_le_q_sub_one_over_two τ'⟩
         have h6_2_2 : (bitsToNat τ.val : F) = -((bitsToNat τ'.val) : F) := by grind
         let h6_2_3 := lower_half_neg_eq q_h1 q_prime h6_2_1.1 h6_2_1.2 h6_2_2
         grind
@@ -212,3 +217,7 @@ theorem ϕOverF_eq_ιOverS'
         rw [ hτ, ϕ_of_t_eq_ϕ_of_neg_t ];
         norm_num +zetaDelta at *;
     · rintro ⟨ y, ⟨ τ, rfl ⟩, rfl ⟩; exact ⟨ _, rfl ⟩;
+
+end StringEncoding
+
+end Elligator.Elligator1

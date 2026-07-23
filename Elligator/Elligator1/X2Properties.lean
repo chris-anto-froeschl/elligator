@@ -22,12 +22,11 @@ public import Elligator.Elligator1.Map
 public import Elligator.Elligator1.MapProperties
 public import Elligator.Elligator1.etaProperties
 
-@[expose] public section
-
 /-!
 # X2 Variable Properties
 
-In this file we introduce some generally helpful lemmas for `X2` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `X2` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -38,6 +37,7 @@ In this file we introduce some generally helpful lemmas for `X2` as introduced i
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -89,7 +89,8 @@ lemma X2_h1
     unfold a a_sqr
     rw [← q_h1]
     nth_rw 2 [add_comm]
-    rw [← pow_mul, FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
+    rw [← pow_mul,
+      FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
     unfold η_of_point
     nth_rw 2 [add_comm]
     rw [q_h1, LegendreSymbol.a_pow_q_add_one_over_two_eq_a point.prop.2.1 q_h1 q_h3]
@@ -105,7 +106,8 @@ lemma X2_h2
   let X2_of_t := X2 s point q
   X2_of_t^2 + 2 * (1 + η_of_point *r_of_s) * X2_of_t + 1 = 0 := by
     intro η_of_point r_of_s X2_of_t
-    have h : (1 + η_of_point * r_of_s + X2_of_t)^2 = (1 + η_of_point * r_of_s)^2 - 1 := by exact X2_h1 q_h1 q_h3 point
+    have h : (1 + η_of_point * r_of_s + X2_of_t)^2 = (1 + η_of_point * r_of_s)^2 - 1 := by
+      exact X2_h1 q_h1 q_h3 point
     grind
 
 @[blueprint "lemma:X2_h3"]
@@ -128,12 +130,15 @@ lemma X2_h3
     intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t
     let η_of_point := η point.val
     let r_of_s := r s
-    let point_of_ϕ_fulfills_ϕOverFProps := point_of_ϕ_fulfills_ϕOverFProps t s_h1 s_h2 q_h1 q_h2 q_h3
+    let point_of_ϕ_fulfills_ϕOverFProps :=
+      point_of_ϕ_fulfills_ϕOverFProps t s_h1 s_h2 q_h1 q_h2 q_h3
     calc
-      (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = X2_of_t^2 - (X_of_t + X'_of_t) * X2_of_t + X_of_t * X'_of_t := by grind
+      (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) =
+          X2_of_t^2 - (X_of_t + X'_of_t) * X2_of_t + X_of_t * X'_of_t := by grind
       _ = X2_of_t^2 + 2 * (1 + η_of_point * r_of_s) * X2_of_t + 1 := by
         rw [X_comparison_implication t s_h1 s_h2 q_h1 q_h2 q_h3]
-        change X2_of_t ^ 2 - -2 * (1 + η_of_point * r_of_s) * X2_of_t + X_of_t * X'_of_t = X2_of_t ^ 2 + 2 * (1 + η_of_point * r_of_s) * X2_of_t + 1
+        change X2_of_t ^ 2 - -2 * (1 + η_of_point * r_of_s) * X2_of_t + X_of_t * X'_of_t
+          = X2_of_t ^ 2 + 2 * (1 + η_of_point * r_of_s) * X2_of_t + 1
         rw [mul_add, mul_comm X_of_t _, X_comparison_implication2 t s_h1 q_h1 q_h2 q_h3]
         grind
       _ = 0 := by exact X2_h2 q_h1 q_h3 ⟨point.val, point_of_ϕ_fulfills_ϕOverFProps⟩
@@ -156,7 +161,8 @@ lemma X2_h4
   let X2_of_t := X2 s point q
   X2_of_t = X_of_t ∨ X2_of_t = X'_of_t := by
     intro t1 t2 h2_2 point X_of_t X'_of_t X2_of_t
-    have h1 : (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = 0 := by exact X2_h3 t s_h1 s_h2 q_h1 q_h2 q_h3
+    have h1 : (X2_of_t - X_of_t) * (X2_of_t - X'_of_t) = 0 := by
+      exact X2_h3 t s_h1 s_h2 q_h1 q_h2 q_h3
     rw [mul_eq_zero] at h1
     nth_rw 1 [← add_left_inj (-X_of_t)]
     nth_rw 2 [← add_left_inj (-X'_of_t)]
@@ -244,9 +250,11 @@ lemma X2_ne_neg_one
       rw [← div_left_inj' r_ne_zero] at X2_equation
       ring_nf at X2_equation
       change -(η_of_point * r_of_s * 2⁻¹ * r_of_s⁻¹ * 2) = 0 at X2_equation
-      have h2_1 : -(η_of_point * r_of_s * 2⁻¹ * r_of_s⁻¹ * 2) = -(η_of_point * (r_of_s * r_of_s⁻¹) * (2 * 2⁻¹)) := by grind
+      have h2_1 : -(η_of_point * r_of_s * 2⁻¹ * r_of_s⁻¹ * 2) =
+          -(η_of_point * (r_of_s * r_of_s⁻¹) * (2 * 2⁻¹)) := by grind
       rw [h2_1] at X2_equation
-      rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)] at X2_equation
+      rw [mul_inv_cancel₀ r_ne_zero,
+        mul_inv_cancel₀ (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)] at X2_equation
       grind
     have h3 : η_of_point ≠ 0 := by
       unfold η_of_point η
@@ -291,7 +299,8 @@ lemma y_with_X2
   let X2_of_point := X2 s point.val q
   let r_of_s := r s
   let y := point.val.2
-  y = (r_of_s * X2_of_point - (1 + X2_of_point)^2) / (r_of_s * X2_of_point + (1 + X2_of_point)^2) := by
+  y = (r_of_s * X2_of_point - (1 + X2_of_point)^2)
+      / (r_of_s * X2_of_point + (1 + X2_of_point)^2) := by
     intro X2_of_point r_of_s y
     let X2_equation := X2_h2 q_h1 q_h3 point
     let η_of_point := η point.val
@@ -322,7 +331,8 @@ lemma y_with_X2
         ring_nf at X2_equation
         grind
       have h2_2 : 2 * η_of_point = -((1 + X2_of_point)^2) / (r_of_s * X2_of_point) := by
-        have h2_2_1 : η_of_point = (-(X2_of_point^2 + 1) / (2 * X2_of_point) -1) / r_of_s := by grind
+        have h2_2_1 : η_of_point = (-(X2_of_point^2 + 1) / (2 * X2_of_point) -1) / r_of_s := by
+          grind
         have h2_2_2 : η_of_point = -(X2_of_point + 1)^2 / (2 * r_of_s * X2_of_point) := by
           have h2_2_2_1 : (2 * X2_of_point) / (2 * X2_of_point) = 1 := by grind
           rw [← h2_2_2_1] at h2_2_1
@@ -334,7 +344,9 @@ lemma y_with_X2
         ring_nf
         grind
       grind
-    have h3 : (1 + 2 * η_of_point) / (1 - 2 * η_of_point) = ((r_of_s * X2_of_point - (1 + X2_of_point)^2)) / ((r_of_s * X2_of_point + (1 + X2_of_point)^2)) := by
+    have h3 : (1 + 2 * η_of_point) / (1 - 2 * η_of_point) =
+        ((r_of_s * X2_of_point - (1 + X2_of_point)^2))
+          / ((r_of_s * X2_of_point + (1 + X2_of_point)^2)) := by
       have h3_1 : 1 = (r_of_s * X2_of_point) / (r_of_s * X2_of_point) := by grind
       rw [h2]
       nth_rw 1 [h3_1]
@@ -395,14 +407,18 @@ lemma X2_observation1_of_X2_ne_one
   let X2_of_point := X2 s point.val q
   let y := point.val.2
   let r_of_s := r s
-  X2_of_point ≠ 1 → (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - y^2) = 4 * r_of_s * X2_of_point * (1 + X2_of_point)^2 := by
+  X2_of_point ≠ 1 → (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - y^2)
+    = 4 * r_of_s * X2_of_point * (1 + X2_of_point)^2 := by
     intro X2_of_point y r_of_s X2_h
     let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 point y_eq_one
     let r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 point
     let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h2 q_h3
-    change y = (r_of_s * X2_of_point - (1 + X2_of_point)^2) / (r_of_s * X2_of_point + (1 + X2_of_point)^2) at y_with_X2
-    have h1 : (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - y^2) = (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 - (r_of_s * X2_of_point - (1 + X2_of_point)^2)^2 := by
+    change y = (r_of_s * X2_of_point - (1 + X2_of_point)^2)
+      / (r_of_s * X2_of_point + (1 + X2_of_point)^2) at y_with_X2
+    have h1 : (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - y^2)
+        = (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2
+          - (r_of_s * X2_of_point - (1 + X2_of_point)^2)^2 := by
       rw [y_with_X2, div_pow, mul_sub]
       rw [← mul_div_assoc]
       nth_rw 3 [mul_comm]
@@ -426,7 +442,8 @@ lemma X2_observation2_of_X2_ne_one
   let y := point.val.2
   let r_of_s := r s
   let d_of_s := d s;
-  X2_of_point ≠ 1 → (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - d_of_s * y^2) = ((2 * r_of_s) / (r_of_s - 2)) * (X2_of_point^4 + (r_of_s^2 - 2) * X2_of_point^2 + 1) := by
+  X2_of_point ≠ 1 → (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - d_of_s * y^2)
+    = ((2 * r_of_s) / (r_of_s - 2)) * (X2_of_point^4 + (r_of_s^2 - 2) * X2_of_point^2 + 1) := by
     intro X2_of_point y r_of_s d_of_s X2_h
     let neg_d_eq_r_add_two_over_r_sub_two := neg_d_eq_r_add_two_over_r_sub_two s_h1 q_h1 q_h2 q_h3
     change -d_of_s = (r_of_s + 2) / (r_of_s - 2) at neg_d_eq_r_add_two_over_r_sub_two
@@ -434,8 +451,11 @@ lemma X2_observation2_of_X2_ne_one
     let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 point y_eq_one
     let r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 point
-    change y = (r_of_s * X2_of_point - (1 + X2_of_point)^2) / (r_of_s * X2_of_point + (1 + X2_of_point)^2) at y_with_X2
-    have h1 : (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - d_of_s * y^2) = (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 + (r_of_s + 2) / (r_of_s - 2) * ((r_of_s * X2_of_point - (1 + X2_of_point)^2)^2) := by
+    change y = (r_of_s * X2_of_point - (1 + X2_of_point)^2)
+      / (r_of_s * X2_of_point + (1 + X2_of_point)^2) at y_with_X2
+    have h1 : (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2 * (1 - d_of_s * y^2)
+        = (r_of_s * X2_of_point + (1 + X2_of_point)^2)^2
+          + (r_of_s + 2) / (r_of_s - 2) * ((r_of_s * X2_of_point - (1 + X2_of_point)^2)^2) := by
       rw [sub_eq_add_neg, neg_eq_neg_one_mul]
       rw [← mul_assoc, ← neg_eq_neg_one_mul]
       rw [neg_d_eq_r_add_two_over_r_sub_two, y_with_X2]
@@ -450,24 +470,38 @@ lemma X2_observation2_of_X2_ne_one
     rw [h1, h2]
     let A := r_of_s * X2_of_point + (X2_of_point^2 + 2 * X2_of_point + 1)
     let B := r_of_s * X2_of_point - (X2_of_point^2 + 2 * X2_of_point + 1)
-    change A^2 + (r_of_s + 2) / (r_of_s - 2) * B^2 = 2 * r_of_s / (r_of_s - 2) * (X2_of_point ^ 4 + (r_of_s ^ 2 - 2) * X2_of_point ^ 2 + 1)
-    have h3 : A^2 = X2_of_point^ 4 + 2 * (r_of_s + 2) * X2_of_point^3 + ((r_of_s + 2)^2 + 2) * X2_of_point^2 + 2 * (r_of_s + 2) * X2_of_point + 1 := by grind
-    have h4 : B^2 = X2_of_point^ 4 - 2 * (r_of_s - 2) * X2_of_point^3 + ((r_of_s - 2)^2 + 2) * X2_of_point^2 - 2 * (r_of_s - 2) * X2_of_point + 1 := by grind
+    change A^2 + (r_of_s + 2) / (r_of_s - 2) * B^2
+      = 2 * r_of_s / (r_of_s - 2) * (X2_of_point ^ 4 + (r_of_s ^ 2 - 2) * X2_of_point ^ 2 + 1)
+    have h3 : A^2 = X2_of_point^ 4 + 2 * (r_of_s + 2) * X2_of_point^3
+        + ((r_of_s + 2)^2 + 2) * X2_of_point^2 + 2 * (r_of_s + 2) * X2_of_point + 1 := by grind
+    have h4 : B^2 = X2_of_point^ 4 - 2 * (r_of_s - 2) * X2_of_point^3
+        + ((r_of_s - 2)^2 + 2) * X2_of_point^2 - 2 * (r_of_s - 2) * X2_of_point + 1 := by grind
     rw [h3, h4]
     let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3
-    have X_pow_four_term : X2_of_point^4 + (r_of_s + 2) / (r_of_s - 2) * X2_of_point^4 = X2_of_point^4 * (2 * r_of_s) / (r_of_s - 2) := by grind
-    have X_pow_three_term : X2_of_point^3 * 2 * (r_of_s + 2) + (r_of_s + 2) / (r_of_s - 2) * (-2 * (r_of_s - 2) * X2_of_point^3) = 0 := by grind
-    have X_pow_two_term : X2_of_point^2 * (r_of_s^2+ 4 * r_of_s + 6) + (r_of_s + 2) / (r_of_s - 2) * (r_of_s^2 - 4 * r_of_s + 6) * X2_of_point^2 = X2_of_point^2 * (2 * r_of_s * (r_of_s^2 - 2) / (r_of_s - 2)) := by
+    have X_pow_four_term : X2_of_point^4 + (r_of_s + 2) / (r_of_s - 2) * X2_of_point^4 =
+        X2_of_point^4 * (2 * r_of_s) / (r_of_s - 2) := by grind
+    have X_pow_three_term : X2_of_point^3 * 2 * (r_of_s + 2)
+        + (r_of_s + 2) / (r_of_s - 2) * (-2 * (r_of_s - 2) * X2_of_point^3) = 0 := by grind
+    have X_pow_two_term : X2_of_point^2 * (r_of_s^2+ 4 * r_of_s + 6)
+        + (r_of_s + 2) / (r_of_s - 2) * (r_of_s^2 - 4 * r_of_s + 6) * X2_of_point^2
+        = X2_of_point^2 * (2 * r_of_s * (r_of_s^2 - 2) / (r_of_s - 2)) := by
       nth_rw 3 [mul_comm]
       rw [← mul_add (X2_of_point^2)]
-      have h5 : (r_of_s ^ 2 + 4 * r_of_s + 6 + (r_of_s + 2) / (r_of_s - 2) * (r_of_s ^ 2 - 4 * r_of_s + 6)) = ((r_of_s ^ 2 + 4 * r_of_s + 6) * (r_of_s - 2) + (r_of_s + 2) * (r_of_s ^ 2 - 4 * r_of_s + 6)) / (r_of_s - 2) := by grind
+      have h5 :
+          (r_of_s ^ 2 + 4 * r_of_s + 6 + (r_of_s + 2) / (r_of_s - 2) * (r_of_s ^ 2 - 4 * r_of_s + 6))
+          = ((r_of_s ^ 2 + 4 * r_of_s + 6) * (r_of_s - 2)
+            + (r_of_s + 2) * (r_of_s ^ 2 - 4 * r_of_s + 6)) / (r_of_s - 2) := by grind
       rw [h5]
-      have h6 : (r_of_s ^ 2 + 4 * r_of_s + 6) * (r_of_s - 2) = r_of_s^3 + 2 * r_of_s^2 - 2 * r_of_s - 12 := by grind
-      have h7 : (r_of_s + 2) * (r_of_s ^ 2 - 4 * r_of_s + 6) = r_of_s^3 - 2 * r_of_s^2 - 2 * r_of_s + 12 := by grind
+      have h6 : (r_of_s ^ 2 + 4 * r_of_s + 6) * (r_of_s - 2) =
+        r_of_s^3 + 2 * r_of_s^2 - 2 * r_of_s - 12 := by grind
+      have h7 : (r_of_s + 2) * (r_of_s ^ 2 - 4 * r_of_s + 6) =
+        r_of_s^3 - 2 * r_of_s^2 - 2 * r_of_s + 12 := by grind
       rw [h6, h7]
-      have h8 : r_of_s ^ 3 + 2 * r_of_s ^ 2 - 2 * r_of_s - 12 + (r_of_s ^ 3 - 2 * r_of_s ^ 2 - 2 * r_of_s + 12) = 2 * r_of_s^3 - 4 * r_of_s := by grind
+      have h8 : r_of_s ^ 3 + 2 * r_of_s ^ 2 - 2 * r_of_s - 12
+          + (r_of_s ^ 3 - 2 * r_of_s ^ 2 - 2 * r_of_s + 12) = 2 * r_of_s^3 - 4 * r_of_s := by grind
       grind
-    have X_pow_one_term : 2 * (r_of_s + 2) * X2_of_point - 2 * (r_of_s + 2) * X2_of_point = 0 := by grind
+    have X_pow_one_term : 2 * (r_of_s + 2) * X2_of_point - 2 * (r_of_s + 2) * X2_of_point = 0 := by
+      grind
     have const_term : 1 + (r_of_s + 2) / (r_of_s - 2) = (2 * r_of_s) / (r_of_s - 2) := by grind
     grind
 
@@ -513,7 +547,8 @@ lemma x_pow_two_of_X2_ne_one_eq1
     intro x y d
     have curve_equation := point.prop;
     unfold EOverF edwardsCurveEquation at curve_equation
-    let one_sub_d_mul_y_pow_two_ne_zero := one_sub_d_mul_y_pow_two_ne_zero s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩;
+    let one_sub_d_mul_y_pow_two_ne_zero :=
+      one_sub_d_mul_y_pow_two_ne_zero s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩;
     change 1 - d * y^2 ≠ 0 at one_sub_d_mul_y_pow_two_ne_zero
     rw [Set.mem_setOf_eq] at curve_equation
     change x^2 + y^2 = 1 + d * x^2 * y^2  at curve_equation
@@ -543,20 +578,27 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
     intro x X r Xh
     let y := point.val.2
     let d := d s;
-    let x_pow_two_of_X2_ne_one_eq1 := x_pow_two_of_X2_ne_one_eq1 s_h2 q_h1 q_h2 q_h3 point point_props
+    let x_pow_two_of_X2_ne_one_eq1 :=
+      x_pow_two_of_X2_ne_one_eq1 s_h2 q_h1 q_h2 q_h3 point point_props
     change x^2 = (1 - y^2) / (1 - d*y^2) at x_pow_two_of_X2_ne_one_eq1
     let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
     change y = (r * X - (1 + X)^2) / (r * X + (1 + X)^2) at y_with_X2
-    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩
+    let y_divisor_ne_zero_with_X2_for_X :=
+      y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩
     change r * X + (1 + X)^2 ≠ 0 at y_divisor_ne_zero_with_X2_for_X
     have h1 : (r * X + (1 + X)^2)^2 ≠ 0 := by grind
     have h2 : 1 = ((r * X + (1 + X)^2)^2) / ((r * X + (1 + X)^2)^2) := by grind
-    let X2_observation1_of_X2_ne_one := X2_observation1_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
-    change X ≠ 1 → (r * X + (1 + X)^2)^2 * (1 - y^2) = 4 * r * X * (1 + X)^2 at X2_observation1_of_X2_ne_one
+    let X2_observation1_of_X2_ne_one :=
+      X2_observation1_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
+    change X ≠ 1 → (r * X + (1 + X)^2)^2 * (1 - y^2)
+      = 4 * r * X * (1 + X)^2 at X2_observation1_of_X2_ne_one
     have h3 : (r * X + (1 + X)^2)^2 * (1 - y^2) = 4 * r * X * (1 + X)^2 := by grind
-    let X2_observation2_of_X2_ne_one := X2_observation2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
-    change X ≠ 1 → (r * X + (1 + X)^2)^2 * (1 - d * y^2) = ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) at X2_observation2_of_X2_ne_one
-    have h4 : (r * X + (1 + X)^2)^2 * (1 - d * y^2) = ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) := by grind
+    let X2_observation2_of_X2_ne_one :=
+      X2_observation2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
+    change X ≠ 1 → (r * X + (1 + X)^2)^2 * (1 - d * y^2)
+      = ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) at X2_observation2_of_X2_ne_one
+    have h4 : (r * X + (1 + X)^2)^2 * (1 - d * y^2) =
+        ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) := by grind
     let X_ne_zero := X2_ne_zero q_h1 q_h3 ⟨point.val, point_props⟩
     change X ≠ 0 at X_ne_zero
     calc
@@ -579,7 +621,9 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         rw [mul_comm (r - 2) (2 * r), mul_div_assoc]
         nth_rw 2 [mul_div_assoc]
         rw [div_self r_sub_two_ne_zero, ← mul_div_assoc]
-        have helper : (r - 2) * (4 * r * X * (1 + X) ^ 2) / (2 * r * 1 * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) = (r - 2) * (2 * X * (1 + X) ^ 2) / ((X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by
+        have helper : (r - 2) * (4 * r * X * (1 + X) ^ 2)
+            / (2 * r * 1 * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1))
+            = (r - 2) * (2 * X * (1 + X) ^ 2) / ((X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by
           have h_1 : (4 * r) / (2 * r) = 2 := by
             let two_ne_zero := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
             let r_ne_zero := (r_ne_zero s_h1 q_h1 q_h2 q_h3)
@@ -587,7 +631,10 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
             ring_nf
             rw [mul_inv_cancel₀ r_ne_zero]
             grind
-          have h_2 : (r - 2) * (4 * r * X * (1 + X) ^ 2) / (2 * r * 1 * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) = ((r - 2) * (X * (1 + X) ^ 2)) * (4 * r) / ((2 * r) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by grind
+          have h_2 : (r - 2) * (4 * r * X * (1 + X) ^ 2)
+              / (2 * r * 1 * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1))
+              = ((r - 2) * (X * (1 + X) ^ 2)) * (4 * r)
+                / ((2 * r) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by grind
           rw [h_2, div_mul_eq_div_div, mul_div_assoc, h_1]
           grind
         rw [helper]
@@ -632,7 +679,8 @@ lemma Y'_pow_two_eq_of_X2_ne_one
     intro X r Y Xh
     let c := c s
     let x := point.val.1
-    let h1 := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_eq_one
+    let h1 :=
+      x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_eq_one
     let two_ne_zero := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
     have h2 : x^2 = (2 * (r -2) * X^2 * (1 + X)^2) / (X^5 + (r^2 - 2) * X^3 + X) := by exact h1 Xh
     calc
@@ -649,7 +697,8 @@ lemma Y'_pow_two_eq_of_X2_ne_one
       grind
     _ = X^5 + (r^2 - 2) * X^3 + X := by
       have h : (2 * (r - 2) * X^2 * (1 + X)^2) ≠ 0 := by
-        let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
+        let X2_add_one_ne_zero :=
+          X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_eq_one
         let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3
         let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨point.val, point_props⟩
         rw [add_comm]
@@ -679,3 +728,7 @@ lemma X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
     intro X2_of_point h1
     let h1 := X2_ne_neg_one s_h1 q_h1 q_h2 q_h3 point y_ne_one
     grind
+
+end X2Properties
+
+end Elligator.Elligator1

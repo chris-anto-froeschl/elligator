@@ -23,12 +23,11 @@ public import Elligator.Elligator1.X2Properties
 public import Elligator.Elligator1.zProperties
 public import Elligator.Elligator1.u2Properties
 
-@[expose] public section
-
 /-!
 # t2 Variable Properties
 
-In this file we introduce some generally helpful lemmas for `t2` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `t2` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -38,6 +37,8 @@ In this file we introduce some generally helpful lemmas for `t2` as introduced i
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -116,7 +117,8 @@ lemma t2_eq_t'
   (q_h3 : q % 4 = 3)
   (X_h :
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+      exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let X'_of_t := X ⟨-t.val, h2_2⟩ s
     let X2_of_t := X2 s point q
     X2_of_t = X'_of_t
@@ -127,7 +129,8 @@ lemma t2_eq_t'
   let t' := -t.val
   t2_of_point = t' := by
     intro point t2_of_point t'
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+      exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let u'_of_t := u ⟨t', h2_2⟩
     let u2_of_t := u2 s point q
     have h1 : u2_of_t = u'_of_t := by exact u2_eq_u' t s_h1 s_h2 q_h1 q_h2 q_h3 X_h
@@ -211,10 +214,12 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
     intro X t h1
     unfold t t'
     let u := u' s_h2 q_h1 q_h2 q_h3 point
-    let u'_eq_X2_or_u'_eq_neg_X2 := u'_eq_X2_or_u'_eq_neg_X2 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let u'_eq_X2_or_u'_eq_neg_X2 :=
+      u'_eq_X2_or_u'_eq_neg_X2 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     change u = X ∨ u = -X at u'_eq_X2_or_u'_eq_neg_X2
     change (1 - u) / (1 + u) ≠ 1 ∧ (1 - u) / (1 + u) ≠ -1
-    let one_add_u'_ne_zero := one_add_u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let one_add_u'_ne_zero :=
+      one_add_u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
     let u'_ne_zero := u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
     let two_ne_zero := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
     and_intros
@@ -241,7 +246,9 @@ lemma one_add_t'_ne_zero
   let t := t' s_h2 q_h1 q_h2 q_h3 point
   X ≠ 1 → t + 1 ≠ 0 := by
     intro X t h1
-    let t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one :=
+      t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one h1
     grind
 
 @[blueprint "lemma:u'_eq_one_sub_t'_over_one_add_t'"]
@@ -263,7 +270,8 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
     intro X u t h1
     unfold t t'
     let u := u' s_h2 q_h1 q_h2 q_h3 point
-    let one_add_u'_ne_zero := one_add_u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let one_add_u'_ne_zero :=
+      one_add_u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
     let two_ne_zero := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
     grind
 
@@ -285,11 +293,15 @@ lemma u'_eq_u
   :
   let u' := u' s_h2 q_h1 q_h2 q_h3 point
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let u := u ⟨t, t_h⟩
   u' = u := by
     intro u' t t_h u
-    let h1 := u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+    let h1 :=
+      u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one X_h
     unfold u' u
     rw [h1]
     unfold Elligator1.u
@@ -313,11 +325,15 @@ lemma v'_eq_v
   :
   let v' := v' s_h2 q_h1 q_h2 q_h3 point
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let v := v ⟨t, t_h⟩ s
   v' = v := by
     intro v' t t_h v
-    let h1 := u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+    let h1 :=
+      u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one X_h
     let h2 := u'_eq_u s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     unfold v' v Elligator1.v' Elligator1.v
     rw [h1]
@@ -341,11 +357,15 @@ lemma X'_eq_X
   :
   let X' := X2 s point q
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let X := X ⟨t, t_h⟩ s
   X' = X := by
     intro X' t t_h X
-    let h1 := u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+    let h1 :=
+      u'_eq_one_sub_t'_over_one_add_t' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one X_h
     let h2 := u'_eq_u s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let h3 := v'_eq_v s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let h4 := X'_eq_χ_of_v'_mul_u' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
@@ -372,7 +392,9 @@ lemma Y'_eq_Y
   :
   let Y' := Y' s_h2 q_h1 q_h2 q_h3 point
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let Y := Y ⟨t, t_h⟩ s q
   Y' = Y := by
     intro Y' t t_h Y
@@ -415,7 +437,9 @@ lemma x'_eq_x
   )
   :
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let x := x ⟨t, t_h⟩ s q
   let x' := x' s_h2 q_h1 q_h2 q_h3 point
   x' = x := by
@@ -457,7 +481,9 @@ lemma y'_eq_y
   )
   :
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let y := y ⟨t, t_h⟩ s
   let y' := y' s_h2 q_h1 q_h2 q_h3 point
   y' = y := by
@@ -492,12 +518,16 @@ theorem x'_and_y'_fulfill_curve_equation
   edwardsCurveEquation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
     let t := t' s_h2 q_h1 q_h2 q_h3 point
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+    let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
     let x := x ⟨t, t_h⟩ s q
     let y := y ⟨t, t_h⟩ s
     let x'_eq_x := x'_eq_x s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let y'_eq_y := y'_eq_y s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
-    let h1 := x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s_h1 s_h2 q_h1 q_h2 q_h3
+    let h1 :=
+      x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s_h1 s_h2 q_h1 q_h2
+        q_h3
     unfold edwardsCurveEquation x' y'
     rw [x'_eq_x, y'_eq_y]
     change x^2 + y^2 = 1 + d * x^2 * y^2
@@ -523,7 +553,9 @@ lemma y_of_t_eq_y_of_point
   )
   :
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let y_of_t := y ⟨t, t_h⟩ s
   let y_of_point := point.val.2
   y_of_t = y_of_point := by
@@ -552,7 +584,9 @@ lemma x_of_t_eq_x_of_point
   )
   :
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let x_of_t := x ⟨t, t_h⟩ s q
   let x_of_point := point.val.1
   x_of_t = x_of_point := by
@@ -595,7 +629,9 @@ lemma x_y_of_point_eq_x_y_of_t
   )
   :
   let t := t' s_h2 q_h1 q_h2 q_h3 point
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
+  let t_h :=
+    t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one X_h
   let y_of_t := y ⟨t, t_h⟩ s
   let y_of_point := point.val.2
   let x_of_t := x ⟨t, t_h⟩ s q
@@ -605,3 +641,7 @@ lemma x_y_of_point_eq_x_y_of_t
     let h1 := x_of_t_eq_x_of_point s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let h2 := y_of_t_eq_y_of_point s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     grind
+
+end t2Properties
+
+end Elligator.Elligator1

@@ -22,12 +22,11 @@ public import Elligator.Elligator1.etaProperties
 public import Elligator.Elligator1.X2Properties
 public import Elligator.Elligator1.zProperties
 
-@[expose] public section
-
 /-!
 # u2 Properties
 
-In this file we introduce some generally helpful lemmas for `u2` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `u2` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -37,6 +36,8 @@ In this file we introduce some generally helpful lemmas for `u2` as introduced i
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -83,7 +84,8 @@ lemma u2_eq_u
   let u2_of_t := u2 s point q
   u2_of_t = u_of_t := by
     intro point u_of_t u2_of_t
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+      exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let X_of_t := X t s
     let X'_of_t := X ⟨-t.val, h2_2⟩ s
     let X2_of_t := X2 s point q
@@ -108,26 +110,36 @@ lemma u2_eq_u
       calc
         z_of_point = (LegendreSymbol.χ (x_of_t^2 * Y_of_t * (X_of_t^2 + 1 / c_of_s^2))) := by
           unfold z_of_point z
-          change LegendreSymbol.χ ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1 * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) = LegendreSymbol.χ (x_of_t ^ 2 * Y_of_t * (X_of_t ^ 2 + 1 / c_of_s ^ 2))
+          change LegendreSymbol.χ
+              ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1
+                * (X2_of_t ^ 2 + 1 / c_of_s ^ 2))
+            = LegendreSymbol.χ (x_of_t ^ 2 * Y_of_t * (X_of_t ^ 2 + 1 / c_of_s ^ 2))
           unfold point ϕ
           simp only [h1]
           rw [dif_pos t.prop]
-          change LegendreSymbol.χ (x_of_t * Y_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) = LegendreSymbol.χ (x_of_t ^ 2 * Y_of_t * (X_of_t ^ 2 + 1 / c_of_s ^ 2))
+          change LegendreSymbol.χ (x_of_t * Y_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2))
+            = LegendreSymbol.χ (x_of_t ^ 2 * Y_of_t * (X_of_t ^ 2 + 1 / c_of_s ^ 2))
           unfold X2_of_t X_of_t
           rw [X_h]
           ring_nf
         _ = χ_of_Y * (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2)) := by
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-          rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)) (IsSquare.sq x_of_t) q_h1 q_h3]
+          rw [LegendreSymbol.χ_a_eq_one
+            (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t))
+            (IsSquare.sq x_of_t) q_h1 q_h3]
           unfold χ_of_Y
           ring_nf
-    have h3 : (LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2)) = (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2)) := by
+    have h3 : (LegendreSymbol.χ (u_of_t^2 + 1 / c_of_s^2)) =
+        (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2)) := by
       unfold X_of_t X
       rw [mul_pow]
       nth_rw 3 [pow_two]
       rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-      rw [← pow_two, LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)) (IsSquare.sq v_of_t) q_h1 q_h3]
+      rw [← pow_two,
+        LegendreSymbol.χ_a_eq_one
+          (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t))
+          (IsSquare.sq v_of_t) q_h1 q_h3]
       unfold u_of_t
       simp_all
     have h4 : χ_of_Y = χ_of_v * (LegendreSymbol.χ (X_of_t^2 + 1 / c_of_s^2)) := by
@@ -136,7 +148,9 @@ lemma u2_eq_u
       let χ_sum := LegendreSymbol.χ (u_of_t ^ 2 + 1 / c_of_s ^ 2)
       change (LegendreSymbol.χ ((χ_of_v * v_of_t)^((q + 1) / 4) * χ_of_v * χ_sum)) = χ_of_v * χ_sum
       rw [mul_assoc, LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-      rw [LegendreSymbol.χ_a_eq_one (χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero t s_h1 q_h1 q_h2 q_h3) (χ_IsSquare_h1 t s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+      rw [LegendreSymbol.χ_a_eq_one
+        (χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero t s_h1 q_h1 q_h2 q_h3)
+        (χ_IsSquare_h1 t s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
       rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
       rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3]
       rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3]
@@ -145,14 +159,18 @@ lemma u2_eq_u
     have h5 : z_of_point = χ_of_v := by
       rw [h2, h4, mul_assoc]
       rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
-      rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (X_pow_two_add_one_over_c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3 t)) (IsSquare.sq (X_of_t^2 + 1 / c_of_s^2)) q_h1 q_h3]
+      rw [LegendreSymbol.χ_a_eq_one
+        (FiniteFieldBasic.pow_two_ne_zero
+          (X_pow_two_add_one_over_c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3 t))
+        (IsSquare.sq (X_of_t^2 + 1 / c_of_s^2)) q_h1 q_h3]
       simp
     rw [h5]
     unfold X_of_t X
     change χ_of_v * (χ_of_v * u_of_t ) = u_of_t
     rw [← mul_assoc, ← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
     have h6 : IsSquare (v_of_t^2) := by exact IsSquare.sq v_of_t
-    rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)) h6 q_h1 q_h3]
+    rw [LegendreSymbol.χ_a_eq_one
+      (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)) h6 q_h1 q_h3]
     simp
 
 @[blueprint "lemma:u2_eq_u'"]
@@ -165,13 +183,15 @@ lemma u2_eq_u'
   (q_h3 : q % 4 = 3)
   (X_h :
     let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+      exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     let X'_of_t := X ⟨-t.val, h2_2⟩ s
     let X2_of_t := X2 s point q
     X2_of_t = X'_of_t
   )
   :
-  have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+  have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+    exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
   let u'_of_t := u ⟨-t.val, h2_2⟩
   let u2_of_t := u2 s point q
@@ -206,11 +226,15 @@ lemma u2_eq_u'
       calc
         z_of_point = (LegendreSymbol.χ (x'_of_t^2 * Y'_of_t * (X'_of_t^2 + 1 / c_of_s^2))) := by
           unfold z_of_point z
-          change LegendreSymbol.χ ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1 * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2))
+          change LegendreSymbol.χ
+              ((c_of_s - 1) * s * X2_of_t * (1 + X2_of_t) * point.1
+                * (X2_of_t ^ 2 + 1 / c_of_s ^ 2))
+            = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2))
           unfold point ϕ
           simp only [h1]
           rw [dif_pos t.prop]
-          change LegendreSymbol.χ (x'_of_t * Y'_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2)) = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2))
+          change LegendreSymbol.χ (x'_of_t * Y'_of_t * x_of_t * (X2_of_t ^ 2 + 1 / c_of_s ^ 2))
+            = LegendreSymbol.χ (x'_of_t ^ 2 * Y'_of_t * (X'_of_t ^ 2 + 1 / c_of_s ^ 2))
           unfold X2_of_t X'_of_t x'_of_t x_of_t
           rw [x_comparison t s_h1 q_h1 q_h2 q_h3]
           rw [X_h]
@@ -218,24 +242,33 @@ lemma u2_eq_u'
         _ = χ_of_Y' * (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2)) := by
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
           rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-          rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 ⟨-t, h2_2⟩)) (IsSquare.sq x'_of_t) q_h1 q_h3]
+          rw [LegendreSymbol.χ_a_eq_one
+            (FiniteFieldBasic.pow_two_ne_zero (x_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 ⟨-t, h2_2⟩))
+            (IsSquare.sq x'_of_t) q_h1 q_h3]
           unfold χ_of_Y'
           ring_nf
-    have h3 : (LegendreSymbol.χ (u'_of_t^2 + 1 / c_of_s^2)) = (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2)) := by
+    have h3 : (LegendreSymbol.χ (u'_of_t^2 + 1 / c_of_s^2)) =
+        (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2)) := by
       unfold X'_of_t X
       rw [mul_pow]
       nth_rw 3 [pow_two]
       rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-      rw [← pow_two, LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t, h2_2⟩)) (IsSquare.sq v'_of_t) q_h1 q_h3]
+      rw [← pow_two,
+        LegendreSymbol.χ_a_eq_one
+          (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t, h2_2⟩))
+          (IsSquare.sq v'_of_t) q_h1 q_h3]
       unfold u'_of_t
       simp_all
     have h4 : χ_of_Y' = χ_of_v' * (LegendreSymbol.χ (X'_of_t^2 + 1 / c_of_s^2)) := by
       rw [← h3]
       unfold χ_of_Y' Y'_of_t Y
       let χ_sum := LegendreSymbol.χ (u'_of_t ^ 2 + 1 / c_of_s ^ 2);
-      change (LegendreSymbol.χ ((χ_of_v' * v'_of_t)^((q + 1) / 4) * χ_of_v' * χ_sum)) = χ_of_v' * χ_sum
+      change (LegendreSymbol.χ ((χ_of_v' * v'_of_t)^((q + 1) / 4) * χ_of_v' * χ_sum))
+        = χ_of_v' * χ_sum
       rw [mul_assoc, LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-      rw [LegendreSymbol.χ_a_eq_one (χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero ⟨-t.val, h2_2⟩ s_h1 q_h1 q_h2 q_h3) (χ_IsSquare_h1 ⟨-t.val, h2_2⟩ s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+      rw [LegendreSymbol.χ_a_eq_one
+        (χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero ⟨-t.val, h2_2⟩ s_h1 q_h1 q_h2 q_h3)
+        (χ_IsSquare_h1 ⟨-t.val, h2_2⟩ s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
       rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
       rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3]
       rw [LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3]
@@ -244,14 +277,19 @@ lemma u2_eq_u'
     have h5 : z_of_point = χ_of_v' := by
       rw [h2, h4, mul_assoc]
       rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
-      rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (X_pow_two_add_one_over_c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t.val, h2_2⟩)) (IsSquare.sq (X'_of_t^2 + 1 / c_of_s^2)) q_h1 q_h3]
+      rw [LegendreSymbol.χ_a_eq_one
+        (FiniteFieldBasic.pow_two_ne_zero
+          (X_pow_two_add_one_over_c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t.val, h2_2⟩))
+        (IsSquare.sq (X'_of_t^2 + 1 / c_of_s^2)) q_h1 q_h3]
       simp
     rw [h5]
     unfold X'_of_t X
     change χ_of_v' * (χ_of_v' * u'_of_t ) = u'_of_t
     rw [← mul_assoc, ← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
     have h6 : IsSquare (v'_of_t^2) := by exact IsSquare.sq v'_of_t
-    rw [LegendreSymbol.χ_a_eq_one (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t.val, h2_2⟩)) h6 q_h1 q_h3]
+    rw [LegendreSymbol.χ_a_eq_one
+      (FiniteFieldBasic.pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t.val, h2_2⟩))
+        h6 q_h1 q_h3]
     simp
 
 @[blueprint "lemma:u2_h1"]
@@ -265,7 +303,8 @@ lemma u2_h1
   :
   let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
   let u_of_t := u t
-  have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+  have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+    exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let u'_of_t := u ⟨-t.val, h2_2⟩
   let u2_of_t := u2 s point.val q
   u2_of_t = u_of_t ∨ u2_of_t = u'_of_t := by
@@ -368,7 +407,8 @@ lemma u'_pow_two_eq_X_pow_two
   let X := X2 s point q
   u^2 = X^2 := by
     intro u X
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_eq_one_or_z'_eq_neg_one :=
+      z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
     unfold u u'
     grind
@@ -389,7 +429,8 @@ lemma u'_eq_X2_or_u'_eq_neg_X2
   let X := X2 s point q
   u = X ∨ u = -X := by
     intro u X
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_eq_one_or_z'_eq_neg_one :=
+      z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
     unfold u u'
     grind
@@ -410,9 +451,11 @@ lemma u'_ne_neg_one
   let X := X2 s point q
   X ≠ 1 → u ≠ -1 := by
     intro u X h1
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_eq_one_or_z'_eq_neg_one :=
+      z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one :=
+      X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
     unfold u u'
     grind
 
@@ -432,9 +475,11 @@ lemma one_add_u'_ne_zero
   let X := X2 s point q
   X ≠ 1 → 1 + u ≠ 0 := by
     intro u X h1
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_eq_one_or_z'_eq_neg_one :=
+      z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one :=
+      X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
     unfold u u'
     grind
 
@@ -454,11 +499,13 @@ lemma u'_ne_zero
   let X := X2 s point q
   X ≠ 1 → u ≠ 0 := by
     intro u X h1
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_eq_one_or_z'_eq_neg_one :=
+      z'_eq_one_or_z'_eq_neg_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
     let z_ne_zero := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨point.val, point_props⟩
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one :=
+      X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
     unfold u u'
     grind
 
@@ -495,11 +542,15 @@ lemma v'_eq_z'_mul_Y'_pow_two
     intro z Y v X h1
     let r := r s
     let c := c s
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
-    let Y'_pow_two_eq_of_X2_ne_one := Y'_pow_two_eq_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
-    let z_pow_three_eq_z := LegendreSymbol.χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨3, by grind⟩ q_h1 q_h2 q_h3
+    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one :=
+      X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
+    let Y'_pow_two_eq_of_X2_ne_one :=
+      Y'_pow_two_eq_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
+    let z_pow_three_eq_z :=
+      LegendreSymbol.χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨3, by grind⟩ q_h1 q_h2 q_h3
     change z^3 = z at z_pow_three_eq_z
-    let z_pow_five_eq_z := LegendreSymbol.χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨5, by grind⟩ q_h1 q_h2 q_h3
+    let z_pow_five_eq_z :=
+      LegendreSymbol.χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨5, by grind⟩ q_h1 q_h2 q_h3
     change z^5 = z at z_pow_five_eq_z
     let x := point.val.1
     have h2 : v = z * (X^5 + (r^2 - 2) * X^3 + X) := by
@@ -525,7 +576,8 @@ lemma v'_ne_zero
   let v := v' s_h2 q_h1 q_h2 q_h3 point
   X ≠ 1 → v ≠ 0 := by
     intro X v h1
-    let v'_eq_z'_mul_Y'_pow_two := v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
+    let v'_eq_z'_mul_Y'_pow_two :=
+      v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
     let Y := Y' s_h2 q_h1 q_h2 q_h3 point
     have h2 : v = z * Y^2 := by grind
@@ -554,7 +606,8 @@ lemma χ_of_v'_eq_χ_of_z'
   X ≠ 1 → χ_of_v = χ_of_z := by
     intro X z v χ_of_v χ_of_z h1
     let Y := Y' s_h2 q_h1 q_h2 q_h3 point
-    let v'_eq_z'_mul_Y'_pow_two := v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
+    let v'_eq_z'_mul_Y'_pow_two :=
+      v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
     unfold χ_of_v v
     rw [v'_eq_z'_mul_Y'_pow_two]
     let h2 := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
@@ -578,7 +631,8 @@ lemma χ_of_z'_eq_z'
   X ≠ 1 → χ_of_z = z := by
     intro X z χ_of_z h1
     let Y := Y' s_h2 q_h1 q_h2 q_h3 point
-    let v'_eq_z'_mul_Y'_pow_two := v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
+    let v'_eq_z'_mul_Y'_pow_two :=
+      v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
     let c := c s
     exact LegendreSymbol.χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3
 
@@ -600,7 +654,8 @@ lemma χ_of_v'_eq_z'
   let χ_of_v := LegendreSymbol.χ v
   X ≠ 1 → χ_of_v = z := by
     intro X v z χ_of_z h1
-    let χ_of_v'_eq_χ_of_z' := χ_of_v'_eq_χ_of_z' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let χ_of_v'_eq_χ_of_z' :=
+      χ_of_v'_eq_χ_of_z' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let χ_of_z'_eq_z' := χ_of_z'_eq_z' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
     grind
 
@@ -630,7 +685,8 @@ lemma X'_eq_χ_of_v'_mul_u'
     rw [mul_comm, ← div_left_inj' z_ne_zero]
     rw [mul_div_assoc, div_self z_ne_zero]
     change X / z = z * X * 1
-    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_argument_ne_zero :=
+      z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let Y := Y' s_h2 q_h1 q_h2 q_h3 point
     let c := c s
     let a := (Y * (X^2 + 1 / c^2))
@@ -657,14 +713,16 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
   let χ_of_v := LegendreSymbol.χ v
   X ≠ 1 → Y^2 = χ_of_v * v := by
     intro X Y v χ_of_v h1
-    let v'_eq_z'_mul_Y'_pow_two := v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
+    let v'_eq_z'_mul_Y'_pow_two :=
+      v'_eq_z'_mul_Y'_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props y_ne_one
     let z :=z' s_h2 q_h1 q_h2 q_h3 point
     have h2 : v = z * Y^2 := by grind
     let z_ne_zero := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     rw [mul_comm, ← div_left_inj' z_ne_zero] at h2
     rw [mul_div_assoc, div_self z_ne_zero, mul_one] at h2
     change v / z = Y^2 at h2
-    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_argument_ne_zero :=
+      z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let c := c s
     let u := u' s_h2 q_h1 q_h2 q_h3 point
     let r := r s
@@ -728,8 +786,11 @@ lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two
   let χ_of_term := LegendreSymbol.χ term
   X ≠ 1 → χ_of_v = χ_of_term := by
     intro X Y v u χ_of_v c term χ_of_term h1
-    let χ_of_v'_eq_z'_unfold_of_X'_ne_1 := χ_of_v'_eq_z'_unfold_of_X'_ne_1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
-    let u'_pow_two_eq_X_pow_two := u'_pow_two_eq_X_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let χ_of_v'_eq_z'_unfold_of_X'_ne_1 :=
+      χ_of_v'_eq_z'_unfold_of_X'_ne_1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one h1
+    let u'_pow_two_eq_X_pow_two :=
+      u'_pow_two_eq_X_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     grind
 
 @[blueprint "lemma:u'_pow_two_add_one_over_c_pow_two_ne_zero"]
@@ -790,15 +851,21 @@ lemma Y'_observation1
   let χ_of_u'_pow_two_add_one_over_c_pow_two := LegendreSymbol.χ (u^2 + 1 / c^2)
   X ≠ 1 → χ_of_Y = χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two  := by
     intro X Y v u χ_of_Y χ_of_v c χ_of_u'_pow_two_add_one_over_c_pow_two h1
-    let χ_of_v'_eq_z'_unfold_of_X'_ne_1 := χ_of_v'_eq_z'_unfold_of_X'_ne_1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
-    let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two := χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let χ_of_v'_eq_z'_unfold_of_X'_ne_1 :=
+      χ_of_v'_eq_z'_unfold_of_X'_ne_1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one h1
+    let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two :=
+      χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point
+        point_props x_ne_zero y_ne_one
     unfold χ_of_v
     let term1 := (u^2 + 1 / c^2)
     let term2 := Y * term1
     let χ_of_term1 := LegendreSymbol.χ term1
     let χ_of_term2 := LegendreSymbol.χ term2
-    have h2 : χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two = χ_of_term2 * χ_of_u'_pow_two_add_one_over_c_pow_two := by grind
-    have h3 : χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two = χ_of_Y * χ_of_term1 * χ_of_u'_pow_two_add_one_over_c_pow_two := by
+    have h2 : χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two =
+        χ_of_term2 * χ_of_u'_pow_two_add_one_over_c_pow_two := by grind
+    have h3 : χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two =
+        χ_of_Y * χ_of_term1 * χ_of_u'_pow_two_add_one_over_c_pow_two := by
       rw [← @LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b _ _ _ Y term1]
       grind
     rw [h3]
@@ -830,11 +897,17 @@ lemma Y'_observation2
   X ≠ 1 → Y = (χ_of_v * v)^((q + 1) / 4) * χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two  := by
     intro X Y v u χ_of_v c χ_of_u'_pow_two_add_one_over_c_pow_two h1
     let χ_of_Y := LegendreSymbol.χ Y
-    let χ_of_v'_eq_z'_unfold_of_X'_ne_1 := χ_of_v'_eq_z'_unfold_of_X'_ne_1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
-    let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two := χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
-    let Y'_observation1 := Y'_observation1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let χ_of_v'_eq_z'_unfold_of_X'_ne_1 :=
+      χ_of_v'_eq_z'_unfold_of_X'_ne_1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one h1
+    let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two :=
+      χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two s_h1 s_h2 q_h1 q_h2 q_h3 point
+        point_props x_ne_zero y_ne_one h1
+    let Y'_observation1 :=
+      Y'_observation1 s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
     change χ_of_Y = χ_of_v * χ_of_u'_pow_two_add_one_over_c_pow_two at Y'_observation1
-    let Y'_pow_two_eq_χ_of_v'_mul_v' := Y'_pow_two_eq_χ_of_v'_mul_v' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let Y'_pow_two_eq_χ_of_v'_mul_v' :=
+      Y'_pow_two_eq_χ_of_v'_mul_v' s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
     rw [← Y'_pow_two_eq_χ_of_v'_mul_v', mul_assoc, ← Y'_observation1]
     rw [← pow_mul, add_comm]
     change Y = Y^(2 * ((1 + q) / 4)) * χ_of_Y
@@ -848,3 +921,7 @@ lemma Y'_observation2
     let Y'_ne_zero := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     rw [LegendreSymbol.χ_of_a_pow_two_eq_one Y'_ne_zero q_h1 q_h3]
     grind
+
+end u2Properties
+
+end Elligator.Elligator1

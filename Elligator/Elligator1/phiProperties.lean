@@ -22,8 +22,6 @@ public import Elligator.Elligator1.Map
 public import Elligator.Elligator1.MapProperties
 public import Elligator.Elligator1.t2Properties
 
-@[expose] public section
-
 /-!
 # ϕ Properties
 
@@ -37,6 +35,8 @@ In this file we introduce some generally helpful lemmas for `ϕ`.
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -284,7 +284,8 @@ lemma ϕ_of_zero
       -- the lemmas itself do not help with concret t values
       unfold y_of_t
       rw [(y_of_zero s_h1 q_h1 q_h2 q_h3)]
-      change ((r_of_s - 4) / (r_of_s + 4) - 1) / (2 * ((r_of_s - 4) / (r_of_s + 4) + 1)) * r_of_s = -2
+      change ((r_of_s - 4) / (r_of_s + 4) - 1) / (2 * ((r_of_s - 4) / (r_of_s + 4) + 1)) * r_of_s
+        = -2
       have h2_2 : 1 = (r_of_s + 4) / (r_of_s + 4) := by
         rw [add_comm]
         rw [div_self (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3)]
@@ -292,7 +293,8 @@ lemma ϕ_of_zero
       nth_rw 1 [h2_2]
       rw [← sub_div, ← add_div, ← sub_sub, ← add_assoc]
       ring_nf
-      rw [inv_inv, mul_comm r_of_s, mul_assoc _ r_of_s, mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h2 q_h3), mul_one]
+      rw [inv_inv, mul_comm r_of_s, mul_assoc _ r_of_s,
+        mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h2 q_h3), mul_one]
       rw [inv_mul_cancel₀ (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3), one_mul]
       rw [← mul_neg_one, ← mul_right_inj' (FiniteFieldBasic.four_ne_zero q_h1 q_h2 q_h3)]
       rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (FiniteFieldBasic.four_ne_zero q_h1 q_h2 q_h3)]
@@ -307,7 +309,8 @@ lemma ϕ_of_zero
     rw [dif_pos h1] at h3
     simp at h3
     rw [h3]
-    change (2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4))
+    change (2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4))
+      = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4))
     ring_nf
 
 -- Used in theorem 3 proof part C
@@ -333,9 +336,11 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     let h2 := point.prop.2.2
     let c_of_s := c s
     let χ_of_c_of_s := LegendreSymbol.χ c_of_s
-    have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one q_h1 q_h2 q_h3 point X2_h
+    have h1 : η_of_point * r_of_s = -2 := by
+      exact η_mul_r_eq_neg_two_of_X2_eq_one q_h1 q_h2 q_h3 point X2_h
     have h2 : x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by exact point.prop.2.2 h1
-    have h3 : y = (r_of_s - 4) / (r_of_s + 4) := by exact y_with_X2_of_X2_eq_one s_h1 q_h1 q_h2 q_h3 point y_eq_one X2_h
+    have h3 : y = (r_of_s - 4) / (r_of_s + 4) := by
+      exact y_with_X2_of_X2_eq_one s_h1 q_h1 q_h2 q_h3 point y_eq_one X2_h
     rw [h2, h3]
     let ϕ_of_zero'' := ϕ_of_zero s_h1 s_h2 q_h1 q_h2 q_h3
     grind
@@ -361,13 +366,15 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
   X ≠ 1 → ϕ_of_t = (x, y) := by
     intro x y X t ϕ_of_t h1
     unfold ϕ_of_t ϕ
-    let h2 := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let h2 := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point
+      point_props x_ne_zero y_ne_one h1
     simp
     rw [dif_pos h2]
     let x_of_t := Elligator1.x ⟨t, h2⟩ s q
     let y_of_t := Elligator1.y ⟨t, h2⟩ s
     change (x_of_t, y_of_t) = (x, y)
-    let h3 := x_y_of_point_eq_x_y_of_t s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let h3 := x_y_of_point_eq_x_y_of_t s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+      y_ne_one h1
     grind
 
 @[blueprint "lemma:ϕ_of_t2_eq_x_y_base_case"]
@@ -408,7 +415,8 @@ lemma ϕ_of_t2_eq_x_y_main_case
   let y_of_t := y t s
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro point t' ϕ_of_t' x_of_t y_of_t
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by
+      exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
     unfold ϕ_of_t' ϕ
     rcases (t2_in_t_or_neg_t t.val s_h1 s_h2 q_h1 q_h2 q_h3) with h | h
     · change t' = t at h
@@ -540,9 +548,11 @@ lemma point_in_ϕOverF_main_case_with_y_ne_one
     let t := t' s_h2 q_h1 q_h2 q_h3 point
     by_cases X2_h : X2_of_point = (1 : F)
     · use 0
-      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one X2_h
+      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩
+        y_ne_one X2_h
     · use t
-      exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X2_h
+      exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
+        y_ne_one X2_h
 
 @[blueprint "lemma:point_in_ϕOverF_main_case"]
 lemma point_in_ϕOverF_main_case
@@ -562,7 +572,8 @@ lemma point_in_ϕOverF_main_case
     let y := point.val.2
     by_cases y_h : y = 1
     · exact point_in_ϕOverF_main_case_with_y_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 point x_ne_zero y_h
-    · exact point_in_ϕOverF_main_case_with_y_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_h
+    · exact point_in_ϕOverF_main_case_with_y_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props
+        x_ne_zero y_h
 
 -- Original: Theorem 3.2 Proof C (3.2 reverse statement)
 @[blueprint "thm:point_in_ϕOverF_of_point_props"]
@@ -584,3 +595,7 @@ theorem point_in_ϕOverF_of_point_props
     · exact point_in_ϕOverF_base_case s_h1 s_h2 q_h1 q_h2 q_h3 point h1 h2
     · rw [← not_ne_iff, not_not] at h2
       exact point_in_ϕOverF_main_case s_h1 s_h2 q_h1 q_h2 q_h3 point h1 h2
+
+end phiProperties
+
+end Elligator.Elligator1
