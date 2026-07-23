@@ -80,9 +80,7 @@ lemma t2_eq_t
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let X_of_t := X t s
     let X2_of_t := X2 s point q
-    X2_of_t = X_of_t
-  )
-  :
+    X2_of_t = X_of_t) :
   let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
   let t2_of_point := t2 s point q
   t2_of_point = t := by
@@ -288,9 +286,7 @@ lemma u'_eq_u
   (y_ne_one : point.val.2 ≠ 1)
   (X_h :
     let X := X2 s point q
-    X ≠ 1
-  )
-  :
+    X ≠ 1) :
   let u' := u' s_h2 q_h1 q_h2 q_h3 point
   let t := t' s_h2 q_h1 q_h2 q_h3 point
   let t_h :=
@@ -320,9 +316,7 @@ lemma v'_eq_v
   (y_ne_one : point.val.2 ≠ 1)
   (X_h :
     let X := X2 s point.val q;
-    X ≠ 1
-  )
-  :
+    X ≠ 1) :
   let v' := v' s_h2 q_h1 q_h2 q_h3 point
   let t := t' s_h2 q_h1 q_h2 q_h3 point
   let t_h :=
@@ -352,9 +346,7 @@ lemma X'_eq_X
   (y_ne_one : point.val.2 ≠ 1)
   (X_h :
     let X := X2 s point q;
-    X ≠ 1
-  )
-  :
+    X ≠ 1) :
   let X' := X2 s point q
   let t := t' s_h2 q_h1 q_h2 q_h3 point
   let t_h :=
@@ -387,9 +379,7 @@ lemma Y'_eq_Y
   (y_ne_one : point.val.2 ≠ 1)
   (X_h :
     let X := X2 s point q;
-    X ≠ 1
-  )
-  :
+    X ≠ 1) :
   let Y' := Y' s_h2 q_h1 q_h2 q_h3 point
   let t := t' s_h2 q_h1 q_h2 q_h3 point
   let t_h :=

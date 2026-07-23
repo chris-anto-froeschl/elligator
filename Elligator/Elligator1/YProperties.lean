@@ -325,7 +325,8 @@ lemma Y_comparison
           = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3
         have h1 : (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_u1 / u1 ^ 3 * χ_of_v1
             * (χ_of_u1_mul_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2)))
-            = (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_v1 * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2))
+            = (χ_of_v1 * v1) ^ ((q + 1) / 4) * χ_of_v1
+              * (LegendreSymbol.χ (u1 ^ 2 + 1 / c_of_s ^ 2))
               * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 := by ring_nf
         rw [h1]
         change Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3 = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1 ^ 3

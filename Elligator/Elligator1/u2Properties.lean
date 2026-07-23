@@ -76,9 +76,7 @@ lemma u2_eq_u
     let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
     let X_of_t := X t s
     let X2_of_t := X2 s point q
-    X2_of_t = X_of_t
-  )
-  :
+    X2_of_t = X_of_t) :
   let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
   let u_of_t := u t
   let u2_of_t := u2 s point q

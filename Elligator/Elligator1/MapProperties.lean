@@ -337,9 +337,7 @@ lemma X_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   let X_of_t := X t s
   (X_of_t - 1)^2 = 0 := by
     intro X_of_t
@@ -373,9 +371,7 @@ lemma X_η_h2
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point.val
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   let X_of_t := X t s
   X_of_t = 1 := by
     intro X_of_t
@@ -400,9 +396,7 @@ lemma u_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   let u_of_t := u t;
   u_of_t = 1 := by
     intro u_of_t
@@ -464,9 +458,7 @@ lemma t_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   t.val = 0 := by
     let u_of_t := u t
     have h1 : u_of_t = 1 := by exact (u_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1)
@@ -494,9 +486,7 @@ lemma v_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   let v_of_t := v t s;
   let r_of_s := r s
   v_of_t = r_of_s^2 := by
@@ -519,9 +509,7 @@ lemma Y_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   let Y_of_t := Y t s q
   let c_of_s := c s
   let χ_of_c_of_s := χ c_of_s
@@ -596,9 +584,7 @@ lemma y_η_h1
     let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
     let r_of_s := r s
     let η_of_point := η point
-    η_of_point * r_of_s = -2
-  )
-  :
+    η_of_point * r_of_s = -2) :
   let r_of_s := r s
   let y_of_t := y t s
   y_of_t = (r_of_s - 4) / (r_of_s + 4) := by

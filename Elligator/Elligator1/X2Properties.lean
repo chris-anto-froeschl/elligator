@@ -488,7 +488,8 @@ lemma X2_observation2_of_X2_ne_one
       nth_rw 3 [mul_comm]
       rw [← mul_add (X2_of_point^2)]
       have h5 :
-          (r_of_s ^ 2 + 4 * r_of_s + 6 + (r_of_s + 2) / (r_of_s - 2) * (r_of_s ^ 2 - 4 * r_of_s + 6))
+          (r_of_s ^ 2 + 4 * r_of_s + 6
+            + (r_of_s + 2) / (r_of_s - 2) * (r_of_s ^ 2 - 4 * r_of_s + 6))
           = ((r_of_s ^ 2 + 4 * r_of_s + 6) * (r_of_s - 2)
             + (r_of_s + 2) * (r_of_s ^ 2 - 4 * r_of_s + 6)) / (r_of_s - 2) := by grind
       rw [h5]
