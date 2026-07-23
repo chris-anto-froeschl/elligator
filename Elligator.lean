@@ -1,5 +1,6 @@
-import Elligator.EdwardsCurve
+import Elligator.Basic
 import Elligator.Elligator1.DecodingFunction
+import Elligator.Elligator1.EdwardsCurve
 import Elligator.Elligator1.InvertedMap
 import Elligator.Elligator1.Map
 import Elligator.Elligator1.MapProperties

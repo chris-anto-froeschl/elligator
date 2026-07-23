@@ -8,11 +8,11 @@ module
 public import Mathlib
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
-public import Elligator.EdwardsCurve
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.EdwardsCurve
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
@@ -40,7 +40,7 @@ namespace Elligator.Elligator1
 section yProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 -- Chapter 3.2 Theorem 1
@@ -103,7 +103,7 @@ lemma Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X
 @[blueprint "lemma:y_divisor_ne_zero"]
 lemma y_divisor_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -222,7 +222,7 @@ lemma y_divisor_ne_zero
 @[blueprint "lemma:y_add_one_ne_zero"]
 lemma y_add_one_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -270,7 +270,7 @@ lemma y_add_one_ne_zero
 lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -299,7 +299,7 @@ lemma u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero
 lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -413,7 +413,7 @@ lemma x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two
         rw [← mul_one 1, ← pow_two, ← div_pow _ _ 2] at h6_1
         rw [← h6_1, pow_two]
         apply IsSquare.mul_self
-      have h6_3 : ¬IsSquare d_of_s := by exact d_nonsquare s_h2 q_h1 q_h2 q_h3
+      have h6_3 : ¬IsSquare d_of_s := by exact d_nonsquare s_h2 q_h1 q_h3
       contradiction
     have h7 : Y_of_t^2 * (1 - d_of_s * x_of_t^2) ≠ 0 := by
       apply mul_ne_zero

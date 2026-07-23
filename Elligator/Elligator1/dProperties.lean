@@ -5,128 +5,68 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
-
-@[expose] public section
 
 /-!
 # d Variable Properties
 
-In this file we introduce some generally helpful lemmas for `d` as introduced in `Elligator.Elligator1.Variables`.
-
-## Main results
-
-- TODO
+In this file we introduce some generally helpful lemmas for `d` as introduced
+in `Elligator.Elligator1.Variables`.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
-section dProperties
-
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 @[blueprint "lemma:d_nonsquare"]
 lemma d_nonsquare
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  :
-  let d_of_s := d s;
-  ¬IsSquare d_of_s := by
-    intro d_of_s
-    rw [isSquare_iff_exists_mul_self d_of_s]
+  : ¬IsSquare (d s) := by
+    rw [isSquare_iff_exists_mul_self (d s)]
     change ¬∃ r, (-((2 / s^2) + 1)^2 / ((2 / s^2) - 1)^2) = r * r
     rintro ⟨w, Pw⟩
-    have h00 : (2 / s^2 - 1)^2 ≠ 0 := by
-      rw [pow_two]
-      apply mul_ne_zero
-      · apply sub_ne_zero.2
-        exact c_ne_one s_h2
-      · apply sub_ne_zero.2
-        exact c_ne_one s_h2
-    have h01 : (2 / s^2 + 1)^2 ≠ 0 := by
-      rw [pow_two]
-      apply mul_ne_zero
-      change c s + 1 ≠ 0
-      · intro h
-        have h' : (c s) = -1 := by
-          rw [← add_right_inj (-1)] at h
-          rw [add_zero] at h
-          rw [add_comm] at h
-          have h8 : (1 : F) + (-1 : F) = 0 := by ring
-          rw [add_assoc] at h
-          rw [h8] at h
-          rw [add_zero] at h
-          exact h
-        apply c_ne_neg_one s_h2 q_h1 q_h2 q_h3 at h'
-        exact h'
-      · intro h
-        have h' : (c s) = -1 := by
-          rw [← add_right_inj (-1)] at h
-          rw [add_zero] at h
-          rw [add_comm] at h
-          have h8 : (1 : F) + (-1 : F) = 0 := by ring
-          rw [add_assoc] at h
-          rw [h8] at h
-          rw [add_zero] at h
-          exact h
-        apply c_ne_neg_one s_h2 q_h1 q_h2 q_h3 at h'
-        exact h'
-    have h1 : w^2 * ((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2 = -1 := by
-      rw [pow_two, ← Pw]
-      rw [div_eq_mul_inv]
-      rw [div_eq_mul_inv]
-      rw [← neg_one_mul]
-      rw [mul_assoc (-1 * (2 / s ^ 2 + 1) ^ 2) (((2 / s ^ 2 - 1) ^ 2)⁻¹) ((2 / s ^ 2 - 1) ^ 2)]
-      rw [inv_mul_cancel₀ h00]
-      rw [mul_one]
-      rw [mul_assoc]
-      rw [mul_inv_cancel₀ h01]
-      rw [mul_one]
-    have h2 : IsSquare (-1 : F) := by
-      rw [← h1]
-      have h3 : IsSquare (w^2) := by
+    have h1 : (2 / s^2 - 1)^2 ≠ 0 := by grind
+    have h2 : (2 / s^2 + 1)^2 ≠ 0 := by grind
+    have h3 : w^2 * ((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2 = -1 := by grind
+    have h4 : IsSquare (-1 : F) := by
+      rw [← h3]
+      have h5 : IsSquare (w^2) := by
         rw [pow_two]
         apply IsSquare.mul_self w
-      have h4 : IsSquare (((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2) := by
+      have h6 : IsSquare (((2 / s^2) - 1)^2 / ((2 / s^2) + 1)^2) := by
         apply IsSquare.div
         · rw [pow_two]
           apply IsSquare.mul_self (2 / s^2 - 1)
         · rw [pow_two]
           apply IsSquare.mul_self (2 / s^2 + 1)
       rw [mul_div_assoc]
-      apply IsSquare.mul h3 h4
-    have h5 : q % 4 ≠ 3 := by
-      rw [FiniteField.isSquare_neg_one_iff] at h2
-      rw [q_h1] at h2
-      exact h2
+      apply IsSquare.mul h5 h6
+    have h7 : q % 4 ≠ 3 := by
+      rw [FiniteField.isSquare_neg_one_iff] at h4
+      rw [q_h1] at h4
+      exact h4
     contradiction
 
 @[blueprint "lemma:d_ne_zero"]
 lemma d_ne_zero
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  :
-  let d_of_s := d s;
-  d_of_s ≠ 0 := by
-    intro d_of_s
-    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
+  : (d s) ≠ 0 := by
+    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
     intro h
-    have h1 : IsSquare d_of_s := by
+    have h1 : IsSquare (d s) := by
       unfold IsSquare
       use 0
       grind
@@ -134,66 +74,47 @@ lemma d_ne_zero
 
 @[blueprint "lemma:one_over_d_nonsquare"]
 lemma one_over_d_nonsquare
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  :
-  let d_of_s := d s;
-  ¬IsSquare (1 / d_of_s) := by
-      intro d_of_s h3_1
+  : ¬IsSquare (1 / (d s)) := by
+      intro h3_1
       unfold IsSquare at h3_1
-      let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
-      let d_ne_zero := d_ne_zero s_h2 q_h1 q_h2 q_h3
+      let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
+      let d_ne_zero := d_ne_zero s_h2 q_h1 q_h3
       rcases h3_1 with ⟨a, ah⟩
       rw [← pow_two, ← mul_left_inj' d_ne_zero] at ah
       ring_nf at ah
-      rw [inv_mul_cancel₀ d_ne_zero] at ah
-      change 1 = d_of_s * a^2 at ah
+      rw [mul_inv_cancel₀ d_ne_zero] at ah
+      change 1 = (d s) * a^2 at ah
       by_cases h3_2 : a = 0
-      · rw [h3_2] at ah
-        ring_nf at ah
-        let one_ne_zero := @FiniteFieldBasic.one_ne_zero F _
-        contradiction
+      · grind
       · have h3_3 : a^2 ≠ 0 := by grind
         rw [← div_left_inj' h3_3, mul_div_assoc, div_self h3_3, mul_one] at ah
         rw [← one_pow 2, ← div_pow] at ah
-        have d_square : IsSquare d_of_s := by
+        have d_square : IsSquare (d s) := by
           use 1 / a
           grind
         contradiction
 
 @[blueprint "lemma:d_ne_one"]
 lemma d_ne_one
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  :
-  let d_of_s := d s;
-  d_of_s ≠ 1 := by
-    intro d_of_s
-    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
-    intro h
-    have h1 : IsSquare d_of_s := by
-      unfold IsSquare
-      use 0
-      grind
-    contradiction
+  : (d s) ≠ 1 := by
+    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
+    grind
 
 @[blueprint "lemma:d_ne_zero_and_d_ne_one"]
 lemma d_ne_zero_and_d_ne_one
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  :
-  let d_of_s := d s;
-  d_of_s ≠ 0 ∧ d_of_s ≠ 1 := by
-    intro d_of_s
+  : (d s) ≠ 0 ∧ (d s) ≠ 1 := by
     split_ands
-    · exact d_ne_zero s_h2 q_h1 q_h2 q_h3
-    · exact d_ne_one s_h2 q_h1 q_h2 q_h3
+    · exact d_ne_zero s_h2 q_h1 q_h3
+    · exact d_ne_one s_h2 q_h1 q_h3
 
 @[blueprint "lemma:neg_d_eq_r_add_two_over_r_sub_two"]
 lemma neg_d_eq_r_add_two_over_r_sub_two
@@ -202,37 +123,28 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
-  let r_of_s := r s;
-  let d_of_s := d s;
-  -d_of_s = (r_of_s + 2) / (r_of_s - 2) := by
-    intro r_of_s d_of_s
-    let c_of_s := c s
+  let r := r s;
+  let d := d s;
+  -d = (r + 2) / (r - 2) := by
+    intro r d
+    let c := c s
     calc
-      -d_of_s = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s) := by
-        change -(-(c_of_s + 1)^2 / (c_of_s - 1)^2) = (c_of_s + 2 + 1 / c_of_s) / (c_of_s - 2 + 1 / c_of_s)
+      -d = (c + 2 + 1 / c) / (c - 2 + 1 / c) := by
+        change -(-(c + 1)^2 / (c - 1)^2) = (c + 2 + 1 / c) / (c - 2 + 1 / c)
         rw [← neg_one_mul]
         nth_rw 2 [← neg_one_mul]
         rw [mul_div_assoc, ← mul_assoc]
         rw [add_pow_two, sub_pow_two]
-        have h3_1 : 1 / c_of_s ≠ 0 := by
+        have h3_1 : 1 / c ≠ 0 := by
           rw [← inv_eq_one_div]
           apply inv_ne_zero
           apply c_ne_zero s_h1 q_h1 q_h2 q_h3
-        have h3_2 : (1 / c_of_s) / (1 / c_of_s) = 1 := by
-          rw [div_self h3_1]
-        have h3_3 : (-1 : F) * (-1) = 1 := by ring
-        rw [h3_3]
-        nth_rw 1 [← h3_2]
-        rw [← mul_div_mul_comm]
-        rw [mul_add, mul_add, mul_add, mul_sub, pow_two, ← mul_assoc]
-        rw [← inv_eq_one_div, inv_mul_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3), one_mul]
-        rw [mul_one, ← mul_assoc, mul_comm, ← mul_assoc]
-        rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3), one_mul]
-        ring_nf
-      _ = (r_of_s + 2) / (r_of_s - 2) := by
-        rw [add_assoc, add_comm 2 (1 / c_of_s), ← add_assoc]
+        grind
+      _ = (r + 2) / (r - 2) := by
+        rw [add_assoc, add_comm 2 (1 / c), ← add_assoc]
         nth_rw 3 [add_comm]
         rw [← add_sub_assoc]
         nth_rw 3 [add_comm]
-        change (r_of_s + 2) / (r_of_s - 2) = (r_of_s + 2) / (r_of_s - 2)
         rfl
+
+end Elligator.Elligator1

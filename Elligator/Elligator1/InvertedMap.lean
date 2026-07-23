@@ -50,7 +50,7 @@ namespace Elligator.Elligator1
 section InvertedMap
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.1 :
@@ -60,7 +60,7 @@ variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q %
 theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -89,7 +89,7 @@ theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
 theorem point_props_iff_point_in_ϕOverF_of_point
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -113,7 +113,7 @@ theorem ϕ_of_t2_eq_x_y
   -- Fix t ∈ F_q
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -142,7 +142,7 @@ theorem ϕ_of_t2_eq_x_y
 @[blueprint "thm:X2_defined"]
 theorem X2_defined
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -191,7 +191,7 @@ theorem z_defined
 @[blueprint "thm:t2_defined"]
 theorem t2_defined
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)

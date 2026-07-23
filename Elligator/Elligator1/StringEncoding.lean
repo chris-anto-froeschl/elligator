@@ -39,7 +39,7 @@ namespace Elligator.Elligator1
 section StringEncoding
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 /-- Original: Chapter "3.4 Encoding as strings": Theorem 4 -/
@@ -65,12 +65,12 @@ variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q %
   -/)]
 noncomputable def ι
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (τ : (@S q))
-  : {P : F × F // P ∈ EOverF s_h2 q_h1 q_h2 q_h3}
+  : {P : F × F // P ∈ EOverF s_h2 q_h1 q_h3}
   := ϕ (σ τ.1) s_h1 s_h2 q_h1 q_h2 q_h3
 
 @[blueprint
@@ -118,7 +118,7 @@ theorem S_card (q_h3 : q % 4 = 3)
   -/)]
 theorem ι_injective
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
   (q_h3 : q % 4 = 3)
@@ -167,7 +167,7 @@ Original: Chapter "3.4 Encoding as strings": Theorem 4
 @[blueprint "def:ιOverS"]
 noncomputable def ιOverS
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -181,7 +181,7 @@ Original: Chapter "3.4 Encoding as strings": Theorem 4
 -/
 noncomputable def ιOverS'
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -191,7 +191,7 @@ noncomputable def ιOverS'
 @[blueprint "thm:thm4-3"]
 theorem ϕOverF_eq_ιOverS'
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
   (q_h3 : q % 4 = 3)

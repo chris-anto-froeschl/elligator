@@ -5,14 +5,13 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib.Algebra.Field.Defs
-public import Mathlib.FieldTheory.Finite.Basic
 public import Elligator.FiniteFieldBasic
 
 /-!
 # Legendre Symbol
 
 In this file we introduce some a special case of the traditional Legendre Symbol.
+
 This definition differs from the normal textbook definition, and therefore of mathlib's existing
 `Mathlib.NumberTheory.LegendreSymbol.Basic` or `Mathlib.NumberTheory.LegendreSymbol.JacobiSymbol`
 by being bound to a finite field with `q` fulfilling `IsPrimePow`, `Fintype.card F = q` and
@@ -25,7 +24,9 @@ See [bernstein2013a] chapter 3.1 for the original account on this version of the
 
 @[expose] public section
 
-namespace LegendreSymbol
+namespace Elligator.LegendreSymbol
+
+open Elligator.FiniteFieldBasic
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ}
@@ -50,7 +51,7 @@ lemma χ_a_zero_eq_zero
   : χ a = 0 := by
     unfold χ
     rw [q_h1, a_eq_zero]
-    apply zero_pow (FiniteFieldBasic.q_sub_one_over_two_ne_zero
+    apply zero_pow (q_sub_one_over_two_ne_zero
       q_h1 q_h2 q_h3)
 
 @[blueprint "lemma:χ_a_ne_zero"]
@@ -97,7 +98,7 @@ lemma χ_a_eq_one
     ring_nf
     have h2 : (Fintype.card F - 1) / 2 * 2 = Fintype.card F - 1 := by
       apply Nat.div_two_mul_two_of_even
-        (FiniteFieldBasic.q_sub_one_even q_h1 q_h3)
+        (q_sub_one_even q_h1 q_h3)
     rw [h2]
     have h3 : r ≠ 0 := by grind
     apply FiniteField.pow_card_sub_one_eq_one r h3
@@ -116,8 +117,7 @@ lemma a_IsSquare
     use b
     unfold b
     rw [← pow_two, ← pow_mul, add_comm]
-    rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two
-      q_h1 q_h3]
+    rw [one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
     have h : (1 + Fintype.card F) / 2 = (Fintype.card F - 1 + 2) / 2 := by omega
     simp_all
     grind
@@ -143,7 +143,7 @@ lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
   : a^((q + 1) / 2) = (χ a) * a := by
     unfold χ
     rw [q_h1]
-    rw [FiniteFieldBasic.card_sub_one_over_four_mul_two_eq_one_add_card_over_two]
+    rw [card_sub_one_over_four_mul_two_eq_one_add_card_over_two]
     nth_rw 3 [← pow_one a]
     rw [← pow_add]
     have h'' : (q + 1) / 2 - 1 + 1 = (q + 1) / 2 := by omega
@@ -167,7 +167,7 @@ lemma a_pow_q_add_one_over_two_eq_a
   : a^((q + 1) / 2) = a := by
     by_cases h : a = 0
     · rw [h, add_comm, zero_pow,]
-      exact FiniteFieldBasic.q_add_one_over_two_ne_zero q_h3
+      exact q_add_one_over_two_ne_zero q_h3
     · rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
       rw [χ_a_mul_a_eq_a h a_square q_h1 q_h3]
 
@@ -181,7 +181,7 @@ lemma χ_of_a_pow_two_eq_one
     unfold χ
     rw [← pow_mul, mul_comm]
     rw [Nat.div_mul_cancel (even_iff_two_dvd.mp
-        (FiniteFieldBasic.q_sub_one_even q_h1 q_h3))]
+        (q_sub_one_even q_h1 q_h3))]
     rw [FiniteField.pow_card_sub_one_eq_one a a_ne_zero]
 
 @[blueprint "lemma:χ_of_a_eq_neg_one"]
@@ -219,7 +219,7 @@ lemma χ_of_neg_one_eq_neg_one
   (q_h3 : q % 4 = 3)
   : χ (-1 : F) = -1 := by
     let h1 := @FiniteFieldBasic.neg_one_ne_zero F _
-    let h2 := FiniteFieldBasic.neg_one_non_square
+    let h2 := neg_one_non_square
       q_h1 q_h2 q_h3
     apply χ_of_a_eq_neg_one h1 h2 q_h1 q_h3
 
@@ -228,7 +228,7 @@ lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} : χ (a * b) = (χ a) * χ 
   unfold χ
   rw [mul_pow]
 
-@[blueprint "lemma:χ_of_a_even_pow_n_eq_one"]
+@[simp, blueprint "lemma:χ_of_a_even_pow_n_eq_one"]
 lemma χ_of_a_even_pow_n_eq_one
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -245,7 +245,7 @@ lemma χ_of_a_even_pow_n_eq_one
     rw [χ_of_a_pow_two_eq_one a_ne_zero q_h1 q_h3]
     rw [one_pow]
 
-@[blueprint "lemma:χ_of_a_pow_n_eq_χ_a"]
+@[simp, blueprint "lemma:χ_of_a_pow_n_eq_χ_a"]
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)
   (n : {n : ℕ | Odd n})
@@ -293,7 +293,7 @@ lemma χ_of_χ_of_a_eq_χ_of_a
     · simp_all
     · rw [h']
       unfold χ
-      let h'' := FiniteFieldBasic.q_sub_one_over_two_odd q_h1 q_h3
+      let h'' := q_sub_one_over_two_odd q_h1 q_h3
       apply Odd.neg_one_pow h''
     · rw [h']
       unfold χ
@@ -305,7 +305,7 @@ lemma χ_of_one_over_a_eq_χ_a
   (a_ne_zero : a ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
-  : χ (1 / a) = χ a := by
+  : χ a = χ (1 / a) := by
     unfold χ;
     rw [div_pow, one_pow, q_h1]
     have h : a ^ ((q - 1) / 2) ≠ 0 := by simp_all
@@ -323,7 +323,7 @@ lemma one_over_χ_of_a_eq_χ_a
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  : 1 / χ a  = χ a := by
+  : χ a = 1 / χ a := by
       -- If a is zero, then χ(a) is zero by definition, so 1/χ(a) is also zero.
     by_cases ha : a = 0
     · simp_all
@@ -331,7 +331,7 @@ lemma one_over_χ_of_a_eq_χ_a
       rw [← mul_left_inj' h]
       unfold χ
       rw [← mul_pow, ← pow_two]
-      change 1 / a ^ ((Fintype.card F - 1) / 2) * a ^ ((Fintype.card F - 1) / 2) = χ (a ^ 2)
+      change χ (a ^ 2) = 1 / a ^ ((Fintype.card F - 1) / 2) * a ^ ((Fintype.card F - 1) / 2)
       rw [χ_a_eq_one (by simp_all) (by aesop) q_h1 q_h3]
       simp_all
 
@@ -341,12 +341,12 @@ lemma χ_of_a_eq_χ_a_mul_b_pow_two {a : F} {b : F}
   (b_ne_zero : b ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
-  : χ a = χ (a * b^2) := by
+  : χ (a * b^2) = χ a := by
     -- By definition of χ, we know that χ(a * b^2) = (a * b^2)^((q - 1) / 2).
     unfold χ
     rw [mul_pow]
     have h : b^2 ≠ 0 := by simp_all
-    change a ^ ((Fintype.card F - 1) / 2) = a ^ ((Fintype.card F - 1) / 2) * χ (b ^ 2)
+    change a ^ ((Fintype.card F - 1) / 2) * χ (b ^ 2) = a ^ ((Fintype.card F - 1) / 2)
     rw [χ_a_eq_one h (by aesop) q_h1 q_h3]
     rw [mul_one]
 
@@ -359,7 +359,7 @@ lemma b_eq_χ_of_b_mul_principal_sqrt_a
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  : b = (χ b) * a^((q + 1) / 4) := by
+  : (χ b) * a^((q + 1) / 4) = b := by
     have h : χ b = b ^ ((q - 1) / 2) := by aesop
     -- Substitute $a$ with $b^2$ in the right-hand side of the equation.
     have h' : b ^ ((q - 1) / 2) * (b ^ 2) ^ ((q + 1) / 4) = b := by
@@ -375,7 +375,7 @@ lemma b_pow_q_add_one_over_four_eq_χ_of_a_mul_a
   (q_h3 : q % 4 = 3)
   : (a^2)^((q + 1) / 4) = (χ a) * a := by
     rw [← pow_mul, mul_comm, ← q_h1, add_comm]
-    rw [FiniteFieldBasic.one_add_card_over_four_mul_two_eq_one_add_card_over_two
+    rw [one_add_card_over_four_mul_two_eq_one_add_card_over_two
       q_h1 q_h3]
     rw [← a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
     rw [← q_h1, add_comm]
@@ -406,4 +406,4 @@ lemma a_eq_zero_of_χ_of_a_eq_zero {a : F} :
     apply eq_zero_of_pow_eq_zero at h
     exact h
 
-end LegendreSymbol
+end Elligator.LegendreSymbol

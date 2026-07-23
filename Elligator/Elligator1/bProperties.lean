@@ -5,48 +5,36 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
 public import Elligator.Elligator1.Variables
-
-@[expose] public section
 
 /-!
 # b Properties
 
 In this file we introduce some generally helpful lemmas for `b`.
 
-## Main results
-
-- TODO
-
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a] chapter 3, theorem 4.
 -/
 
-namespace Elligator.Elligator1
+@[expose] public section
 
--- Original-Reference: Theorem 4
-section bProperties
+namespace Elligator.Elligator1
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:two_pow_b_le_q"]
 lemma two_pow_b_le_q (q_h3 : q % 4 = 3) : 2^(@b q) ≤ q := by
-    apply Nat.pow_log_le_self
-    grind
+  apply Nat.pow_log_le_self
+  grind
 
 @[blueprint "lemma:q_lt_two_pow_b_succ"]
-lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) :=
-  Nat.lt_pow_succ_log_self (by decide) _
+lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) := Nat.lt_pow_succ_log_self (by decide) _
 
 @[blueprint "lemma:two_pow_b_gt_q_over_two"]
-lemma two_pow_b_gt_q_over_two
-  (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
-  :
-  2^(@b q) > q / 2 := by
+lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+  : 2^(@b q) > q / 2 := by
     let h1 := two_pow_b_le_q q_h3
     let h2 := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
     unfold b
@@ -56,9 +44,10 @@ lemma two_pow_b_gt_q_over_two
     grind
 
 @[blueprint "lemma:half_q_lt_two_pow_b"]
-lemma half_q_lt_two_pow_b :
-    (q - 1) / 2 < 2^(@b q) := by
-      rw [ Nat.div_lt_iff_lt_mul (by norm_num), mul_comm];
-      rw [← pow_succ']
-      apply lt_of_le_of_lt (Nat.sub_le _ _)
-      exact Nat.lt_pow_succ_log_self (by norm_num) q
+lemma half_q_lt_two_pow_b : (q - 1) / 2 < 2^(@b q) := by
+  rw [ Nat.div_lt_iff_lt_mul (by norm_num), mul_comm];
+  rw [← pow_succ']
+  apply lt_of_le_of_lt (Nat.sub_le _ _)
+  exact Nat.lt_pow_succ_log_self (by norm_num) q
+
+end Elligator.Elligator1

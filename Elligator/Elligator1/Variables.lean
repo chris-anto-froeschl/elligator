@@ -5,8 +5,6 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
 
 /-!
@@ -23,7 +21,7 @@ See [bernstein2013a] chapter 3.
 
 namespace Elligator.Elligator1
 
-section Variables
+open Elligator.LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
 
@@ -79,8 +77,7 @@ Original: Chapter "3.2 The map": Theorem 1
 noncomputable def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u := u t
   let v := v t s
-  let χ_of_v := LegendreSymbol.χ v
-  χ_of_v * u
+  (χ v) * u
 
 /-- Y(t, s) is a function defined in the paper.
 
@@ -95,9 +92,7 @@ noncomputable def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F 
   let u := u t
   let c := c s
   let v := v t s
-  let χ_of_v := LegendreSymbol.χ v
-  let χ_of_sum := LegendreSymbol.χ (u^2 + 1 / c^2)
-  (χ_of_v * v)^((q+ 1) / 4) * χ_of_v * χ_of_sum
+  ((χ v) * v)^((q+ 1) / 4) * (χ v) * χ (u^2 + 1 / c^2)
 
 /-- x(t, s) is a function defined in the paper. It is the x-coordinate of the point on the curve.
 
@@ -149,7 +144,7 @@ noncomputable def z (s : F) (P : F × F) (q : ℕ) : F :=
   let c := c s
   let X2 := X2 s P q
   let a := (c - 1) * s * X2 * (1 + X2) * x * (X2^2 + 1 / c^2)
-  LegendreSymbol.χ a
+  χ a
 
 /-- u2 is a function defined in the paper.
 
@@ -200,7 +195,5 @@ Original: Chapter "3.4 Encoding as strings": Theorem 4
 @[blueprint "def:S"]
 noncomputable def S {q : ℕ} : Finset (Fin (@b q) → Bool) :=
   Finset.univ.filter (fun τ => (bitsToNat τ) ≤ (q - 1) / 2)
-
-end Variables
 
 end Elligator.Elligator1

@@ -9,11 +9,11 @@ public import Mathlib
 public import Architect
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
-public import Elligator.EdwardsCurve
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.EdwardsCurve
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
@@ -42,7 +42,7 @@ namespace Elligator.Elligator1
 section Map
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 omit [Fintype F] in
@@ -102,7 +102,7 @@ theorem x_defined
   -/)]
 theorem y_defined
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -144,7 +144,7 @@ theorem map_fulfills_helper_equation
 theorem variable_mul_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -169,7 +169,7 @@ theorem variable_mul_ne_zero
 theorem map_fulfills_curve_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -177,7 +177,7 @@ theorem map_fulfills_curve_equation
   let x := x t s q
   let y := y t s
   let d := d s
-  have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 q_h1 q_h2 q_h3
+  have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 q_h1 q_h3
   edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 q_h1 q_h2 q_h3
@@ -187,16 +187,16 @@ theorem map_fulfills_curve_equation
 noncomputable def ϕ
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  : EOverF s_h2 q_h1 q_h2 q_h3 :=
+  : EOverF s_h2 q_h1 q_h3 :=
   open scoped Classical in let P := if h : t ≠ 1 ∧ t ≠ -1
     then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s)
     else (0, 1)
   -- TODO writeable as type?
-  have P_in_EOverF : P ∈ (EOverF s_h2 q_h1 q_h2 q_h3) := by
+  have P_in_EOverF : P ∈ (EOverF s_h2 q_h1 q_h3) := by
     unfold EOverF
     rw [Set.mem_setOf_eq]
     unfold P

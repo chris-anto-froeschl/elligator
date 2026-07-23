@@ -5,38 +5,29 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
-public import Elligator.Elligator1.Variables
-
-@[expose] public section
+public import Elligator.Basic
 
 /-!
 # s Variable Properties
 
-In this file we introduce some generally helpful lemmas for `s` as introduced in `Elligator.Elligator1.Variables`.
-
-## Main results
-
-- TODO
+In this file we introduce some generally helpful lemmas for `s` as introduced
+in `Elligator.Elligator1.Variables`.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
 
 namespace Elligator.Elligator1
 
-section sProperties
-
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F}
 
 omit [Fintype F] in
 @[blueprint "lemma:s_pow_two_ne_two"]
-lemma s_pow_two_ne_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+lemma s_pow_two_ne_two (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   : s^2 ≠ 2 := by
   have h1 : s^2 - 2 ≠ 0 := by
     intro h
@@ -48,7 +39,7 @@ lemma s_pow_two_ne_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
 
 omit [Fintype F] in
 @[blueprint "lemma:s_pow_two_ne_neg_two"]
-lemma s_pow_two_ne_neg_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) : s^2 ≠ -2 := by
+lemma s_pow_two_ne_neg_two (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : s^2 ≠ -2 := by
   have h1 : s^2 + 2 ≠ 0 := by
     intro h
     rw [h] at s_h2
@@ -56,3 +47,5 @@ lemma s_pow_two_ne_neg_two (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0) : s^2 ≠ -2 := 
   intro h
   rw [h] at h1
   norm_num at h1
+
+end Elligator.Elligator1

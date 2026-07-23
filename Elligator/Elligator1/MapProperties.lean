@@ -8,11 +8,11 @@ module
 public import Mathlib
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
-public import Elligator.EdwardsCurve
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.EdwardsCurve
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
@@ -20,8 +20,6 @@ public import Elligator.Elligator1.YProperties
 public import Elligator.Elligator1.xProperties
 public import Elligator.Elligator1.yProperties
 public import Elligator.Elligator1.Map
-
-@[expose] public section
 
 /-!
 # Map Properties
@@ -39,12 +37,16 @@ This hierarchy allows to have a linear dependence hierarchy without polluting ma
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
 section MapProperties
 
+open LegendreSymbol
+
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 -- Used in Theorem 3 Proof B part as implication for point_in_ϕOverF_with_prop2_main_case
@@ -53,7 +55,7 @@ variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q %
 lemma y_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -104,7 +106,7 @@ lemma y_h1
 lemma y_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -140,7 +142,7 @@ lemma y_h2
 lemma y_h3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -165,7 +167,7 @@ lemma y_h3
 lemma X_comparison_implication
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -184,8 +186,8 @@ lemma X_comparison_implication
     let u2 := u ⟨t2, h2_2⟩
     let v1 := v t s
     let v2 := v ⟨t2, h2_2⟩ s
-    let χ_of_v1 := LegendreSymbol.χ v1
-    let χ_of_v2 := LegendreSymbol.χ v2
+    let χ_of_v1 := χ v1
+    let χ_of_v2 := χ v2
     unfold X2
     rw [X_comparison t q_h1 q_h2 q_h3]
     exact (y_h3 t s_h1 s_h2 q_h1 q_h2 q_h3)
@@ -219,11 +221,11 @@ lemma χ_IsSquare_h1
   (q_h3 : q % 4 = 3)
   :
   let v_of_t := v t s
-  let χ_of_v := LegendreSymbol.χ v_of_t
+  let χ_of_v := χ v_of_t
   IsSquare ((χ_of_v * v_of_t)^((q + 1) / 4)) := by
     intro v_of_t χ_of_v
     have v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
-    have h1 := LegendreSymbol.χ_a_mul_a_IsSquare v_ne_zero q_h1 q_h2 q_h3
+    have h1 := χ_a_mul_a_IsSquare v_ne_zero q_h1 q_h2 q_h3
     unfold IsSquare at h1
     rcases h1 with ⟨r, hr⟩
     rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
@@ -310,7 +312,7 @@ lemma point_comparison
 lemma X_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -345,7 +347,7 @@ lemma X_η_h1
 lemma X_η_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -372,7 +374,7 @@ lemma X_η_h2
 lemma u_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -388,17 +390,17 @@ lemma u_η_h1
     intro u_of_t
     let X_of_t := X t s
     let v_of_t := v t s
-    let χ_of_v_of_t := LegendreSymbol.χ v_of_t
+    let χ_of_v_of_t := χ v_of_t
     have v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
     have h1 : X_of_t = χ_of_v_of_t * u_of_t := by
       unfold X_of_t X
       rfl
     unfold X_of_t at h1
     rw [X_η_h2 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1] at h1
-    rcases LegendreSymbol.χ_values q_h1 q_h2 q_h3
+    rcases χ_values q_h1 q_h2 q_h3
     · rename_i h2
       change χ_of_v_of_t = 0 at h2
-      have h3 := @LegendreSymbol.a_eq_zero_of_χ_of_a_eq_zero _ _ _ v_of_t
+      have h3 := @a_eq_zero_of_χ_of_a_eq_zero _ _ _ v_of_t
       have h4 : v_of_t = 0 := by
         apply h3 h2
       contradiction
@@ -436,7 +438,7 @@ lemma u_η_h1
 lemma t_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -466,7 +468,7 @@ lemma t_η_h1
 lemma v_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -491,7 +493,7 @@ lemma v_η_h1
 lemma Y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -504,25 +506,25 @@ lemma Y_η_h1
   :
   let Y_of_t := Y t s q
   let c_of_s := c s
-  let χ_of_c_of_s := LegendreSymbol.χ c_of_s
+  let χ_of_c_of_s := χ c_of_s
   let r_of_s := r s
   Y_of_t = r_of_s * χ_of_c_of_s := by
     intro Y_of_t c_of_s χ_of_c_of_s r_of_s
-    let χ_of_one_add_one_div_c_of_s_pow_two := LegendreSymbol.χ (1 + 1 / c_of_s^2)
-    let χ_of_r_of_s := LegendreSymbol.χ r_of_s
+    let χ_of_one_add_one_div_c_of_s_pow_two := χ (1 + 1 / c_of_s^2)
+    let χ_of_r_of_s := χ r_of_s
     let v_of_t := v t s;
     let u_of_t := u t;
-    let χ_of_v_of_t := LegendreSymbol.χ v_of_t
-    let χ_of_r_of_s_div_c_of_s := LegendreSymbol.χ (r_of_s / c_of_s)
-    let χ_of_r_of_s_pow_two := LegendreSymbol.χ (r_of_s^2)
-    let χ_of_sum := LegendreSymbol.χ (u_of_t ^ 2 + 1 / c_of_s ^ 2)
+    let χ_of_v_of_t := χ v_of_t
+    let χ_of_r_of_s_div_c_of_s := χ (r_of_s / c_of_s)
+    let χ_of_r_of_s_pow_two := χ (r_of_s^2)
+    let χ_of_sum := χ (u_of_t ^ 2 + 1 / c_of_s ^ 2)
     have c_ne_zero := c_ne_zero s_h1 q_h1 q_h2 q_h3
     calc
       Y_of_t = (r_of_s^2)^((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two := by
         unfold Y_of_t Y
         rw [(v_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1)]
         rw [(u_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1)]
-        change (χ_of_r_of_s_pow_two  * r_of_s^2) ^ ((q + 1) / 4) * χ_of_r_of_s_pow_two * (LegendreSymbol.χ (1 ^ 2 + 1 / c_of_s ^ 2)) = (r_of_s ^ 2) ^ ((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two
+        change (χ_of_r_of_s_pow_two  * r_of_s^2) ^ ((q + 1) / 4) * χ_of_r_of_s_pow_two * (χ (1 ^ 2 + 1 / c_of_s ^ 2)) = (r_of_s ^ 2) ^ ((q + 1) / 4) * χ_of_one_add_one_div_c_of_s_pow_two
         have h1 : r_of_s^2 ≠ 0 := by
           rw [pow_two]
           apply mul_ne_zero
@@ -530,32 +532,32 @@ lemma Y_η_h1
           · exact r_ne_zero s_h1 q_h1 q_h2 q_h3
         have h2 : IsSquare (r_of_s^2) := by apply IsSquare.sq
         unfold χ_of_r_of_s_pow_two
-        rw [LegendreSymbol.χ_a_eq_one h1 h2 q_h1 q_h3]
+        rw [χ_a_eq_one h1 h2 q_h1 q_h3]
         nth_rw 2 [pow_two]
         rw [mul_one, one_mul, mul_one]
       _ = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s := by
         unfold χ_of_one_add_one_div_c_of_s_pow_two
         rw [FiniteFieldBasic.one_add_one_a_pow_two_eq_a_add_one_over_a_over_a c_ne_zero]
-        change (r_of_s ^ 2) ^ ((q + 1) / 4) * LegendreSymbol.χ (r_of_s / c_of_s) = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s
-        rw [LegendreSymbol.b_pow_q_add_one_over_four_eq_χ_of_a_mul_a q_h1 q_h3]
+        change (r_of_s ^ 2) ^ ((q + 1) / 4) * χ (r_of_s / c_of_s) = χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s
+        rw [b_pow_q_add_one_over_four_eq_χ_of_a_mul_a q_h1 q_h3]
       _ = r_of_s * χ_of_c_of_s := by
         have r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
-        let χ_of_one_over_c_of_s := LegendreSymbol.χ (1 / c_of_s)
+        let χ_of_one_over_c_of_s := χ (1 / c_of_s)
         calc
           χ_of_r_of_s * r_of_s * χ_of_r_of_s_div_c_of_s = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s := by
             have h : r_of_s / c_of_s = r_of_s * (1 / c_of_s) := by ring_nf
             unfold χ_of_r_of_s_div_c_of_s
             rw [h]
-            rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+            rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
             change χ_of_r_of_s * r_of_s * (χ_of_r_of_s * χ_of_one_over_c_of_s) = r_of_s * χ_of_r_of_s * χ_of_r_of_s *  χ_of_one_over_c_of_s
             ring_nf
           _ = r_of_s * 1 * χ_of_one_over_c_of_s := by
-            rw [mul_assoc r_of_s, ← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+            rw [mul_assoc r_of_s, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
             rw [← pow_two]
-            rw [LegendreSymbol.χ_of_a_pow_two_eq_one r_ne_zero q_h1 q_h3]
+            rw [χ_of_a_pow_two_eq_one r_ne_zero q_h1 q_h3]
           _ = r_of_s * χ_of_c_of_s := by
             unfold χ_of_one_over_c_of_s
-            rw [LegendreSymbol.χ_of_one_over_a_eq_χ_a c_ne_zero q_h1 q_h3]
+            rw [← χ_of_one_over_a_eq_χ_a c_ne_zero q_h1 q_h3]
             rw [mul_one]
 
 -- Implicated by main case of Theorem 3 proof part B.
@@ -563,7 +565,7 @@ lemma Y_η_h1
 lemma y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -606,7 +608,7 @@ lemma y_of_zero
 lemma ϕ_of_t_eq_zero_one
   (t : { n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -625,7 +627,7 @@ lemma ϕ_of_t_eq_zero_one
 lemma y_add_one_eq_two
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -673,7 +675,7 @@ Original: Chapter "3.3 Inverting the map": Theorem 3
 def ϕOverFProp3 (s : F) (point : F × F) : Prop :=
   let x := point.fst
   let c := c s
-  let χ_of_c := LegendreSymbol.χ c
+  let χ_of_c := χ c
   let r := r s
   let η_of_point := η point
   η_of_point * r = -2 → x = 2 * s * (c - 1) * χ_of_c / r
@@ -694,7 +696,7 @@ Original: Chapter "3.2 The map": Definition 2
 @[blueprint "def:ϕOverF"]
 noncomputable def ϕOverF
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -705,7 +707,7 @@ noncomputable def ϕOverF
 lemma point_in_ϕOverF_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -731,7 +733,7 @@ lemma point_in_ϕOverF_with_prop1_base_case
 lemma point_in_ϕOverF_with_prop1_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -751,7 +753,7 @@ lemma point_in_ϕOverF_with_prop1_main_case
 lemma point_in_ϕOverF_with_prop1
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -773,7 +775,7 @@ lemma point_in_ϕOverF_with_prop1
 lemma point_in_ϕOverF_with_prop2_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -801,7 +803,7 @@ lemma point_in_ϕOverF_with_prop2_base_case
 lemma point_in_ϕOverF_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -839,7 +841,7 @@ lemma point_in_ϕOverF_with_prop2_main_case
 lemma point_in_ϕOverF_with_prop2
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -861,7 +863,7 @@ lemma point_in_ϕOverF_with_prop2
 lemma point_in_ϕOverF_with_prop3_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -889,7 +891,7 @@ lemma point_in_ϕOverF_with_prop3_base_case
 lemma point_in_ϕOverF_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -902,8 +904,8 @@ lemma point_in_ϕOverF_with_prop3_main_case
     let X_of_t := X t s
     let Y_of_t := Y t s q
     let v_of_t := v t s
-    let χ_of_c_of_s := LegendreSymbol.χ c_of_s
-    let χ_of_v_of_s := LegendreSymbol.χ v_of_t
+    let χ_of_c_of_s := χ c_of_s
+    let χ_of_v_of_s := χ v_of_t
     unfold x_of_point point ϕ
     simp only []
     rw [dif_pos t.prop]
@@ -916,7 +918,7 @@ lemma point_in_ϕOverF_with_prop3_main_case
     simp
     nth_rw 2 [mul_div_assoc]
     unfold χ_of_c_of_s
-    nth_rw 2 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
+    nth_rw 2 [one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
     change (c_of_s - 1) * s * (1 + 1) / (r_of_s * χ_of_c_of_s) = 2 * s * (c_of_s - 1) * (1 / χ_of_c_of_s / r_of_s)
     ring_nf
 
@@ -925,7 +927,7 @@ lemma point_in_ϕOverF_with_prop3_main_case
 lemma point_in_ϕOverF_with_prop3
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -948,7 +950,7 @@ lemma point_in_ϕOverF_with_prop3
 theorem point_props_of_point_in_ϕOverF
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -968,7 +970,7 @@ theorem point_props_of_point_in_ϕOverF
 lemma point_of_ϕ_in_ϕOverF
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -984,7 +986,7 @@ lemma point_of_ϕ_in_ϕOverF
 lemma point_of_ϕ_fulfills_ϕOverFProps
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)

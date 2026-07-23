@@ -42,14 +42,14 @@ namespace Elligator.Elligator1
 section zProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:z_eq_zero"]
 lemma z_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -68,11 +68,11 @@ lemma z_eq_zero
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 @[blueprint "def:z'"]
 noncomputable def z'
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   : F :=
   let Y := Y' s_h2 q_h1 q_h2 q_h3 point
   let X := X2 s point q
@@ -82,11 +82,11 @@ noncomputable def z'
 @[blueprint "lemma:Y'_ne_zero"]
 lemma Y'_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -108,11 +108,11 @@ lemma Y'_ne_zero
 @[blueprint "lemma:X_pow_two_add_"]
 lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   :
   let X := X2 s point q
   let c := c s
@@ -133,11 +133,11 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
 @[blueprint "lemma:z'_argument_ne_zero"]
 lemma z'_argument_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -154,11 +154,11 @@ lemma z'_argument_ne_zero
 @[blueprint "lemma:z'_ne_zero"]
 lemma z'_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -176,11 +176,11 @@ lemma z'_ne_zero
 @[blueprint "lemma:z'_eq_one_or_z'_eq_neg_one"]
 lemma z'_eq_one_or_z'_eq_neg_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)

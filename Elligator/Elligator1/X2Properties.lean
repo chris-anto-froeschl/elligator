@@ -44,14 +44,14 @@ namespace Elligator.Elligator1
 section X2Properties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:X2_eq_neg_one"]
 lemma X2_eq_neg_one
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -112,7 +112,7 @@ lemma X2_h2
 lemma X2_h3
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -142,7 +142,7 @@ lemma X2_h3
 lemma X2_h4
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -415,7 +415,7 @@ lemma X2_observation1_of_X2_ne_one
 @[blueprint "lemma:X2_observation2_of_X2_ne_one"]
 lemma X2_observation2_of_X2_ne_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -473,7 +473,7 @@ lemma X2_observation2_of_X2_ne_one
 
 @[blueprint "lemma:one_sub_d_mul_y_pow_two_ne_zero"]
 lemma one_sub_d_mul_y_pow_two_ne_zero
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -483,8 +483,8 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
   let d_of_s := d s;
   1 - d_of_s * y^2 ≠ 0 := by
     intro y d_of_s h1
-    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h2 q_h3
-    let d_ne_zero := d_ne_zero s_h2 q_h1 q_h2 q_h3
+    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
+    let d_ne_zero := d_ne_zero s_h2 q_h1 q_h3
     rw [← add_left_inj (d_of_s * y^2)] at h1
     ring_nf at h1
     rw [mul_comm, ← div_left_inj' d_ne_zero, mul_div_assoc, div_self d_ne_zero, mul_one] at h1
@@ -493,17 +493,17 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
       unfold IsSquare
       use y
       grind
-    let h3 := one_over_d_nonsquare s_h2 q_h1 q_h2 q_h3
+    let h3 := one_over_d_nonsquare s_h2 q_h1 q_h3
     change ¬IsSquare (1 / d_of_s) at h3
     contradiction
 
 @[blueprint "lemma:x_pow_two_of_X2_ne_one_eq1"]
 lemma x_pow_two_of_X2_ne_one_eq1
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   :
   let x := point.val.1
@@ -528,11 +528,11 @@ lemma x_pow_two_of_X2_ne_one_eq1
 @[blueprint "lemma:x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one"]
 lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (y_eq_one : point.val.2 ≠ 1)
   :
@@ -601,11 +601,11 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
 /-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 @[blueprint "def:Y'"]
 noncomputable def Y'
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   : F :=
   let x := point.val.1
   let c := c s
@@ -616,11 +616,11 @@ noncomputable def Y'
 @[blueprint "lemma:Y'_pow_two_eq_of_X2_ne_one"]
 lemma Y'_pow_two_eq_of_X2_ne_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (y_eq_one : point.val.2 ≠ 1)
   :

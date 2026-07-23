@@ -36,7 +36,7 @@ namespace Elligator.Elligator1
 section YProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:Y_ne_zero"]
@@ -113,7 +113,7 @@ lemma one_add_X_ne_zero
     have h2 : u_of_t = -χ_of_v_of_t := by
       rw [← neg_one_mul (χ_of_v_of_t)]
       change u_of_t = -1 * LegendreSymbol.χ v_of_t
-      rw [← LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
+      rw [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
       rw [← mul_left_inj' (LegendreSymbol.χ_a_ne_zero v_ne_zero q_h1)]
       ring_nf
       rw [mul_inv_cancel₀ (LegendreSymbol.χ_a_ne_zero v_ne_zero q_h1)]
@@ -169,7 +169,7 @@ lemma one_add_X_ne_zero
       have h5_3 : χ_of_v_of_t ≠ 0 := LegendreSymbol.χ_a_ne_zero v_ne_zero q_h1
       rw [← mul_left_inj' h5_3] at h1
       change -χ_of_v_of_t * -χ_of_v_of_t * LegendreSymbol.χ v_of_t = -1 * χ_of_v_of_t at h1
-      rw [← LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3] at h1
+      rw [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3] at h1
       change -χ_of_v_of_t * -χ_of_v_of_t * (1 / χ_of_v_of_t) = -1 * χ_of_v_of_t at h1
       rw [← inv_eq_one_div χ_of_v_of_t] at h1
       rw [← neg_one_mul] at h1
@@ -257,19 +257,19 @@ lemma Y_comparison
           rw [div_pow]
           rw [h1_3]
           unfold χ_of_u1
-          nth_rw 2 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
+          nth_rw 2 [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
           ring_nf
     have second_factor : χ_of_v2 = χ_of_v1 := by exact v_comparison_implication4 t q_h1 q_h3
     have third_factor : LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = LegendreSymbol.χ (u1 * v1 * (u1^2 + 1 / c_of_s^2)) := by
       calc
         LegendreSymbol.χ (u2^2 + 1 / c_of_s^2) = LegendreSymbol.χ ((c_of_s^2 * u1^4 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) := by
-          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+          rw [← LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
           rw [mul_comm]
-          rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero t) q_h1 q_h3]
+          rw [← LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero t) q_h1 q_h3]
           rw [mul_comm]
           rw [LegendreSymbol.χ_of_a_eq_χ_a_mul_b_pow_two (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1 q_h3]
-          change LegendreSymbol.χ ((u1^2)^2 * (c_of_s^2 * (u2^2 + 1 / c_of_s^2)) * (u1^2 + 1 / c_of_s^2)^2) = LegendreSymbol.χ (c_of_s ^ 2 * u1 ^ 4 * (u2 ^ 2 + 1 / c_of_s ^ 2) * (u1 ^ 2 + 1 / c_of_s ^ 2) ^ 2)
-          ring_nf
+          simp_all +decide
+          grind
         _ = LegendreSymbol.χ ((u1^2 * (c_of_s^2 + u1^2)) * (u1^2 + 1 / c_of_s^2)^2) := by
           rw [pow_two u2]
           unfold u2
@@ -314,7 +314,7 @@ lemma Y_comparison
         rw [← LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
         rw [← pow_two]
         rw [LegendreSymbol.χ_of_a_pow_two_eq_one u_ne_zero q_h1 q_h3]
-        rw [← LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
+        rw [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
         have h2 : Odd 3 := by
           apply Nat.odd_iff.mpr
           norm_num

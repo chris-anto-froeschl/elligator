@@ -5,11 +5,8 @@ Authors: Chris Anto Fröschl, Matthias Güdemann
 -/
 module
 
-public import Architect
-public import Mathlib.Algebra.Field.Defs
-public import Mathlib.FieldTheory.Finite.Basic
+public import Elligator.Basic
 public import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
-public import Mathlib.Tactic.Cases
 
 /-!
 # Finite Field Basic
@@ -27,7 +24,7 @@ See [bernstein2013a] for the original account on this specifc finite field.
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ}
 
-namespace FiniteFieldBasic
+namespace Elligator.FiniteFieldBasic
 
 omit [Field F] in
 @[blueprint "lemma:q_odd"]
@@ -125,8 +122,8 @@ lemma four_ne_zero
     have h1 : (4 : F) = 2 * 2 := by norm_num
     rw [h1]
     apply mul_ne_zero
-    · exact (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)
-    · exact (FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3)
+    · exact (two_ne_zero q_h1 q_h2 q_h3)
+    · exact (two_ne_zero q_h1 q_h2 q_h3)
 
 omit [Fintype F] in
 @[blueprint "lemma:neg_one_ne_zero"]
@@ -206,9 +203,9 @@ omit [Fintype F] in
 lemma zero_h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
   constructor
   · symm
-    exact FiniteFieldBasic.one_ne_zero
+    exact one_ne_zero
   · symm
-    exact FiniteFieldBasic.neg_one_ne_zero
+    exact neg_one_ne_zero
 
 omit [Fintype F] in
 @[blueprint "lemma:neg_t_ne_one_and_neg_t_ne_neg_one"]
@@ -274,8 +271,8 @@ lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
     rw [mul_inv_cancel₀ a_ne_zero]
 
 @[blueprint "lemma:card_sub_one_over_four_mul_two_eq_one_add_card_over_two"]
-lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two :
-  (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
+lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two
+  : (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
 
 lemma q_h1 (q_h3 : q % 4 = 3)
   : (q + 1) / 4 * 2 = (q - 1) / 2 + 1 := by grind
@@ -359,4 +356,4 @@ lemma exists_nat_cast_eq
     · rw [← hn, Nat.mod_def, Nat.cast_sub (Nat.mul_div_le _ _ )]
       aesop
 
-end FiniteFieldBasic
+end Elligator.FiniteFieldBasic

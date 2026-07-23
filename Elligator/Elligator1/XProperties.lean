@@ -35,7 +35,7 @@ namespace Elligator.Elligator1
 section XProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:X_pow_two_add_one_over_c_pow_two_ne_zero"]
@@ -111,7 +111,7 @@ lemma X_comparison
         ring_nf
       _ = 1 / (χ_of_v1 * u1) := by
         unfold χ_of_v1
-        nth_rw 1 [← LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
+        nth_rw 1 [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
         ring_nf
       _ = 1 / X1 := by
         change 1 / X1 = 1 / X1

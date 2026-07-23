@@ -43,16 +43,16 @@ namespace Elligator.Elligator1
 section phiProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:x_y_eq_zero_one"]
 lemma x_y_eq_zero_one
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_eq_zero : point.val.1 = 0)
   :
@@ -77,11 +77,11 @@ lemma x_y_eq_zero_one
 
 @[blueprint "lemma:y_ne_one"]
 lemma y_ne_one
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (x_ne_zero : point.val.1 ≠ 0)
   :
   let y := point.val.2
@@ -104,17 +104,17 @@ lemma y_ne_one
       have h2_2 : IsSquare d_of_s := by
         rw [← h2_1, ← one_mul 1, ← pow_two]
         apply IsSquare.sq 1
-      have h2_2 : ¬ IsSquare d_of_s := by exact d_nonsquare s_h2 q_h1 q_h2 q_h3
+      have h2_2 : ¬ IsSquare d_of_s := by exact d_nonsquare s_h2 q_h1 q_h3
       contradiction
     contradiction
 
 @[blueprint "lemma:η_ne_zero"]
 lemma η_ne_zero
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   :
@@ -142,7 +142,7 @@ lemma η_ne_zero
 lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -164,7 +164,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
 lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -193,7 +193,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
 lemma ϕ_of_t_eq_ϕ_of_neg_t
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -215,7 +215,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t
 theorem ϕ_preimages
   (t : F)
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -257,7 +257,7 @@ theorem ϕ_preimages
 @[blueprint "lemma:ϕ_of_zero"]
 lemma ϕ_of_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -314,7 +314,7 @@ lemma ϕ_of_zero
 @[blueprint "lemma:x_y_eq_ϕ_of_zero_of_X2_eq_one"]
 lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -344,11 +344,11 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
 @[blueprint "lemma:x_y_eq_ϕ_of_t_of_X2_ne_one"]
 lemma x_y_eq_ϕ_of_t_of_X2_ne_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -374,7 +374,7 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
 lemma ϕ_of_t2_eq_x_y_base_case
   (t : { n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -396,7 +396,7 @@ lemma ϕ_of_t2_eq_x_y_base_case
 lemma ϕ_of_t2_eq_x_y_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -426,7 +426,7 @@ lemma ϕ_of_t2_eq_x_y_main_case
 @[blueprint "lemma:ϕ_of_one_eq_zero_one"]
 lemma ϕ_of_one_eq_zero_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -440,7 +440,7 @@ lemma ϕ_of_one_eq_zero_one
 @[blueprint "lemma:ϕ_of_neg_one_eq_zero_one"]
 lemma ϕ_of_neg_one_eq_zero_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -454,7 +454,7 @@ lemma ϕ_of_neg_one_eq_zero_one
 @[blueprint "lemma:ϕ_of_one_in_ϕ_of_F"]
 lemma ϕ_of_one_in_ϕ_of_F
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -469,11 +469,11 @@ lemma ϕ_of_one_in_ϕ_of_F
 @[blueprint "lemma:point_in_ϕOverF_base_case"]
 lemma point_in_ϕOverF_base_case
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_eq_zero : point.val.1 = 0)
   :
@@ -486,11 +486,11 @@ lemma point_in_ϕOverF_base_case
 @[blueprint "lemma:point_in_ϕOverF_main_case_with_y_eq_one"]
 lemma point_in_ϕOverF_main_case_with_y_eq_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (x_ne_zero : point.val.1 ≠ 0)
   (y_eq_one : point.val.2 = 1)
   :
@@ -512,18 +512,18 @@ lemma point_in_ϕOverF_main_case_with_y_eq_one
     ring_nf at h4_1
     have h5 : x^2 ≠ 0 := by grind
     rw [inv_pow, mul_inv_cancel₀ h5, one_mul] at h4_1
-    let h6 := d_ne_one s_h2 q_h1 q_h2 q_h3
+    let h6 := d_ne_one s_h2 q_h1 q_h3
     symm at h4_1
     contradiction
 
 @[blueprint "lemma:point_in_ϕOverF_main_case_with_y_ne_one"]
 lemma point_in_ϕOverF_main_case_with_y_ne_one
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   (y_ne_one : point.val.2 ≠ 1)
@@ -547,11 +547,11 @@ lemma point_in_ϕOverF_main_case_with_y_ne_one
 @[blueprint "lemma:point_in_ϕOverF_main_case"]
 lemma point_in_ϕOverF_main_case
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (point_props : ϕOverFProps s point)
   (x_ne_zero : point.val.1 ≠ 0)
   :
@@ -568,11 +568,11 @@ lemma point_in_ϕOverF_main_case
 @[blueprint "thm:point_in_ϕOverF_of_point_props"]
 theorem point_in_ϕOverF_of_point_props
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   :
   ϕOverFProps s point
   → point.val ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3

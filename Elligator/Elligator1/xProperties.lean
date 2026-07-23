@@ -8,10 +8,10 @@ module
 public import Mathlib
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
-public import Elligator.EdwardsCurve
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
+public import Elligator.Elligator1.EdwardsCurve
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
@@ -38,13 +38,13 @@ namespace Elligator.Elligator1
 section xProperties
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:x_ne_zero"]
 lemma x_ne_zero
   (s_h1 : s ≠ 0)
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
@@ -151,11 +151,11 @@ lemma x_comparison
 
 @[blueprint "lemma:x_y_eq_zero_sign_one"]
 lemma x_y_eq_zero_sign_one
-  (s_h2 : (s^2 - 2) * (s^2 + 2) ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h2 q_h3})
+  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (x_eq_zero : point.val.1 = 0)
   : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
     let d_of_s := d s
