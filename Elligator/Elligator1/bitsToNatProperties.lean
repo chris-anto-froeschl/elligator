@@ -34,7 +34,8 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
 
 @[blueprint "lemma:bitsToNat_le_full_range"]
-lemma bitsToNat_le_full_range {n : ℕ} (τ : Fin n → Bool) : bitsToNat τ ≤ ∑ i ∈ Finset.range n, 2^i := by
+lemma bitsToNat_le_full_range {n : ℕ} (τ : Fin n → Bool) :
+    bitsToNat τ ≤ ∑ i ∈ Finset.range n, 2^i := by
   rw [ Finset.sum_range ];
   exact Finset.sum_le_sum fun i _ => by aesop;
 
@@ -54,11 +55,13 @@ lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n →
   induction' n with n ih;
   · decide
   · intro τ τ' h1;
-    have h_bitsToNat_succ : ∀ (τ : Fin (n + 1) → Bool), bitsToNat τ = 2 * bitsToNat (fun i => τ (Fin.succ i)) + if τ 0 then 1 else 0 := by
+    have h_bitsToNat_succ : ∀ (τ : Fin (n + 1) → Bool),
+        bitsToNat τ = 2 * bitsToNat (fun i => τ (Fin.succ i)) + if τ 0 then 1 else 0 := by
       intro τ; unfold bitsToNat; simp +decide [ Fin.sum_univ_succ, pow_succ' ]
       ring_nf
       rw [ Finset.sum_mul _ _ _ ]; congr; ext; aesop;
-    have h_bitsToNat_succ_eq : bitsToNat (fun i => τ (Fin.succ i)) = bitsToNat (fun i => τ' (Fin.succ i)) := by
+    have h_bitsToNat_succ_eq :
+        bitsToNat (fun i => τ (Fin.succ i)) = bitsToNat (fun i => τ' (Fin.succ i)) := by
       grind +ring;
     ext i; induction i using Fin.inductionOn <;> simp_all +singlePass ;
     · grind +ring;
@@ -67,8 +70,8 @@ lemma bitsToNat_injective {n : ℕ} : Function.Injective (bitsToNat : (Fin n →
 /-- Every natural number less than `2^n` is the binary value of some bit-vector. -/
 -- TODO use Function.surjective possible, i.e. have to get hm into ∀ m value somehow
 @[blueprint "lemma:bitsToNat_surj"]
-lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2^n) :
-  ∃ τ : Fin n → Bool, bitsToNat τ = m := by
+lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2 ^ n) :
+    ∃ τ : Fin n → Bool, bitsToNat τ = m := by
     induction' n with n ih generalizing m <;> simp_all +decide [ pow_succ' ];
     rcases Nat.even_or_odd' m with ⟨ k, rfl | rfl ⟩;
     · obtain ⟨ τ, hτ ⟩ := ih k ( by linarith );
@@ -91,7 +94,8 @@ lemma natCast_injective_of_prime_card
     have h3 := h2 ( a - b |> Int.natAbs )
     simp_all
     cases abs_cases ( a - b : ℤ ) <;> simp_all
-    · exact le_antisymm ( le_of_not_gt fun h => by have := Nat.le_of_dvd ( by omega ) h3; omega ) ‹_›;
+    · exact le_antisymm
+        ( le_of_not_gt fun h => by have := Nat.le_of_dvd ( by omega ) h3; omega ) ‹_›;
     · exact absurd h3 ( Nat.not_dvd_of_pos_of_lt ( by omega ) ( by omega ) )
 
 @[blueprint "lemma:lower_half_neg_eq"]

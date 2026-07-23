@@ -13,12 +13,11 @@ public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.rProperties
 
-@[expose] public section
-
 /-!
 # u Variable Properties
 
-In this file we introduce some generally helpful lemmas for `u` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `u` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -28,6 +27,8 @@ In this file we introduce some generally helpful lemmas for `u` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -102,3 +103,7 @@ lemma one_add_u_ne_zero
     split_ands
     · exact FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3;
     · exact FiniteFieldBasic.one_add_t_ne_zero t
+
+end uProperties
+
+end Elligator.Elligator1

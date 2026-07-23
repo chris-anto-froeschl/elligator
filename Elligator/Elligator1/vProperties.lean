@@ -14,12 +14,11 @@ public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.rProperties
 public import Elligator.Elligator1.uProperties
 
-@[expose] public section
-
 /-!
 # v Variable Properties
 
-In this file we introduce some generally helpful lemmas for `v` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `v` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -29,6 +28,8 @@ In this file we introduce some generally helpful lemmas for `v` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -88,11 +89,14 @@ lemma v_h1
     intro v_of_t c_of_s u_of_t
     unfold v_of_t v
     let r_of_s := r s
-    change u_of_t ^ 5 + (r_of_s ^ 2 - 2) * u_of_t ^ 3 + u_of_t = u_of_t * (u_of_t ^ 2 + c_of_s ^ 2) * (u_of_t ^ 2 + 1 / c_of_s ^ 2)
+    change u_of_t ^ 5 + (r_of_s ^ 2 - 2) * u_of_t ^ 3 + u_of_t
+      = u_of_t * (u_of_t ^ 2 + c_of_s ^ 2) * (u_of_t ^ 2 + 1 / c_of_s ^ 2)
     rw [r_h1 s_h1 q_h1 q_h2 q_h3]
     rw [mul_add, mul_add, add_mul, add_mul]
     ring_nf
-    change u_of_t + u_of_t ^ 3 * c_of_s ^ 2 + u_of_t ^ 3 * c_of_s⁻¹ ^ 2 + u_of_t ^ 5 = u_of_t * c_of_s ^ 2 * c_of_s⁻¹ ^ 2 + u_of_t ^ 3 * c_of_s ^ 2 + u_of_t ^ 3 * c_of_s⁻¹ ^ 2 + u_of_t ^ 5
+    change u_of_t + u_of_t ^ 3 * c_of_s ^ 2 + u_of_t ^ 3 * c_of_s⁻¹ ^ 2 + u_of_t ^ 5
+      = u_of_t * c_of_s ^ 2 * c_of_s⁻¹ ^ 2 + u_of_t ^ 3 * c_of_s ^ 2
+        + u_of_t ^ 3 * c_of_s⁻¹ ^ 2 + u_of_t ^ 5
     simp
     have h1 : c_of_s^2 ≠ 0 := by
       rw [pow_two]
@@ -171,7 +175,8 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
     intro v_of_t χ_of_v
     rw [mul_pow χ_of_v v_of_t ((q + 1) / 4)]
     apply mul_ne_zero
-    · apply pow_ne_zero ((q + 1) / 4) (LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1)
+    · apply pow_ne_zero ((q + 1) / 4)
+        (LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1)
     · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)
 
 omit [Fintype F] in
@@ -320,3 +325,7 @@ lemma v_of_zero :
     rw [u_of_zero]
     unfold r_of_s
     ring_nf
+
+end vProperties
+
+end Elligator.Elligator1

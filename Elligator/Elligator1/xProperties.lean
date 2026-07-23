@@ -17,12 +17,11 @@ public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
 public import Elligator.Elligator1.YProperties
 
-@[expose] public section
-
 /-!
 # x Variable Properties
 
-In this file we introduce some generally helpful lemmas for `x` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `x` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -32,6 +31,8 @@ In this file we introduce some generally helpful lemmas for `x` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -110,7 +111,8 @@ lemma x_comparison
         rw [X_comparison t q_h1 q_h2 q_h3]
         unfold Y2
         rw [Y_comparison t s_h1 q_h1 q_h2 q_h3]
-        change (c_of_s - 1) * s * (1 / X1) * (1 + 1 / X1) / (Y1 / X1^3) = (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3)
+        change (c_of_s - 1) * s * (1 / X1) * (1 + 1 / X1) / (Y1 / X1^3) =
+          (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3)
         ring_nf
       _ = (c_of_s - 1) * s * X1 * (1 + X1) / Y1 := by
         have h2_12_1 : X1^3 / X1^3 = 1 := by
@@ -118,9 +120,11 @@ lemma x_comparison
         rw [← mul_one ((c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3))]
         nth_rw 5 [← h2_12_1]
         rw [← mul_div_mul_comm]
-        have h2_12_2 : (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) * X1 ^ 3 = (c_of_s - 1) * s * X1 * (1 + X1) := by
+        have h2_12_2 : (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) * X1 ^ 3 =
+          (c_of_s - 1) * s * X1 * (1 + X1) := by
           calc
-            (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) * X1 ^ 3 = (c_of_s - 1) * s * X1^3 / X1 * (1 + 1 / X1) := by
+            (c_of_s - 1) * s * 1 / X1 * (1 + 1 / X1) * X1 ^ 3 =
+                (c_of_s - 1) * s * X1^3 / X1 * (1 + 1 / X1) := by
               repeat rw [mul_assoc]
               rw [mul_comm (1 + 1 / X1) (X1^3)]
               rw [← mul_assoc]
@@ -176,3 +180,7 @@ lemma x_y_eq_zero_sign_one
     · rw [← h]
       right
       rfl
+
+end xProperties
+
+end Elligator.Elligator1

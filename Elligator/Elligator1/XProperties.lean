@@ -14,12 +14,11 @@ public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 
-@[expose] public section
-
 /-!
 # X Variable Properties
 
-In this file we introduce some generally helpful lemmas for `X` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `X` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -29,6 +28,8 @@ In this file we introduce some generally helpful lemmas for `X` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -54,7 +55,9 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
     rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
     ring_nf at h
     change X_of_t^2 * c_of_s^2 + c_of_s⁻¹^2 * c_of_s^2 = 0 at h
-    rw [inv_pow c_of_s 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)), ← add_left_inj (-1 : F), ← mul_pow] at h
+    rw [inv_pow c_of_s 2,
+      inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)),
+      ← add_left_inj (-1 : F), ← mul_pow] at h
     simp at h
     have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q_h1 q_h2 q_h3
     have h' : IsSquare (-1 : F) := by
@@ -139,3 +142,7 @@ lemma X_of_zero
     change (LegendreSymbol.χ (r_of_s^2)) * 1 = 1
     rw [LegendreSymbol.χ_of_a_pow_two_eq_one (r_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
     simp
+
+end XProperties
+
+end Elligator.Elligator1

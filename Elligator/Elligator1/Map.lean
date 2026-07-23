@@ -21,8 +21,6 @@ public import Elligator.Elligator1.YProperties
 public import Elligator.Elligator1.xProperties
 public import Elligator.Elligator1.yProperties
 
-@[expose] public section
-
 /-!
 # Map
 
@@ -37,6 +35,8 @@ In this file we collect the main results regarding the map of Elligator 1.
 See [bernstein2013a] chapter 3 theorem 1.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
 section Map
@@ -49,7 +49,8 @@ omit [Fintype F] in
 @[blueprint
   (title := "u defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   u = (1 - t)/(1 + t),
   $$
@@ -62,7 +63,8 @@ theorem u_defined :
 @[blueprint
   (title := "Y defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   Y = (\chi(v)v)^{(q+1)/4}\chi(v)\chi(u^2 + 1/c^2),
   $$
@@ -78,7 +80,8 @@ theorem Y_defined
 @[blueprint
   (title := "x defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   x = (c - 1)sX(1 + X)/Y,
   $$
@@ -95,7 +98,8 @@ theorem x_defined
 @[blueprint
   (title := "y defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   y = (rX - (1 + X)^2)/(rX + (1 + X)^2).
   $$
@@ -180,9 +184,10 @@ theorem map_fulfills_curve_equation
   have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 q_h1 q_h3
   edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
-    exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 q_h1 q_h2 q_h3
+    exact
+      x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 q_h1 q_h2 q_h3
 
-/-- Original: Chapter "3.2 The map": Definition 2-/
+/-- Original: Chapter "3.2 The map": Definition 2 -/
 @[blueprint "def:ϕ"]
 noncomputable def ϕ
   (t : F)
@@ -207,3 +212,7 @@ noncomputable def ϕ
       unfold edwardsCurveEquation
       ring_nf
   ⟨P, P_in_EOverF⟩
+
+end Map
+
+end Elligator.Elligator1

@@ -14,8 +14,6 @@ public import Elligator.Elligator1.phiProperties
 public import Elligator.Elligator1.bProperties
 public import Elligator.Elligator1.bitsToNatProperties
 
-@[expose] public section
-
 /-!
 # S Properties
 
@@ -29,6 +27,8 @@ In this file we introduce some generally helpful lemmas for `S`.
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -55,7 +55,8 @@ lemma image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two
 @[blueprint "lemma:S_card_eq_icc_zero_to_q_sub_one_over_two_card"]
 lemma S_card_eq_icc_zero_to_q_sub_one_over_two_card
   : (@S q).card = (Finset.Icc 0 ((q - 1) / 2)).card := by
-    rw [← image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two, Finset.card_image_of_injective _ bitsToNat_injective];
+    rw [← image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two,
+      Finset.card_image_of_injective _ bitsToNat_injective];
 
 @[blueprint "lemma:S_card_eq_q_add_one_over_two"]
 lemma S_card_eq_q_add_one_over_two (q_h3 : q % 4 = 3)
@@ -63,3 +64,7 @@ lemma S_card_eq_q_add_one_over_two (q_h3 : q % 4 = 3)
     rw [S_card_eq_icc_zero_to_q_sub_one_over_two_card]
     simp_all
     grind
+
+end SProperties
+
+end Elligator.Elligator1

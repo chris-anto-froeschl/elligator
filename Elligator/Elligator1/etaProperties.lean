@@ -21,12 +21,11 @@ public import Elligator.Elligator1.yProperties
 public import Elligator.Elligator1.Map
 public import Elligator.Elligator1.MapProperties
 
-@[expose] public section
-
 /-!
 # η Properties
 
-In this file we introduce some generally helpful lemmas for `η` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `η` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -36,6 +35,8 @@ In this file we introduce some generally helpful lemmas for `η` as introduced i
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -64,3 +65,7 @@ lemma η_eq_zero
     unfold y_of_t point
     rw [ϕ_of_t_eq_zero_one t s_h1 s_h2 q_h1 q_h2 q_h3]
     simp
+
+end etaProperties
+
+end Elligator.Elligator1

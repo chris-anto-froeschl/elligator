@@ -21,12 +21,11 @@ public import Elligator.Elligator1.yProperties
 public import Elligator.Elligator1.etaProperties
 public import Elligator.Elligator1.X2Properties
 
-@[expose] public section
-
 /-!
 # z Properties
 
-In this file we introduce some generally helpful lemmas for `z` as introduced in `Elligator.Elligator1.Variables`.
+In this file we introduce some generally helpful lemmas for `z` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## Main results
 
@@ -36,6 +35,8 @@ In this file we introduce some generally helpful lemmas for `z` as introduced in
 
 See [bernstein2013a] chapter 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -61,7 +62,8 @@ lemma z_eq_zero
     unfold z_of_point z
     let c_of_s := c s
     repeat rw [X2_eq_neg_one t s_h1 s_h2 q_h1 q_h2 q_h3]
-    change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) = 0
+    change LegendreSymbol.χ
+      ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) = 0
     simp
     exact LegendreSymbol.χ_a_zero_eq_zero (rfl) q_h1 q_h2 q_h3
 
@@ -97,7 +99,8 @@ lemma Y'_ne_zero
     let X := X2 s point q
     let x := point.val.1
     let c := c s
-    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
+    let X2_add_one_ne_zero :=
+      X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨point.val, point_props⟩
     let c_sub_one_ne_zero := c_sub_one_ne_zero s_h2
     unfold Y Y'
@@ -122,7 +125,9 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
     rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
     ring_nf at h
     change X^2 * c^2 + c⁻¹^2 * c^2 = 0 at h
-    rw [inv_pow c 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)), ← add_left_inj (-1 : F), ← mul_pow] at h
+    rw [inv_pow c 2,
+      inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)),
+      ← add_left_inj (-1 : F), ← mul_pow] at h
     simp at h
     have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q_h1 q_h2 q_h3
     have h' : IsSquare (-1 : F) := by
@@ -169,7 +174,8 @@ lemma z'_ne_zero
     let Y := Y' s_h2 q_h1 q_h2 q_h3 point
     let X := X2 s point q
     let c := c s
-    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_argument_ne_zero :=
+      z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
     exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero q_h1
 
@@ -200,3 +206,7 @@ lemma z'_eq_one_or_z'_eq_neg_one
     change χ_of_a = 1 ∨ χ_of_a = -1
     simp_all
     grind
+
+end zProperties
+
+end Elligator.Elligator1

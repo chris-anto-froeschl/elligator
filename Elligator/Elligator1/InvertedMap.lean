@@ -11,7 +11,6 @@ public import Mathlib.Data.Set.Basic
 public import Elligator.FiniteFieldBasic
 public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.dProperties
@@ -28,8 +27,6 @@ public import Elligator.Elligator1.zProperties
 public import Elligator.Elligator1.t2Properties
 public import Elligator.Elligator1.phiProperties
 
-@[expose] public section
-
 /-!
 # Inverted Map
 
@@ -43,6 +40,8 @@ In this file we introduce the main results of the inverted map.
 
 See [bernstein2013a] chapter 3 theorem 3.
 -/
+
+@[expose] public section
 
 namespace Elligator.Elligator1
 
@@ -103,7 +102,8 @@ theorem point_props_iff_point_in_ϕOverF_of_point
     · exact point_props_of_point_in_ϕOverF t s_h1 s_h2 q_h1 q_h2 q_h3
 
 -- Original: Chapter "3.3 Inverting the map" - Theorem 3.3
--- If (x, y) ∈ ϕ(Fq) then the following elements X_bar, z, u_bar, t_bar of Fq are defined and ϕ(t_bar) = (x, y):
+-- If (x, y) ∈ ϕ(Fq) then the following elements X_bar, z, u_bar, t_bar of Fq are defined and
+-- ϕ(t_bar) = (x, y):
 --    X_bar = −(1 + ηr) + ((1 + ηr)² − 1)^((q+1)/4),
 --    z = χ((c − 1)s * X_bar * (1 + X_bar) * x * (X_bar² + 1/c²)),
 --    u_bar = z * X_bar,
@@ -200,3 +200,7 @@ theorem t2_defined
   let u2_of_point := u2 s point.val q
   (1 + u2_of_point) ≠ 0 := by
     exact one_add_u2_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point
+
+end InvertedMap
+
+end Elligator.Elligator1
