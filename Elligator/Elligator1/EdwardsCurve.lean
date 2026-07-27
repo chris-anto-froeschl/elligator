@@ -23,8 +23,6 @@ See [bernstein2013a] chapter 3.
 
 namespace Elligator.Elligator1
 
-section EdwardsCurve
-
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ}
 
@@ -59,7 +57,5 @@ lemma zero_one_fulfill_edwardsCurveEquation
     intro d_of_s d_h
     unfold edwardsCurveEquation
     ring
-
-end EdwardsCurve
 
 end Elligator.Elligator1

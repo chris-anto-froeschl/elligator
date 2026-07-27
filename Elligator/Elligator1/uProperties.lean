@@ -5,86 +5,58 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
-public import Elligator.Elligator1.cProperties
-public import Elligator.Elligator1.rProperties
-
-@[expose] public section
 
 /-!
 # u Variable Properties
 
-In this file we introduce some generally helpful lemmas for `u` as introduced in `Elligator.Elligator1.Variables`.
-
-## Main results
-
-- TODO
+In this file we introduce some generally helpful lemmas for `u` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
-section uProperties
+open Elligator.FiniteFieldBasic
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 omit [Fintype F] in
 @[blueprint "lemma:u_ne_zero"]
-lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) := by
-  change (1 - t.val) / (1 + t.val) ≠ 0
-  apply div_ne_zero (FiniteFieldBasic.one_sub_t_ne_zero t) (FiniteFieldBasic.one_add_t_ne_zero t)
+lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) :=
+  div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t)
 
 omit [Fintype F] in
 @[blueprint "lemma:u_pow_two_ne_zero"]
-lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  : (u t)^2 ≠ (0 : F) := by
-    rw [pow_two]
-    apply mul_ne_zero
-    · exact (u_ne_zero t)
-    · exact (u_ne_zero t)
+lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (u t)^2 ≠ (0 : F) :=
+  pow_two_ne_zero (u_ne_zero t)
 
 omit [Fintype F] in
 @[blueprint "lemma:u_comparison"]
-lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) :
+lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
-  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let u1 := u t
-  let u2 := u ⟨t2, h2_2⟩
+  let u2 := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
   u2 = 1 / u1 := by
-    intro t1 t2 h2_2 u1 u2
-    let c_of_s := c s
-    let r_of_s := r s
+    intro t1 t2 u1 u2
     calc
-      u2 = (1 - t2) / (1 + t2) := by
-        unfold u2 u
-        simp
-     _ = (1 + t) / (1 - t) := by
-       unfold t2 t1
-       simp
-       ring_nf
-     _ = 1 / u1 := by
-       unfold u1 u
-       simp
+      u2 = (1 - t2) / (1 + t2) := by simp [u2, u]
+     _ = (1 + t) / (1 - t) := by simp [t2, t1]; ring_nf
+     _ = 1 / u1 := by simp [u1, u]
 
 omit [Fintype F] in
 @[blueprint "lemma:u_of_zero"]
 lemma u_of_zero :
-  let h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := FiniteFieldBasic.zero_h1
-  let u_of_t := u ⟨(0 : F), h1⟩
-  u_of_t = 1 := by
-    intro h1 u_of_t
-    unfold u_of_t u
-    simp
+  let u := u ⟨(0 : F), zero_h1⟩
+  u = 1 := by simp [u]
 
 @[blueprint "lemma:one_add_u_ne_zero"]
 lemma one_add_u_ne_zero
@@ -92,13 +64,12 @@ lemma one_add_u_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  :
-  let u := u t
-  1 + u ≠ 0 := by
-    intro u
-    unfold u Elligator1.u;
-    rw [add_div' _ _ _ (by exact FiniteFieldBasic.one_add_t_ne_zero t)]
+  : 1 + (u t) ≠ 0 := by
+    unfold u
+    rw [add_div' _ _ _ (one_add_t_ne_zero t)]
     norm_num
     split_ands
-    · exact FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3;
-    · exact FiniteFieldBasic.one_add_t_ne_zero t
+    · exact two_ne_zero q_h1 q_h2 q_h3;
+    · exact one_add_t_ne_zero t
+
+end Elligator.Elligator1

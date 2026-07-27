@@ -106,7 +106,7 @@ lemma X_comparison
         unfold χ_of_v2 v2 t2
         rw [v_comparison_implication4 t q_h1 q_h3]
         unfold u2
-        rw [u_comparison t s]
+        rw [u_comparison t]
         change χ_of_v1 * (1 / u1) = χ_of_v1 / u1
         ring_nf
       _ = 1 / (χ_of_v1 * u1) := by
