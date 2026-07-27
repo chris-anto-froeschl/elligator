@@ -166,7 +166,9 @@ lemma x_y_eq_zero_sign_one
     change x = 0 at x_eq_zero
     rw [← x_eq_zero]
     have h1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by
-      exact point.prop
+      let h' := point.prop
+      simp only [edwardsCurveEquation_iff] at h'
+      exact h'
     rw [x_eq_zero] at h1
     simp at h1
     rcases h1 with h | h

@@ -498,10 +498,8 @@ theorem x'_and_y'_fulfill_curve_equation
     let x'_eq_x := x'_eq_x s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let y'_eq_y := y'_eq_y s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let h1 := x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s_h1 s_h2 q_h1 q_h2 q_h3
-    unfold edwardsCurveEquation x' y'
-    rw [x'_eq_x, y'_eq_y]
-    change x^2 + y^2 = 1 + d * x^2 * y^2
-    grind
+    simp only [edwardsCurveEquation_iff]
+    grind [x'_eq_x, y'_eq_y]
 
 -- TODO how to do jump to point.val.(1|2) = (x'|y')?
 -- They have the same formulas (i.e x'/y' = x/y), but always only using point as a builder

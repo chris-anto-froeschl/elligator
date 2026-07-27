@@ -512,10 +512,11 @@ lemma x_pow_two_of_X2_ne_one_eq1
   x^2 = (1 - y^2) / (1 - d*y^2) := by
     intro x y d
     have curve_equation := point.prop;
-    unfold EOverF edwardsCurveEquation at curve_equation
+    unfold EOverF at curve_equation
+    simp_all only [edwardsCurveEquation_iff]
     let one_sub_d_mul_y_pow_two_ne_zero := one_sub_d_mul_y_pow_two_ne_zero s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩;
     change 1 - d * y^2 ≠ 0 at one_sub_d_mul_y_pow_two_ne_zero
-    rw [Set.mem_setOf_eq] at curve_equation
+    rw [ Set.mem_setOf_eq] at curve_equation
     change x^2 + y^2 = 1 + d * x^2 * y^2  at curve_equation
     rw [← add_left_inj (-d * x^2 * y^2 - y^2)] at curve_equation
     ring_nf at curve_equation

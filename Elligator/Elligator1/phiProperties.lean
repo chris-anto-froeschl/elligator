@@ -90,7 +90,10 @@ lemma y_ne_one
     let x := point.val.1
     let d_of_s := d s
     have h2 : x = 0 := by
-      have h2_1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by exact point.prop
+      have h2_1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by
+        let h2_1_1 := point.prop
+        simp only [EOverF, edwardsCurveEquation_iff] at h2_1_1
+        exact h2_1_1
       rw [h1] at h2_1
       simp at h2_1
       rw [← add_left_inj (-1), ← add_left_inj (-x^2)] at h2_1
@@ -506,6 +509,7 @@ lemma point_in_ϕOverF_main_case_with_y_eq_one
     rw [Set.mem_setOf_eq] at h4_1
     let d_of_s := d s;
     rw [y_eq_one] at h4_1
+    simp only [edwardsCurveEquation_iff] at h4_1
     change x ^ 2 + 1 ^ 2 = 1 + d_of_s * x ^ 2 * 1 ^ 2  at h4_1
     rw [← add_right_inj (-1)] at h4_1
     rw [← div_left_inj' x_ne_zero, ← div_left_inj' x_ne_zero] at h4_1

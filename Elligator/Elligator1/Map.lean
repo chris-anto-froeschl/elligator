@@ -180,6 +180,7 @@ theorem map_fulfills_curve_equation
   have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one s_h2 q_h1 q_h3
   edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
+    rw [edwardsCurveEquation_iff]
     exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 q_h1 q_h2 q_h3
 
 /-- Original: Chapter "3.2 The map": Definition 2-/
@@ -204,6 +205,5 @@ noncomputable def ϕ
     · rw [dif_pos h1]
       exact map_fulfills_curve_equation ⟨t, h1⟩ s_h1 s_h2 q_h1 q_h2 q_h3
     · rw [dif_neg h1]
-      unfold edwardsCurveEquation
-      ring_nf
+      simp
   ⟨P, P_in_EOverF⟩
