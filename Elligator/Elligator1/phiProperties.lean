@@ -63,7 +63,7 @@ lemma x_y_eq_zero_one
       unfold ϕOverFProps ϕOverFProp1 at point_props
       exact point_props.1
     have h2 : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
-      exact x_y_eq_zero_sign_one s_h2 q_h1 q_h2 q_h3 point x_eq_zero
+      exact x_y_eq_zero_sign_one s_h2 q_h1 q_h3 point x_eq_zero
     change (x, y) = (0, 1)
     rcases h2 with h3 | h3
     · exact h3

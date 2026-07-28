@@ -164,7 +164,7 @@ theorem X2_defined
         let h1_4 := congrArg Prod.snd h1_2
         simp at h1_4
         rw [← h1_4]
-        exact y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 ⟨t, h1_3⟩
+        exact y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨t, h1_3⟩
       · simp only [] at h1_2
         rw [dif_neg h1_3] at h1_2
         let h1_4 := congrArg Prod.snd h1_2

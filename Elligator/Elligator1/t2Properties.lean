@@ -497,7 +497,7 @@ theorem x'_and_y'_fulfill_curve_equation
     let y := y ⟨t, t_h⟩ s
     let x'_eq_x := x'_eq_x s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
     let y'_eq_y := y'_eq_y s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X_h
-    let h1 := x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two ⟨t, t_h⟩ s_h1 s_h2 q_h1 q_h2 q_h3
+    let h1 := curve_equation ⟨t, t_h⟩ s_h1 s_h2 q_h1 q_h2 q_h3
     simp only [edwardsCurveEquation_iff]
     grind [x'_eq_x, y'_eq_y]
 

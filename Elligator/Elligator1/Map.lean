@@ -5,10 +5,6 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Architect
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
@@ -21,8 +17,6 @@ public import Elligator.Elligator1.YProperties
 public import Elligator.Elligator1.xProperties
 public import Elligator.Elligator1.yProperties
 
-@[expose] public section
-
 /-!
 # Map
 
@@ -30,16 +24,17 @@ In this file we collect the main results regarding the map of Elligator 1.
 
 ## Main results
 
-- TODO
+- `u_defined`, `Y_defined`, `x_defined`, `y_defined`: variables are well defined
+- `map_fulfills_curve_equation`: the defined variables fulfill a curve equation
 
 ## References
 
 See [bernstein2013a] chapter 3 theorem 1.
 -/
 
-namespace Elligator.Elligator1
+@[expose] public section
 
-section Map
+namespace Elligator.Elligator1
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -49,7 +44,8 @@ omit [Fintype F] in
 @[blueprint
   (title := "u defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   u = (1 - t)/(1 + t),
   $$
@@ -62,7 +58,8 @@ theorem u_defined :
 @[blueprint
   (title := "Y defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   Y = (\chi(v)v)^{(q+1)/4}\chi(v)\chi(u^2 + 1/c^2),
   $$
@@ -78,7 +75,8 @@ theorem Y_defined
 @[blueprint
   (title := "x defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   x = (c - 1)sX(1 + X)/Y,
   $$
@@ -95,7 +93,8 @@ theorem x_defined
 @[blueprint
   (title := "y defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  The following element of $\mathbb{F}_q$ is defined for each
+  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
   $$
   y = (rX - (1 + X)^2)/(rX + (1 + X)^2).
   $$
@@ -131,7 +130,7 @@ theorem map_fulfills_helper_equation
   let Y := Y t s q
   Y^2 = X^5 + (r^2 - 2) * X^3 + X := by
     intro r_of_s X_of_t Y_of_t
-    exact Y_pow_two_eq_X_pow_five_add_r_pow_two_sub_2_mul_X_pow_three_add_X t s_h1 q_h1 q_h2 q_h3
+    exact helper_eq t s_h1 q_h1 q_h2 q_h3
 
 -- Chapter 3.2 Theorem 1
 @[blueprint
@@ -155,8 +154,7 @@ theorem variable_mul_ne_zero
   let Y := Y t s q
   let x := x t s q
   let y := y t s
-  u * v * X  * Y * x * (y + 1) ≠ 0 := by
-  exact u_mul_v_mul_X_mul_Y_mul_x_mul_y_add_one_ne_zero t s_h1 s_h2 q_h1 q_h2 q_h3
+  u * v * X  * Y * x * (y + 1) ≠ 0 := variable_mul_ne_zero' t s_h1 s_h2 q_h1 q_h2 q_h3
 
 -- Chapter 3.2 Theorem 1
 @[blueprint
@@ -181,9 +179,9 @@ theorem map_fulfills_curve_equation
   edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
     rw [edwardsCurveEquation_iff]
-    exact x_pow_two_add_y_pow_two_eq_one_add_d_mul_x_pow_two_mul_y_pow_two t s_h1 s_h2 q_h1 q_h2 q_h3
+    exact curve_equation t s_h1 s_h2 q_h1 q_h2 q_h3
 
-/-- Original: Chapter "3.2 The map": Definition 2-/
+/-- Original: Chapter "3.2 The map": Definition 2 -/
 @[blueprint "def:ϕ"]
 noncomputable def ϕ
   (t : F)
@@ -207,3 +205,5 @@ noncomputable def ϕ
     · rw [dif_neg h1]
       simp
   ⟨P, P_in_EOverF⟩
+
+end Elligator.Elligator1

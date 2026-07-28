@@ -65,19 +65,19 @@ lemma y_h1
   let X_of_t := X t s
   X_of_t^2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1 = 0 := by
     intro y_of_t r_of_s X_of_t
-    rw [← mul_left_inj' (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
+    rw [← mul_left_inj' (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
     change (X_of_t ^ 2 + (2 + r_of_s * (y_of_t - 1) / (y_of_t + 1)) * X_of_t + 1) * (y_of_t + 1) = 0 * (y_of_t + 1)
     repeat rw [add_mul]
     rw [zero_mul]
     have h1 : (2 * X_of_t * (y_of_t + 1) + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) = (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) * X_of_t := by
       rw [add_mul _ _ X_of_t]
-      rw [← div_left_inj' (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
+      rw [← div_left_inj' (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
       change (2 * X_of_t * (y_of_t + 1) + r_of_s * (y_of_t - 1) / (y_of_t + 1) * X_of_t * (y_of_t + 1)) / (y_of_t + 1) = (2 * (y_of_t + 1) * X_of_t + r_of_s * (y_of_t - 1) * X_of_t) / (y_of_t + 1)
       repeat rw [add_div]
-      repeat rw [mul_div_assoc, div_self (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
+      repeat rw [mul_div_assoc, div_self (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
       rw [mul_comm (2 * (y_of_t + 1)) X_of_t, ← mul_assoc]
       nth_rw 2 [mul_div_assoc]
-      rw [div_self (y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t)]
+      rw [div_self (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
       ring_nf
     rw [h1]
     have h2 : (2 * (y_of_t + 1) + r_of_s * (y_of_t - 1)) = (y_of_t * r_of_s - r_of_s + 2 * y_of_t + 2) := by ring_nf
@@ -746,7 +746,7 @@ lemma point_in_ϕOverF_with_prop1_main_case
     unfold y point ϕ
     simp only []
     rw [dif_pos t.prop]
-    exact y_add_one_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t
+    exact y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
 -- Original: Theorem 3.2 Proof B prop 1 argumentation
 @[blueprint "lemma:point_in_ϕOverF_with_prop1"]

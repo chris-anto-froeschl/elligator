@@ -5,38 +5,33 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 
-@[expose] public section
-
 /-!
 # X Variable Properties
 
-In this file we introduce some generally helpful lemmas for `X` as introduced in `Elligator.Elligator1.Variables`.
-
-## Main results
-
-- TODO
+In this file we introduce some generally helpful lemmas for `X` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
-section XProperties
+open Elligator.FiniteFieldBasic
+open Elligator.LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 @[blueprint "lemma:X_pow_two_add_one_over_c_pow_two_ne_zero"]
 lemma X_pow_two_add_one_over_c_pow_two_ne_zero
@@ -46,20 +41,16 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let X := X t s
-  let c := c s
-  X^2 + 1 / c^2 ≠ 0 := by
-    intro X_of_t c_of_s h
-    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
-    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
-    ring_nf at h
-    change X_of_t^2 * c_of_s^2 + c_of_s⁻¹^2 * c_of_s^2 = 0 at h
-    rw [inv_pow c_of_s 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)), ← add_left_inj (-1 : F), ← mul_pow] at h
-    simp at h
-    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q_h1 q_h2 q_h3
-    have h' : IsSquare (-1 : F) := by
-      rw [← h, pow_two]
-      apply IsSquare.mul_self
+  (X t s)^2 + 1 / (c s)^2 ≠ 0 := by
+    let X := X t s
+    let c := c s
+    intro h
+    have h' : X^2 * c^2 + c⁻¹^2 * c^2 = 0 := by grind
+    have h'' : X^2 * c^2 = -1 := by grind [c_ne_zero]
+    have h''' : ¬IsSquare (-1 : F) := by exact neg_one_non_square q_h1 q_h2 q_h3
+    have h'''' : IsSquare (-1 : F) := by
+      rw [← h'', ← mul_pow]
+      apply IsSquare.sq (X * c)
     contradiction
 
 @[blueprint "lemma:X_ne_zero"]
@@ -70,12 +61,9 @@ lemma X_ne_zero
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
-  let X := X t s
-  X ≠ 0 := by
-    let u_of_t := u t
-    let v_of_t := v t s
+  (X t s) ≠ 0 := by
     apply mul_ne_zero
-    · apply LegendreSymbol.χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1
+    · apply χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1
     · apply u_ne_zero t
 
 @[blueprint "lemma:X_comparison"]
@@ -87,21 +75,18 @@ lemma X_comparison
   :
   let t1 := t.val
   let t2 := -t1
-  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
   let X1 := X t s
-  let X2 := X ⟨t2, h2_2⟩ s
+  let X2 := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   X2 = 1 / X1 := by
-    intro t1 t2 h2_2 X1 X2
+    intro t1 t2 X1 X2
     let u1 := u t
-    let u2 := u ⟨t2, h2_2⟩
+    let u2 := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
     let v1 := v t s
-    let v2 := v ⟨t2, h2_2⟩ s
+    let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
     let χ_of_v1 := LegendreSymbol.χ v1
     let χ_of_v2 := LegendreSymbol.χ v2
     calc
-      X2 = χ_of_v2 * u2 := by
-        change χ_of_v2 * u2 = χ_of_v2 * u2
-        rfl
+      X2 = χ_of_v2 * u2 := by rfl
       _ = χ_of_v1 / u1 := by
         unfold χ_of_v2 v2 t2
         rw [v_comparison_implication4 t q_h1 q_h3]
@@ -113,9 +98,7 @@ lemma X_comparison
         unfold χ_of_v1
         nth_rw 1 [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
         ring_nf
-      _ = 1 / X1 := by
-        change 1 / X1 = 1 / X1
-        rfl
+      _ = 1 / X1 := by rfl
 
 @[blueprint "lemma:X_of_zero"]
 lemma X_of_zero
@@ -124,18 +107,16 @@ lemma X_of_zero
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
-  have h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by exact FiniteFieldBasic.zero_h1
-  let X_of_t := X ⟨(0 : F), h1⟩ s
-  X_of_t = 1 := by
-    intro h1 X_of_t
-    unfold X_of_t X
-    let v_of_t := v ⟨(0 : F), h1⟩ s
-    let r_of_s := r s
-    let χ_of_v_of_t := LegendreSymbol.χ v_of_t
+  let X_of_zero := X ⟨(0 : F), zero_h1⟩ s
+  X_of_zero = 1 := by
+    intro X_of_zero
+    unfold X_of_zero X
+    let χ_of_v := LegendreSymbol.χ (v ⟨(0 : F), zero_h1⟩ s)
     rw [u_of_zero]
-    change χ_of_v_of_t * 1 = 1
-    unfold χ_of_v_of_t v_of_t
+    change χ_of_v * 1 = 1
+    unfold χ_of_v
     rw [v_of_zero]
-    change (LegendreSymbol.χ (r_of_s^2)) * 1 = 1
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (r_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+    rw [χ_of_a_pow_two_eq_one (r_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
     simp
+
+end Elligator.Elligator1

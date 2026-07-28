@@ -106,4 +106,16 @@ lemma c_pow_two_ne_zero
     · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
     · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
 
+@[blueprint "lemma:s_pow_two_eq_two_over_c"]
+lemma s_pow_two_eq_two_over_c
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  : s^2 = 2 / (c s) := by
+    change s^2 = 2 / (2 / s^2)
+    ring_nf
+    rw [inv_inv]
+    rw [mul_assoc]
+    rw [inv_mul_cancel₀ (two_ne_zero q_h1 q_h2 q_h3), mul_one]
+
 end Elligator.Elligator1
