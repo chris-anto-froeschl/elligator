@@ -5,45 +5,30 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
-public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
-public import Elligator.Elligator1.cProperties
-public import Elligator.Elligator1.dProperties
-public import Elligator.Elligator1.uProperties
-public import Elligator.Elligator1.vProperties
-public import Elligator.Elligator1.XProperties
-public import Elligator.Elligator1.YProperties
-public import Elligator.Elligator1.xProperties
-public import Elligator.Elligator1.yProperties
 public import Elligator.Elligator1.etaProperties
 public import Elligator.Elligator1.X2Properties
-
-@[expose] public section
 
 /-!
 # z Properties
 
-In this file we introduce some generally helpful lemmas for `z` as introduced in `Elligator.Elligator1.Variables`.
-
-## Main results
-
-- TODO
+In this file we introduce some generally helpful lemmas for `z` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
-section zProperties
+open Elligator.FiniteFieldBasic
+open Elligator.LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 @[blueprint "lemma:z_eq_zero"]
 lemma z_eq_zero
@@ -54,30 +39,27 @@ lemma z_eq_zero
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
-  let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
-  let z := z s point q
+  let P := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let z := z s P q
   z = 0 := by
-    intro point z_of_point
-    unfold z_of_point z
-    let c_of_s := c s
+    intro P z
+    unfold z Elligator1.z
+    let c := c s
     repeat rw [X2_eq_neg_one t s_h1 s_h2 q_h1 q_h2 q_h3]
-    change LegendreSymbol.χ ((c_of_s - 1) * s * (-1) * (1 + (-1)) * point.1 * ((-1) ^ 2 + 1 / c_of_s ^ 2)) = 0
-    simp
-    exact LegendreSymbol.χ_a_zero_eq_zero (rfl) q_h1 q_h2 q_h3
+    simp_all
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 @[blueprint "def:z'"]
 noncomputable def z'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   : F :=
-  let Y := Y' s_h2 q_h1 q_h2 q_h3 point
-  let X := X2 s point q
+  let Y := Y' s_h2 q_h1 q_h3 P
+  let X := X2 s P q
   let c := c s
-  LegendreSymbol.χ (Y * (X^2 + 1 / c^2))
+  χ (Y * (X^2 + 1 / c^2))
 
 @[blueprint "lemma:Y'_ne_zero"]
 lemma Y'_ne_zero
@@ -86,23 +68,18 @@ lemma Y'_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_ne_one : point.val.2 ≠ 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_ne_one : P.val.2 ≠ 1)
   :
-  let Y := Y' s_h2 q_h1 q_h2 q_h3 point
+  let Y := Y' s_h2 q_h1 q_h3 P
   Y ≠ 0 := by
     intro Y
-    let X := X2 s point q
-    let x := point.val.1
-    let c := c s
-    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one
-    let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨point.val, point_props⟩
+    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_ne_one
+    let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨P.val, P_props⟩
     let c_sub_one_ne_zero := c_sub_one_ne_zero s_h2
     unfold Y Y'
-    change (c - 1) * s * X * (1 + X) / x ≠ 0
-    rw [add_comm]
     grind
 
 @[blueprint "lemma:X_pow_two_add_"]
@@ -112,9 +89,9 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   :
-  let X := X2 s point q
+  let X := X2 s P q
   let c := c s
   X^2 + 1 / c^2 ≠ 0 := by
     intro X c h
@@ -122,10 +99,11 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
     rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
     ring_nf at h
     change X^2 * c^2 + c⁻¹^2 * c^2 = 0 at h
-    rw [inv_pow c 2, inv_mul_cancel₀ (FiniteFieldBasic.pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)), ← add_left_inj (-1 : F), ← mul_pow] at h
-    simp at h
-    have h' : ¬IsSquare (-1 : F) := by exact FiniteFieldBasic.neg_one_non_square q_h1 q_h2 q_h3
-    have h' : IsSquare (-1 : F) := by
+    rw [inv_pow c 2, inv_mul_cancel₀ (pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3))] at h
+    rw [← add_left_inj (-1 : F), ← mul_pow] at h
+    simp only [add_neg_cancel_right, zero_add] at h
+    let h' := neg_one_non_square q_h1 q_h2 q_h3
+    have h'' : IsSquare (-1 : F) := by
       rw [← h, pow_two]
       apply IsSquare.mul_self
     contradiction
@@ -137,19 +115,15 @@ lemma z'_argument_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_ne_one : point.val.2 ≠ 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_ne_one : P.val.2 ≠ 1)
   :
-  let Y := Y' s_h2 q_h1 q_h2 q_h3 point
-  let X := X2 s point q
+  let Y := Y' s_h2 q_h1 q_h3 P
+  let X := X2 s P q
   let c := c s
-  Y * (X^2 + 1 / c^2) ≠ 0 := by
-    intro Y X c
-    let h1 := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
-    let h2 := X_pow_two_add_1_over_c_pow_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point
-    grind
+  Y * (X^2 + 1 / c^2) ≠ 0 := by grind [Y'_ne_zero, X_pow_two_add_1_over_c_pow_two_ne_zero]
 
 @[blueprint "lemma:z'_ne_zero"]
 lemma z'_ne_zero
@@ -158,20 +132,21 @@ lemma z'_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_ne_one : point.val.2 ≠ 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_ne_one : P.val.2 ≠ 1)
   :
-  let z :=z' s_h2 q_h1 q_h2 q_h3 point
+  let z := z' s_h2 q_h1 q_h3 P
   z ≠ 0 := by
     intro z
-    let Y := Y' s_h2 q_h1 q_h2 q_h3 point
-    let X := X2 s point q
+    let Y := Y' s_h2 q_h1 q_h3 P
+    let X := X2 s P q
     let c := c s
-    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    let z'_argument_ne_zero :=
+      z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
-    exact LegendreSymbol.χ_a_ne_zero z'_argument_ne_zero q_h1
+    exact χ_a_ne_zero z'_argument_ne_zero q_h1
 
 @[blueprint "lemma:z'_eq_one_or_z'_eq_neg_one"]
 lemma z'_eq_one_or_z'_eq_neg_one
@@ -180,23 +155,25 @@ lemma z'_eq_one_or_z'_eq_neg_one
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_ne_one : point.val.2 ≠ 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_ne_one : P.val.2 ≠ 1)
   :
-  let z :=z' s_h2 q_h1 q_h2 q_h3 point
+  let z := z' s_h2 q_h1 q_h3 P
   z = 1 ∨ z = -1 := by
     intro z
-    let Y := Y' s_h2 q_h1 q_h2 q_h3 point
-    let X := X2 s point q
+    let Y := Y' s_h2 q_h1 q_h3 P
+    let X := X2 s P q
     let c := c s
     let a := (Y * (X^2 + 1 / c^2))
-    let χ_of_a := LegendreSymbol.χ a
-    have h1 := @LegendreSymbol.χ_values _ _ _ q a q_h1 q_h2 q_h3
+    let χ_of_a := χ a
+    have h1 := @χ_values _ _ _ q a q_h1 q_h2 q_h3
     change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1
-    have h2 := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one
+    have h2 := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
     change χ_of_a ≠ 0 at h2
     change χ_of_a = 1 ∨ χ_of_a = -1
     simp_all
     grind
+
+end Elligator.Elligator1

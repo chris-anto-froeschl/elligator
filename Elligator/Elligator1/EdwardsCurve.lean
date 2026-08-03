@@ -18,6 +18,13 @@ The general curve definition deliberately does not depend on a finite field, its
 the Elligator parameter `s`; those assumptions occur only in the specialization proving that
 `d s` is a valid coefficient.
 
+## Main results
+
+- `curve`: the untwisted Edwards curve with the paper's coefficient `d(s)`.
+- `curve_isValid`: the Elligator hypotheses imply that `d(s)` is a valid Edwards coefficient.
+- `EOverF`: the set of affine field-valued points satisfying the Elligator 1 curve equation.
+- `EOverF_eq_affinePoints`: `EOverF` agrees with the general twisted-Edwards affine-point set.
+
 ## References
 
 See [bernstein2013a] chapter 3.

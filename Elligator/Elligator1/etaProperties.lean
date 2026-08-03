@@ -5,45 +5,28 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
 public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
-public import Elligator.Elligator1.cProperties
-public import Elligator.Elligator1.dProperties
-public import Elligator.Elligator1.uProperties
-public import Elligator.Elligator1.vProperties
-public import Elligator.Elligator1.XProperties
-public import Elligator.Elligator1.YProperties
-public import Elligator.Elligator1.xProperties
-public import Elligator.Elligator1.yProperties
 public import Elligator.Elligator1.Map
 public import Elligator.Elligator1.MapProperties
-
-@[expose] public section
 
 /-!
 # η Properties
 
-In this file we introduce some generally helpful lemmas for `η` as introduced in `Elligator.Elligator1.Variables`.
-
-## Main results
-
-- TODO
+In this file we introduce some generally helpful lemmas for `η` as introduced in
+`Elligator.Elligator1.Variables`.
 
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
-section etaProperties
-
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 @[blueprint "lemma:η_eq_zero"]
 lemma η_eq_zero
@@ -54,13 +37,15 @@ lemma η_eq_zero
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
-  let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
-  let η_of_point := η point
-  η_of_point = 0 := by
-    intro point η_of_point
-    unfold η_of_point η
-    let y_of_t := point.2
-    change (y_of_t - 1) / (2 * (y_of_t + 1)) = 0
-    unfold y_of_t point
+  let P := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let η := η P
+  η = 0 := by
+    intro P η
+    unfold η Elligator1.η
+    let y := P.2
+    change (y - 1) / (2 * (y + 1)) = 0
+    unfold y P
     rw [ϕ_of_t_eq_zero_one t s_h1 s_h2 q_h1 q_h2 q_h3]
     simp
+
+end Elligator.Elligator1

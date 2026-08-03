@@ -20,16 +20,24 @@ public import Elligator.Elligator1.yProperties
 /-!
 # Map
 
-In this file we collect the main results regarding the map of Elligator 1.
+This file formalizes the construction and well-definedness results in Theorem 1 of the Elligator
+paper. For a field input `t ≠ ±1`, the auxiliary quantities `u`, `v`, `X`, and `Y` determine a
+point `(x, y)` on the complete Edwards curve. The exceptional inputs `t = ±1` are incorporated by
+`ϕ`, which sends both to `(0, 1)`.
 
 ## Main results
 
-- `u_defined`, `Y_defined`, `x_defined`, `y_defined`: variables are well defined
-- `map_fulfills_curve_equation`: the defined variables fulfill a curve equation
+- `u_defined`, `Y_defined`, `x_defined`, `y_defined`: the denominators in the paper's formulas
+  are nonzero, so the displayed expressions are defined.
+- `map_fulfills_helper_equation`: the auxiliary coordinates satisfy `Y² = X⁵ + (r² - 2)X³ + X`.
+- `variable_mul_ne_zero`: the nonvanishing assertion `u * v * X * Y * x * (y + 1) ≠ 0`
+  from Theorem 1.
+- `map_fulfills_curve_equation`: the resulting `(x, y)` satisfies the Edwards curve equation.
+- `ϕ`: Definition 2's total map from field elements to points on the Edwards curve.
 
 ## References
 
-See [bernstein2013a] chapter 3 theorem 1.
+See [bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 -/
 
 @[expose] public section
@@ -110,7 +118,8 @@ theorem y_defined
     intro t
     exact y_divisor_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t
 
--- Chapter 3.2 Theorem 1
+/-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
+`Y² = X⁵ + (r² - 2)X³ + X`. -/
 @[blueprint
   (title := "Fulfill Helper Curve Equation")
   (statement := /--
@@ -132,7 +141,8 @@ theorem map_fulfills_helper_equation
     intro r_of_s X_of_t Y_of_t
     exact helper_eq t s_h1 q_h1 q_h2 q_h3
 
--- Chapter 3.2 Theorem 1
+/-- The quantities constructed for a nonexceptional input are all nonzero as asserted in
+Theorem 1: `u * v * X * Y * x * (y + 1) ≠ 0`. -/
 @[blueprint
   (title := "Non zero helper variables")
   (statement := /--
@@ -156,7 +166,8 @@ theorem variable_mul_ne_zero
   let y := y t s
   u * v * X  * Y * x * (y + 1) ≠ 0 := variable_mul_ne_zero' t s_h1 s_h2 q_h1 q_h2 q_h3
 
--- Chapter 3.2 Theorem 1
+/-- The coordinates produced from a nonexceptional input satisfy the Edwards curve equation
+`x² + y² = 1 + d * x² * y²`. This is the final conclusion of Theorem 1. -/
 @[blueprint
   (title := "Fulfill Curve Equation")
   (statement := /--
@@ -181,7 +192,11 @@ theorem map_fulfills_curve_equation
     rw [edwardsCurveEquation_iff]
     exact curve_equation t s_h1 s_h2 q_h1 q_h2 q_h3
 
-/-- Original: Chapter "3.2 The map": Definition 2 -/
+/-- The total Elligator map `ϕ : F → E(F)` from Definition 2 of the paper.
+
+For `t ≠ ±1`, it returns the coordinates `x(t)` and `y(t)` constructed in Theorem 1. The two
+exceptional inputs `t = ±1` are both mapped to the neutral point `(0, 1)`. The codomain subtype
+records that the result satisfies the Edwards curve equation. -/
 @[blueprint "def:ϕ"]
 noncomputable def ϕ
   (t : F)

@@ -35,7 +35,9 @@ namespace Elligator
 `a * x^2 + y^2 = 1 + d * x^2 * y^2`. -/
 @[ext]
 structure TwistedEdwardsCurve (R : Type*) where
+  /-- left hand side coefficient -/
   a : R
+  /-- right hand side coefficient -/
   d : R
 
 namespace TwistedEdwardsCurve

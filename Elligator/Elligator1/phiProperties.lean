@@ -5,109 +5,70 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Mathlib
-public import Elligator.FiniteFieldBasic
-public import Elligator.LegendreSymbol
-public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
-public import Elligator.Elligator1.cProperties
-public import Elligator.Elligator1.dProperties
-public import Elligator.Elligator1.uProperties
-public import Elligator.Elligator1.vProperties
-public import Elligator.Elligator1.XProperties
-public import Elligator.Elligator1.YProperties
-public import Elligator.Elligator1.xProperties
-public import Elligator.Elligator1.yProperties
-public import Elligator.Elligator1.Map
-public import Elligator.Elligator1.MapProperties
 public import Elligator.Elligator1.t2Properties
-
-@[expose] public section
 
 /-!
 # ϕ Properties
 
 In this file we introduce some generally helpful lemmas for `ϕ`.
 
-## Main results
-
-- TODO
-
 ## References
 
 See [bernstein2013a] chapter 3.
 -/
 
+@[expose] public section
+
 namespace Elligator.Elligator1
 
-section phiProperties
+open Elligator.FiniteFieldBasic
+open Elligator.LegendreSymbol
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 @[blueprint "lemma:x_y_eq_zero_one"]
 lemma x_y_eq_zero_one
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_eq_zero : point.val.1 = 0)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_eq_zero : P.val.1 = 0)
   :
-  point.val = ((0 : F), (1 : F)) := by
-    let x := point.val.1
-    let y := point.val.2
-    have h1 : y + 1 ≠ 0 := by
-      unfold ϕOverFProps ϕOverFProp1 at point_props
-      exact point_props.1
-    have h2 : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
-      exact x_y_eq_zero_sign_one s_h2 q_h1 q_h3 point x_eq_zero
+  P.val = ((0 : F), (1 : F)) := by
+    let x := P.val.1
+    let y := P.val.2
+    have h : y + 1 ≠ 0 := P_props.1
+    let h' := x_y_eq_zero_sign_one s_h2 q_h1 q_h3 P x_eq_zero
     change (x, y) = (0, 1)
-    rcases h2 with h3 | h3
-    · exact h3
-    · change (x, y) = (0, -1) at h3
-      have h4 := Prod.mk.inj h3
-      have h5 : y + 1 = 0 := by
-        rw [← add_left_inj (-1)]
-        simp
-        exact h4.right
+    rcases h' with h'' | h''
+    · exact h''
+    · change (x, y) = (0, -1) at h''
+      have h''' : y + 1 = 0 := by grind
       contradiction
 
 @[blueprint "lemma:y_ne_one"]
 lemma y_ne_one
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (x_ne_zero : point.val.1 ≠ 0)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (x_ne_zero : P.val.1 ≠ 0)
   :
-  let y := point.val.2
+  let y := P.val.2
   y ≠ 1 := by
-    intro y h1
-    let x := point.val.1
-    let d_of_s := d s
-    have h2 : x = 0 := by
-      have h2_1 : x^2 + y^2 = 1 + d_of_s * x^2 * y^2 := by
-        let h2_1_1 := point.prop
-        simp only [EOverF, edwardsCurveEquation_iff] at h2_1_1
-        exact h2_1_1
-      rw [h1] at h2_1
-      simp at h2_1
-      rw [← add_left_inj (-1), ← add_left_inj (-x^2)] at h2_1
-      simp at h2_1
-      rw [← neg_one_mul (x^2), ← add_mul, pow_two, ← mul_assoc] at h2_1
-      rw [← div_left_inj' (x_ne_zero), ← div_left_inj' (x_ne_zero)] at h2_1
-      rw [mul_div_assoc, div_self (x_ne_zero), mul_one] at h2_1
-      rw [mul_div_assoc, div_self (x_ne_zero), mul_one] at h2_1
-      rw [← add_left_inj 1] at h2_1
-      simp at h2_1
-      have h2_2 : IsSquare d_of_s := by
-        rw [← h2_1, ← one_mul 1, ← pow_two]
-        apply IsSquare.sq 1
-      have h2_2 : ¬ IsSquare d_of_s := by exact d_nonsquare s_h2 q_h1 q_h3
+    intro y h
+    let x := P.val.1
+    let d := d s
+    have h' : x = 0 := by
+      have h'' : x^2 + y^2 = 1 + d * x^2 * y^2 := by
+        let P_h := P.prop
+        simp only [EOverF, edwardsCurveEquation_iff] at P_h
+        exact P_h
+      have t_h : IsSquare d := by grind
+      let t_h' := d_nonsquare s_h2 q_h1 q_h3
       contradiction
     contradiction
 
@@ -117,29 +78,21 @@ lemma η_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
   :
-  let η_of_point := η point.val
-  η_of_point ≠ 0 := by
-    intro η_of_point
-    let x := point.val.1
-    let y := point.val.2
-    unfold η_of_point η
+  (η P.val) ≠ 0 := by
+    let x := P.val.1
+    let y := P.val.2
+    unfold η
     change (y - 1) / (2 * (y + 1)) ≠ 0
     apply div_ne_zero
-    · intro h1
-      have h2 : y ≠ 1 := by exact y_ne_one s_h2 q_h1 q_h2 q_h3 point x_ne_zero
-      have h3: y = 1 := by
-        rw [← add_left_inj 1] at h1
-        simp at h1
-        exact h1
+    · intro h
+      have h' := y_ne_one s_h2 q_h1 q_h3 P x_ne_zero
+      have h'': y = 1 := by grind
       contradiction
-    · unfold ϕOverFProps at point_props
-      apply mul_ne_zero
-      · exact FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
-      · exact point_props.1
+    · exact mul_ne_zero (two_ne_zero q_h1 q_h2 q_h3) P_props.1
 
 @[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t_base_case"]
 lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
@@ -177,19 +130,15 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
   ϕ_of_t = ϕ_of_neg_t := by
     let t1 := t.val
     let t2 := -t.val
-    have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     let x1 := x t s q
-    let x2 := x ⟨t2, h2_2⟩ s q
+    let x2 := x ⟨t2, t_h⟩ s q
     let y1 := y t s
-    let y2 := y ⟨t2, h2_2⟩ s
-    have h2_10 : y2 = y1 := by exact y_comparison t s_h1 q_h1 q_h2 q_h3
-    have h2_12 : x2 = x1 := by exact x_comparison t s_h1 q_h1 q_h2 q_h3
+    let y2 := y ⟨t2, t_h⟩ s
+    have h : y2 = y1 := by exact y_comparison t q_h1 q_h2 q_h3
+    have h' : x2 = x1 := by exact x_comparison t s_h1 q_h1 q_h2 q_h3
     change (ϕ t1 s_h1 s_h2 q_h1 q_h2 q_h3).val = (ϕ t2 s_h1 s_h2 q_h1 q_h2 q_h3).val
-    unfold ϕ
-    simp
-    rw [dif_pos h2_2, dif_pos t.property]
-    change (x1, y1) = (x2, y2)
-    rw [h2_10, h2_12]
+    grind [ϕ]
 
 -- Original: Theorem 3.1 forward statement, Proof A
 @[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t"]
@@ -207,10 +156,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t
     intro ϕ_of_t ϕ_of_neg_t
     by_cases h2 : t = 1 ∨ t = -1
     · exact ϕ_of_t_eq_ϕ_of_neg_t_base_case ⟨t, h2⟩ s_h1 s_h2 q_h1 q_h2 q_h3
-    · have h2_1 : (t ≠ 1 ∧ t ≠ -1) := by
-        rw [ne_eq, ne_eq]
-        rw [← not_or]
-        exact h2
+    · have h2_1 : (t ≠ 1 ∧ t ≠ -1) := by grind
       exact ϕ_of_t_eq_ϕ_of_neg_t_main_case ⟨t, h2_1⟩ s_h1 s_h2 q_h1 q_h2 q_h3
 
 @[blueprint "thm:ϕ_preimages"]
@@ -224,37 +170,42 @@ theorem ϕ_preimages
   (q_h3 : q % 4 = 3)
   :
   let ϕ_of_t := (ϕ t s_h1 s_h2 q_h1 q_h2 q_h3).val
-  ¬ (∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), (ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3).val = ϕ_of_t) := by
+  ¬(∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), (ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3).val = ϕ_of_t) := by
     intro ϕ_of_t h
     rcases h with ⟨p, hp⟩
-    have h1 : p.val = t ∨ p.val = -t := by
-      let p_point := ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3
-      let t_point := ϕ t s_h1 s_h2 q_h1 q_h2 q_h3
-      let t2_of_p := t2 s p_point q
-      let t2_of_t := t2 s t_point q
-      have h11 : t2_of_p = p ∨ t2_of_p = -p := by
-        exact (t2_in_t_or_neg_t p.val s_h1 s_h2 q_h1 q_h2 q_h3)
-      have h12 : t2_of_t = t ∨ t2_of_t = -t := by
-        exact (t2_in_t_or_neg_t t s_h1 s_h2 q_h1 q_h2 q_h3)
-      unfold t2_of_p p_point at h11
-      rw [hp] at h11
-      change t2_of_t = p ∨ t2_of_t = -p at h11
-      rcases h11
-      · rename_i h13
-        rw [← h13]
-        exact h12
-      · rename_i h13
-        rw [h13] at h12
-        simp at h12
-        symm at h12
-        nth_rw 2 [← mul_left_inj' FiniteFieldBasic.neg_one_ne_zero] at h12
-        simp at h12
-        exact h12
-    have h4 : p ≠ t := by exact p.prop.left
-    have h5 : p ≠ -t := by exact p.prop.right
-    rcases h1
-    · contradiction
-    · contradiction
+    have h' : p.val = t ∨ p.val = -t := by
+      let p_P := ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3
+      let t_P := ϕ t s_h1 s_h2 q_h1 q_h2 q_h3
+      let t2_of_p := t2 s p_P q
+      let t2_of_t := t2 s t_P q
+      have t2_h : t2_of_p = p ∨ t2_of_p = -p := t2_in_t_or_neg_t p.val s_h1 s_h2 q_h1 q_h2 q_h3
+      have t2_h' : t2_of_t = t ∨ t2_of_t = -t := t2_in_t_or_neg_t t s_h1 s_h2 q_h1 q_h2 q_h3
+      unfold t2_of_p p_P at t2_h
+      rw [hp] at t2_h
+      change t2_of_t = p ∨ t2_of_t = -p at t2_h
+      rcases t2_h with h | h <;> grind
+    have h'' := p.prop.left
+    have h''' := p.prop.right
+    rcases h' <;> contradiction
+
+
+/-- Equality of images under `ϕ` forces the inputs to agree up to sign.
+This is the preimage conclusion of Theorem 3, restated in the form needed for the injectivity
+argument in Theorem 4. -/
+lemma eq_or_eq_neg_of_ϕ_eq
+  (t t' : F)
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (h : ϕ t s_h1 s_h2 q_h1 q_h2 q_h3 = ϕ t' s_h1 s_h2 q_h1 q_h2 q_h3) :
+  t = t' ∨ t = -t' := by
+    by_contra hne
+    push Not at hne
+    apply ϕ_preimages t s_h1 s_h2 q_h1 q_h2 q_h3
+    use ⟨t', by grind⟩
+    grind
 
 -- Implicated by main case of Theorem 3 Proof part B
 @[blueprint "lemma:ϕ_of_zero"]
@@ -266,52 +217,42 @@ lemma ϕ_of_zero
   (q_h3 : q % 4 = 3)
   :
   let ϕ_of_zero := (ϕ (0 : F) s_h1 s_h2 q_h1 q_h2 q_h3).val
-  let c_of_s := c s;
-  let χ_of_c_of_s  := LegendreSymbol.χ c_of_s
-  let r_of_s := r s
-  ϕ_of_zero  = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) := by
-    intro ϕ_of_zero c_of_s χ_of_c_of_s r_of_s
+  let c := c s
+  let r := r s
+  ϕ_of_zero  = (2 * (c - 1) * s * (χ c) / r, (r - 4) / (r + 4)) := by
+    intro ϕ_of_zero c r
     unfold ϕ_of_zero ϕ
-    let h1 := @FiniteFieldBasic.zero_h1 F _
-    simp only []
-    rw [dif_pos h1]
-    let η_of_point := η ϕ_of_zero
-    have h2 : η_of_point * r_of_s = -2 := by
-      unfold η_of_point η ϕ_of_zero ϕ
+    let h := @zero_h1 F _
+    let η_of_P := η ϕ_of_zero
+    have h' : η_of_P * r = -2 := by
+      unfold η_of_P η ϕ_of_zero ϕ
       simp only []
-      rw [dif_pos h1]
-      let y_of_t := y ⟨(0 : F), h1⟩ s
-      let X_of_zero := X ⟨(0 : F), h1⟩ s
-      change (y_of_t - 1) / (2 * (y_of_t + 1)) * r_of_s = -2
+      rw [dif_pos h]
+      let y := y ⟨(0 : F), h⟩ s
+      let X := X ⟨(0 : F), h⟩ s
+      change (y - 1) / (2 * (y + 1)) * r = -2
       -- This has to be proven again here as in y_η_h1 and X_η_h1 since
       -- the lemmas itself do not help with concret t values
-      unfold y_of_t
-      rw [(y_of_zero s_h1 q_h1 q_h2 q_h3)]
-      change ((r_of_s - 4) / (r_of_s + 4) - 1) / (2 * ((r_of_s - 4) / (r_of_s + 4) + 1)) * r_of_s = -2
-      have h2_2 : 1 = (r_of_s + 4) / (r_of_s + 4) := by
-        rw [add_comm]
-        rw [div_self (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3)]
-      nth_rw 1 [h2_2]
-      nth_rw 1 [h2_2]
-      rw [← sub_div, ← add_div, ← sub_sub, ← add_assoc]
+      unfold y
+      rw [y_of_zero s_h1 q_h1 q_h2 q_h3]
+      change ((r - 4) / (r + 4) - 1) / (2 * ((r - 4) / (r + 4) + 1)) * r = -2
+      have t_h : 1 = (r + 4) / (r + 4) := by
+        rw [add_comm, div_self (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3)]
+      rw [t_h, ← sub_div, ← add_div, ← sub_sub, ← add_assoc]
       ring_nf
-      rw [inv_inv, mul_comm r_of_s, mul_assoc _ r_of_s, mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h2 q_h3), mul_one]
-      rw [inv_mul_cancel₀ (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3), one_mul]
-      rw [← mul_neg_one, ← mul_right_inj' (FiniteFieldBasic.four_ne_zero q_h1 q_h2 q_h3)]
-      rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (FiniteFieldBasic.four_ne_zero q_h1 q_h2 q_h3)]
+      rw [inv_inv, mul_comm r, mul_assoc _ r, mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h2 q_h3)]
+      rw [mul_one, inv_mul_cancel₀ (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3), one_mul]
+      rw [← mul_neg_one, ← mul_right_inj' (four_ne_zero q_h1 q_h2 q_h3)]
+      rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (four_ne_zero q_h1 q_h2 q_h3)]
       ring_nf
-    rw [y_η_h1 ⟨0, h1⟩ s_h1 s_h2 q_h1 q_h2 q_h3 h2]
     let x_of_t := ϕ_of_zero.1
-    have h3 : x_of_t = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by
-      apply point_in_ϕOverF_with_prop3 (0 : F) s_h1 s_h2 q_h1 q_h2 q_h3
-      exact h2
+    have h3 : x_of_t = 2 * s * (c - 1) * (χ c) / r := by
+      apply P_in_ϕOverF_with_prop3 (0 : F) s_h1 s_h2 q_h1 q_h2 q_h3
+      exact h'
+    simp only [ne_eq, not_false_eq_true, and_self, reduceDIte, h]
+    rw [y_η_h1 ⟨0, h⟩ s_h1 s_h2 q_h1 q_h2 q_h3 h']
     unfold x_of_t ϕ_of_zero ϕ at h3
-    simp only [] at h3
-    rw [dif_pos h1] at h3
-    simp at h3
-    rw [h3]
-    change (2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4)) = (2 * (c_of_s - 1) * s * χ_of_c_of_s / r_of_s, (r_of_s - 4) / (r_of_s + 4))
-    ring_nf
+    grind
 
 -- Used in theorem 3 proof part C
 @[blueprint "lemma:x_y_eq_ϕ_of_zero_of_X2_eq_one"]
@@ -321,24 +262,20 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {P : F × F // ϕOverFProps s P})
-  (y_eq_one : point.val.2 ≠ 1)
+  (P : {P : F × F // ϕOverFProps s P})
+  (y_eq_one : P.val.2 ≠ 1)
   :
-  let x := point.val.1
-  let y := point.val.2
-  let X2_of_point := X2 s point.val q
-  let ϕ_of_zero  := ϕ 0 s_h1 s_h2 q_h1 q_h2 q_h3
-  X2_of_point = 1 → ϕ_of_zero = (x, y) := by
-    intro x y X2_of_point ϕ_of_zero' X2_h
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 point y_eq_one
-    let η_of_point := η point.val
-    let r_of_s := r s
-    let h2 := point.prop.2.2
-    let c_of_s := c s
-    let χ_of_c_of_s := LegendreSymbol.χ c_of_s
-    have h1 : η_of_point * r_of_s = -2 := by exact η_mul_r_eq_neg_two_of_X2_eq_one q_h1 q_h2 q_h3 point X2_h
-    have h2 : x = 2 * s * (c_of_s - 1) * χ_of_c_of_s / r_of_s := by exact point.prop.2.2 h1
-    have h3 : y = (r_of_s - 4) / (r_of_s + 4) := by exact y_with_X2_of_X2_eq_one s_h1 q_h1 q_h2 q_h3 point y_eq_one X2_h
+  let x := P.val.1
+  let y := P.val.2
+  let X2_of_P := X2 s P.val q
+  let ϕ_of_zero := ϕ 0 s_h1 s_h2 q_h1 q_h2 q_h3
+  X2_of_P = 1 → ϕ_of_zero = (x, y) := by
+    intro x y X2_of_P ϕ_of_zero' X2_h
+    let r := r s
+    let c := c s
+    have h1 := η_mul_r_eq_neg_two_of_X2_eq_one q_h1 q_h2 q_h3 P X2_h
+    have h2 : x = 2 * s * (c - 1) * (χ c) / r := P.prop.2.2 h1
+    have h3 : y = (r - 4) / (r + 4) := y_with_X2_of_X2_eq_one s_h1 q_h1 q_h2 q_h3 P y_eq_one X2_h
     rw [h2, h3]
     let ϕ_of_zero'' := ϕ_of_zero s_h1 s_h2 q_h1 q_h2 q_h3
     grind
@@ -351,26 +288,27 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_ne_one : point.val.2 ≠ 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_ne_one : P.val.2 ≠ 1)
   :
-  let x := point.val.1
-  let y := point.val.2
-  let X := X2 s point q
-  let t := t' s_h2 q_h1 q_h2 q_h3 point
+  let x := P.val.1
+  let y := P.val.2
+  let X := X2 s P q
+  let t := t' s_h2 q_h1 q_h3 P
   let ϕ_of_t := ϕ t s_h1 s_h2 q_h1 q_h2 q_h3
   X ≠ 1 → ϕ_of_t = (x, y) := by
-    intro x y X t ϕ_of_t h1
+    intro x y X t ϕ_of_t h
     unfold ϕ_of_t ϕ
-    let h2 := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
-    simp
-    rw [dif_pos h2]
-    let x_of_t := Elligator1.x ⟨t, h2⟩ s q
-    let y_of_t := Elligator1.y ⟨t, h2⟩ s
+    let h' := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+      s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one h
+    simp only []
+    rw [dif_pos h']
+    let x_of_t := Elligator1.x ⟨t, h'⟩ s q
+    let y_of_t := Elligator1.y ⟨t, h'⟩ s
     change (x_of_t, y_of_t) = (x, y)
-    let h3 := x_y_of_point_eq_x_y_of_t s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one h1
+    let h'' := x_y_of_P_eq_x_y s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one h
     grind
 
 @[blueprint "lemma:ϕ_of_t2_eq_x_y_base_case"]
@@ -382,16 +320,13 @@ lemma ϕ_of_t2_eq_x_y_base_case
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
-  let point := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
-  let t' := t2 s point q
+  let P := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let t' := t2 s P q
   let ϕ_of_t' := (ϕ t' s_h1 s_h2 q_h1 q_h2 q_h3).val
   ϕ_of_t' = (0, 1) := by
-    intro point t' ϕ_of_t'
+    intro P t' ϕ_of_t'
     unfold ϕ_of_t' ϕ
-    have h1 : ¬ (t' ≠ 1 ∧ t' ≠ -1) := by
-      unfold t'
-      rw [t2_eq_one t s_h1 s_h2 q_h1 q_h2 q_h3]
-      simp
+    have h1 : ¬ (t' ≠ 1 ∧ t' ≠ -1) := by grind [t2_eq_one]
     simp only []
     rw [dif_neg h1]
 
@@ -404,14 +339,14 @@ lemma ϕ_of_t2_eq_x_y_main_case
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
-  let point := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
-  let t' := t2 s point q
+  let P := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
+  let t' := t2 s P q
   let ϕ_of_t' := ϕ t' s_h1 s_h2 q_h1 q_h2 q_h3
   let x_of_t := x t s q
   let y_of_t := y t s
   ϕ_of_t' = (x_of_t, y_of_t) := by
-    intro point t' ϕ_of_t' x_of_t y_of_t
-    have h2_2 : (-t.val ≠ 1 ∧ -t.val ≠ -1) := by exact FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one t
+    intro P t' ϕ_of_t' x_of_t y_of_t
+    have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     unfold ϕ_of_t' ϕ
     rcases (t2_in_t_or_neg_t t.val s_h1 s_h2 q_h1 q_h2 q_h3) with h | h
     · change t' = t at h
@@ -421,10 +356,10 @@ lemma ϕ_of_t2_eq_x_y_main_case
     · change t' = -t at h
       rw [h]
       simp only []
-      rw [dif_pos h2_2]
+      rw [dif_pos t_h]
       unfold x_of_t y_of_t
       symm
-      exact point_comparison t s_h1 q_h1 q_h2 q_h3
+      exact P_comparison t s_h1 q_h1 q_h2 q_h3
 
 @[blueprint "lemma:ϕ_of_one_eq_zero_one"]
 lemma ϕ_of_one_eq_zero_one
@@ -435,10 +370,7 @@ lemma ϕ_of_one_eq_zero_one
   (q_h3 : q % 4 = 3)
   :
   let ϕ_of_one := (ϕ (1 : F) s_h1 s_h2 q_h1 q_h2 q_h3).val
-  ϕ_of_one = (0, 1) := by
-    intro ϕ_of_one
-    unfold ϕ_of_one ϕ
-    simp
+  ϕ_of_one = (0, 1) := by simp [ϕ]
 
 @[blueprint "lemma:ϕ_of_neg_one_eq_zero_one"]
 lemma ϕ_of_neg_one_eq_zero_one
@@ -449,10 +381,7 @@ lemma ϕ_of_neg_one_eq_zero_one
   (q_h3 : q % 4 = 3)
   :
   let ϕ_of_neg_one := (ϕ (-1 : F) s_h1 s_h2 q_h1 q_h2 q_h3).val
-  ϕ_of_neg_one = (0, 1) := by
-    intro ϕ_of_neg_one
-    unfold ϕ_of_neg_one ϕ
-    simp
+  ϕ_of_neg_one = (0, 1) := by simp [ϕ]
 
 @[blueprint "lemma:ϕ_of_one_in_ϕ_of_F"]
 lemma ϕ_of_one_in_ϕ_of_F
@@ -465,126 +394,118 @@ lemma ϕ_of_one_in_ϕ_of_F
   let ϕ_of_one := (ϕ (1 : F) s_h1 s_h2 q_h1 q_h2 q_h3).val
   ϕ_of_one ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3 := by
     intro ϕ_of_one
-    unfold ϕOverF
-    rw [Set.mem_setOf_eq]
     use (1 : F)
 
-@[blueprint "lemma:point_in_ϕOverF_base_case"]
-lemma point_in_ϕOverF_base_case
+@[blueprint "lemma:P_in_ϕOverF_base_case"]
+lemma P_in_ϕOverF_base_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_eq_zero : point.val.1 = 0)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_eq_zero : P.val.1 = 0)
   :
-  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3;
-  point.val ∈ ϕOverF := by
-    rw [x_y_eq_zero_one s_h2 q_h1 q_h2 q_h3 point point_props x_eq_zero]
+  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3
+  P.val ∈ ϕOverF := by
+    rw [x_y_eq_zero_one s_h2 q_h1 q_h3 P P_props x_eq_zero]
     rw [← ϕ_of_one_eq_zero_one s_h1 s_h2 q_h1 q_h2 q_h3]
     exact ϕ_of_one_in_ϕ_of_F s_h1 s_h2 q_h1 q_h2 q_h3
 
-@[blueprint "lemma:point_in_ϕOverF_main_case_with_y_eq_one"]
-lemma point_in_ϕOverF_main_case_with_y_eq_one
+@[blueprint "lemma:P_in_ϕOverF_main_case_with_y_eq_one"]
+lemma P_in_ϕOverF_main_case_with_y_eq_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_eq_one : point.val.2 = 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_eq_one : P.val.2 = 1)
   :
-  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3;
-  point.val ∈ ϕOverF := by
+  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3
+  P.val ∈ ϕOverF := by
     intro ϕOverF
-    let x := point.val.1
-    let y := point.val.2
+    let x := P.val.1
+    let y := P.val.2
     -- Note: this differs from original proof, which claims that this implies x = 0, contra
-    -- I was not able to see that
-    have h4_1 := point.prop;
-    unfold EOverF at h4_1
-    rw [Set.mem_setOf_eq] at h4_1
-    let d_of_s := d s;
-    rw [y_eq_one] at h4_1
-    simp only [edwardsCurveEquation_iff] at h4_1
-    change x ^ 2 + 1 ^ 2 = 1 + d_of_s * x ^ 2 * 1 ^ 2  at h4_1
-    rw [← add_right_inj (-1)] at h4_1
-    rw [← div_left_inj' x_ne_zero, ← div_left_inj' x_ne_zero] at h4_1
-    ring_nf at h4_1
-    have h5 : x^2 ≠ 0 := by grind
-    rw [inv_pow, mul_inv_cancel₀ h5, one_mul] at h4_1
-    let h6 := d_ne_one s_h2 q_h1 q_h3
-    symm at h4_1
+    -- TODO I was not able to see that
+    have h := P.prop;
+    unfold EOverF at h
+    rw [Set.mem_setOf_eq] at h
+    let d := d s;
+    rw [y_eq_one] at h
+    simp only [edwardsCurveEquation_iff] at h
+    change x ^ 2 + 1 ^ 2 = 1 + d * x ^ 2 * 1 ^ 2  at h
+    rw [← add_right_inj (-1)] at h
+    rw [← div_left_inj' x_ne_zero, ← div_left_inj' x_ne_zero] at h
+    ring_nf at h
+    have h' : x^2 ≠ 0 := by grind
+    rw [inv_pow, mul_inv_cancel₀ h', one_mul] at h
+    let h'' := d_ne_one s_h2 q_h1 q_h3
+    symm at h
     contradiction
 
-@[blueprint "lemma:point_in_ϕOverF_main_case_with_y_ne_one"]
-lemma point_in_ϕOverF_main_case_with_y_ne_one
+@[blueprint "lemma:P_in_ϕOverF_main_case_with_y_ne_one"]
+lemma P_in_ϕOverF_main_case_with_y_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
-  (y_ne_one : point.val.2 ≠ 1)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
+  (y_ne_one : P.val.2 ≠ 1)
   :
-  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3;
-  point.val ∈ ϕOverF := by
+  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3
+  P.val ∈ ϕOverF := by
     intro ϕOverF
-    let x := point.val.1
-    let y := point.val.2
-    let η_ne_zero := η_ne_zero s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero
     unfold ϕOverF Elligator1.ϕOverF
-    rw [Set.mem_setOf_eq]
-    let X2_of_point := X2 s point q
-    let t := t' s_h2 q_h1 q_h2 q_h3 point
-    by_cases X2_h : X2_of_point = (1 : F)
+    rw [Set.mem_range]
+    let X2_of_P := X2 s P q
+    let t := t' s_h2 q_h1 q_h3 P
+    by_cases X2_h : X2_of_P = (1 : F)
     · use 0
-      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨point.val, point_props⟩ y_ne_one X2_h
+      exact x_y_eq_ϕ_of_zero_of_X2_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_ne_one X2_h
     · use t
-      exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_ne_one X2_h
+      exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one X2_h
 
-@[blueprint "lemma:point_in_ϕOverF_main_case"]
-lemma point_in_ϕOverF_main_case
+@[blueprint "lemma:P_in_ϕOverF_main_case"]
+lemma P_in_ϕOverF_main_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  (point_props : ϕOverFProps s point)
-  (x_ne_zero : point.val.1 ≠ 0)
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (P_props : ϕOverFProps s P)
+  (x_ne_zero : P.val.1 ≠ 0)
   :
-  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3;
-  point.val ∈ ϕOverF := by
+  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3
+  P.val ∈ ϕOverF := by
     intro ϕOverF
-    let x := point.val.1
-    let y := point.val.2
+    let y := P.val.2
     by_cases y_h : y = 1
-    · exact point_in_ϕOverF_main_case_with_y_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 point x_ne_zero y_h
-    · exact point_in_ϕOverF_main_case_with_y_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 point point_props x_ne_zero y_h
+    · exact P_in_ϕOverF_main_case_with_y_eq_one s_h1 s_h2 q_h1 q_h2 q_h3 P x_ne_zero y_h
+    · exact P_in_ϕOverF_main_case_with_y_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_h
 
 -- Original: Theorem 3.2 Proof C (3.2 reverse statement)
-@[blueprint "thm:point_in_ϕOverF_of_point_props"]
-theorem point_in_ϕOverF_of_point_props
+@[blueprint "thm:P_in_ϕOverF_of_P_props"]
+theorem P_in_ϕOverF_of_P_props
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
-  :
-  ϕOverFProps s point
-  → point.val ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3
-  := by
+  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  : ϕOverFProps s P → P.val ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3 := by
     intro h1
-    let x := point.val.1
-    let y := point.val.2
+    let x := P.val.1
     by_cases h2 : x = 0
-    · exact point_in_ϕOverF_base_case s_h1 s_h2 q_h1 q_h2 q_h3 point h1 h2
+    · exact P_in_ϕOverF_base_case s_h1 s_h2 q_h1 q_h2 q_h3 P h1 h2
     · rw [← not_ne_iff, not_not] at h2
-      exact point_in_ϕOverF_main_case s_h1 s_h2 q_h1 q_h2 q_h3 point h1 h2
+      exact P_in_ϕOverF_main_case s_h1 s_h2 q_h1 q_h2 q_h3 P h1 h2
+
+end Elligator.Elligator1
