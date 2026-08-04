@@ -767,10 +767,9 @@ lemma Y'_observation2
     rw [← Y'_pow_two_eq_χ_of_v'_mul_v', mul_assoc, ← Y'_observation1]
     rw [← pow_mul, add_comm]
     change Y = Y^(2 * ((1 + q) / 4)) * (χ Y)
-    rw [← q_h1]
     nth_rw 2 [mul_comm]
-    rw [one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
-    rw [q_h1, add_comm, a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
+    rw [one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
+    rw [add_comm, a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
     rw [mul_comm, ← mul_assoc]
     rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
     let Y'_ne_zero := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one

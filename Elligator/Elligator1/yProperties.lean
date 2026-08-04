@@ -76,7 +76,7 @@ lemma helper_eq
           change ((χ_of_v * v)^((q + 1) / 4) * χ_of_v * χ_of_sum)^2
             = (χ_of_v * v)^((q + 1) / 2) * χ_of_v^2 * χ_of_sum^2
           ring_nf
-          rw [← q_h1, one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
+          rw [one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
         _ = (χ_of_v * v)^((q + 1) / 2) * 1 := by
           rw [χ_of_a_even_pow_n_eq_one v_ne_zero ⟨2, even_two⟩ q_h1 q_h3]
           rw [χ_of_a_even_pow_n_eq_one

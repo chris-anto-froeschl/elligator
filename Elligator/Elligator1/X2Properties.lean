@@ -68,12 +68,11 @@ lemma X2_h1
     change (1 + η_of_P * r + (-(1 + η_of_P * r) + a))^2 = a_sqr
     ring_nf
     unfold a a_sqr
-    rw [← q_h1]
     nth_rw 2 [add_comm]
-    rw [← pow_mul, one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
+    rw [← pow_mul, one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
     unfold η_of_P
     nth_rw 2 [add_comm]
-    rw [q_h1, a_pow_q_add_one_over_two_eq_a P.prop.2.1 q_h1 q_h3]
+    rw [a_pow_q_add_one_over_two_eq_a P.prop.2.1 q_h1 q_h3]
 
 lemma X2_h2
   (q_h1 : Fintype.card F = q)

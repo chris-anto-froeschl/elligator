@@ -46,7 +46,7 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
     intro h
     have h' : X^2 * c^2 + c⁻¹^2 * c^2 = 0 := by grind
     have h'' : X^2 * c^2 = -1 := by grind [c_ne_zero]
-    have h''' : ¬IsSquare (-1 : F) := by exact neg_one_non_square q_h1 q_h2 q_h3
+    have h''' : ¬IsSquare (-1 : F) := neg_one_non_square q_h1 q_h3
     have h'''' : IsSquare (-1 : F) := by
       rw [← h'', ← mul_pow]
       apply IsSquare.sq (X * c)

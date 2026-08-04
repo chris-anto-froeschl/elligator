@@ -119,7 +119,7 @@ lemma one_add_X_ne_zero
       rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b] at h1
       nth_rw 1 [← neg_one_mul] at h1
       rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b] at h1
-      rw [χ_of_neg_one_eq_neg_one q_h1 q_h2 q_h3] at h1
+      rw [χ_of_neg_one_eq_neg_one q_h1 q_h3] at h1
       rw [χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3] at h1
       change -1 * χ_of_v * χ (r ^ 2) * -χ_of_v = -1 at h1
       have h5_1 : r^2 ≠ 0 := pow_two_ne_zero (r_ne_zero s_h1 q_h1 q_h2 q_h3)
@@ -200,9 +200,8 @@ lemma Y_comparison
         have h''' : (u1^6)^((q + 1) / 4) = χ_of_u1 * u1^3  := by
           have h'''' : 6 = 3 * 2 := by norm_num
           rw [h'''', ← pow_mul, mul_assoc, mul_comm, pow_mul, mul_comm]
-          rw [← q_h1, add_comm]
-          rw [one_add_card_over_four_mul_two_eq_one_add_card_over_two q_h1 q_h3]
-          rw [q_h1, add_comm, a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
+          rw [add_comm, one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
+          rw [add_comm, a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
           change (χ_of_u1 * u1)^3 = χ_of_u1 * u1^3
           rw [mul_pow, χ_of_a_pow_n_eq_χ_a u1 ⟨3, by trivial⟩ q_h1 q_h2 q_h3]
         calc

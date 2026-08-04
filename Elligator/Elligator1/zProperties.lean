@@ -98,7 +98,7 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
     rw [inv_pow c 2, inv_mul_cancel₀ (pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3))] at h
     rw [← add_left_inj (-1 : F), ← mul_pow] at h
     simp only [add_neg_cancel_right, zero_add] at h
-    let h' := neg_one_non_square q_h1 q_h2 q_h3
+    let h' := neg_one_non_square q_h1 q_h3
     have h'' : IsSquare (-1 : F) := by
       rw [← h, pow_two]
       apply IsSquare.mul_self

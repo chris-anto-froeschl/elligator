@@ -27,37 +27,31 @@ variable {q : ℕ}
 namespace Elligator.FiniteFieldBasic
 
 omit [Field F] in
-lemma q_odd (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
-  : Odd (Fintype.card F) := by
-    rw [Nat.odd_iff]
-    omega
+lemma q_odd (q_h3 : q % 4 = 3) : Odd q := by
+  rw [Nat.odd_iff]
+  omega
 
 omit [Field F] in
-lemma q_sub_one_over_two_odd
-  (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
-  : Odd ((Fintype.card F - 1) / 2) := by
-    rw [Nat.odd_iff]
-    omega
+lemma q_sub_one_over_two_odd (q_h3 : q % 4 = 3) : Odd ((q - 1) / 2) := by
+  rw [Nat.odd_iff]
+  omega
 
 omit [Field F] in
-lemma q_sub_one_even (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
-  : Even (Fintype.card F - 1) := by
-    rw [Nat.even_iff]
-    omega
+lemma q_sub_one_even (q_h3 : q % 4 = 3) : Even (q - 1) := by
+  rw [Nat.even_iff]
+  omega
 
 omit [Field F] in
-lemma q_sub_one_dvd_two (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
-  : 2 ∣ Fintype.card F - 1 := Even.two_dvd (q_sub_one_even q_h1 q_h3)
+lemma q_sub_one_dvd_two (q_h3 : q % 4 = 3) : 2 ∣ q - 1 := Even.two_dvd (q_sub_one_even q_h3)
 
-lemma primepow_ne_one (q_h2 : IsPrimePow q)
-  : q ≠ 1 := by
-    intro h
-    have h' : ¬ IsPrimePow q := by
-      intro h2_1_1
-      apply IsPrimePow.two_le at h2_1_1
-      rw [h] at h2_1_1
-      contradiction
+lemma primepow_ne_one (q_h2 : IsPrimePow q) : q ≠ 1 := by
+  intro h
+  have h' : ¬ IsPrimePow q := by
+    intro h2_1_1
+    apply IsPrimePow.two_le at h2_1_1
+    rw [h] at h2_1_1
     contradiction
+  contradiction
 
 lemma odd_prime_power_gt_two (q_h2 : IsPrimePow q) (hq : Odd q) : q > 2 := by
   have h1 : q ≠ 0 := by grind
@@ -80,6 +74,7 @@ lemma ring_char_ne_two
     obtain ⟨p, k, hp, hk, hpk⟩ := q_h2
     obtain ⟨n, hrc, hcard⟩ := FiniteField.card F (ringChar F)
     rw [q_h1, ← hpk] at hcard
+    -- TODO
     have h1 : p ∣ ringChar F := hp.dvd_of_dvd_pow (hcard ▸ dvd_pow_self p hk.ne')
     have h2 : p = ringChar F := (Nat.prime_dvd_prime_iff_eq hp.nat_prime hrc).mp h1
     have h3 : p ≠ 2 := by
@@ -125,14 +120,8 @@ lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by
     simp
   simp_all
 
-lemma neg_one_non_square
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  : ¬IsSquare (-1 : F) := by
-    have h_neg_one_not_square : IsSquare (-1 : F) ↔ Fintype.card F % 4 ≠ 3 := by
-      apply_rules [ FiniteField.isSquare_neg_one_iff ];
-    aesop
+lemma neg_one_non_square (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
+  : ¬IsSquare (-1 : F) := by grind [FiniteField.isSquare_neg_one_iff]
 
 lemma p_odd_power_odd (p k : ℕ) (hp : Odd p) : Odd (p^k) := Odd.pow hp
 
@@ -211,50 +200,34 @@ lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
       have h2_2_1_2 : t1 ≠ 1 := by exact t.property.left
       contradiction
 
-omit [Field F] in
-lemma one_add_card_mod_four_eq_zero
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  : (1 + Fintype.card F) % 4 = 0 := by omega
+lemma q_sub_one_over_four_mul_two_eq_one_add_q_over_two
+  : (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
 
 omit [Field F] in
-lemma four_dvd_one_add_card
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  : 4 ∣ (1 + Fintype.card F) := by
-    exact Nat.dvd_of_mod_eq_zero (
-      one_add_card_mod_four_eq_zero q_h1 q_h3)
+lemma one_add_q_mod_four_eq_zero (q_h3 : q % 4 = 3) : (1 + q) % 4 = 0 := by omega
 
 omit [Field F] in
-lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  :
-  let card := Fintype.card F
-  ((1 + card) / 4 * 2) = (1 + card) / 2 := by
-    intro card
-    have h : (1 + card) % 4 = 0 :=
-      one_add_card_mod_four_eq_zero q_h1 q_h3
+lemma four_dvd_one_add_q (q_h3 : q % 4 = 3) : 4 ∣ (1 + q) :=
+  Nat.dvd_of_mod_eq_zero (one_add_q_mod_four_eq_zero q_h3)
+
+omit [Field F] in
+lemma one_add_q_over_four_mul_two_eq_one_add_q_over_two (q_h3 : q % 4 = 3)
+  : ((1 + q) / 4 * 2) = (1 + q) / 2 := by
+    have h : (1 + q) % 4 = 0 :=
+      one_add_q_mod_four_eq_zero q_h3
     omega
 
 omit [Fintype F] in
-lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
-  {a : F}
-  (a_ne_zero : a ≠ 0)
+lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a {a : F} (a_ne_zero : a ≠ 0)
   : 1 + 1 / a^2 = (a + 1 / a) / a := by
     ring_nf
     rw [mul_inv_cancel₀ a_ne_zero]
 
-lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two
-  : (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
+lemma q_h1 (q_h3 : q % 4 = 3) : (q + 1) / 4 * 2 = (q - 1) / 2 + 1 := by grind
 
-lemma q_h1 (q_h3 : q % 4 = 3)
-  : (q + 1) / 4 * 2 = (q - 1) / 2 + 1 := by grind
-
-lemma ringChar_of_F_eq_q (q_h1 : Fintype.card F = q) (q_prime : Prime q)
-  : ringChar F = q := by
-    have := FiniteField.card F (ringChar F)
-    aesop
+lemma ringChar_of_F_eq_q (q_h1 : Fintype.card F = q) (q_prime : Prime q) : ringChar F = q := by
+  have := FiniteField.card F (ringChar F)
+  aesop
 
 @[simp, blueprint "lemma:ringChar_to_q"]
 lemma ringChar_to_q (q_h1 : Fintype.card F = q) (q_prime : Prime q)
@@ -266,9 +239,8 @@ lemma ringChar_to_q (q_h1 : Fintype.card F = q) (q_prime : Prime q)
 lemma fin_to_finfield_func_injective
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
-  : Function.Injective (fun n : Fin (Fintype.card F) => (n : F)) := by
+  : Function.Injective (fun n : Fin q => (n : F)) := by
     unfold Function.Injective
-    rw [q_h1]
     intro a b h1
     let h2 := ringChar.spec F
     specialize h2 (Int.natAbs (a - b))
@@ -293,9 +265,9 @@ lemma fin_to_finfield_func_injective
 lemma fin_to_finfield_func_surjective
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
-  : Function.Surjective (fun n : Fin (Fintype.card F) => (n : F)) := by
+  : Function.Surjective (fun n : Fin q => (n : F)) := by
     let h1 := fin_to_finfield_func_injective q_h1 q_prime
-    have h2 : Fintype.card (Fin (Fintype.card F)) = Fintype.card F := by simp_all
+    have h2 : Fintype.card (Fin q) = Fintype.card F := by simp_all
     let h3 := (Fintype.bijective_iff_injective_and_card _).mpr ⟨h1, h2⟩
     exact h3.2
 
@@ -305,7 +277,7 @@ lemma nat_to_finfield_func_surjective
   : Function.Surjective (fun n : ℕ => (n : F)) := by
     intro t
     let h := fin_to_finfield_func_surjective q_h1 q_prime
-    exact Exists.elim (h t) fun n hn => ⟨ n, hn ⟩;
+    exact Exists.elim (h t) fun n hn => ⟨n, hn⟩
 
 /-
 Every element of F can be written as (n : F) for some n < q because Fintype.card F = q and
