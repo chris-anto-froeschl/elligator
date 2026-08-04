@@ -64,9 +64,9 @@ lemma x_ne_zero
             have h1_2 := c_ne_one s_h2
             contradiction
           · apply s_h1
-        · apply X_ne_zero s_h1 q_h1 q_h2 q_h3 t
+        · apply X_ne_zero s_h1 q_h1 q_h3 t
       · apply one_add_X_ne_zero s_h1 q_h1 q_h2 q_h3 t
-    · apply Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    · apply Y_ne_zero s_h1 q_h1 q_h3 t
 
 lemma x_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
@@ -88,7 +88,7 @@ lemma x_comparison
     let X2 := X ⟨t2, t_h⟩ s
     let Y1 := Y t s q
     let Y2 := Y ⟨t2, t_h⟩ s q
-    have X_pow_three_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)
+    have X_pow_three_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero s_h1 q_h1 q_h3 t)
     calc
       x2 = (c - 1) * s * X2 * (1 + X2) / Y2 := by rfl
       _ = (c - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by grind [X_comparison, Y_comparison]

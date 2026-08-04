@@ -63,7 +63,6 @@ lemma Y'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (P_props : ϕOverFProps s P)
@@ -73,7 +72,7 @@ lemma Y'_ne_zero
   let Y := Y' s_h2 q_h1 q_h3 P
   Y ≠ 0 := by
     intro Y
-    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_ne_one
+    let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_ne_one
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨P.val, P_props⟩
     let c_sub_one_ne_zero := c_sub_one_ne_zero s_h2
     unfold Y Y'
@@ -83,7 +82,6 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   :
@@ -108,7 +106,6 @@ lemma z'_argument_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (P_props : ϕOverFProps s P)
@@ -124,7 +121,6 @@ lemma z'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (P_props : ϕOverFProps s P)
@@ -137,8 +133,7 @@ lemma z'_ne_zero
     let Y := Y' s_h2 q_h1 q_h3 P
     let X := X2 s P q
     let c := c s
-    let z'_argument_ne_zero :=
-      z'_argument_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
+    let z'_argument_ne_zero := z'_argument_ne_zero s_h1 s_h2 q_h1 q_h3 P P_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
     exact χ_a_ne_zero z'_argument_ne_zero q_h1
 
@@ -163,7 +158,7 @@ lemma z'_eq_one_or_z'_eq_neg_one
     let χ_of_a := χ a
     have h1 := @χ_values _ _ _ q a q_h1 q_h2 q_h3
     change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1
-    have h2 := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
+    have h2 := z'_ne_zero s_h1 s_h2 q_h1 q_h3 P P_props x_ne_zero y_ne_one
     change χ_of_a ≠ 0 at h2
     change χ_of_a = 1 ∨ χ_of_a = -1
     simp_all

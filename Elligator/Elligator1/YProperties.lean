@@ -37,7 +37,6 @@ variable {q : ℕ}
 lemma Y_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
@@ -48,7 +47,7 @@ lemma Y_ne_zero
     let χ_of_sum := χ (u^2 + 1 / (c s)^2)
     intro Y
     change ((χ v) * v)^((q + 1) / 4) * (χ v) * χ_of_sum ≠ 0
-    let v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    let v_ne_zero := v_ne_zero s_h1 q_h1 q_h3 t
     apply mul_ne_zero
     · apply mul_ne_zero
       · rw [mul_pow (χ v) v ((q + 1) / 4)]
@@ -58,7 +57,7 @@ lemma Y_ne_zero
         · apply pow_ne_zero (((q + 1) / 4) : ℕ)
           apply v_ne_zero
       · apply χ_a_ne_zero v_ne_zero q_h1
-    · apply χ_a_ne_zero (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1
+    · apply χ_a_ne_zero (v_h1_third_factor_ne_zero s_h1 q_h1 q_h3 t) q_h1
 
 @[blueprint "lemma:X_mul_Y_ne_zero"
   (title := "$XY \\neq 0$, so $x$ is defined")
@@ -69,7 +68,6 @@ lemma Y_ne_zero
 lemma X_mul_Y_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
@@ -77,8 +75,8 @@ lemma X_mul_Y_ne_zero
   let Y := Y t s q
   X * Y ≠ 0 := by
     apply mul_ne_zero
-    · apply X_ne_zero s_h1 q_h1 q_h2 q_h3 t
-    · apply Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    · apply X_ne_zero s_h1 q_h1 q_h3 t
+    · apply Y_ne_zero s_h1 q_h1 q_h3 t
 
 @[blueprint "lemma:one_add_X_ne_zero"
   (title := "$1 + X \\neq 0$, so $x \\neq 0$")
@@ -99,7 +97,7 @@ lemma one_add_X_ne_zero
     let v := v t s
     let r := r s
     let χ_of_v := χ v
-    let v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    let v_ne_zero := v_ne_zero s_h1 q_h1 q_h3 t
     intro X
     change 1 + χ_of_v * u ≠ 0
     intro h
@@ -122,7 +120,7 @@ lemma one_add_X_ne_zero
       rw [χ_of_neg_one_eq_neg_one q_h1 q_h3] at h1
       rw [χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3] at h1
       change -1 * χ_of_v * χ (r ^ 2) * -χ_of_v = -1 at h1
-      have h5_1 : r^2 ≠ 0 := pow_two_ne_zero (r_ne_zero s_h1 q_h1 q_h2 q_h3)
+      have h5_1 : r^2 ≠ 0 := pow_two_ne_zero (r_ne_zero s_h1 q_h1 q_h3)
       have h5_2 : IsSquare (r^2) := IsSquare.sq r
       rw [χ_a_eq_one h5_1 h5_2 q_h1 q_h3] at h1
       rw [mul_one] at h1
@@ -219,7 +217,7 @@ lemma Y_comparison
           rw [← χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 q_h1 q_h3) q_h1 q_h3]
           rw [mul_comm, ← χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero t) q_h1 q_h3]
           rw [mul_comm, χ_of_a_eq_χ_a_mul_b_pow_two
-            (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1 q_h3]
+            (v_h1_third_factor_ne_zero s_h1 q_h1 q_h3 t) q_h1 q_h3]
           grind
         _ = χ ((u1^2 * (c^2 + u1^2)) * (u1^2 + 1 / c^2)^2) := by
           rw [pow_two u2]
@@ -253,7 +251,7 @@ lemma Y_comparison
         rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← mul_assoc, mul_assoc Y1 (χ u1) (χ u1)]
         rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
         rw [χ_of_a_pow_two_eq_one u_ne_zero q_h1 q_h3, one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
-        let v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
+        let v_ne_zero := v_ne_zero s_h1 q_h1 q_h3 t
         rw [← χ_of_a_pow_n_eq_χ_a v1 ⟨3, by trivial⟩ q_h1 q_h2 q_h3]
         change Y1 * 1 * (1 / χ_of_v1^3) / u1^3 = Y1 / (χ_of_v1 * u1)^3
         grind

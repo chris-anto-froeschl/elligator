@@ -33,11 +33,7 @@ variable {q : ℕ}
   In the situation of Theorem 1, $r = c + 1/c \neq 0$: if $r = 0$ then $c = -1/c$, so
   $c^2 = -1$, a contradiction since $-1$ is not a square in $\mathbb{F}_q$.
   -/)]
-lemma r_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+lemma r_ne_zero (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : (r s) ≠ 0 := by
     intro h
     let c := c s
@@ -62,7 +58,6 @@ lemma four_add_r_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : 4 + (r s) ≠ 0 := by
     let c := c s
@@ -85,7 +80,7 @@ lemma four_add_r_ne_zero
       omega
     exact h_not_sq h_neg_sq
 
-lemma r_h1 (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+lemma r_h1 (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   :
   let r := r s
   let c := c s
@@ -104,7 +99,6 @@ lemma r_sub_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : (r s) - 2 ≠ 0 := by
     let c := c s

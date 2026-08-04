@@ -50,19 +50,19 @@ lemma y_h1
   let X := X t s
   X^2 + (2 + r * (y - 1) / (y + 1)) * X + 1 = 0 := by
     intro y r X
-    rw [← mul_left_inj' (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+    rw [← mul_left_inj' (y_add_one_ne_zero s_h1 q_h1 q_h3 t)]
     change (X^2 + (2 + r * (y - 1) / (y + 1)) * X + 1) * (y + 1) = 0 * (y + 1)
     repeat rw [add_mul]
     rw [zero_mul]
     have h1 : (2 * X * (y + 1) + r * (y - 1) / (y + 1) * X * (y + 1))
       = (2 * (y + 1) + r * (y - 1)) * X := by
-      rw [add_mul _ _ X, ← div_left_inj' (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+      rw [add_mul _ _ X, ← div_left_inj' (y_add_one_ne_zero s_h1 q_h1 q_h3 t)]
       change (2 * X * (y + 1) + r * (y - 1) / (y + 1) * X * (y + 1)) / (y + 1)
         = (2 * (y + 1) * X + r * (y - 1) * X) / (y + 1)
-      repeat rw [add_div, mul_div_assoc, div_self (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+      repeat rw [add_div, mul_div_assoc, div_self (y_add_one_ne_zero s_h1 q_h1 q_h3 t)]
       rw [mul_comm (2 * (y + 1)) X, ← mul_assoc]
       nth_rw 2 [mul_div_assoc]
-      rw [div_self (y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+      rw [div_self (y_add_one_ne_zero s_h1 q_h1 q_h3 t)]
       ring_nf
     have h2 : (2 * (y + 1) + r * (y - 1)) = (y * r - r + 2 * y + 2) := by ring_nf
     rw [h1, h2, mul_add, add_mul]
@@ -133,13 +133,13 @@ lemma y_h3
   X + 1 / X = -2 * (1 + η * r) := by
     intro r X P η
     rw [← add_right_inj (2 * (1 + η * r))]
-    rw [← mul_left_inj' (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+    rw [← mul_left_inj' (X_ne_zero s_h1 q_h1 q_h3 t)]
     change (2 * (1 + η * r) + (X + 1 / X)) * X = (2 * (1 + η * r) + -2 * (1 + η * r)) * X
     have h1 : (2 * (1 + η * r) + -2 * (1 + η * r)) * X = 0 := by ring_nf
     rw [h1, ← y_h2 t s_h1 s_h2 q_h1 q_h2 q_h3]
     change (2 * (1 + η * r) + (X + 1 / X)) * X = X^2 + 2 * (1 + η * r) * X + 1
     ring_nf
-    rw [mul_inv_cancel₀ (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+    rw [mul_inv_cancel₀ (X_ne_zero s_h1 q_h1 q_h3 t)]
     ring_nf
 
 lemma X_comparison_implication
@@ -179,7 +179,7 @@ lemma X_comparison_implication2
     unfold X2
     rw [X_comparison t q_h1 q_h2 q_h3]
     rw [← inv_eq_one_div]
-    rw [inv_mul_cancel₀ (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
+    rw [inv_mul_cancel₀ (X_ne_zero s_h1 q_h1 q_h3 t)]
 
 lemma χ_IsSquare_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
@@ -191,7 +191,7 @@ lemma χ_IsSquare_h1
   let v := v t s
   IsSquare (((χ v) * v)^((q + 1) / 4)) := by
     intro v
-    have v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    have v_ne_zero := v_ne_zero s_h1 q_h1 q_h3 t
     have h1 := χ_a_mul_a_IsSquare v_ne_zero q_h1 q_h2 q_h3
     unfold IsSquare at h1
     rcases h1 with ⟨r, hr⟩
@@ -269,11 +269,11 @@ lemma X_η_h1
     have h1_1 : X + 1 / X = -2 * (1 + η * r) := by exact (y_h3 t s_h1 s_h2 q_h1 q_h2 q_h3)
     rw [η_h1] at h1_1
     ring_nf at h1_1
-    rw [← mul_left_inj' (X_ne_zero s_h1 q_h1 q_h2 q_h3 t), add_mul] at h1_1
+    rw [← mul_left_inj' (X_ne_zero s_h1 q_h1 q_h3 t), add_mul] at h1_1
     change X * X + X⁻¹ * X = 2 * X at h1_1
     rw [← add_left_inj (2 * X)]
     ring_nf
-    rw [inv_mul_cancel₀ (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)] at h1_1
+    rw [inv_mul_cancel₀ (X_ne_zero s_h1 q_h1 q_h3 t)] at h1_1
     rw [pow_two, add_comm]
     nth_rw 2 [mul_comm]
     exact h1_1
@@ -318,7 +318,7 @@ lemma u_η_h1
     let X := X t s
     let v := v t s
     let χ_of_v := χ v
-    have v_ne_zero := v_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    have v_ne_zero := v_ne_zero s_h1 q_h1 q_h3 t
     have h1 : X = χ_of_v * u := by rfl
     unfold X at h1
     rw [X_η_h2 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1] at h1
@@ -416,7 +416,7 @@ lemma Y_η_h1
         rw [v_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1, u_η_h1 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1]
         change (χ (r^2) * r^2)^((q + 1) / 4) * χ (r^2) * (χ (1^2 + 1 / c^2))
           = (r^2)^((q + 1) / 4) * χ (1 + 1 / c^2)
-        have h1 : r^2 ≠ 0 := pow_two_ne_zero (r_ne_zero s_h1 q_h1 q_h2 q_h3)
+        have h1 : r^2 ≠ 0 := pow_two_ne_zero (r_ne_zero s_h1 q_h1 q_h3)
         have h2 : IsSquare (r^2) := IsSquare.sq r
         rw [χ_a_eq_one h1 h2 q_h1 q_h3]
         nth_rw 2 [pow_two]
@@ -426,7 +426,7 @@ lemma Y_η_h1
         change (r^2)^((q + 1) / 4) * χ (r / c) = (χ r) * r * χ (r / c)
         rw [b_pow_q_add_one_over_four_eq_χ_of_a_mul_a q_h1 q_h3]
       _ = r * (χ c) := by
-        have r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
+        have r_ne_zero := r_ne_zero s_h1 q_h1 q_h3
         let χ_of_one_over_c := χ (1 / c)
         calc
           (χ r) * r * χ (r / c) = r * (χ r) * (χ r) * χ_of_one_over_c := by
@@ -465,18 +465,13 @@ lemma y_η_h1
     rw [X_η_h2 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1]
     ring_nf
 
-lemma y_of_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  :
+lemma y_of_zero (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3) :
   let y := y ⟨(0 : F), zero_h1⟩ s
   let r := r s
   y = (r - 4) / (r + 4) := by
     intro y r
     unfold y Elligator1.y
-    rw [X_of_zero s_h1 q_h1 q_h2 q_h3]
+    rw [X_of_zero s_h1 q_h1 q_h3]
     change (r * 1 - (1 + 1)^2) / (r * 1 + (1 + 1)^2) = (r - 4) / (r + 4)
     ring_nf
 
@@ -644,7 +639,7 @@ lemma P_in_ϕOverF_with_prop1_main_case
     unfold y P ϕ
     simp only []
     rw [dif_pos t.prop]
-    exact y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    exact y_add_one_ne_zero s_h1 q_h1 q_h3 t
 
 -- Original: Theorem 3.2 Proof B prop 1 argumentation
 lemma P_in_ϕOverF_with_prop1

@@ -115,7 +115,6 @@ lemma d_ne_zero_and_d_ne_one
 lemma neg_d_eq_r_add_two_over_r_sub_two
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
   let r := r s;

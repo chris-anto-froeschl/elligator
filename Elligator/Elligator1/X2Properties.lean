@@ -153,7 +153,6 @@ lemma X2_ne_zero
 lemma y_divisor_ne_zero_with_X2_for_X
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
@@ -166,7 +165,7 @@ lemma y_divisor_ne_zero_with_X2_for_X
     change X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 at h2
     let y := P.val.2
     have h3 : 2 * η = 1 := by
-      have hne : r * X2 ≠ 0 := mul_ne_zero (r_ne_zero s_h1 q_h1 q_h2 q_h3) (X2_ne_zero q_h1 q_h3 P)
+      have hne : r * X2 ≠ 0 := mul_ne_zero (r_ne_zero s_h1 q_h1 q_h3) (X2_ne_zero q_h1 q_h3 P)
       rw [← div_left_inj' hne]
       grind
     have h4 : y - 1 = y + 1 := by
@@ -178,7 +177,6 @@ lemma y_divisor_ne_zero_with_X2_for_X
 lemma X2_ne_neg_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
@@ -195,7 +193,7 @@ lemma X2_ne_neg_one
     rw [h1] at X2_equation
     have h2 : η = 0 := by
       ring_nf at X2_equation
-      let r_ne_zero := r_ne_zero s_h1 q_h1 q_h2 q_h3
+      let r_ne_zero := r_ne_zero s_h1 q_h1 q_h3
       rw [← div_left_inj' (two_ne_zero q_h1 q_h3)] at X2_equation
       rw [← div_left_inj' r_ne_zero] at X2_equation
       ring_nf at X2_equation
@@ -220,7 +218,6 @@ lemma X2_ne_neg_one
 lemma X2_add_one_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_ne_one : P.val.2 ≠ 1)
@@ -231,7 +228,6 @@ lemma X2_add_one_ne_zero
 lemma y_with_X2
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
@@ -246,7 +242,7 @@ lemma y_with_X2
     let y_add_one_ne_zero := P.prop.1
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 P
     let two_ne_zero := two_ne_zero q_h1 q_h3
-    let r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
+    let r_ne_zero := r_ne_zero s_h1 q_h1 q_h3
     change X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 at X2_equation
     have h1 : y = (1 + 2 * η) / (1 - 2 * η) := by
       have h1_1 : η = (y - 1) / (2 * (y + 1)) := by simp [η, Elligator1.η, y]
@@ -283,7 +279,6 @@ lemma y_with_X2
 lemma y_with_X2_of_X2_eq_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
@@ -295,7 +290,6 @@ lemma y_with_X2_of_X2_eq_one
 
 lemma η_mul_r_eq_neg_two_of_X2_eq_one
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
@@ -314,7 +308,6 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
 lemma X2_observation1_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
@@ -324,8 +317,8 @@ lemma X2_observation1_of_X2_ne_one
   let r := r s
   X2 ≠ 1 → (r * X2 + (1 + X2)^2)^2 * (1 - y^2) = 4 * r * X2 * (1 + X2)^2 := by
     intro X2 y r X2_h
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 P y_eq_one
-    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h2 q_h3
+    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 P y_eq_one
+    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h3
     change y = (r * X2 - (1 + X2)^2) / (r * X2 + (1 + X2)^2) at y_with_X2
     have h1 : (r * X2 + (1 + X2)^2)^2 * (1 - y^2)
       = (r * X2 + (1 + X2)^2)^2 - (r * X2 - (1 + X2)^2)^2 := by
@@ -340,7 +333,6 @@ lemma X2_observation2_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
@@ -352,10 +344,10 @@ lemma X2_observation2_of_X2_ne_one
   X2 ≠ 1 → (r * X2 + (1 + X2)^2)^2 * (1 - d * y^2)
     = ((2 * r) / (r - 2)) * (X2^4 + (r^2 - 2) * X2^2 + 1) := by
     intro X2 y r d X2_h
-    let neg_d_eq_r_add_two_over_r_sub_two := neg_d_eq_r_add_two_over_r_sub_two s_h1 q_h1 q_h2 q_h3
+    let neg_d_eq_r_add_two_over_r_sub_two := neg_d_eq_r_add_two_over_r_sub_two s_h1 q_h1 q_h3
     change -d = (r + 2) / (r - 2) at neg_d_eq_r_add_two_over_r_sub_two
-    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h2 q_h3
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 P y_eq_one
+    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h3
+    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 P y_eq_one
     change y = (r * X2 - (1 + X2)^2) / (r * X2 + (1 + X2)^2) at y_with_X2
     have h1 : (r * X2 + (1 + X2)^2)^2 * (1 - d * y^2)
       = (r * X2 + (1 + X2)^2)^2 + (r + 2) / (r - 2) * ((r * X2 - (1 + X2)^2)^2) := by
@@ -375,7 +367,7 @@ lemma X2_observation2_of_X2_ne_one
     have h4 : B^2 = X2^ 4 - 2 * (r - 2) * X2^3 + ((r - 2)^2 + 2) * X2^2 - 2 * (r - 2) * X2 + 1 := by
       grind
     rw [h3, h4]
-    let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3
+    let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h3
     have X_pow_four_term : X2^4 + (r + 2) / (r - 2) * X2^4 = X2^4 * (2 * r) / (r - 2) := by grind
     have X_pow_three_term : X2^3 * 2 * (r + 2) + (r + 2) / (r - 2) * (-2 * (r - 2) * X2^3) = 0 := by
       grind
@@ -451,7 +443,6 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (P_props : ϕOverFProps s P)
@@ -466,20 +457,20 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
     let d := d s;
     let x_pow_two_of_X2_ne_one_eq1 := x_pow_two_of_X2_ne_one_eq1 s_h2 q_h1 q_h3 P P_props
     change x^2 = (1 - y^2) / (1 - d*y^2) at x_pow_two_of_X2_ne_one_eq1
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_eq_one
+    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
     change y = (r * X - (1 + X)^2) / (r * X + (1 + X)^2) at y_with_X2
     let y_divisor_ne_zero_with_X2_for_X :=
-      y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩
+      y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h3 ⟨P.val, P_props⟩
     change r * X + (1 + X)^2 ≠ 0 at y_divisor_ne_zero_with_X2_for_X
     have h1 : (r * X + (1 + X)^2)^2 ≠ 0 := by grind
     have h2 : 1 = ((r * X + (1 + X)^2)^2) / ((r * X + (1 + X)^2)^2) := by grind
     let X2_observation1_of_X2_ne_one :=
-      X2_observation1_of_X2_ne_one s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_eq_one
+      X2_observation1_of_X2_ne_one s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
     change X ≠ 1 →
       (r * X + (1 + X)^2)^2 * (1 - y^2) = 4 * r * X * (1 + X)^2 at X2_observation1_of_X2_ne_one
     have h3 : (r * X + (1 + X)^2)^2 * (1 - y^2) = 4 * r * X * (1 + X)^2 := by grind
     let X2_observation2_of_X2_ne_one :=
-      X2_observation2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_eq_one
+      X2_observation2_of_X2_ne_one s_h1 s_h2 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
     change X ≠ 1 → (r * X + (1 + X)^2)^2 * (1 - d * y^2)
       = ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) at X2_observation2_of_X2_ne_one
     have h4 : (r * X + (1 + X)^2)^2 * (1 - d * y^2)
@@ -494,7 +485,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         rw [mul_div_assoc, div_mul_div_comm]
         grind
       _ = (2 * (r - 2) * X * (1 + X)^2) / (X^4 + (r^2 - 2) * X^2 + 1) := by
-        let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3
+        let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h3
         change r - 2 ≠ 0 at r_sub_two_ne_zero
         have h' : 1 = (r - 2) / (r - 2) := by grind
         rw [← one_mul ((4 * r * X * (1 + X)^2) / ((2 * r) / (r - 2) * (X^4 + (r^2 - 2) * X^2 + 1)))]
@@ -510,7 +501,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
           = (r - 2) * (2 * X * (1 + X)^2) / ((X^4 + (r^2 - 2) * X^2 + 1)) := by
           have h''' : (4 * r) / (2 * r) = 2 := by
             let two_ne_zero := two_ne_zero q_h1 q_h3
-            let r_ne_zero := (r_ne_zero s_h1 q_h1 q_h2 q_h3)
+            let r_ne_zero := (r_ne_zero s_h1 q_h1 q_h3)
             rw [← mul_left_inj' two_ne_zero]
             ring_nf
             rw [mul_inv_cancel₀ r_ne_zero]
@@ -546,7 +537,6 @@ lemma Y'_pow_two_eq_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (P_props : ϕOverFProps s P)
@@ -560,7 +550,7 @@ lemma Y'_pow_two_eq_of_X2_ne_one
     intro X r Y Xh
     let c := c s
     let x := P.val.1
-    let h := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 P P_props y_eq_one
+    let h := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s_h1 s_h2 q_h1 q_h3 P P_props y_eq_one
     let two_ne_zero := two_ne_zero q_h1 q_h3
     have h' : x^2 = (2 * (r -2) * X^2 * (1 + X)^2) / (X^5 + (r^2 - 2) * X^3 + X) := h Xh
     calc
@@ -577,8 +567,8 @@ lemma Y'_pow_two_eq_of_X2_ne_one
       rw [h]
     _ = X^5 + (r^2 - 2) * X^3 + X := by
       have h'' : (2 * (r - 2) * X^2 * (1 + X)^2) ≠ 0 := by
-        let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_eq_one
-        let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3
+        let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
+        let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h3
         let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨P.val, P_props⟩
         rw [add_comm]
         apply mul_ne_zero
@@ -594,7 +584,6 @@ lemma Y'_pow_two_eq_of_X2_ne_one
 lemma X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_ne_one : P.val.2 ≠ 1)

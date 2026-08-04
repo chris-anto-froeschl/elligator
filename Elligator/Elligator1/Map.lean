@@ -76,7 +76,6 @@ theorem u_defined :
 theorem Y_defined
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : (c s)^2 ≠ 0 := by
     exact c_pow_two_ne_zero s_h1 q_h1 q_h3
@@ -94,11 +93,10 @@ theorem Y_defined
 theorem x_defined
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (Y t s q) ≠ 0 := by
     intro t
-    exact Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
+    exact Y_ne_zero s_h1 q_h1 q_h3 t
 
 @[blueprint
   (title := "$y$ is defined")

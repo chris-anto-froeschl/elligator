@@ -188,11 +188,7 @@ theorem X2_defined
   (statement := /--
   The denominator $c^2$ occurring in $z$ of Theorem 3.3 is nonzero, so $z$ is defined.
   -/)]
-theorem z_defined
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+theorem z_defined (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : (c s)^2 ≠ 0 := c_pow_two_ne_zero s_h1 q_h1 q_h3
 
 /-- The denominator `1 + u2` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/

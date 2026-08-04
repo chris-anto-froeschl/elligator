@@ -34,15 +34,9 @@ lemma two_pow_b_le_q (q_h3 : q % 4 = 3) : 2^(@b q) ≤ q := by
   apply Nat.pow_log_le_self
   grind
 
-lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) := Nat.lt_pow_succ_log_self (by decide) _
+lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) := Nat.lt_pow_succ_log_self (by grind) _
 
-@[blueprint "lemma:two_pow_b_gt_q_over_two"
-  (title := "$2^b > q/2$")
-  (statement := /--
-  With $b = \lfloor \log_2 q \rfloor$ we have $2^b > q/2$; hence
-  $\{0, 1, \ldots, (q-1)/2\}$ is a subset of $\{0, 1, \ldots, 2^b - 1\}$.
-  -/)]
-lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : 2^(@b q) > q / 2 := by
     let h1 := two_pow_b_le_q q_h3
     let h2 := FiniteFieldBasic.two_ne_zero q_h1 q_h3

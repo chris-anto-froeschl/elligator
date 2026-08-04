@@ -63,7 +63,6 @@ lemma u_of_zero :
 lemma one_add_u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : 1 + (u t) ≠ 0 := by
     unfold u

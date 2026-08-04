@@ -36,11 +36,9 @@ variable {q : ℕ}
 lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
-  (X t s)^2 + 1 / (c s)^2 ≠ 0 := by
+  : (X t s)^2 + 1 / (c s)^2 ≠ 0 := by
     let X := X t s
     let c := c s
     intro h
@@ -61,13 +59,11 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
 lemma X_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
-  (X t s) ≠ 0 := by
+  : (X t s) ≠ 0 := by
     apply mul_ne_zero
-    · apply χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1
+    · apply χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h3 t) q_h1
     · apply u_ne_zero t
 
 lemma X_comparison
@@ -106,7 +102,6 @@ lemma X_comparison
 lemma X_of_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
   let X_of_zero := X ⟨(0 : F), zero_h1⟩ s
@@ -118,7 +113,7 @@ lemma X_of_zero
     change χ_of_v * 1 = 1
     unfold χ_of_v
     rw [v_of_zero]
-    rw [χ_of_a_pow_two_eq_one (r_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+    rw [χ_of_a_pow_two_eq_one (r_ne_zero s_h1 q_h1 q_h3) q_h1 q_h3]
     simp
 
 end Elligator.Elligator1

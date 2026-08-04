@@ -73,7 +73,6 @@ lemma y_ne_one
 lemma η_ne_zero
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
   (P_props : ϕOverFProps s P)
@@ -239,14 +238,14 @@ lemma ϕ_of_zero
       -- This has to be proven again here as in y_η_h1 and X_η_h1 since
       -- the lemmas itself do not help with concret t values
       unfold y
-      rw [y_of_zero s_h1 q_h1 q_h2 q_h3]
+      rw [y_of_zero s_h1 q_h1 q_h3]
       change ((r - 4) / (r + 4) - 1) / (2 * ((r - 4) / (r + 4) + 1)) * r = -2
       have t_h : 1 = (r + 4) / (r + 4) := by
-        rw [add_comm, div_self (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3)]
+        rw [add_comm, div_self (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h3)]
       rw [t_h, ← sub_div, ← add_div, ← sub_sub, ← add_assoc]
       ring_nf
-      rw [inv_inv, mul_comm r, mul_assoc _ r, mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h2 q_h3)]
-      rw [mul_one, inv_mul_cancel₀ (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3), one_mul]
+      rw [inv_inv, mul_comm r, mul_assoc _ r, mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h3)]
+      rw [mul_one, inv_mul_cancel₀ (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h3), one_mul]
       rw [← mul_neg_one, ← mul_right_inj' (four_ne_zero q_h1 q_h3)]
       rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (four_ne_zero q_h1 q_h3)]
       ring_nf
@@ -277,9 +276,9 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     intro x y X2_of_P ϕ_of_zero' X2_h
     let r := r s
     let c := c s
-    have h1 := η_mul_r_eq_neg_two_of_X2_eq_one q_h1 q_h2 q_h3 P X2_h
+    have h1 := η_mul_r_eq_neg_two_of_X2_eq_one q_h1 q_h3 P X2_h
     have h2 : x = 2 * s * (c - 1) * (χ c) / r := P.prop.2.2 h1
-    have h3 : y = (r - 4) / (r + 4) := y_with_X2_of_X2_eq_one s_h1 q_h1 q_h2 q_h3 P y_eq_one X2_h
+    have h3 : y = (r - 4) / (r + 4) := y_with_X2_of_X2_eq_one s_h1 q_h1 q_h3 P y_eq_one X2_h
     rw [h2, h3]
     let ϕ_of_zero'' := ϕ_of_zero s_h1 s_h2 q_h1 q_h2 q_h3
     grind

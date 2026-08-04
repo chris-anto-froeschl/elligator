@@ -456,7 +456,7 @@ lemma y_eq_y_of_P
   let y_of_P := P.val.2
   y = y_of_P := by
     intro t t_h y y_of_P
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h2 q_h3 ⟨P.val, P_props⟩ y_ne_one
+    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_ne_one
     unfold y_of_P
     rw [y_with_X2]
     unfold y Elligator1.y
@@ -487,7 +487,7 @@ lemma x_eq_x_of_P
     let Y' := Y' s_h2 q_h1 q_h3 P
     let c := c s
     let X := X2 s P q
-    let Y'_ne_zero := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
+    let Y'_ne_zero := Y'_ne_zero s_h1 s_h2 q_h1 q_h3 P P_props x_ne_zero y_ne_one
     change x_of_P ≠ 0 at x_ne_zero
     have h1 : Y' = (c - 1) * s * X * (1 + X) / x_of_P := by grind [Y', Elligator1.Y']
     have h2 : x_of_P = (c - 1) * s * X * (1 + X) / Y' := by

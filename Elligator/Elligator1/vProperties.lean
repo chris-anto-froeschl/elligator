@@ -35,7 +35,6 @@ variable {q : ℕ}
 lemma v_h1_third_factor_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (u t)^2 + 1 / (c s)^2 ≠ 0 := by
@@ -51,7 +50,6 @@ lemma v_h1_third_factor_ne_zero
 lemma v_h1
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
@@ -68,7 +66,6 @@ lemma v_h1
 lemma v_h1_second_factor_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (u t)^2 + (c s)^2 ≠ 0 := by
@@ -76,7 +73,7 @@ lemma v_h1_second_factor_ne_zero
     let c := c s
     let u := u t
     have h' : -1 = (u / c)^2 := by
-      let h'' := (c_pow_two_ne_zero s_h1 q_h1 q_h3)
+      let h'' := c_pow_two_ne_zero s_h1 q_h1 q_h3
       grind
     have h'' : IsSquare (-1 : F) := by
       rw [h', pow_two]
@@ -92,22 +89,20 @@ lemma v_h1_second_factor_ne_zero
 lemma v_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : v t s ≠ (0 : F) := by
-    rw [v_h1 s_h1 q_h1 q_h2 q_h3 t]
+    rw [v_h1 s_h1 q_h1 q_h3 t]
     apply mul_ne_zero
     · apply mul_ne_zero
       · apply u_ne_zero t
-      · exact (v_h1_second_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t)
-    · exact (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t)
+      · exact (v_h1_second_factor_ne_zero s_h1 q_h1 q_h3 t)
+    · exact (v_h1_third_factor_ne_zero s_h1 q_h1 q_h3 t)
 
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   :
   let v := v t s
@@ -115,8 +110,8 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
     intro v
     rw [mul_pow (χ v) v ((q + 1) / 4)]
     apply mul_ne_zero
-    · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1)
-    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)
+    · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h3 t) q_h1)
+    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 q_h1 q_h3 t)
 
 omit [Fintype F] in
 lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
