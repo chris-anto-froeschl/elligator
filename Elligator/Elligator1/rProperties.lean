@@ -49,7 +49,7 @@ lemma r_ne_zero
         _ = -1 := by
           nth_rw 1 [← neg_one_mul 1]
           ring_nf
-          rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3)]
+          rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h3)]
     have h3 : IsSquare (-1 : F) := by
       rw [← h2, pow_two]
       apply IsSquare.mul_self c
@@ -68,8 +68,8 @@ lemma four_add_r_ne_zero
     let c := c s
     change 4 + (c + 1 / c) ≠ 0
     intro h
-    have hc : c ≠ 0 := c_ne_zero s_h1 q_h1 q_h2 q_h3
-    have h2 : (2 : F) ≠ 0 := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
+    have hc : c ≠ 0 := c_ne_zero s_h1 q_h1 q_h3
+    have h2 : (2 : F) ≠ 0 := FiniteFieldBasic.two_ne_zero q_h1 q_h3
     have h_quad : c ^ 2 + 4 * c + 1 = 0 := by grind
     have h_neg_sq : IsSquare (-1 : F) := by
       set a : F := s ^ 2 + 4
@@ -96,7 +96,7 @@ lemma r_h1 (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q
       _ = c^2 + 2 * (c * (1 / c)) + (1 / c)^2 - 2 := by grind
       _ = c^2 + 2 + 1 / c^2 - 2 := by
         ring_nf
-        rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3)]
+        rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h3)]
         ring_nf
       _ = c^2 + 1 / c^2 := by ring_nf
 
@@ -108,7 +108,7 @@ lemma r_sub_two_ne_zero
   (q_h3 : q % 4 = 3)
   : (r s) - 2 ≠ 0 := by
     let c := c s
-    let c_ne_zero := c_ne_zero s_h1 q_h1 q_h2 q_h3
+    let c_ne_zero := c_ne_zero s_h1 q_h1 q_h3
     let c_ne_one := c_ne_one s_h2
     change (c + 1 / c) - 2 ≠ 0
     have h1 : (c + 1 / c) - 2 = (c - 1)^2 / c := by grind

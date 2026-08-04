@@ -179,8 +179,8 @@ theorem X2_defined
         let h1_4 := congrArg Prod.snd h1_2
         rw [← h1_4]
         ring_nf
-        exact two_ne_zero q_h1 q_h2 q_h3
-    exact mul_ne_zero (two_ne_zero q_h1 q_h2 q_h3) h1
+        exact two_ne_zero q_h1 q_h3
+    exact mul_ne_zero (two_ne_zero q_h1 q_h3) h1
 
 /-- The denominator `c²` occurring in the definition of `z` is nonzero. -/
 @[blueprint "thm:z_defined"
@@ -193,7 +193,7 @@ theorem z_defined
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
-  : (c s)^2 ≠ 0 := c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3
+  : (c s)^2 ≠ 0 := c_pow_two_ne_zero s_h1 q_h1 q_h3
 
 /-- The denominator `1 + u2` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/
 @[blueprint "thm:t2_defined"

@@ -70,7 +70,7 @@ lemma one_add_u_ne_zero
     rw [add_div' _ _ _ (one_add_t_ne_zero t)]
     norm_num
     split_ands
-    · exact two_ne_zero q_h1 q_h2 q_h3;
+    · exact two_ne_zero q_h1 q_h3;
     · exact one_add_t_ne_zero t
 
 end Elligator.Elligator1

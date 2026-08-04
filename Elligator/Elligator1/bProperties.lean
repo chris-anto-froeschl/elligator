@@ -45,7 +45,7 @@ lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) := Nat.lt_pow_succ_log_self (by d
 lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
   : 2^(@b q) > q / 2 := by
     let h1 := two_pow_b_le_q q_h3
-    let h2 := FiniteFieldBasic.two_ne_zero q_h1 q_h2 q_h3
+    let h2 := FiniteFieldBasic.two_ne_zero q_h1 q_h3
     unfold b
     let h3 := @q_lt_two_pow_b_succ q
     have h4 : 2^(@b q) > q / 2 ↔ q < 2^((@b q) + 1) := by grind

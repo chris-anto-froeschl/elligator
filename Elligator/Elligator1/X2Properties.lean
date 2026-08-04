@@ -196,12 +196,12 @@ lemma X2_ne_neg_one
     have h2 : η = 0 := by
       ring_nf at X2_equation
       let r_ne_zero := r_ne_zero s_h1 q_h1 q_h2 q_h3
-      rw [← div_left_inj' (two_ne_zero q_h1 q_h2 q_h3)] at X2_equation
+      rw [← div_left_inj' (two_ne_zero q_h1 q_h3)] at X2_equation
       rw [← div_left_inj' r_ne_zero] at X2_equation
       ring_nf at X2_equation
       have h2_1 : -(η * r * 2⁻¹ * r⁻¹ * 2) = -(η * (r * r⁻¹) * (2 * 2⁻¹)) := by grind
       rw [h2_1] at X2_equation
-      rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (two_ne_zero q_h1 q_h2 q_h3)] at X2_equation
+      rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (two_ne_zero q_h1 q_h3)] at X2_equation
       grind
     have h3 : η ≠ 0 := by
       unfold η Elligator1.η
@@ -210,9 +210,9 @@ lemma X2_ne_neg_one
         intro h3_2_1
         let y_add_one_ne_zero := P_prop.1
         unfold ϕOverFProp1 at y_add_one_ne_zero
-        rw [← div_left_inj' (two_ne_zero q_h1 q_h2 q_h3)] at h3_2_1
+        rw [← div_left_inj' (two_ne_zero q_h1 q_h3)] at h3_2_1
         ring_nf at h3_2_1
-        rw [inv_mul_cancel₀ (two_ne_zero q_h1 q_h2 q_h3)] at h3_2_1
+        rw [inv_mul_cancel₀ (two_ne_zero q_h1 q_h3)] at h3_2_1
         grind
       apply div_ne_zero h3_1 h3_2
     contradiction
@@ -245,7 +245,7 @@ lemma y_with_X2
     let η := η P.val
     let y_add_one_ne_zero := P.prop.1
     let X2_ne_zero := X2_ne_zero q_h1 q_h3 P
-    let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+    let two_ne_zero := two_ne_zero q_h1 q_h3
     let r_ne_zero :=r_ne_zero s_h1 q_h1 q_h2 q_h3
     change X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 at X2_equation
     have h1 : y = (1 + 2 * η) / (1 - 2 * η) := by
@@ -305,7 +305,7 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
   X2 = 1 → η * r = -2 := by
     intro η  X2 r X2_h
     let h1 := X2_h2 q_h1 q_h3 P
-    let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+    let two_ne_zero := two_ne_zero q_h1 q_h3
     change X2^2 + 2 * (1 + η *r) * X2 + 1 = 0 at h1
     rw [X2_h, ← add_left_inj (-4), ← div_left_inj' two_ne_zero] at h1
     ring_nf at h1
@@ -509,7 +509,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
           (r - 2) * (4 * r * X * (1 + X)^2) / (2 * r * 1 * (X^4 + (r^2 - 2) * X^2 + 1))
           = (r - 2) * (2 * X * (1 + X)^2) / ((X^4 + (r^2 - 2) * X^2 + 1)) := by
           have h''' : (4 * r) / (2 * r) = 2 := by
-            let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+            let two_ne_zero := two_ne_zero q_h1 q_h3
             let r_ne_zero := (r_ne_zero s_h1 q_h1 q_h2 q_h3)
             rw [← mul_left_inj' two_ne_zero]
             ring_nf
@@ -561,7 +561,7 @@ lemma Y'_pow_two_eq_of_X2_ne_one
     let c := c s
     let x := P.val.1
     let h := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 P P_props y_eq_one
-    let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+    let two_ne_zero := two_ne_zero q_h1 q_h3
     have h' : x^2 = (2 * (r -2) * X^2 * (1 + X)^2) / (X^5 + (r^2 - 2) * X^3 + X) := h Xh
     calc
      Y^2 = (c - 1)^2 * s^2 * X^2 * (1 + X)^2 / (x^2) := by

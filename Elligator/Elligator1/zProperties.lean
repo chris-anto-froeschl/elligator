@@ -91,11 +91,11 @@ lemma X_pow_two_add_1_over_c_pow_two_ne_zero
   let c := c s
   X^2 + 1 / c^2 ≠ 0 := by
     intro X c h
-    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
-    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h2 q_h3)] at h
+    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h3)] at h
+    rw [← mul_left_inj' (c_ne_zero s_h1 q_h1 q_h3)] at h
     ring_nf at h
     change X^2 * c^2 + c⁻¹^2 * c^2 = 0 at h
-    rw [inv_pow c 2, inv_mul_cancel₀ (pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3))] at h
+    rw [inv_pow c 2, inv_mul_cancel₀ (pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h3))] at h
     rw [← add_left_inj (-1 : F), ← mul_pow] at h
     simp only [add_neg_cancel_right, zero_add] at h
     let h' := neg_one_non_square q_h1 q_h3

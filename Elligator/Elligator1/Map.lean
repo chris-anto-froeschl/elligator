@@ -79,7 +79,7 @@ theorem Y_defined
   (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : (c s)^2 ≠ 0 := by
-    exact c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3
+    exact c_pow_two_ne_zero s_h1 q_h1 q_h3
 
 @[blueprint
   (title := "$x$ is defined")

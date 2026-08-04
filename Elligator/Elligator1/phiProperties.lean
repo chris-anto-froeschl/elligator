@@ -89,7 +89,7 @@ lemma η_ne_zero
       have h' := y_ne_one s_h2 q_h1 q_h3 P x_ne_zero
       have h'': y = 1 := by grind
       contradiction
-    · exact mul_ne_zero (two_ne_zero q_h1 q_h2 q_h3) P_props.1
+    · exact mul_ne_zero (two_ne_zero q_h1 q_h3) P_props.1
 
 lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
   (t : { t : F // t = 1 ∨ t = -1})
@@ -247,8 +247,8 @@ lemma ϕ_of_zero
       ring_nf
       rw [inv_inv, mul_comm r, mul_assoc _ r, mul_inv_cancel₀ (r_ne_zero s_h1 q_h1 q_h2 q_h3)]
       rw [mul_one, inv_mul_cancel₀ (four_add_r_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3), one_mul]
-      rw [← mul_neg_one, ← mul_right_inj' (four_ne_zero q_h1 q_h2 q_h3)]
-      rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (four_ne_zero q_h1 q_h2 q_h3)]
+      rw [← mul_neg_one, ← mul_right_inj' (four_ne_zero q_h1 q_h3)]
+      rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (four_ne_zero q_h1 q_h3)]
       ring_nf
     let x_of_t := ϕ_of_zero.1
     have h3 : x_of_t = 2 * s * (c - 1) * (χ c) / r := by

@@ -62,7 +62,7 @@ lemma v_h1
     intro v c u
     let r := r s
     change u^5 + (r^2 - 2) * u^3 + u = u * (u^2 + c^2) * (u^2 + 1 / c^2)
-    have h1 : c^2 ≠ 0 := by exact pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)
+    have h1 : c^2 ≠ 0 := by exact pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h3)
     grind [r_h1]
 
 lemma v_h1_second_factor_ne_zero
@@ -76,7 +76,7 @@ lemma v_h1_second_factor_ne_zero
     let c := c s
     let u := u t
     have h' : -1 = (u / c)^2 := by
-      let h'' := (c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3)
+      let h'' := (c_pow_two_ne_zero s_h1 q_h1 q_h3)
       grind
     have h'' : IsSquare (-1 : F) := by
       rw [h', pow_two]

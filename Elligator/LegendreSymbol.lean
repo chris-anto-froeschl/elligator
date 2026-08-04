@@ -60,8 +60,7 @@ lemma χ_a_zero_eq_zero
   : χ a = 0 := by
     unfold χ
     rw [q_h1, a_eq_zero]
-    apply zero_pow (q_sub_one_over_two_ne_zero
-      q_h1 q_h2 q_h3)
+    apply zero_pow (q_sub_one_over_two_ne_zero q_h1 q_h2 q_h3)
 
 lemma χ_a_ne_zero
   {a : F}
@@ -77,7 +76,6 @@ lemma neg_χ_a_ne_χ_a
   {a : F}
   (a_ne_zero : a ≠ 0)
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : χ a ≠ -(χ a) := by
     unfold χ

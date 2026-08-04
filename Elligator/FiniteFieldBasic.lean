@@ -8,6 +8,11 @@ module
 public import Elligator.Basic
 public import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
 
+import Mathlib.Data.Fintype.Card
+import Mathlib.Algebra.CharP.Basic
+import Mathlib.RingTheory.IntegralDomain
+
+
 /-!
 # Finite Field Basic
 
@@ -66,47 +71,39 @@ lemma q_add_one_over_four_ne_zero (q_h3 : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by g
 
 lemma q_add_one_over_two_ne_zero (q_h3 : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by grind
 
-lemma ring_char_ne_two
+lemma two_ne_zero {F : Type*} [Field F] [Fintype F] {q : ℕ}
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  : ringChar F ≠ 2 := by
-    obtain ⟨p, k, hp, hk, hpk⟩ := q_h2
-    obtain ⟨n, hrc, hcard⟩ := FiniteField.card F (ringChar F)
-    rw [q_h1, ← hpk] at hcard
-    -- TODO
-    have h1 : p ∣ ringChar F := hp.dvd_of_dvd_pow (hcard ▸ dvd_pow_self p hk.ne')
-    have h2 : p = ringChar F := (Nat.prime_dvd_prime_iff_eq hp.nat_prime hrc).mp h1
-    have h3 : p ≠ 2 := by
-      rintro rfl
-      have : 2 ∣ q := by grind
-      omega
-    rw [← h2]
-    exact h3
-
-lemma two_ne_zero
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : (2 : F) ≠ 0 := by
-    intro h
-    apply ring_char_ne_two q_h1 q_h2 q_h3
-    obtain ⟨n, hp, _⟩ := FiniteField.card F (ringChar F)
-    have h1 : ringChar F ∣ 2 := (ringChar.spec F 2).mp (by simp_all)
-    have h2 := Nat.le_of_dvd (by norm_num) h1
-    have h3 := hp.two_le
-    omega
+  intro h
+  -- turn `(2 : F) = 0` into a divisibility statement about the characteristic
+  have hdvd : ringChar F ∣ 2 := (CharP.cast_eq_zero_iff F (ringChar F) 2).mp h
+  -- ringChar F ∣ 2 and ringChar F ≠ 1 (F is nontrivial) forces ringChar F = 2
+  have hp : ringChar F = 2 := by
+    rcases (Nat.dvd_prime Nat.prime_two).mp hdvd with h1 | h1
+    · exact absurd h1 (CharP.char_ne_one F (ringChar F))
+    · exact h1
+  haveI : CharP F 2 := by
+    rw [← hp]
+    exact ringChar.charP F
+  -- a finite field of characteristic 2 has cardinality a power of 2
+  obtain ⟨n, -, hcard⟩ := FiniteField.card F 2
+  have hqeq : q = 2^(n : ℕ) := by rw [← q_h1, hcard]
+  have hdvd2 : (2 : ℕ) ∣ q := by
+    rw [hqeq]
+    exact dvd_pow_self 2 n.pos.ne'
+  -- 2 ∣ q contradicts q % 4 = 3
+  omega
 
 lemma four_ne_zero
   (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
   (q_h3 : q % 4 = 3)
   : (4 : F) ≠ 0 := by
     have h1 : (4 : F) = 2 * 2 := by norm_num
     rw [h1]
     apply mul_ne_zero
-    · exact (two_ne_zero q_h1 q_h2 q_h3)
-    · exact (two_ne_zero q_h1 q_h2 q_h3)
+    · exact (two_ne_zero q_h1 q_h3)
+    · exact (two_ne_zero q_h1 q_h3)
 
 omit [Fintype F] in
 lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by

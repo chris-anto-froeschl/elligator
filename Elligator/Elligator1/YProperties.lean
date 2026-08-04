@@ -139,7 +139,7 @@ lemma one_add_X_ne_zero
       rw [mul_inv_cancel₀ h5_3] at h1
       rw [mul_one] at h1
       exact h1
-    have h6 : χ_of_v ≠ -χ_of_v := neg_χ_a_ne_χ_a v_ne_zero q_h1 q_h2 q_h3
+    have h6 : χ_of_v ≠ -χ_of_v := neg_χ_a_ne_χ_a v_ne_zero q_h1 q_h3
     contradiction
 
 lemma Y_comparison
@@ -216,7 +216,7 @@ lemma Y_comparison
       calc
         χ (u2^2 + 1 / c^2)
           = χ ((c^2 * u1^4 * (u2^2 + 1 / c^2)) * (u1^2 + 1 / c^2)^2) := by
-          rw [← χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 q_h1 q_h2 q_h3) q_h1 q_h3]
+          rw [← χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero s_h1 q_h1 q_h3) q_h1 q_h3]
           rw [mul_comm, ← χ_of_a_eq_χ_a_mul_b_pow_two (u_pow_two_ne_zero t) q_h1 q_h3]
           rw [mul_comm, χ_of_a_eq_χ_a_mul_b_pow_two
             (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1 q_h3]

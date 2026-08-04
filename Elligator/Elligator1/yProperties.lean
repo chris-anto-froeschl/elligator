@@ -113,7 +113,7 @@ lemma y_divisor_ne_zero
           have h' : (2 * (2 / s^2 + 1 / (2 / s^2)) + 4) = (s + 2 / s)^2 := by
             ring_nf
             rw [inv_inv, mul_inv_cancel₀ s_h1, one_mul, mul_assoc]
-            rw [inv_mul_cancel₀ (two_ne_zero q_h1 q_h2 q_h3)]
+            rw [inv_mul_cancel₀ (two_ne_zero q_h1 q_h3)]
             ring_nf
           rw [h']
     have h4 : IsSquare (-1 : F) := by
@@ -161,8 +161,8 @@ lemma y_add_one_ne_zero
     have h4 : r * X = 0 := by
       rw [← add_left_inj (r * X + (1 + X)^2)] at h3
       ring_nf at h3
-      rw [← div_left_inj' (two_ne_zero q_h1 q_h2 q_h3), mul_div_assoc] at h3
-      rw [div_self (two_ne_zero q_h1 q_h2 q_h3)] at h3
+      rw [← div_left_inj' (two_ne_zero q_h1 q_h3), mul_div_assoc] at h3
+      rw [div_self (two_ne_zero q_h1 q_h3)] at h3
       ring_nf at h3
       exact h3
     have h5 : r * X ≠ 0 := by
@@ -220,12 +220,12 @@ lemma curve_equation
         _ = 2 * (r - 2) := by
           rw [sub_pow_two, mul_one, one_pow 2, add_mul, sub_mul]
           rw [← mul_div_assoc, one_mul, mul_comm, pow_two, ← mul_assoc]
-          rw [mul_div_assoc, div_self (c_ne_zero s_h1 q_h1 q_h2 q_h3), mul_one]
+          rw [mul_div_assoc, div_self (c_ne_zero s_h1 q_h1 q_h3), mul_one]
           nth_rw 4 [← mul_one 2]
           rw [add_comm, ← add_sub_assoc, mul_div_assoc, ← mul_add 2 (1 / c) c, add_comm]
           change 2 * r - 2 * c * (2 / c) = 2 * (r - 2)
           ring_nf
-          rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h2 q_h3)]
+          rw [mul_inv_cancel₀ (c_ne_zero s_h1 q_h1 q_h3)]
           ring_nf
     have h2 : Y^2 * (1 - x^2) = X * (r * X - (1 + X)^2)^2 := by
       calc

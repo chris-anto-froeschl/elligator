@@ -133,7 +133,7 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
         have h : 1 / c ≠ 0 := by
           rw [← inv_eq_one_div]
           apply inv_ne_zero
-          apply c_ne_zero s_h1 q_h1 q_h2 q_h3
+          apply c_ne_zero s_h1 q_h1 q_h3
         grind
       _ = (r + 2) / (r - 2) := by
         rw [add_assoc, add_comm 2 (1 / c), ← add_assoc]

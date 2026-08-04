@@ -74,7 +74,7 @@ lemma t2_eq_t
     rw [h, sub_div' (one_add_t_ne_zero t)]
     rw [add_div' (1 - t.val) 1 (1 + t.val) (one_add_t_ne_zero t)]
     rw [div_div_div_eq]
-    have h' : (1 + t.val) * 2 ≠ 0 := mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero q_h1 q_h2 q_h3)
+    have h' : (1 + t.val) * 2 ≠ 0 := mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero q_h1 q_h3)
     grind
 
 lemma t2_eq_t'
@@ -106,7 +106,7 @@ lemma t2_eq_t'
     rw [h, sub_div' (one_add_t_ne_zero ⟨t', t_h⟩)]
     rw [add_div' (1 - t') 1 (1 + t') (one_add_t_ne_zero ⟨t', t_h⟩), div_div_div_eq]
     have h' : ((1 + t') * 2) ≠ 0 :=
-      mul_ne_zero (one_add_t_ne_zero ⟨t', t_h⟩) (two_ne_zero q_h1 q_h2 q_h3)
+      mul_ne_zero (one_add_t_ne_zero ⟨t', t_h⟩) (two_ne_zero q_h1 q_h3)
     grind
 
 @[blueprint "lemma:t2_in_t_or_neg_t"
@@ -176,7 +176,7 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
     let one_add_u'_ne_zero :=
       one_add_u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one h1
     let u'_ne_zero := u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one h1
-    let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+    let two_ne_zero := two_ne_zero q_h1 q_h3
     and_intros
     · intro h2
       have h3 : 2 = 0 := by grind
@@ -220,7 +220,7 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
     let u := u' s_h2 q_h1 q_h3 P
     let one_add_u'_ne_zero :=
       one_add_u'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one h1
-    let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+    let two_ne_zero := two_ne_zero q_h1 q_h3
     grind
 
 lemma u'_eq_u

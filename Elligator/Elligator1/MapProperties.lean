@@ -113,7 +113,7 @@ lemma y_h2
       _ = X^2 + (2 + r * (y - 1) / (y + 1)) * X + 1 := by
         rw [mul_add 2]
         rw [div_eq_mul_inv 1 2, mul_one, one_mul, mul_assoc, ← mul_assoc]
-        rw [mul_inv_cancel₀ (two_ne_zero q_h1 q_h2 q_h3)]
+        rw [mul_inv_cancel₀ (two_ne_zero q_h1 q_h3)]
         ring_nf
       _ = 0 := by rw [y_h1 t s_h1 s_h2 q_h1 q_h2 q_h3]
 
@@ -334,7 +334,7 @@ lemma u_η_h1
         change χ_of_v = -1 at h2
         rw [h2] at h1
         unfold u Elligator1.u at h1
-        have two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+        have two_ne_zero := two_ne_zero q_h1 q_h3
         have h3 : (2 : F) = 0 := by grind
         contradiction
       · rename_i h2
@@ -363,9 +363,9 @@ lemma t_η_h1
     rw [← add_left_inj (t.val - 1)] at h1
     ring_nf at h1
     symm at h1
-    rw [← div_left_inj' (two_ne_zero q_h1 q_h2 q_h3)] at h1
+    rw [← div_left_inj' (two_ne_zero q_h1 q_h3)] at h1
     ring_nf at h1
-    rw [mul_assoc, inv_mul_cancel₀ (two_ne_zero q_h1 q_h2 q_h3), mul_one] at h1
+    rw [mul_assoc, inv_mul_cancel₀ (two_ne_zero q_h1 q_h3), mul_one] at h1
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
@@ -409,7 +409,7 @@ lemma Y_η_h1
   let r := r s
   Y = r * (χ c) := by
     intro Y c r
-    have c_ne_zero := c_ne_zero s_h1 q_h1 q_h2 q_h3
+    have c_ne_zero := c_ne_zero s_h1 q_h1 q_h3
     calc
       Y = (r^2)^((q + 1) / 4) * χ (1 + 1 / c^2) := by
         unfold Y Elligator1.Y
@@ -624,7 +624,7 @@ lemma P_in_ϕOverF_with_prop1_base_case
       · rw [h1_1]
         simp
     unfold y P ϕ
-    let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
+    let two_ne_zero := two_ne_zero q_h1 q_h3
     simp [h1]
     grind
 
@@ -715,7 +715,7 @@ lemma P_in_ϕOverF_with_prop2_main_case
       exact (y_h2 t s_h1 s_h2 q_h1 q_h2 q_h3)
     have h2 : NeZero (2 : F) := by
       rw [neZero_iff]
-      apply (two_ne_zero q_h1 q_h2 q_h3)
+      apply (two_ne_zero q_h1 q_h3)
     rw [pow_two] at h1
     nth_rw 1 [← one_mul X, mul_assoc] at h1
     change IsSquare ((1 + η * r) ^ 2 - 1)
@@ -725,8 +725,8 @@ lemma P_in_ϕOverF_with_prop2_main_case
     rw [mul_pow 2 _ 2] at h1
     have h3 : 2^2 = (4 : F) := by norm_num
     rw [mul_one, h3, ← mul_sub, mul_comm] at h1
-    rw [← div_left_inj' (four_ne_zero q_h1 q_h2 q_h3)] at h1
-    rw [mul_div_assoc, div_self (four_ne_zero q_h1 q_h2 q_h3)] at h1
+    rw [← div_left_inj' (four_ne_zero q_h1 q_h3)] at h1
+    rw [mul_div_assoc, div_self (four_ne_zero q_h1 q_h3)] at h1
     rw [mul_one, ← h3, ← div_pow _ _ 2] at h1
     rw [h1]
     apply IsSquare.sq
@@ -772,7 +772,7 @@ lemma P_in_ϕOverF_with_prop3_base_case
     rw [dif_neg h'] at h
     ring_nf at h
     simp at h
-    have h3 := two_ne_zero q_h1 q_h2 q_h3
+    have h3 := two_ne_zero q_h1 q_h3
     contradiction
 
 lemma P_in_ϕOverF_with_prop3_main_case
