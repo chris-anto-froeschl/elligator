@@ -17,7 +17,7 @@ In this file we introduce some generally helpful lemmas for `η` as introduced i
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.
 -/
 
 @[expose] public section
@@ -28,7 +28,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:η_eq_zero"]
+
 lemma η_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)

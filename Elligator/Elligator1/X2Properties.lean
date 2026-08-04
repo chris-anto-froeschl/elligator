@@ -17,7 +17,7 @@ In this file we introduce some generally helpful lemmas for `X2` as introduced i
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.3, Theorem 3.
 -/
 
 @[expose] public section
@@ -31,7 +31,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:X2_eq_neg_one"]
 lemma X2_eq_neg_one
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -53,7 +52,6 @@ lemma X2_eq_neg_one
     rw [zero_pow, add_zero]
     exact q_add_one_over_four_ne_zero q_h3
 
-@[blueprint "lemma:X2_h1"]
 lemma X2_h1
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
@@ -77,7 +75,6 @@ lemma X2_h1
     nth_rw 2 [add_comm]
     rw [q_h1, a_pow_q_add_one_over_two_eq_a P.prop.2.1 q_h1 q_h3]
 
-@[blueprint "lemma:X2_h2"]
 lemma X2_h2
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
@@ -91,7 +88,6 @@ lemma X2_h2
     have h := X2_h1 q_h1 q_h3 P
     grind
 
-@[blueprint "lemma:X2_h3"]
 lemma X2_h3
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -120,7 +116,6 @@ lemma X2_h3
         grind
       _ = 0 := X2_h2 q_h1 q_h3 ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
 
-@[blueprint "lemma:X2_h4"]
 lemma X2_h4
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -140,7 +135,6 @@ lemma X2_h4
     have h := X2_h3 t s_h1 s_h2 q_h1 q_h2 q_h3
     grind
 
-@[blueprint "lemma:X2_ne_zero"]
 lemma X2_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
@@ -157,7 +151,6 @@ lemma X2_ne_zero
     rw [h'] at h
     simp at h
 
-@[blueprint "lemma:y_divisor_ne_zero_with_X"]
 lemma y_divisor_ne_zero_with_X2_for_X
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -183,7 +176,6 @@ lemma y_divisor_ne_zero_with_X2_for_X
     have h5 : y - 1 ≠ y + 1 := by grind
     contradiction
 
-@[blueprint "lemma:X2_ne_neg_one"]
 lemma X2_ne_neg_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -226,7 +218,6 @@ lemma X2_ne_neg_one
       apply div_ne_zero h3_1 h3_2
     contradiction
 
-@[blueprint "lemma:X2_add_one_ne_zero"]
 lemma X2_add_one_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -238,7 +229,6 @@ lemma X2_add_one_ne_zero
   let X2 := X2 s P q
   X2 + 1 ≠ 0 := by grind [X2_ne_neg_one]
 
-@[blueprint "lemma:y_with_X2"]
 lemma y_with_X2
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -291,7 +281,6 @@ lemma y_with_X2
     rw [← h3]
     exact h1
 
-@[blueprint "lemma:y_with_X2_of_X2_eq_one"]
 lemma y_with_X2_of_X2_eq_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -305,7 +294,6 @@ lemma y_with_X2_of_X2_eq_one
   let y := P.val.2
   X2 = 1 → y = (r - 4) / (r + 4) := by grind [y_with_X2]
 
-@[blueprint "lemma:η_mul_r_eq_neg_two_of_X2_eq_one"]
 lemma η_mul_r_eq_neg_two_of_X2_eq_one
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -324,7 +312,6 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
     ring_nf at h1
     grind
 
-@[blueprint "lemma:X2_observation1_of_X2_ne_one"]
 lemma X2_observation1_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -350,7 +337,6 @@ lemma X2_observation1_of_X2_ne_one
       ring_nf
     grind
 
-@[blueprint "lemma:X2_observation2_of_X2_ne_one"]
 lemma X2_observation2_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -411,7 +397,6 @@ lemma X2_observation2_of_X2_ne_one
     have const_term : 1 + (r + 2) / (r - 2) = (2 * r) / (r - 2) := by grind
     grind
 
-@[blueprint "lemma:one_sub_d_mul_y_pow_two_ne_zero"]
 lemma one_sub_d_mul_y_pow_two_ne_zero
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -435,7 +420,6 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
     change ¬IsSquare (1 / d) at h3
     contradiction
 
-@[blueprint "lemma:x_pow_two_of_X2_ne_one_eq1"]
 lemma x_pow_two_of_X2_ne_one_eq1
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -464,7 +448,6 @@ lemma x_pow_two_of_X2_ne_one_eq1
     rw [← div_left_inj' one_sub_d_mul_y_pow_two_ne_zero] at curve_equation
     grind
 
-@[blueprint "lemma:x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one"]
 lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -548,7 +531,6 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         ring_nf
 
 /-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-@[blueprint "def:Y'"]
 noncomputable def Y'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -561,7 +543,6 @@ noncomputable def Y'
   -- This is just `def x` with the denominator `Y` replaced by `x` of P
   (c - 1) * s * X * (1 + X) / x
 
-@[blueprint "lemma:Y'_pow_two_eq_of_X2_ne_one"]
 lemma Y'_pow_two_eq_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -611,7 +592,6 @@ lemma Y'_pow_two_eq_of_X2_ne_one
       rw [div_div_div_comm, div_self h'']
       grind
 
-@[blueprint "lemma:X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one"]
 lemma X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)

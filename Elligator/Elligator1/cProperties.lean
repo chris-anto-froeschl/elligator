@@ -16,7 +16,7 @@ in `Elligator.Elligator1.Variables`.
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -29,7 +29,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:c_ne_zero"]
 lemma c_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -43,7 +42,6 @@ lemma c_ne_zero
       apply mul_ne_zero s_h1 s_h1
 
 omit [Fintype F] in
-@[blueprint "lemma:c_ne_one"]
 lemma c_ne_one (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) ≠ 1 := by
   change 2 / s^2 ≠ 1
   apply div_ne_one_of_ne
@@ -51,7 +49,6 @@ lemma c_ne_one (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) ≠ 1 := by
   apply s_pow_two_ne_two s_h2
 
 omit [Fintype F] in
-@[blueprint "lemma:c_ne_neg_one"]
 lemma c_ne_neg_one (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) ≠ -1 := by
   change 2 / s^2 ≠ -1
   intro h
@@ -60,7 +57,6 @@ lemma c_ne_neg_one (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) ≠ -1 := by
   exact h'
 
 omit [Fintype F] in
-@[blueprint "lemma:c_add_one_ne_zero"]
 lemma c_add_one_ne_zero (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) + 1 ≠ 0 := by
   intro h
   change 2 / s^2 + 1 = 0 at h
@@ -72,12 +68,19 @@ lemma c_add_one_ne_zero (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) + 1 ≠
   exact h2
 
 omit [Fintype F] in
-@[blueprint "lemma:c_sub_one_ne_zero"]
 lemma c_sub_one_ne_zero (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) - 1 ≠ 0 := by
   apply sub_ne_zero.2
   exact c_ne_one s_h2
 
-@[blueprint "lemma:c_h"]
+@[blueprint "lemma:c_h"
+  (title := "$c(c - 1)(c + 1) \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $c = 2/s^2$ satisfies
+  $$
+  c(c - 1)(c + 1) \neq 0 .
+  $$
+  Indeed $c \neq 0$ since $c = 2/s^2$, and $c \neq \pm 1$ since $s^2 \neq \pm 2$.
+  -/)]
 lemma c_h
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -94,7 +97,6 @@ lemma c_h
       · exact c_sub_one_ne_zero s_h2
     · exact c_add_one_ne_zero s_h2
 
-@[blueprint "lemma:c_pow_two_ne_zero"]
 lemma c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -106,7 +108,6 @@ lemma c_pow_two_ne_zero
     · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
     · exact (c_ne_zero s_h1 q_h1 q_h2 q_h3)
 
-@[blueprint "lemma:s_pow_two_eq_two_over_c"]
 lemma s_pow_two_eq_two_over_c
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)

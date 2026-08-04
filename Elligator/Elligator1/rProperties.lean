@@ -16,7 +16,7 @@ in `Elligator.Elligator1.Variables`.
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -27,7 +27,12 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:r_ne_zero"]
+@[blueprint "lemma:r_ne_zero"
+  (title := "$r \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $r = c + 1/c \neq 0$: if $r = 0$ then $c = -1/c$, so
+  $c^2 = -1$, a contradiction since $-1$ is not a square in $\mathbb{F}_q$.
+  -/)]
 lemma r_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -53,7 +58,6 @@ lemma r_ne_zero
       exact h3
     contradiction
 
-@[blueprint "lemma:four_add_r_ne_zero"]
 lemma four_add_r_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -81,7 +85,6 @@ lemma four_add_r_ne_zero
       omega
     exact h_not_sq h_neg_sq
 
-@[blueprint "lemma:r_h"]
 lemma r_h1 (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
   :
   let r := r s
@@ -97,7 +100,6 @@ lemma r_h1 (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q
         ring_nf
       _ = c^2 + 1 / c^2 := by ring_nf
 
-@[blueprint "lemma:r_sub_two_ne_zero"]
 lemma r_sub_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)

@@ -19,8 +19,7 @@ Theorem 4, and computes its cardinality.
 
 ## Main results
 
-- `image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two`: binary evaluation maps `S` onto
-  the integer interval `[0, (q - 1) / 2]`.
+- `bitsToNat_image_S`: binary evaluation maps `S` onto the integer interval `[0, (q - 1) / 2]`.
 - `S_card_eq_q_add_one_over_two`: when `q ≡ 3 (mod 4)`, the set `S` has `(q + 1) / 2` elements.
 
 ## References
@@ -37,8 +36,16 @@ variable {q : ℕ}
 
 /-- Binary evaluation maps the admissible strings `S` onto exactly the natural-number interval
 from `0` through `(q - 1) / 2`, as required by the definition of `S` in Theorem 4. -/
-@[blueprint "lemma:image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two"]
-lemma image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two
+@[blueprint "lemma:bitsToNat_image_S"
+  (title := "Binary values of the admissible strings")
+  (statement := /--
+  Since $2^b \leq q$ and $2^b > q/2$, each of $0, 1, \ldots, (q-1)/2$ has a preimage under
+  $\sigma$, and the binary values of the strings in $S$ are exactly
+  $$
+  \{0, 1, \ldots, (q-1)/2\} .
+  $$
+  -/)]
+lemma bitsToNat_image_S
   : Finset.image bitsToNat (@S q) = Finset.Icc 0 ((q - 1) / 2) := by
     unfold S bitsToNat
     ext m
@@ -51,19 +58,33 @@ lemma image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two
       use τ
       aesop
 
-@[blueprint "lemma:S_card_eq_icc_zero_to_q_sub_one_over_two_card"]
-lemma S_card_eq_icc_zero_to_q_sub_one_over_two_card
+@[blueprint "lemma:S_card_eq_Icc_card"
+  (title := "$\\#S$ equals the size of the lower half")
+  (statement := /--
+  Binary evaluation is injective, hence
+  $$
+  \#S = \#\{0, 1, \ldots, (q-1)/2\} .
+  $$
+  -/)]
+lemma S_card_eq_Icc_card
   : (@S q).card = (Finset.Icc 0 ((q - 1) / 2)).card := by
-    rw [← image_of_bitsToNat_of_S_eq_icc_zero_to_q_sub_one_over_two]
+    rw [← bitsToNat_image_S]
     rw [Finset.card_image_of_injective _ bitsToNat_injective]
 
 /-- The lower-half string set `S` has `(q + 1) / 2` elements when `q ≡ 3 (mod 4)`.
 This is the cardinality computation used in Theorem 4 of the paper. -/
-@[blueprint "lemma:S_card_eq_q_add_one_over_two"]
+@[blueprint "lemma:S_card_eq_q_add_one_over_two"
+  (title := "$\\#S = (q + 1)/2$")
+  (statement := /--
+  For $q \equiv 3 \pmod 4$, the set $S$ has exactly
+  $$
+  \#S = (q + 1)/2
+  $$
+  elements.
+  -/)]
 lemma S_card_eq_q_add_one_over_two (q_h3 : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
-    rw [S_card_eq_icc_zero_to_q_sub_one_over_two_card]
-    rw [Nat.card_Icc]
+    rw [S_card_eq_Icc_card, Nat.card_Icc]
     grind
 
 end Elligator.Elligator1

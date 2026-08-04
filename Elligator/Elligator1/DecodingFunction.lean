@@ -21,7 +21,7 @@ for every other `t`, returns the coordinates constructed in Theorem 1.
 
 ## References
 
-See [bernstein2013a] chapter 3.2, Definition 2.
+See [bernstein2013a], Section 3.2, Definition 2.
 -/
 
 @[expose] public section
@@ -32,24 +32,17 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-/--
-Original: Chapter "3.2 The map": Definition 2
--/
+/-- The decoding function for the complete Edwards curve -/
 @[blueprint
-  (title := "The Map")
+  (title := "Coordinates of the decoding function")
   (statement := /--
-  Definition 2. In the situation of Theorem 1, the decoding function for the complete Edwards curve
-  $E : x^2 + y^2 = 1 + d x^2 y^2$ is the function $\varphi : \mathbb{F}_q \to E(\mathbb{F}_q)$
-  defined as follows:
+  In the situation of Theorem 1, the decoding function for the complete Edwards curve
+  $E : x^2 + y^2 = 1 + d x^2 y^2$ is the function $\varphi : \mathbb{F}_q \to E(\mathbb{F}_q)$ with
   $$
-  \varphi(\pm 1) = (0, 1);
+  \varphi(\pm 1) = (0, 1), \qquad \varphi(t) = (x, y) \text{ for } t \notin \{\pm 1\}.
   $$
-  if $t \notin \{\pm 1\}$ then
-  $$
-  \varphi(t) = (x, y).
-  $$
-
-  Original: Chapter "3.2 The map": Definition 2
+  Here $\varphi$ is regarded as a map $\mathbb{F}_q \to \mathbb{F}_q \times \mathbb{F}_q$,
+  forgetting the proof that the image lies on $E$.
   -/)]
 noncomputable def DecodingFunction
   (t : F)

@@ -15,7 +15,7 @@ In this file we introduce some generally helpful lemmas for `t2` as introduced i
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.3.
 -/
 
 @[expose] public section
@@ -28,7 +28,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:t2_eq_one"]
 lemma t2_eq_one
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -48,7 +47,6 @@ lemma t2_eq_one
     rw [u2_eq_zero t s_h1 s_h2 q_h1 q_h2 q_h3]
     simp
 
-@[blueprint "lemma:t2_eq_t"]
 lemma t2_eq_t
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -79,7 +77,6 @@ lemma t2_eq_t
     have h' : (1 + t.val) * 2 ≠ 0 := mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero q_h1 q_h2 q_h3)
     grind
 
-@[blueprint "lemma:t2_eq_t'"]
 lemma t2_eq_t'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -112,7 +109,13 @@ lemma t2_eq_t'
       mul_ne_zero (one_add_t_ne_zero ⟨t', t_h⟩) (two_ne_zero q_h1 q_h2 q_h3)
     grind
 
-@[blueprint "lemma:t2_in_t_or_neg_t"]
+@[blueprint "lemma:t2_in_t_or_neg_t"
+  (title := "$\\bar t = \\pm t$")
+  (statement := /--
+  For $t \in \mathbb{F}_q$, the parameter $\bar t$ reconstructed from $\varphi(t)$ in
+  Theorem 3.3 satisfies $\bar t = t$ or $\bar t = -t$. This is the key step showing that
+  $\varphi(t)$ has no preimages besides $t$ and $-t$.
+  -/)]
 lemma t2_in_t_or_neg_t
   (t : F)
   (s_h1 : s ≠ 0)
@@ -140,7 +143,6 @@ lemma t2_in_t_or_neg_t
       grind
 
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-@[blueprint "def:t'"]
 noncomputable def t'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -150,7 +152,6 @@ noncomputable def t'
   let u := u' s_h2 q_h1 q_h3 P
   (1 - u) / (1 + u)
 
-@[blueprint "lemma:t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one"]
 lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -184,7 +185,6 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
       have h3 : 2 = 0 := by grind
       contradiction
 
-@[blueprint "lemma:one_add_t"]
 lemma one_add_t'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -200,7 +200,6 @@ lemma one_add_t'_ne_zero
   let t := t' s_h2 q_h1 q_h3 P
   X ≠ 1 → t + 1 ≠ 0 := by grind [t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one]
 
-@[blueprint "lemma:u'_eq_one_sub_t'_over_one_add_t'"]
 lemma u'_eq_one_sub_t'_over_one_add_t'
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -224,7 +223,6 @@ lemma u'_eq_one_sub_t'_over_one_add_t'
     let two_ne_zero := two_ne_zero q_h1 q_h2 q_h3
     grind
 
-@[blueprint "lemma:u'_eq_u"]
 lemma u'_eq_u
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -246,7 +244,6 @@ lemma u'_eq_u
   let u := u ⟨t, t_h⟩
   u' = u := by grind [u', u, u'_eq_one_sub_t'_over_one_add_t']
 
-@[blueprint "lemma:v'_eq_v"]
 lemma v'_eq_v
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -268,7 +265,6 @@ lemma v'_eq_v
   let v := v ⟨t, t_h⟩ s
   v' = v := by grind [v', v, u'_eq_one_sub_t'_over_one_add_t', u'_eq_u]
 
-@[blueprint "lemma:X'_eq_X"]
 lemma X'_eq_X
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -300,7 +296,6 @@ lemma X'_eq_X
     change X = X
     rfl
 
-@[blueprint "lemma:Y'_eq_Y"]
 lemma Y'_eq_Y
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -331,7 +326,6 @@ lemma Y'_eq_Y
     rfl
 
 /-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-@[blueprint "def:x'"]
 noncomputable def x'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -343,7 +337,6 @@ noncomputable def x'
   let Y' := Y' s_h2 q_h1 q_h3 P
   (c - 1) * s * X' * (1 + X') / Y'
 
-@[blueprint "lemma:x'_eq_x"]
 lemma x'_eq_x
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -373,7 +366,6 @@ lemma x'_eq_x
     grind
 
 /-- `y'` is the `y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-@[blueprint "def:y'"]
 noncomputable def y'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -384,7 +376,6 @@ noncomputable def y'
   let r := r s
   (r * X' - (1 + X')^2) / (r * X' + (1 + X')^2)
 
-@[blueprint "lemma:y'_eq_y"]
 lemma y'_eq_y
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -413,7 +404,6 @@ lemma y'_eq_y
     let h2 := X'_eq_X s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one X_h
     grind
 
-@[blueprint "thm:x'_and_y'_fulfill_curve_equation"]
 theorem x'_and_y'_fulfill_curve_equation
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -445,7 +435,6 @@ theorem x'_and_y'_fulfill_curve_equation
     simp only [edwardsCurveEquation_iff]
     grind [x'_eq_x, y'_eq_y]
 
-@[blueprint "lemma:y_eq_y_of_P"]
 lemma y_eq_y_of_P
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -474,7 +463,6 @@ lemma y_eq_y_of_P
     let h2 := X'_eq_X s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one X_h
     grind
 
-@[blueprint "lemma:x_eq_x_of_P"]
 lemma x_eq_x_of_P
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -515,7 +503,6 @@ lemma x_eq_x_of_P
     change x = x
     rfl
 
-@[blueprint "lemma:x_y_of_P_eq_x_y"]
 lemma x_y_of_P_eq_x_y
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)

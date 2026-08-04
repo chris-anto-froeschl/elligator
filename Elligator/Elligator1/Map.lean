@@ -50,13 +50,14 @@ variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q %
 
 omit [Fintype F] in
 @[blueprint
-  (title := "u defined")
+  (title := "$u$ is defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each
-  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  In the situation of Theorem 1, for each $t \in \mathbb{F}_q \setminus \{\pm 1\}$ the
+  denominator of
   $$
-  u = (1 - t)/(1 + t),
+  u = (1 - t)/(1 + t)
   $$
+  is nonzero, i.e. $1 + t \neq 0$.
   -/)]
 theorem u_defined :
   ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1}, (1 + t.val) ≠ 0 := by
@@ -64,13 +65,13 @@ theorem u_defined :
     exact FiniteFieldBasic.one_add_t_ne_zero t
 
 @[blueprint
-  (title := "Y defined")
+  (title := "$Y$ is defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each
-  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  In the situation of Theorem 1, the quantity
   $$
-  Y = (\chi(v)v)^{(q+1)/4}\chi(v)\chi(u^2 + 1/c^2),
+  Y = (\chi(v)v)^{(q+1)/4}\chi(v)\chi(u^2 + 1/c^2)
   $$
+  is defined for each $t \in \mathbb{F}_q \setminus \{\pm 1\}$, since $c^2 \neq 0$.
   -/)]
 theorem Y_defined
   (s_h1 : s ≠ 0)
@@ -81,13 +82,14 @@ theorem Y_defined
     exact c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3
 
 @[blueprint
-  (title := "x defined")
+  (title := "$x$ is defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each
-  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  In the situation of Theorem 1, $Y \neq 0$ for each $t \in \mathbb{F}_q \setminus \{\pm 1\}$,
+  so that
   $$
-  x = (c - 1)sX(1 + X)/Y,
+  x = (c - 1)sX(1 + X)/Y
   $$
+  is defined.
   -/)]
 theorem x_defined
   (s_h1 : s ≠ 0)
@@ -99,13 +101,15 @@ theorem x_defined
     exact Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
 @[blueprint
-  (title := "y defined")
+  (title := "$y$ is defined")
   (statement := /--
-  The following element of $\mathbb{F}_q$ is defined for each
-  $t \in \mathbb{F}_q \setminus \{-1,1\}$:
+  In the situation of Theorem 1, $rX + (1 + X)^2 \neq 0$ for each
+  $t \in \mathbb{F}_q \setminus \{\pm 1\}$, so that
   $$
   y = (rX - (1 + X)^2)/(rX + (1 + X)^2).
+  y = (rX - (1 + X)^2)/(rX + (1 + X)^2)
   $$
+  is defined.
   -/)]
 theorem y_defined
   (s_h1 : s ≠ 0)
@@ -121,13 +125,15 @@ theorem y_defined
 /-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
 `Y² = X⁵ + (r² - 2)X³ + X`. -/
 @[blueprint
-  (title := "Fulfill Helper Curve Equation")
+  (title := "$(X, Y)$ lies on the auxiliary curve")
   (statement := /--
-  Let r, X and Y as defined above.
-
-  Then $Y^2 = X^5 + (r^2 - 2)X^3 + X$ holds.
+  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let $r$, $X$,
+  $Y$ be as above. Then
+  $$
+  Y^2 = X^5 + (r^2 - 2)X^3 + X .
+  $$
   -/)]
-theorem map_fulfills_helper_equation
+theorem map_fulfills_auxiliary_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -144,11 +150,13 @@ theorem map_fulfills_helper_equation
 /-- The quantities constructed for a nonexceptional input are all nonzero as asserted in
 Theorem 1: `u * v * X * Y * x * (y + 1) ≠ 0`. -/
 @[blueprint
-  (title := "Non zero helper variables")
+  (title := "Nonvanishing of the auxiliary quantities")
   (statement := /--
-  Let u, v, X, Y, x, y as defined above.
-
-  Then $uvXYx(y + 1) \neq 0$.
+  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let
+  $u, v, X, Y, x, y$ be as above. Then
+  $$
+  uvXYx(y + 1) \neq 0 .
+  $$
   -/)]
 theorem variable_mul_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
@@ -169,11 +177,14 @@ theorem variable_mul_ne_zero
 /-- The coordinates produced from a nonexceptional input satisfy the Edwards curve equation
 `x² + y² = 1 + d * x² * y²`. This is the final conclusion of Theorem 1. -/
 @[blueprint
-  (title := "Fulfill Curve Equation")
+  (title := "$(x, y)$ lies on the Edwards curve")
   (statement := /--
-  Let x and y as defined above.
-
-  Then $x^2 + y^2 = 1 + d x^2 y^2$ holds.
+  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let $x$, $y$
+  be as above. Then $(x, y)$ is a point of the complete Edwards curve
+  $E : x^2 + y^2 = 1 + d x^2 y^2$, i.e.
+  $$
+  x^2 + y^2 = 1 + d x^2 y^2 .
+  $$
   -/)]
 theorem map_fulfills_curve_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
@@ -197,7 +208,17 @@ theorem map_fulfills_curve_equation
 For `t ≠ ±1`, it returns the coordinates `x(t)` and `y(t)` constructed in Theorem 1. The two
 exceptional inputs `t = ±1` are both mapped to the neutral point `(0, 1)`. The codomain subtype
 records that the result satisfies the Edwards curve equation. -/
-@[blueprint "def:ϕ"]
+@[blueprint "def:ϕ"
+  (title := "The decoding function $\\varphi$")
+  (statement := /--
+  In the situation of Theorem 1, the decoding function for the complete Edwards curve
+  $E : x^2 + y^2 = 1 + d x^2 y^2$ is the function
+  $\varphi : \mathbb{F}_q \to E(\mathbb{F}_q)$ defined as follows:
+  $$
+  \varphi(\pm 1) = (0, 1);
+  $$
+  if $t \notin \{\pm 1\}$ then $\varphi(t) = (x, y)$.
+  -/)]
 noncomputable def ϕ
   (t : F)
   (s_h1 : s ≠ 0)

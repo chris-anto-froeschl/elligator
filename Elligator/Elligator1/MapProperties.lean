@@ -21,7 +21,7 @@ This hierarchy allows to have a linear dependence hierarchy without polluting ma
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.
 -/
 
 @[expose] public section
@@ -37,7 +37,6 @@ variable {q : ℕ}
 
 -- Used in Theorem 3 Proof B part as implication for P_in_ϕOverF_with_prop2_main_case
 -- argument.
-@[blueprint "lemma:y_h1"]
 lemma y_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -85,7 +84,6 @@ lemma y_h1
     simp
 
 -- Implicated by y_h1. Saved for further proof arguments in Theorem 3 Proof B
-@[blueprint "lemma:y_h2"]
 lemma y_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -120,7 +118,6 @@ lemma y_h2
       _ = 0 := by rw [y_h1 t s_h1 s_h2 q_h1 q_h2 q_h3]
 
 -- Implicated by y_h2.
-@[blueprint "lemma:y_h3"]
 lemma y_h3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -145,7 +142,6 @@ lemma y_h3
     rw [mul_inv_cancel₀ (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
     ring_nf
 
-@[blueprint "lemma:X_comparison_implication"]
 lemma X_comparison_implication
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -167,7 +163,6 @@ lemma X_comparison_implication
     rw [X_comparison t q_h1 q_h2 q_h3]
     exact (y_h3 t s_h1 s_h2 q_h1 q_h2 q_h3)
 
-@[blueprint "lemma:X_comparison_implication"]
 lemma X_comparison_implication2
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -186,7 +181,6 @@ lemma X_comparison_implication2
     rw [← inv_eq_one_div]
     rw [inv_mul_cancel₀ (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)]
 
-@[blueprint "lemma:χ_IsSquare_h1"]
 lemma χ_IsSquare_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -204,7 +198,6 @@ lemma χ_IsSquare_h1
     rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
     apply IsSquare.sq
 
-@[blueprint "lemma:y_comparison"]
 lemma y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (q_h1 : Fintype.card F = q)
@@ -234,7 +227,6 @@ lemma y_comparison
         simp
         rfl
 
-@[blueprint "lemma:P_comparison"]
 lemma P_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -255,7 +247,6 @@ lemma P_comparison
     rw [x_comparison t s_h1 q_h1 q_h2 q_h3, y_comparison t q_h1 q_h2 q_h3]
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:X_η_h1"]
 lemma X_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -288,7 +279,6 @@ lemma X_η_h1
     exact h1_1
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:X_η_h2"]
 lemma X_η_h2
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -309,7 +299,6 @@ lemma X_η_h2
     grind
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:u_η_h1"]
 lemma u_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -352,7 +341,6 @@ lemma u_η_h1
         grind
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:t_η_h1"]
 lemma t_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -381,7 +369,6 @@ lemma t_η_h1
     exact h1
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:v_η_h1"]
 lemma v_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -404,7 +391,6 @@ lemma v_η_h1
     grind
 
 -- Used in the main case of Theorem 3 Proof part B
-@[blueprint "lemma:Y_η_h1"]
 lemma Y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -455,7 +441,6 @@ lemma Y_η_h1
             rw [mul_one]
 
 -- Implicated by main case of Theorem 3 proof part B.
-@[blueprint "lemma:y_η_h1"]
 lemma y_η_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -480,7 +465,6 @@ lemma y_η_h1
     rw [X_η_h2 t s_h1 s_h2 q_h1 q_h2 q_h3 η_h1]
     ring_nf
 
-@[blueprint "lemma:y_of_zero"]
 lemma y_of_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -496,7 +480,6 @@ lemma y_of_zero
     change (r * 1 - (1 + 1)^2) / (r * 1 + (1 + 1)^2) = (r - 4) / (r + 4)
     ring_nf
 
-@[blueprint "lemma:ϕ_eq_zero_one"]
 lemma ϕ_of_t_eq_zero_one
   (t : { n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -511,7 +494,6 @@ lemma ϕ_of_t_eq_zero_one
     unfold ϕ Elligator1.ϕ
     rcases t.prop with h | h <;> simp [h]
 
-@[blueprint "lemma:y_add_one_eq_two"]
 lemma y_add_one_eq_two
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -532,18 +514,35 @@ lemma y_add_one_eq_two
 This property does not have to consider a dedicated field `F` with `q`.
 This restriction is defined during the context evolution.
 
-Original: Chapter "3.3 Inverting the map": Theorem 3
+Original: Section "3.3 Inverting the map", Theorem 3
 -/
-@[blueprint "def:ϕOverFProp1"]
+@[blueprint "def:ϕOverFProp1"
+  (title := "Image condition 1: $y + 1 \\neq 0$")
+  (statement := /--
+  The first of the three conditions characterizing $\varphi(\mathbb{F}_q)$ inside
+  $E(\mathbb{F}_q)$ in Theorem 3: a point $(x, y)$ satisfies
+  $$
+  y + 1 \neq 0 .
+  $$
+  -/)]
 noncomputable def ϕOverFProp1 (P : F × F) : Prop :=
   let y := P.snd
   y + 1 ≠ 0
 
 /-- `ϕOverFProp2` is the second property fulfilled by Ps in `EOverF`.
 
-Original: Chapter "3.3 Inverting the map": Theorem 3
+Original: Section "3.3 Inverting the map", Theorem 3
 -/
-@[blueprint "def:ϕOverFProp2"]
+@[blueprint "def:ϕOverFProp2"
+  (title := "Image condition 2: $(1 + \\eta r)^2 - 1$ is a square")
+  (statement := /--
+  The second of the three conditions characterizing $\varphi(\mathbb{F}_q)$ inside
+  $E(\mathbb{F}_q)$ in Theorem 3: a point $(x, y)$ satisfies that
+  $$
+  (1 + \eta r)^2 - 1
+  $$
+  is a square, where $\eta = (y - 1)/(2(y + 1))$.
+  -/)]
 def ϕOverFProp2 (s : F) (P : F × F) : Prop :=
   let r := r s
   let η := η P
@@ -551,9 +550,17 @@ def ϕOverFProp2 (s : F) (P : F × F) : Prop :=
 
 /-- `ϕOverFProp3` is the third property fulfilled by Ps in `EOverF`.
 
-Original: Chapter "3.3 Inverting the map": Theorem 3
+Original: Section "3.3 Inverting the map", Theorem 3
 -/
-@[blueprint "def:ϕOverFProp3"]
+@[blueprint "def:ϕOverFProp3"
+  (title := "Image condition 3: the exceptional case $\\eta r = -2$")
+  (statement := /--
+  The third of the three conditions characterizing $\varphi(\mathbb{F}_q)$ inside
+  $E(\mathbb{F}_q)$ in Theorem 3: a point $(x, y)$ satisfies that if $\eta r = -2$ then
+  $$
+  x = 2s(c - 1)\chi(c)/r .
+  $$
+  -/)]
 def ϕOverFProp3 (s : F) (P : F × F) : Prop :=
   let x := P.fst
   let c := c s
@@ -564,17 +571,30 @@ def ϕOverFProp3 (s : F) (P : F × F) : Prop :=
 /-- `ϕOverFProps` combines the previously defined properties which are fulfilled by Ps
 in `EOverF`, i.e. `ϕOverFProp1`, `ϕOverFProp2` and `ϕOverFProp3`.
 
-Original: Chapter "3.3 Inverting the map": Theorem 3
+Original: Section "3.3 Inverting the map", Theorem 3
 -/
-@[blueprint "def:ϕOverFProps"]
+@[blueprint "def:ϕOverFProps"
+  (title := "The image conditions of Theorem 3")
+  (statement := /--
+  The conjunction of the three conditions of Theorem 3 for a point $(x, y) \in E(\mathbb{F}_q)$:
+  $y + 1 \neq 0$; $(1 + \eta r)^2 - 1$ is a square, where $\eta = (y - 1)/(2(y + 1))$; and if
+  $\eta r = -2$ then $x = 2s(c - 1)\chi(c)/r$.
+  -/)]
 def ϕOverFProps (s : F) (P : F × F) : Prop :=
   ϕOverFProp1 P ∧ ϕOverFProp2 s P ∧ ϕOverFProp3 s P
 
 /-- `ϕOverF` is the set of Ps produced by `ϕ`.
 
-Original: Chapter "3.2 The map": Definition 2
+Original: Section "3.2 The map", Definition 2
 -/
-@[blueprint "def:ϕOverF"]
+@[blueprint "def:ϕOverF"
+  (title := "The image $\\varphi(\\mathbb{F}_q)$")
+  (statement := /--
+  The image of the decoding function of Definition 2,
+  $$
+  \varphi(\mathbb{F}_q) = \{\varphi(t) : t \in \mathbb{F}_q\} \subseteq E(\mathbb{F}_q) .
+  $$
+  -/)]
 noncomputable def ϕOverF
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -584,7 +604,6 @@ noncomputable def ϕOverF
   : Set (F × F)
   := Set.range (fun t : F => ϕ t s_h1 s_h2 q_h1 q_h2 q_h3)
 
-@[blueprint "lemma:P_in_ϕOverF_with_prop1_base_case"]
 lemma P_in_ϕOverF_with_prop1_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -609,7 +628,6 @@ lemma P_in_ϕOverF_with_prop1_base_case
     simp [h1]
     grind
 
-@[blueprint "lemma:P_in_ϕOverF_with_prop1_main_case"]
 lemma P_in_ϕOverF_with_prop1_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -629,7 +647,6 @@ lemma P_in_ϕOverF_with_prop1_main_case
     exact y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
 -- Original: Theorem 3.2 Proof B prop 1 argumentation
-@[blueprint "lemma:P_in_ϕOverF_with_prop1"]
 lemma P_in_ϕOverF_with_prop1
   (t : F)
   (s_h1 : s ≠ 0)
@@ -650,7 +667,6 @@ lemma P_in_ϕOverF_with_prop1
         exact h1
       exact P_in_ϕOverF_with_prop1_base_case ⟨t, h1_1⟩ s_h1 s_h2 q_h1 q_h2 q_h3
 
-@[blueprint "lemma:P_in_ϕOverF_with_prop2_base_case"]
 lemma P_in_ϕOverF_with_prop2_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -678,7 +694,6 @@ lemma P_in_ϕOverF_with_prop2_base_case
     use 0
     simp
 
-@[blueprint "lemma:P_in_ϕOverF_with_prop2_main_case"]
 lemma P_in_ϕOverF_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -717,7 +732,6 @@ lemma P_in_ϕOverF_with_prop2_main_case
     apply IsSquare.sq
 
 -- Original: Theorem 3.2 Proof B prop 2 argumentation
-@[blueprint "lemma:P_in_ϕOverF_with_prop2"]
 lemma P_in_ϕOverF_with_prop2
   (t : F)
   (s_h1 : s ≠ 0)
@@ -739,7 +753,6 @@ lemma P_in_ϕOverF_with_prop2
         exact h1
       exact P_in_ϕOverF_with_prop2_base_case ⟨t, h1_1⟩ s_h1 s_h2 q_h1 q_h2 q_h3
 
-@[blueprint "lemma:P_in_ϕOverF_with_prop3_base_case"]
 lemma P_in_ϕOverF_with_prop3_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -762,7 +775,6 @@ lemma P_in_ϕOverF_with_prop3_base_case
     have h3 := two_ne_zero q_h1 q_h2 q_h3
     contradiction
 
-@[blueprint "lemma:P_in_ϕOverF_with_prop3_main_case"]
 lemma P_in_ϕOverF_with_prop3_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -793,7 +805,6 @@ lemma P_in_ϕOverF_with_prop3_main_case
     grind
 
 -- Original: Theorem 3.2 Proof B prop 3 argumentation
-@[blueprint "lemma:P_in_ϕOverF_with_prop3"]
 lemma P_in_ϕOverF_with_prop3
   (t : F)
   (s_h1 : s ≠ 0)
@@ -815,7 +826,13 @@ lemma P_in_ϕOverF_with_prop3
       exact P_in_ϕOverF_with_prop3_base_case ⟨t, h1_1⟩ s_h1 s_h2 q_h1 q_h2 q_h3
 
 -- Original: Theorem 3.2 Proof B (3.2 forward statement)
-@[blueprint "thm:P_props_of_P_in_ϕOverF"]
+@[blueprint "thm:P_props_of_P_in_ϕOverF"
+  (title := "Points of $\\varphi(\\mathbb{F}_q)$ satisfy the image conditions")
+  (statement := /--
+  The forward part of statement 2 of Theorem 3: every $(x, y) \in \varphi(\mathbb{F}_q)$
+  satisfies $y + 1 \neq 0$; $(1 + \eta r)^2 - 1$ is a square, where
+  $\eta = (y - 1)/(2(y + 1))$; and if $\eta r = -2$ then $x = 2s(c - 1)\chi(c)/r$.
+  -/)]
 theorem P_props_of_P_in_ϕOverF
   (t : F)
   (s_h1 : s ≠ 0)
@@ -833,7 +850,6 @@ theorem P_props_of_P_in_ϕOverF
     · exact P_in_ϕOverF_with_prop2 t s_h1 s_h2 q_h1 q_h2 q_h3
     · exact P_in_ϕOverF_with_prop3 t s_h1 s_h2 q_h1 q_h2 q_h3
 
-@[blueprint "lemma:P_of_ϕ_in_ϕOverF"]
 lemma P_of_ϕ_in_ϕOverF
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -846,7 +862,6 @@ lemma P_of_ϕ_in_ϕOverF
   let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3
   P ∈ ϕOverF := by simp [ϕOverF]
 
-@[blueprint "lemma:P_of_ϕ_fulfills_ϕOverFProps"]
 lemma P_of_ϕ_fulfills_ϕOverFProps
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)

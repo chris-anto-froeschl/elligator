@@ -18,7 +18,7 @@ In this file we introduce some generally helpful lemmas for `v` as introduced in
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -32,7 +32,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:v_h"]
 lemma v_h1_third_factor_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -49,7 +48,6 @@ lemma v_h1_third_factor_ne_zero
     rw [q_h1] at h''
     contradiction
 
-@[blueprint "lemma:v_h"]
 lemma v_h1
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -67,7 +65,6 @@ lemma v_h1
     have h1 : c^2 ≠ 0 := by exact pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h2 q_h3)
     grind [r_h1]
 
-@[blueprint "lemma:v_h"]
 lemma v_h1_second_factor_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -87,7 +84,11 @@ lemma v_h1_second_factor_ne_zero
     rw [FiniteField.isSquare_neg_one_iff, q_h1] at h''
     contradiction
 
-@[blueprint "lemma:v_ne_zero"]
+@[blueprint "lemma:v_ne_zero"
+  (title := "$v \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $v \neq 0$.
+  -/)]
 lemma v_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -102,7 +103,6 @@ lemma v_ne_zero
       · exact (v_h1_second_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t)
     · exact (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t)
 
-@[blueprint "lemma:χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero"]
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -119,7 +119,6 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
     · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)
 
 omit [Fintype F] in
-@[blueprint "lemma:v_comparison"]
 lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -137,7 +136,6 @@ lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
         ring_nf
 
 omit [Fintype F] in
-@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication1 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -155,7 +153,6 @@ lemma v_comparison_implication1 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
       _ = v1 := by grind [v]
 
 omit [Fintype F] in
-@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -170,7 +167,6 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     rw [← v_comparison_implication1 t]
     grind
 
-@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (q_h1 : Fintype.card F = q)
@@ -184,7 +180,6 @@ lemma v_comparison_implication3
     rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) q_h1 q_h3]
     simp
 
-@[blueprint "lemma:v_comparison_implication"]
 lemma v_comparison_implication4
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (q_h1 : Fintype.card F = q)
@@ -205,7 +200,6 @@ lemma v_comparison_implication4
     simp
 
 omit [Fintype F] in
-@[blueprint "lemma:v_of_zero"]
 lemma v_of_zero :
   let v := v ⟨(0 : F), zero_h1⟩ s
   v = (r s)^2 := by

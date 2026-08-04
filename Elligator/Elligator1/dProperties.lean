@@ -16,7 +16,7 @@ in `Elligator.Elligator1.Variables`.
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -27,7 +27,12 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:d_nonsquare"]
+@[blueprint "lemma:d_nonsquare"
+  (title := "$d$ is not a square")
+  (statement := /--
+  In the situation of Theorem 1, $d = -(c + 1)^2/(c - 1)^2$ is not a square in $\mathbb{F}_q$:
+  otherwise $-1 = d(c - 1)^2/(c + 1)^2$ would be a square, a contradiction.
+  -/)]
 lemma d_nonsquare
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -58,7 +63,6 @@ lemma d_nonsquare
       exact h4
     contradiction
 
-@[blueprint "lemma:d_ne_zero"]
 lemma d_ne_zero
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -66,47 +70,39 @@ lemma d_ne_zero
   : (d s) ≠ 0 := by
     let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
     intro h
-    have h1 : IsSquare (d s) := by
+    have h' : IsSquare (d s) := by
       unfold IsSquare
       use 0
       grind
     contradiction
 
-@[blueprint "lemma:one_over_d_nonsquare"]
 lemma one_over_d_nonsquare
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
   : ¬IsSquare (1 / (d s)) := by
-      intro h3_1
-      unfold IsSquare at h3_1
+      intro h
+      unfold IsSquare at h
       let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
       let d_ne_zero := d_ne_zero s_h2 q_h1 q_h3
-      rcases h3_1 with ⟨a, ah⟩
+      rcases h with ⟨a, ah⟩
       rw [← pow_two, ← mul_left_inj' d_ne_zero] at ah
       ring_nf at ah
       rw [mul_inv_cancel₀ d_ne_zero] at ah
       change 1 = (d s) * a^2 at ah
-      by_cases h3_2 : a = 0
+      by_cases h' : a = 0
       · grind
-      · have h3_3 : a^2 ≠ 0 := by grind
-        rw [← div_left_inj' h3_3, mul_div_assoc, div_self h3_3, mul_one] at ah
+      · have h'' : a^2 ≠ 0 := by grind
+        rw [← div_left_inj' h'', mul_div_assoc, div_self h'', mul_one] at ah
         rw [← one_pow 2, ← div_pow] at ah
         have d_square : IsSquare (d s) := by
           use 1 / a
           grind
         contradiction
 
-@[blueprint "lemma:d_ne_one"]
-lemma d_ne_one
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  : (d s) ≠ 1 := by
-    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
-    grind
+lemma d_ne_one (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
+  : (d s) ≠ 1 := by grind [d_nonsquare]
 
-@[blueprint "lemma:d_ne_zero_and_d_ne_one"]
 lemma d_ne_zero_and_d_ne_one
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -116,7 +112,6 @@ lemma d_ne_zero_and_d_ne_one
     · exact d_ne_zero s_h2 q_h1 q_h3
     · exact d_ne_one s_h2 q_h1 q_h3
 
-@[blueprint "lemma:neg_d_eq_r_add_two_over_r_sub_two"]
 lemma neg_d_eq_r_add_two_over_r_sub_two
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -135,7 +130,7 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
         nth_rw 2 [← neg_one_mul]
         rw [mul_div_assoc, ← mul_assoc]
         rw [add_pow_two, sub_pow_two]
-        have h3_1 : 1 / c ≠ 0 := by
+        have h : 1 / c ≠ 0 := by
           rw [← inv_eq_one_div]
           apply inv_ne_zero
           apply c_ne_zero s_h1 q_h1 q_h2 q_h3

@@ -24,7 +24,7 @@ In this file we introduce some generally helpful lemmas for `y` as introduced in
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -38,8 +38,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
--- Chapter 3.2 Theorem 1
-@[blueprint "lemma:helper_eq"]
 lemma helper_eq
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -88,7 +86,6 @@ lemma helper_eq
     rw [h1]
     exact h4
 
-@[blueprint "lemma:y_divisor_ne_zero"]
 lemma y_divisor_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -144,7 +141,6 @@ lemma y_divisor_ne_zero
       exact h4
     contradiction
 
-@[blueprint "lemma:y_add_one_ne_zero"]
 lemma y_add_one_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -173,8 +169,6 @@ lemma y_add_one_ne_zero
       apply mul_ne_zero (r_ne_zero s_h1 q_h1 q_h2 q_h3) (X_ne_zero s_h1 q_h1 q_h2 q_h3 t)
     contradiction
 
--- Chapter 3.2 Theorem 1
-@[blueprint "lemma:variable_mul_ne_zero'"]
 lemma variable_mul_ne_zero'
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)
@@ -202,8 +196,6 @@ lemma variable_mul_ne_zero'
       · apply x_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 t
     · apply y_add_one_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
--- Chapter 3.2 Theorem 1
-@[blueprint "lemma:curve_equation"]
 lemma curve_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : s ≠ 0)

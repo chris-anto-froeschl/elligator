@@ -15,7 +15,7 @@ In this file we introduce some generally helpful lemmas for `u` as introduced in
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2.
 -/
 
 @[expose] public section
@@ -29,17 +29,20 @@ variable {s : F}
 variable {q : ℕ}
 
 omit [Fintype F] in
-@[blueprint "lemma:u_ne_zero"]
+@[blueprint "lemma:u_ne_zero"
+  (title := "$u \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $u = (1 - t)/(1 + t) \neq 0$ for
+  $t \in \mathbb{F}_q \setminus \{\pm 1\}$, since $1 - t \neq 0$ and $1 + t \neq 0$.
+  -/)]
 lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) :=
   div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t)
 
 omit [Fintype F] in
-@[blueprint "lemma:u_pow_two_ne_zero"]
 lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (u t)^2 ≠ (0 : F) :=
   pow_two_ne_zero (u_ne_zero t)
 
 omit [Fintype F] in
-@[blueprint "lemma:u_comparison"]
 lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -53,12 +56,10 @@ lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
      _ = 1 / u1 := by simp [u1, u]
 
 omit [Fintype F] in
-@[blueprint "lemma:u_of_zero"]
 lemma u_of_zero :
   let u := u ⟨(0 : F), zero_h1⟩
   u = 1 := by simp [u]
 
-@[blueprint "lemma:one_add_u_ne_zero"]
 lemma one_add_u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (q_h1 : Fintype.card F = q)

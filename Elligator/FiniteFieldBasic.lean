@@ -27,14 +27,12 @@ variable {q : ℕ}
 namespace Elligator.FiniteFieldBasic
 
 omit [Field F] in
-@[blueprint "lemma:q_odd"]
 lemma q_odd (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : Odd (Fintype.card F) := by
     rw [Nat.odd_iff]
     omega
 
 omit [Field F] in
-@[blueprint "lemma:q_sub_one_over_two_odd"]
 lemma q_sub_one_over_two_odd
   (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : Odd ((Fintype.card F - 1) / 2) := by
@@ -42,18 +40,15 @@ lemma q_sub_one_over_two_odd
     omega
 
 omit [Field F] in
-@[blueprint "lemma:q_sub_one_even"]
 lemma q_sub_one_even (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : Even (Fintype.card F - 1) := by
     rw [Nat.even_iff]
     omega
 
 omit [Field F] in
-@[blueprint "lemma:q_sub_one_dvd_two"]
 lemma q_sub_one_dvd_two (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
   : 2 ∣ Fintype.card F - 1 := Even.two_dvd (q_sub_one_even q_h1 q_h3)
 
-@[blueprint "lemma:primepow_ne_one"]
 lemma primepow_ne_one (q_h2 : IsPrimePow q)
   : q ≠ 1 := by
     intro h
@@ -64,7 +59,6 @@ lemma primepow_ne_one (q_h2 : IsPrimePow q)
       contradiction
     contradiction
 
-@[blueprint "lemma:odd_prime_power_gt_two"]
 lemma odd_prime_power_gt_two (q_h2 : IsPrimePow q) (hq : Odd q) : q > 2 := by
   have h1 : q ≠ 0 := by grind
   have h2 : q ≠ 1 := primepow_ne_one q_h2
@@ -72,16 +66,12 @@ lemma odd_prime_power_gt_two (q_h2 : IsPrimePow q) (hq : Odd q) : q > 2 := by
   lia
 
 omit [Fintype F] in
-@[blueprint "lemma:one_ne_zero"]
 lemma one_ne_zero : (1 : F) ≠ 0 := by grind
 
-@[blueprint "lemma:q_add_one_over_four_ne_zero"]
 lemma q_add_one_over_four_ne_zero (q_h3 : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by grind
 
-@[blueprint "lemma:q_add_one_over_two_ne_zero"]
 lemma q_add_one_over_two_ne_zero (q_h3 : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by grind
 
-@[blueprint "lemma:ring_char_ne_two"]
 lemma ring_char_ne_two
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -99,7 +89,6 @@ lemma ring_char_ne_two
     rw [← h2]
     exact h3
 
-@[blueprint "lemma:two_ne_zero"]
 lemma two_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -113,7 +102,6 @@ lemma two_ne_zero
     have h3 := hp.two_le
     omega
 
-@[blueprint "lemma:four_ne_zero"]
 lemma four_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -126,7 +114,6 @@ lemma four_ne_zero
     · exact (two_ne_zero q_h1 q_h2 q_h3)
 
 omit [Fintype F] in
-@[blueprint "lemma:neg_one_ne_zero"]
 lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by
   have he: Odd (-1 : F) := by
     rw [Odd]
@@ -138,7 +125,6 @@ lemma neg_one_ne_zero : (-1 : F) ≠ 0 := by
     simp
   simp_all
 
-@[blueprint "lemma:neg_one_non_square"]
 lemma neg_one_non_square
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -148,11 +134,9 @@ lemma neg_one_non_square
       apply_rules [ FiniteField.isSquare_neg_one_iff ];
     aesop
 
-@[blueprint "lemma:p_odd_power_odd"]
 lemma p_odd_power_odd (p k : ℕ) (hp : Odd p) : Odd (p^k) := Odd.pow hp
 
 omit [Field F] in
-@[blueprint "lemma:q_sub_one_over_two_ne_zero"]
 lemma q_sub_one_over_two_ne_zero
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -163,11 +147,9 @@ lemma q_sub_one_over_two_ne_zero
     omega
 
 omit [Fintype F] in
-@[blueprint "lemma:pow_two_ne_zero"]
 lemma pow_two_ne_zero {a : F} (a_ne_zero : a ≠ 0) : a^2 ≠ 0 := by simp_all
 
 omit [Fintype F] in
-@[blueprint "lemma:one_sub_t_ne_zero"]
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 := by
   intro h
   have h1 : t.val = 1 := by
@@ -186,7 +168,6 @@ lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val 
   contradiction
 
 omit [Fintype F] in
-@[blueprint "lemma:one_add_t_ne_zero"]
 lemma one_add_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) + t.val ≠ 0 := by
   intro h
   have h1 : t.val = -1 := by
@@ -199,7 +180,6 @@ lemma one_add_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) + t.val 
   contradiction
 
 omit [Fintype F] in
-@[blueprint "lemma:zero_h"]
 lemma zero_h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
   constructor
   · symm
@@ -208,7 +188,6 @@ lemma zero_h1 : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 := by
     exact neg_one_ne_zero
 
 omit [Fintype F] in
-@[blueprint "lemma:neg_t_ne_one_and_neg_t_ne_neg_one"]
 lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -233,14 +212,12 @@ lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
       contradiction
 
 omit [Field F] in
-@[blueprint "lemma:one_add_card_mod_four_eq_zero"]
 lemma one_add_card_mod_four_eq_zero
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
   : (1 + Fintype.card F) % 4 = 0 := by omega
 
 omit [Field F] in
-@[blueprint "lemma:four_dvd_one_add_card"]
 lemma four_dvd_one_add_card
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
@@ -249,7 +226,6 @@ lemma four_dvd_one_add_card
       one_add_card_mod_four_eq_zero q_h1 q_h3)
 
 omit [Field F] in
-@[blueprint "lemma:one_add_card_over_four_mul_two_eq_one_add_card_over_two"]
 lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
   (q_h1 : Fintype.card F = q)
   (q_h3 : q % 4 = 3)
@@ -262,7 +238,6 @@ lemma one_add_card_over_four_mul_two_eq_one_add_card_over_two
     omega
 
 omit [Fintype F] in
-@[blueprint "lemma:one_add_one_a_pow_two_eq_a_add_one_over_a_over_a"]
 lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -270,14 +245,12 @@ lemma one_add_one_a_pow_two_eq_a_add_one_over_a_over_a
     ring_nf
     rw [mul_inv_cancel₀ a_ne_zero]
 
-@[blueprint "lemma:card_sub_one_over_four_mul_two_eq_one_add_card_over_two"]
 lemma card_sub_one_over_four_mul_two_eq_one_add_card_over_two
   : (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
 
 lemma q_h1 (q_h3 : q % 4 = 3)
   : (q + 1) / 4 * 2 = (q - 1) / 2 + 1 := by grind
 
-@[blueprint "lemma:ringChar_of_F_eq_q"]
 lemma ringChar_of_F_eq_q (q_h1 : Fintype.card F = q) (q_prime : Prime q)
   : ringChar F = q := by
     have := FiniteField.card F (ringChar F)
@@ -290,7 +263,6 @@ lemma ringChar_to_q (q_h1 : Fintype.card F = q) (q_prime : Prime q)
     aesop
 
 -- TODO ugly proof, this is just type coercion issues which I do not know how to solve
-@[blueprint "lemma:fin_to_finfield_func_injective"]
 lemma fin_to_finfield_func_injective
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
@@ -318,7 +290,6 @@ lemma fin_to_finfield_func_injective
       apply absurd h2
       apply (Nat.not_dvd_of_pos_of_lt (by omega) (by omega))
 
-@[blueprint "lemma:fin_to_finfield_func_surjective"]
 lemma fin_to_finfield_func_surjective
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
@@ -328,7 +299,6 @@ lemma fin_to_finfield_func_surjective
     let h3 := (Fintype.bijective_iff_injective_and_card _).mpr ⟨h1, h2⟩
     exact h3.2
 
-@[blueprint "lemma:nat_to_finfield_func_surjective"]
 lemma nat_to_finfield_func_surjective
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
@@ -342,7 +312,6 @@ Every element of F can be written as (n : F) for some n < q because Fintype.card
 the natural cast n ↦ (n : F) has period equal to ringChar F = q (since q is prime),
 so {(0 : F), (1 : F), ..., (q-1 : F)} gives all q distinct elements.
 -/
-@[blueprint "lemma:exists_nat_cast_eq"]
 lemma exists_nat_cast_eq
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)

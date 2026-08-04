@@ -27,7 +27,7 @@ the Elligator parameter `s`; those assumptions occur only in the specialization 
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.
 -/
 
 @[expose] public section
@@ -46,7 +46,15 @@ The subtype argument is preserved for compatibility.  New generic developments s
 use `(edwardsCurve d).Equation x y`, and carry coefficient validity separately via
 `TwistedEdwardsCurve.IsValid`.
 -/
-@[blueprint "def:edwardsCurveEquation"]
+@[blueprint "def:edwardsCurveEquation"
+  (title := "The complete Edwards curve equation")
+  (statement := /--
+  For a coefficient $d \notin \{0, 1\}$, the complete Edwards curve $E$ over $\mathbb{F}_q$ is
+  given by the equation
+  $$
+  x^2 + y^2 = 1 + d x^2 y^2 .
+  $$
+  -/)]
 def edwardsCurveEquation (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1}) : Prop :=
   (edwardsCurve (F := F) d.val).Equation x y
 
@@ -72,7 +80,16 @@ theorem curve_isValid
 
 /-- `EOverF` is the set of affine points on the Edwards curve selected by Elligator 1.
 See `EOverF_eq_affinePoints` for the generic curve view. -/
-@[blueprint "def:EOverF"]
+@[blueprint "def:EOverF"
+  (title := "The point set $E(\\mathbb{F}_q)$")
+  (statement := /--
+  With $d = -(c + 1)^2/(c - 1)^2$ as in Theorem 1, let
+  $$
+  E(\mathbb{F}_q) = \{(x, y) \in \mathbb{F}_q \times \mathbb{F}_q :
+    x^2 + y^2 = 1 + d x^2 y^2\}
+  $$
+  be the set of affine points of the complete Edwards curve $E$.
+  -/)]
 def EOverF
   {s : F}
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -92,8 +109,13 @@ theorem EOverF_eq_affinePoints
     EOverF s_h2 q_h1 q_h3 = (curve s).affinePoints := by
   rfl
 
-@[blueprint "lemma:zero_one_fulfill_edwardsCurveEquation"]
-lemma zero_one_fulfill_edwardsCurveEquation
+@[blueprint "lemma:edwardsCurveEquation_zero_one"
+  (title := "$(0, 1)$ is a point of $E$")
+  (statement := /--
+  The neutral point $(0, 1)$, which is the value of $\varphi(\pm 1)$ in Definition 2, lies on the
+  complete Edwards curve $E : x^2 + y^2 = 1 + d x^2 y^2$.
+  -/)]
+lemma edwardsCurveEquation_zero_one
   {s : F}
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)

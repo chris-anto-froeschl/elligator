@@ -14,7 +14,7 @@ In this file we introduce some generally helpful lemmas for `ϕ`.
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.3.
 -/
 
 @[expose] public section
@@ -28,7 +28,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:x_y_eq_zero_one"]
 lemma x_y_eq_zero_one
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -49,7 +48,6 @@ lemma x_y_eq_zero_one
       have h''' : y + 1 = 0 := by grind
       contradiction
 
-@[blueprint "lemma:y_ne_one"]
 lemma y_ne_one
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -72,7 +70,6 @@ lemma y_ne_one
       contradiction
     contradiction
 
-@[blueprint "lemma:η_ne_zero"]
 lemma η_ne_zero
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -94,7 +91,6 @@ lemma η_ne_zero
       contradiction
     · exact mul_ne_zero (two_ne_zero q_h1 q_h2 q_h3) P_props.1
 
-@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t_base_case"]
 lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -116,7 +112,6 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
       unfold ϕ
       simp
 
-@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t_main_case"]
 lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -141,7 +136,14 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
     grind [ϕ]
 
 -- Original: Theorem 3.1 forward statement, Proof A
-@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t"]
+@[blueprint "lemma:ϕ_of_t_eq_ϕ_of_neg_t"
+  (title := "$\\varphi(t) = \\varphi(-t)$")
+  (statement := /--
+  The forward part of statement 1 of Theorem 3: for every $t \in \mathbb{F}_q$,
+  $$
+  \varphi(t) = \varphi(-t) .
+  $$
+  -/)]
 lemma ϕ_of_t_eq_ϕ_of_neg_t
   (t : F)
   (s_h1 : s ≠ 0)
@@ -159,8 +161,13 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t
     · have h2_1 : (t ≠ 1 ∧ t ≠ -1) := by grind
       exact ϕ_of_t_eq_ϕ_of_neg_t_main_case ⟨t, h2_1⟩ s_h1 s_h2 q_h1 q_h2 q_h3
 
-@[blueprint "thm:ϕ_preimages"]
 -- Original: Theorem 3.1 backward statement (Original: Proof B as the very last argument)
+@[blueprint "thm:ϕ_preimages"
+  (title := "$\\varphi$ has no preimages besides $t$ and $-t$")
+  (statement := /--
+  The reverse part of statement 1 of Theorem 3: for $t \in \mathbb{F}_q$, no element of
+  $\mathbb{F}_q$ other than $t$ and $-t$ is a preimage of $\varphi(t)$ under $\varphi$.
+  -/)]
 theorem ϕ_preimages
   (t : F)
   (s_h1 : s ≠ 0)
@@ -188,7 +195,6 @@ theorem ϕ_preimages
     have h''' := p.prop.right
     rcases h' <;> contradiction
 
-
 /-- Equality of images under `ϕ` forces the inputs to agree up to sign.
 This is the preimage conclusion of Theorem 3, restated in the form needed for the injectivity
 argument in Theorem 4. -/
@@ -208,7 +214,6 @@ lemma eq_or_eq_neg_of_ϕ_eq
     grind
 
 -- Implicated by main case of Theorem 3 Proof part B
-@[blueprint "lemma:ϕ_of_zero"]
 lemma ϕ_of_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -255,7 +260,6 @@ lemma ϕ_of_zero
     grind
 
 -- Used in theorem 3 proof part C
-@[blueprint "lemma:x_y_eq_ϕ_of_zero_of_X2_eq_one"]
 lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -281,7 +285,6 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
     grind
 
 -- Used in theorem 3 proof part C
-@[blueprint "lemma:x_y_eq_ϕ_of_t_of_X2_ne_one"]
 lemma x_y_eq_ϕ_of_t_of_X2_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -311,7 +314,6 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
     let h'' := x_y_of_P_eq_x_y s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one h
     grind
 
-@[blueprint "lemma:ϕ_of_t2_eq_x_y_base_case"]
 lemma ϕ_of_t2_eq_x_y_base_case
   (t : { n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -330,7 +332,6 @@ lemma ϕ_of_t2_eq_x_y_base_case
     simp only []
     rw [dif_neg h1]
 
-@[blueprint "lemma:ϕ_of_t2_eq_x_y_main_case"]
 lemma ϕ_of_t2_eq_x_y_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -361,7 +362,6 @@ lemma ϕ_of_t2_eq_x_y_main_case
       symm
       exact P_comparison t s_h1 q_h1 q_h2 q_h3
 
-@[blueprint "lemma:ϕ_of_one_eq_zero_one"]
 lemma ϕ_of_one_eq_zero_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -372,7 +372,6 @@ lemma ϕ_of_one_eq_zero_one
   let ϕ_of_one := (ϕ (1 : F) s_h1 s_h2 q_h1 q_h2 q_h3).val
   ϕ_of_one = (0, 1) := by simp [ϕ]
 
-@[blueprint "lemma:ϕ_of_neg_one_eq_zero_one"]
 lemma ϕ_of_neg_one_eq_zero_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -383,7 +382,6 @@ lemma ϕ_of_neg_one_eq_zero_one
   let ϕ_of_neg_one := (ϕ (-1 : F) s_h1 s_h2 q_h1 q_h2 q_h3).val
   ϕ_of_neg_one = (0, 1) := by simp [ϕ]
 
-@[blueprint "lemma:ϕ_of_one_in_ϕ_of_F"]
 lemma ϕ_of_one_in_ϕ_of_F
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -396,7 +394,6 @@ lemma ϕ_of_one_in_ϕ_of_F
     intro ϕ_of_one
     use (1 : F)
 
-@[blueprint "lemma:P_in_ϕOverF_base_case"]
 lemma P_in_ϕOverF_base_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -413,7 +410,6 @@ lemma P_in_ϕOverF_base_case
     rw [← ϕ_of_one_eq_zero_one s_h1 s_h2 q_h1 q_h2 q_h3]
     exact ϕ_of_one_in_ϕ_of_F s_h1 s_h2 q_h1 q_h2 q_h3
 
-@[blueprint "lemma:P_in_ϕOverF_main_case_with_y_eq_one"]
 lemma P_in_ϕOverF_main_case_with_y_eq_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -447,7 +443,6 @@ lemma P_in_ϕOverF_main_case_with_y_eq_one
     symm at h
     contradiction
 
-@[blueprint "lemma:P_in_ϕOverF_main_case_with_y_ne_one"]
 lemma P_in_ϕOverF_main_case_with_y_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -472,7 +467,6 @@ lemma P_in_ϕOverF_main_case_with_y_ne_one
     · use t
       exact x_y_eq_ϕ_of_t_of_X2_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one X2_h
 
-@[blueprint "lemma:P_in_ϕOverF_main_case"]
 lemma P_in_ϕOverF_main_case
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -492,7 +486,13 @@ lemma P_in_ϕOverF_main_case
     · exact P_in_ϕOverF_main_case_with_y_ne_one s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_h
 
 -- Original: Theorem 3.2 Proof C (3.2 reverse statement)
-@[blueprint "thm:P_in_ϕOverF_of_P_props"]
+@[blueprint "thm:P_in_ϕOverF_of_P_props"
+  (title := "The image conditions characterize $\\varphi(\\mathbb{F}_q)$")
+  (statement := /--
+  The reverse part of statement 2 of Theorem 3: every $(x, y) \in E(\mathbb{F}_q)$ such that
+  $y + 1 \neq 0$; $(1 + \eta r)^2 - 1$ is a square, where $\eta = (y - 1)/(2(y + 1))$; and
+  $x = 2s(c - 1)\chi(c)/r$ whenever $\eta r = -2$, lies in $\varphi(\mathbb{F}_q)$.
+  -/)]
 theorem P_in_ϕOverF_of_P_props
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)

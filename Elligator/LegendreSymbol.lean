@@ -19,7 +19,7 @@ by being bound to a finite field with `q` fulfilling `IsPrimePow`, `Fintype.card
 
 ## References
 
-See [bernstein2013a] chapter 3.1 for the original account on this version of the Legendre Symbol.
+See [bernstein2013a], Section 3.2 for the original account on this version of the Legendre Symbol.
 -/
 
 @[expose] public section
@@ -36,9 +36,18 @@ prime congruent to 3 modulo 4.
 
 This function was added, since Mathlib.NumberTheory.LegendreSymbol.Basic is restricted to ℤ.
 
-Original: definition at chapter 3.1.
+Original: definition at, Section 3.2.
 -/
-@[blueprint "def:χ"]
+@[blueprint "def:χ"
+  (title := "The quadratic character $\\chi$")
+  (statement := /--
+  Fix a prime power $q \equiv 3 \pmod 4$. Define $\chi : \mathbb{F}_q \to \mathbb{F}_q$ by
+  $$
+  \chi(a) = a^{(q-1)/2} .
+  $$
+  If $a$ is a nonzero square then $\chi(a) = 1$; if $a$ is a non-square then $\chi(a) = -1$;
+  if $a = 0$ then $\chi(a) = 0$.
+  -/)]
 noncomputable def χ (a : F) : F := a^((Fintype.card F - 1) / 2)
 
 @[simp, blueprint "lemma:χ_a_zero_eq_zero"]
@@ -54,7 +63,6 @@ lemma χ_a_zero_eq_zero
     apply zero_pow (q_sub_one_over_two_ne_zero
       q_h1 q_h2 q_h3)
 
-@[blueprint "lemma:χ_a_ne_zero"]
 lemma χ_a_ne_zero
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -65,7 +73,6 @@ lemma χ_a_ne_zero
     apply pow_ne_zero ((q - 1) / 2) at a_ne_zero
     exact a_ne_zero
 
-@[blueprint "lemma:neg_χ_a_ne_χ_a"]
 lemma neg_χ_a_ne_χ_a
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -103,7 +110,6 @@ lemma χ_a_eq_one
     have h3 : r ≠ 0 := by grind
     apply FiniteField.pow_card_sub_one_eq_one r h3
 
-@[blueprint "lemma:a_IsSquare"]
 lemma a_IsSquare
   {a : F}
   (q_h1 : Fintype.card F = q)
@@ -122,7 +128,6 @@ lemma a_IsSquare
     simp_all
     grind
 
-@[blueprint "lemma:χ_a_eq_one_iff_a_square"]
 lemma χ_a_eq_one_iff_a_square
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -135,7 +140,6 @@ lemma χ_a_eq_one_iff_a_square
     · intro a_square
       exact χ_a_eq_one a_ne_zero a_square q_h1 q_h3
 
-@[blueprint "lemma:a_pow_q_add_one_over_two_eq_χ_of_a_mul_a"]
 lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
   {a : F}
   (q_h1 : Fintype.card F = q)
@@ -149,7 +153,6 @@ lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
     have h'' : (q + 1) / 2 - 1 + 1 = (q + 1) / 2 := by omega
     rw [h'']
 
-@[blueprint "lemma:χ_a_mul_a_eq_a"]
 lemma χ_a_mul_a_eq_a
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -184,7 +187,6 @@ lemma χ_of_a_pow_two_eq_one
         (q_sub_one_even q_h1 q_h3))]
     rw [FiniteField.pow_card_sub_one_eq_one a a_ne_zero]
 
-@[blueprint "lemma:χ_of_a_eq_neg_one"]
 lemma χ_of_a_eq_neg_one
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -193,13 +195,12 @@ lemma χ_of_a_eq_neg_one
   (q_h3 : q % 4 = 3)
   : χ a = -1 := by
     -- Euler's criterion
-    -- TODO any standard lemma to reuse here?
-    have h1 : (a^((Fintype.card F - 1) / 2))^2 = 1 := by
+    have h : (a^((Fintype.card F - 1) / 2))^2 = 1 := by
       rw [← pow_mul, Nat.div_mul_cancel (by omega)]
       exact FiniteField.pow_card_sub_one_eq_one a a_ne_zero
-    rw [sq_eq_one_iff] at h1
+    rw [sq_eq_one_iff] at h
     unfold χ
-    rcases h1 with h2 | h2
+    rcases h with h' | h'
     · contrapose a_nonsquare
       unfold IsSquare
       have h_square : ∃ b : F, a = b^2 := by
@@ -210,9 +211,8 @@ lemma χ_of_a_eq_neg_one
       use b
       rw [← pow_two]
       exact b_h
-    · exact h2
+    · exact h'
 
-@[blueprint "lemma:χ_of_neg_one_eq_neg_one"]
 lemma χ_of_neg_one_eq_neg_one
   (q_h1 : Fintype.card F = q)
   (q_h2 : IsPrimePow q)
@@ -223,7 +223,6 @@ lemma χ_of_neg_one_eq_neg_one
       q_h1 q_h2 q_h3
     apply χ_of_a_eq_neg_one h1 h2 q_h1 q_h3
 
-@[blueprint "lemma:χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b"]
 lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} : χ (a * b) = (χ a) * χ b := by
   unfold χ
   rw [mul_pow]
@@ -261,7 +260,6 @@ lemma χ_of_a_pow_n_eq_χ_a
     · rw [χ_of_a_even_pow_n_eq_one h_a ⟨2 * k, h⟩  q_h1 q_h3]
       simp
 
-@[blueprint "lemma:χ_values"]
 lemma χ_values
   {a : F}
   (q_h1 : Fintype.card F = q)
@@ -280,7 +278,6 @@ lemma χ_values
         left
         apply χ_of_a_eq_neg_one h h' q_h1 q_h3
 
-@[blueprint "lemma:χ_of_χ_of_a_eq_χ_of_a"]
 lemma χ_of_χ_of_a_eq_χ_of_a
   {a : F}
   (q_h1 : Fintype.card F = q)
@@ -299,7 +296,6 @@ lemma χ_of_χ_of_a_eq_χ_of_a
       unfold χ
       rw [one_pow]
 
-@[blueprint "lemma:χ_of_one_over_a_eq_χ_a"]
 lemma χ_of_one_over_a_eq_χ_a
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -317,7 +313,6 @@ lemma χ_of_one_over_a_eq_χ_a
     rw [FiniteField.pow_card_sub_one_eq_one a a_ne_zero]
     simp_all
 
-@[blueprint "lemma:one_over_χ_of_a_eq_χ_a"]
 lemma one_over_χ_of_a_eq_χ_a
   {a : F}
   (q_h1 : Fintype.card F = q)
@@ -335,8 +330,7 @@ lemma one_over_χ_of_a_eq_χ_a
       rw [χ_a_eq_one (by simp_all) (by aesop) q_h1 q_h3]
       simp_all
 
-  -- Introduced in paper theory theorem 3.A proof
-@[blueprint "lemma:χ_of_a_eq_χ_a_mul_b_pow_two"]
+-- Introduced in paper theory theorem 3.A proof
 lemma χ_of_a_eq_χ_a_mul_b_pow_two {a : F} {b : F}
   (b_ne_zero : b ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -350,7 +344,6 @@ lemma χ_of_a_eq_χ_a_mul_b_pow_two {a : F} {b : F}
     rw [χ_a_eq_one h (by aesop) q_h1 q_h3]
     rw [mul_one]
 
-@[blueprint "lemma:b_eq_χ_of_b_mul_principal_sqrt_a"]
 lemma b_eq_χ_of_b_mul_principal_sqrt_a
   {a : F}
   (a_square : IsSquare a)
@@ -368,7 +361,6 @@ lemma b_eq_χ_of_b_mul_principal_sqrt_a
       rw [h'', ← q_h1, FiniteField.pow_card]
     simp_all +decide
 
-@[blueprint "lemma:b_pow_q_add_one_over_four_eq_χ_of_a_mul_a"]
 lemma b_pow_q_add_one_over_four_eq_χ_of_a_mul_a
   {a : F}
   (q_h1 : Fintype.card F = q)
@@ -380,7 +372,6 @@ lemma b_pow_q_add_one_over_four_eq_χ_of_a_mul_a
     rw [← a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
     rw [← q_h1, add_comm]
 
-@[blueprint "lemma:χ_a_mul_a_IsSquare"]
 lemma χ_a_mul_a_IsSquare
   {a : F}
   (a_ne_zero : a ≠ 0)
@@ -398,7 +389,6 @@ lemma χ_a_mul_a_IsSquare
     rw [← pow_two]
     rw [χ_of_a_even_pow_n_eq_one a_ne_zero ⟨2, even_two⟩ q_h1 q_h3]
 
-@[blueprint "lemma:a_eq_zero_of_χ_of_a_eq_zero"]
 lemma a_eq_zero_of_χ_of_a_eq_zero {a : F} :
   χ a = 0 → a = 0 := by
     intro h

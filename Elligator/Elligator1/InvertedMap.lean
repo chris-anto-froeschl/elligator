@@ -19,16 +19,15 @@ preimage and image of `ϕ`, and verifies the paper's explicit inverse formula on
 
 - `ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages`: the preimage of `ϕ t` consists exactly of `t` and `-t`;
   in particular, `ϕ t = ϕ (-t)` and there are no other preimages.
-- `P_props_iff_P_in_ϕOverF_of_P`: membership in the image `ϕ(F)` is equivalent to the three
+- `props_iff_mem_ϕOverF`: membership in the image `ϕ(F)` is equivalent to the three
   algebraic point conditions stated in part 2 of Theorem 3.
 - `X2_defined`, `z_defined`, `t2_defined`: the denominators required by the inverse construction
   are nonzero on `ϕ(F)`.
 - `ϕ_of_t2_eq_x_y`: applying `ϕ` to the reconstructed parameter `t2` recovers the original point.
 
-
 ## References
 
-See [bernstein2013a], Section 3.3, Theorem 3.
+See [bernstein2013a] Section 3.3, Theorem 3.
 -/
 
 @[expose] public section
@@ -41,11 +40,18 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-/-- The fiber of `ϕ t` consists exactly of the two field elements `t` and `-t`.
+/-- The preimage of `ϕ t` consists exactly of the two field elements `t` and `-t`.
 
 This is part 1 of Theorem 3. The left side records `ϕ t = ϕ (-t)`; the right side says that no
 field element distinct from both `t` and `-t` maps to `ϕ t`. -/
-@[blueprint "thm:thm3-1"]
+@[blueprint "thm:thm3-1"
+  (title := "Theorem 3.1: the fibers of $\\varphi$")
+  (statement := /--
+  In the situation of Definition 2: if $t \in \mathbb{F}_q$ then the set of preimages of
+  $\varphi(t)$ under $\varphi$ is $\{t, -t\}$.
+  Equivalently, $\varphi(t) = \varphi(-t)$ if and only if no element of $\mathbb{F}_q$ other
+  than $t$ and $-t$ maps to $\varphi(t)$.
+  -/)]
 theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
   (t : F)
   (s_h1 : s ≠ 0)
@@ -72,8 +78,18 @@ For `P = ϕ t`, membership in `ϕ(F)` is equivalent to `ϕOverFProps s P`: `y + 
 Note: Original statement does not read like an iff. Only the proof explanation
 makes this more concrete.
 -/
-@[blueprint "thm:thm3-2"]
-theorem P_props_iff_P_in_ϕOverF_of_P
+@[blueprint "thm:thm3-2"
+  (title := "Theorem 3.2: the image of $\\varphi$")
+  (statement := /--
+  In the situation of Definition 2: $\varphi(\mathbb{F}_q)$ is the set of
+  $(x, y) \in E(\mathbb{F}_q)$ such that
+  \begin{itemize}
+    \item $y + 1 \neq 0$;
+    \item $(1 + \eta r)^2 - 1$ is a square, where $\eta = \frac{y - 1}{2(y + 1)}$; and
+    \item if $\eta r = -2$ then $x = 2s(c - 1)\chi(c)/r$.
+  \end{itemize}
+  -/)]
+theorem props_iff_mem_ϕOverF
   (t : F)
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -91,8 +107,20 @@ theorem P_props_iff_P_in_ϕOverF_of_P
 /-- The explicit inverse formula in part 3 of Theorem 3 recovers a point in `ϕ(F)`.
 
 Starting with `P = ϕ t`, the definitions `X2`, `z`, `u2`, and `t2` reproduce the paper's
-quantities `X̄`, `z`, `ū`, and `t̄`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`. -/
-@[blueprint "thm:thm3-3"]
+quantities `X2`, `z`, `u2`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`. -/
+@[blueprint "thm:thm3-3"
+  (title := "Theorem 3.3: inverting $\\varphi$")
+  (statement := /--
+  In the situation of Definition 2: if $(x, y) \in \varphi(\mathbb{F}_q)$ then the following
+  elements $\bar X, z, \bar u, \bar t$ of $\mathbb{F}_q$ are defined and
+  $\varphi(\bar t) = (x, y)$:
+  \begin{align*}
+    \bar X &= -(1 + \eta r) + ((1 + \eta r)^2 - 1)^{(q+1)/4}, \\
+    z &= \chi\bigl((c - 1)s\bar X(1 + \bar X)x(\bar X^2 + 1/c^2)\bigr), \\
+    \bar u &= z\bar X, \\
+    \bar t &= (1 - \bar u)/(1 + \bar u).
+  \end{align*}
+  -/)]
 theorem ϕ_of_t2_eq_x_y
   -- Fix t ∈ F_q
   (t : F)
@@ -121,7 +149,12 @@ theorem ϕ_of_t2_eq_x_y
 
 /-- The denominator `2 * (y + 1)` in the inverse construction is nonzero on `ϕ(F)`.
 This supplies the definedness of `η`, and hence of `X2`, in part 3 of Theorem 3. -/
-@[blueprint "thm:X2_defined"]
+@[blueprint "thm:X2_defined"
+  (title := "$\\bar X$ is defined")
+  (statement := /--
+  For $(x, y) \in \varphi(\mathbb{F}_q)$ the denominator $2(y + 1)$ of $\eta$ is nonzero, so
+  $\eta$ and hence $\bar X$ of Theorem 3.3 are defined.
+  -/)]
 theorem X2_defined
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -150,7 +183,11 @@ theorem X2_defined
     exact mul_ne_zero (two_ne_zero q_h1 q_h2 q_h3) h1
 
 /-- The denominator `c²` occurring in the definition of `z` is nonzero. -/
-@[blueprint "thm:z_defined"]
+@[blueprint "thm:z_defined"
+  (title := "$z$ is defined")
+  (statement := /--
+  The denominator $c^2$ occurring in $z$ of Theorem 3.3 is nonzero, so $z$ is defined.
+  -/)]
 theorem z_defined
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -159,7 +196,12 @@ theorem z_defined
   : (c s)^2 ≠ 0 := c_pow_two_ne_zero s_h1 q_h1 q_h2 q_h3
 
 /-- The denominator `1 + u2` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/
-@[blueprint "thm:t2_defined"]
+@[blueprint "thm:t2_defined"
+  (title := "$\\bar t$ is defined")
+  (statement := /--
+  For $(x, y) \in \varphi(\mathbb{F}_q)$ the denominator $1 + \bar u$ of $\bar t$ in
+  Theorem 3.3 is nonzero, so $\bar t$ is defined.
+  -/)]
 theorem t2_defined
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)

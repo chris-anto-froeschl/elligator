@@ -19,7 +19,7 @@ In this file we introduce some generally helpful lemmas for `X` as introduced in
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -33,7 +33,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:X_pow_two_add_one_over_c_pow_two_ne_zero"]
 lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -53,7 +52,12 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
       apply IsSquare.sq (X * c)
     contradiction
 
-@[blueprint "lemma:X_ne_zero"]
+@[blueprint "lemma:X_ne_zero"
+  (title := "$X \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $X = \chi(v)u \neq 0$, since $u \neq 0$ and
+  $\chi(v) \neq 0$.
+  -/)]
 lemma X_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -66,7 +70,6 @@ lemma X_ne_zero
     · apply χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1
     · apply u_ne_zero t
 
-@[blueprint "lemma:X_comparison"]
 lemma X_comparison
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (q_h1 : Fintype.card F = q)
@@ -100,7 +103,6 @@ lemma X_comparison
         ring_nf
       _ = 1 / X1 := by rfl
 
-@[blueprint "lemma:X_of_zero"]
 lemma X_of_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)

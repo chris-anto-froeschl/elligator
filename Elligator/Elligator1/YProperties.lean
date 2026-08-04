@@ -20,7 +20,7 @@ In this file we introduce some generally helpful lemmas for `Y` as introduced in
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -34,7 +34,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:Y_ne_zero"]
 lemma Y_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -61,7 +60,12 @@ lemma Y_ne_zero
       · apply χ_a_ne_zero v_ne_zero q_h1
     · apply χ_a_ne_zero (v_h1_third_factor_ne_zero s_h1 q_h1 q_h2 q_h3 t) q_h1
 
-@[blueprint "lemma:X_mul_Y_ne_zero"]
+@[blueprint "lemma:X_mul_Y_ne_zero"
+  (title := "$XY \\neq 0$, so $x$ is defined")
+  (statement := /--
+  In the situation of Theorem 1, $XY \neq 0$; in particular $Y \neq 0$, so
+  $x = (c - 1)sX(1 + X)/Y$ is defined.
+  -/)]
 lemma X_mul_Y_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -76,7 +80,12 @@ lemma X_mul_Y_ne_zero
     · apply X_ne_zero s_h1 q_h1 q_h2 q_h3 t
     · apply Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
-@[blueprint "lemma:one_add_X_ne_zero"]
+@[blueprint "lemma:one_add_X_ne_zero"
+  (title := "$1 + X \\neq 0$, so $x \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $1 + X \neq 0$: if $X = -1$ then $u = -\chi(v)$, so
+  $v = -\chi(v)r^2$ and hence $\chi(v) = -\chi(v)$, a contradiction.
+  -/)]
 lemma one_add_X_ne_zero
   (s_h1 : s ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -133,7 +142,6 @@ lemma one_add_X_ne_zero
     have h6 : χ_of_v ≠ -χ_of_v := neg_χ_a_ne_χ_a v_ne_zero q_h1 q_h2 q_h3
     contradiction
 
-@[blueprint "lemma:Y_comparison"]
 lemma Y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)

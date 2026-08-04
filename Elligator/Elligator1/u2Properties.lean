@@ -16,7 +16,7 @@ In this file we introduce some generally helpful lemmas for `u2` as introduced i
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.
 -/
 
 @[expose] public section
@@ -30,7 +30,6 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:u2_eq_zero"]
 lemma u2_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (s_h1 : s ≠ 0)
@@ -43,7 +42,6 @@ lemma u2_eq_zero
   let u2 := u2 s P q
   u2 = 0 := by grind [z_eq_zero, u2]
 
-@[blueprint "lemma:u2_eq_u"]
 lemma u2_eq_u
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -137,7 +135,6 @@ lemma u2_eq_u
     rw [χ_a_eq_one (pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 t)) h6 q_h1 q_h3]
     simp
 
-@[blueprint "lemma:u2_eq_u'"]
 lemma u2_eq_u'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -240,7 +237,6 @@ lemma u2_eq_u'
     rw [χ_a_eq_one (pow_two_ne_zero (v_ne_zero s_h1 q_h1 q_h2 q_h3 ⟨-t.val, t_h⟩)) h6 q_h1 q_h3]
     simp
 
-@[blueprint "lemma:u2_h1"]
 lemma u2_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -264,7 +260,6 @@ lemma u2_h1
 
 /-- The key step: rewriting `1 + u2(ϕ(t))` in the main case (t ≠ ±1) to show it is ne_zero,
     using `u2_h1` which gives `u2 = u(t)` or `u2 = u(-t)`. -/
-@[blueprint "lemma:one_add_u"]
 lemma one_add_u2_ne_zero_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (s_h1 : (s : F) ≠ 0)
@@ -285,7 +280,6 @@ lemma one_add_u2_ne_zero_main_case
       let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
       exact one_add_u_ne_zero ⟨-t.val, t_h⟩ q_h1 q_h2 q_h3
 
-@[blueprint "lemma:one_add_u2_ne_zero_base_case"]
 lemma one_add_u2_ne_zero_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (s_h1 : s ≠ 0)
@@ -302,7 +296,6 @@ lemma one_add_u2_ne_zero_base_case
     rw [u2_eq_zero, add_zero]
     exact FiniteFieldBasic.one_ne_zero
 
-@[blueprint "lemma:one_add_u2_ne_zero"]
 lemma one_add_u2_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -325,7 +318,6 @@ lemma one_add_u2_ne_zero
       grind
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-@[blueprint "def:u'"]
 noncomputable def u'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -336,7 +328,6 @@ noncomputable def u'
   let X := X2 s P q
   z * X
 
-@[blueprint "lemma:u'_pow_two_eq_X_pow_two"]
 lemma u'_pow_two_eq_X_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -352,7 +343,6 @@ lemma u'_pow_two_eq_X_pow_two
   let X := X2 s P q
   u^2 = X^2 := by grind [u, u', z', z'_eq_one_or_z'_eq_neg_one ]
 
-@[blueprint "lemma:u'_eq_X2_or_u'_eq_neg_X2"]
 lemma u'_eq_X2_or_u'_eq_neg_X2
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -368,7 +358,6 @@ lemma u'_eq_X2_or_u'_eq_neg_X2
   let X := X2 s P q
   u = X ∨ u = -X := by grind [u, u', z'_eq_one_or_z'_eq_neg_one]
 
-@[blueprint "lemma:u'_ne_neg_one"]
 lemma u'_ne_neg_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -392,7 +381,6 @@ lemma u'_ne_neg_one
     unfold u u'
     grind
 
-@[blueprint "lemma:one_add_u'_ne_zero"]
 lemma one_add_u'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -416,7 +404,6 @@ lemma one_add_u'_ne_zero
     unfold u u'
     grind
 
-@[blueprint "lemma:u'_ne_zero"]
 lemma u'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -443,7 +430,6 @@ lemma u'_ne_zero
     grind
 
 /-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-@[blueprint "def:v'"]
 noncomputable def v'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -455,7 +441,6 @@ noncomputable def v'
   -- Note: this is just the definition of v as in theorem 1
   u^5 + (r^2 - 2) * u^3 + u
 
-@[blueprint "lemma:v'_eq_z'_mul_Y'_pow_two"]
 lemma v'_eq_z'_mul_Y'_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -490,7 +475,6 @@ lemma v'_eq_z'_mul_Y'_pow_two
       grind
     grind
 
-@[blueprint "lemma:v'_ne_zero"]
 lemma v'_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -516,7 +500,6 @@ lemma v'_ne_zero
     let z_ne_zero := z'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
     grind
 
-@[blueprint "lemma:χ_of_v'_eq_χ_of_z'"]
 lemma χ_of_v'_eq_χ_of_z'
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -543,7 +526,6 @@ lemma χ_of_v'_eq_χ_of_z'
     let h' := Y'_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P P_props x_ne_zero y_ne_one
     rw [χ_of_a_eq_χ_a_mul_b_pow_two h' q_h1 q_h3]
 
-@[blueprint "lemma:χ_of_z'_eq_z'"]
 lemma χ_of_z'_eq_z'
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)
@@ -558,7 +540,6 @@ lemma χ_of_z'_eq_z'
     intro X z χ_of_z h1
     exact χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3
 
-@[blueprint "lemma:χ_of_v'_eq_z'"]
 lemma χ_of_v'_eq_z'
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -576,7 +557,6 @@ lemma χ_of_v'_eq_z'
   let χ_of_v := χ v
   X ≠ 1 → χ_of_v = z := by grind [χ_of_v'_eq_χ_of_z', χ_of_z'_eq_z']
 
-@[blueprint "lemma:X'_eq_χ_of_v'_mul_u'"]
 lemma X'_eq_χ_of_v'_mul_u'
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -612,7 +592,6 @@ lemma X'_eq_χ_of_v'_mul_u'
     rw [mul_div_assoc, ← one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
     grind
 
-@[blueprint "lemma:Y'_pow_two_eq_χ_of_v'_mul_v'"]
 lemma Y'_pow_two_eq_χ_of_v'_mul_v'
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -653,7 +632,6 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
     rw [χ_of_v'_eq_z' h1]
     grind
 
-@[blueprint "lemma:χ_of_v'_eq_z'_unfold_of_X'_ne_one"]
 lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -681,7 +659,6 @@ lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
     rw [χ_of_v'_eq_z' h1]
     rfl
 
-@[blueprint "lemma:χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two"]
 lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -701,7 +678,6 @@ lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_over_c_pow_two
   X ≠ 1 → (χ v) = χ (Y * (u^2 + 1 / c^2)) := by
     grind [χ_of_v'_eq_z'_unfold_of_X'_ne_one, u'_pow_two_eq_X_pow_two]
 
-@[blueprint "lemma:u'_pow_two_add_one_over_c_pow_two_ne_zero"]
 lemma u'_pow_two_add_one_over_c_pow_two_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -723,7 +699,6 @@ lemma u'_pow_two_add_one_over_c_pow_two_ne_zero
       exact h''
     contradiction
 
-@[blueprint "lemma:Y'_observation1"]
 lemma Y'_observation1
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -761,7 +736,6 @@ lemma Y'_observation1
       rw [χ_of_a_even_pow_n_eq_one term1_ne_zero ⟨2, even_two⟩ q_h1 q_h3]
     grind
 
-@[blueprint "lemma:Y'_observation2"]
 lemma Y'_observation2
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)

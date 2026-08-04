@@ -32,7 +32,7 @@ onto `ϕ(F)`.
 
 ## References
 
-See [bernstein2013a] chapter 3.4, theorem 4.
+See [bernstein2013a], Section 3.4, theorem 4.
 -/
 
 @[expose] public section
@@ -40,32 +40,21 @@ See [bernstein2013a] chapter 3.4, theorem 4.
 namespace Elligator.Elligator1
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 /-- The Elligator string encoding from Theorem 4 of the paper.
-For an admissible `b`-bit string `τ ∈ S`, `ι τ` is the curve point `ϕ (σ τ)`.
-The return subtype records that this point lies on the Edwards curve. -/
-@[blueprint
-  (title := "The Encoding Function")
+For an admissible `b`-bit string `τ ∈ S`, `ι τ` is the curve point `ϕ (σ τ)`. The return subtype
+records that this point lies on the Edwards curve. -/
+@[blueprint "def:ι"
+  (title := "The string encoding $\\iota$")
   (statement := /--
-  In the situation of Definition 2, assume that $q$ is prime, and
-  define $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  In the situation of Definition 2, assume that $q$ is prime, and let $b$, $\sigma$ and $S$ be
+  as above. Define
   $$
-  \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i.
+    \iota : S \to E(\mathbb{F}_q)
   $$
-
-  Define
-  $$
-  S = \sigma^{-1}(\{0, 1, 2, \ldots, (q - 1)/2\}).
-  $$
-
-  Define $\iota : S \to E(\mathbb{F}_q)$ as follows:
-  $$
-  \iota(\tau) = \varphi(\sigma(\tau)).
-  $$
-
-  Original: Chapter "3.4 Encoding as strings": Theorem 4
+  by $\iota(\tau) = \varphi(\sigma(\tau))$.
   -/)]
 noncomputable def ι
   (τ : (@S q))
@@ -80,9 +69,12 @@ noncomputable def ι
 This is the cardinality assertion in Theorem 4. Here `S` consists of the `b`-bit strings whose
 binary values lie in the integer interval from `0` through `(q - 1) / 2`. -/
 @[blueprint
-  (title := "Cardinality of S")
+  (title := "Theorem 4.1: cardinality of $S$")
   (statement := /--
-  With $S$ as above, $\#S = (q + 1)/2$.
+  In the situation of Theorem 4, the set of admissible strings satisfies
+  $$
+  \#S = (q + 1)/2 .
+  $$
   -/)]
 theorem S_card (q_h3 : q % 4 = 3) : (@S q).card = (q + 1) / 2 := S_card_eq_q_add_one_over_two q_h3
 
@@ -108,10 +100,10 @@ lemma σ_eq_of_eq_or_eq_neg
 Following Theorem 4 of the paper, equality of encoded points first gives equality of their field
 representatives up to sign by Theorem 3. Membership in the lower-half set `S` eliminates the
 negative case, and injectivity of binary evaluation then identifies the original strings. -/
-@[blueprint
-  (title := "Injectivity of the Encoding Function")
+@[blueprint "thm:thm4-2"
+  (title := "Theorem 4.2: injectivity of $\\iota$")
   (statement := /--
-  The map $\iota : S \to E(\mathbb F_q)$ is injective.
+  In the situation of Theorem 4, $\iota$ is an injective map from $S$ to $E(\mathbb{F}_q)$.
   -/)]
 theorem ι_injective
   (s_h1 : s ≠ 0)
@@ -119,7 +111,7 @@ theorem ι_injective
   (q_h1 : Fintype.card F = q)
   (q_prime : Prime q)
   (q_h3 : q % 4 = 3) :
-  let q_h2 := by grind
+  let q_h2 := q_prime.isPrimePow
   Function.Injective (fun τ : S => ι τ s_h1 s_h2 q_h1 q_h2 q_h3) := by
     intro q_h2 τ τ' h
     apply Subtype.ext
@@ -129,7 +121,14 @@ theorem ι_injective
 
 /-- The set of curve points produced by the string encoding `ι`.
 This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
-@[blueprint "def:ιOverS"]
+@[blueprint "def:ιOverS"
+  (title := "The image $\\iota(S)$")
+  (statement := /--
+  The set of curve points produced by the string encoding,
+  $$
+  \iota(S) = \{\varphi(\sigma(\tau)) : \tau \in S\} \subseteq E(\mathbb{F}_q) .
+  $$
+  -/)]
 noncomputable def ιOverS
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -143,7 +142,11 @@ For each `t : F`, one of `t` and `-t` has a lower-half representative `σ τ` wi
 `ϕ t = ϕ (-t)`, this proves that every point in `ϕ(F)` is encoded by `ι`. The reverse inclusion is
 immediate from the definition `ι τ = ϕ (σ τ)`. This is the surjectivity-onto-`ϕ(F)` part of
 Theorem 4. -/
-@[blueprint "thm:thm4-3"]
+@[blueprint "thm:thm4-3"
+  (title := "Theorem 4.3: $\\iota(S) = \\varphi(\\mathbb{F}_q)$")
+  (statement := /--
+  In the situation of Theorem 4, $\iota(S) = \varphi(\mathbb{F}_q)$.
+  -/)]
 theorem ϕOverF_eq_ιOverS
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -171,5 +174,87 @@ theorem ϕOverF_eq_ιOverS
         exact (ϕ_of_t_eq_ϕ_of_neg_t t s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3).symm
     · rintro ⟨τ, rfl⟩
       exact ⟨σ τ.1, rfl⟩
+
+/-- The encoding `ι`, with its codomain restricted to the image `ϕ(F)`.
+
+Unlike `ι`, whose codomain is the full Edwards curve, this map records in its result type the
+stronger fact that every encoded point belongs to the image of `ϕ`. -/
+@[blueprint "def:ιToϕOverF"
+  (title := "The encoding $\\iota$ as a map onto $\\varphi(\\mathbb{F}_q)$")
+  (statement := /--
+  The string encoding of Theorem 4, viewed as a map
+  $$
+  \iota : S \to \varphi(\mathbb{F}_q)
+  $$
+  with codomain the image of $\varphi$ rather than all of $E(\mathbb{F}_q)$.
+  -/)]
+noncomputable def ιToϕOverF
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (q_h1 : Fintype.card F = q)
+  (q_h2 : IsPrimePow q)
+  (q_h3 : q % 4 = 3)
+  (τ : @S q) :
+  {P : F × F // P ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3} :=
+    ⟨(ι τ s_h1 s_h2 q_h1 q_h2 q_h3).val, ⟨σ τ.1, rfl⟩⟩
+
+/-- The encoding `ι` is a bijection from `S` onto `ϕ(F)`.
+The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in the type. Injectivity is
+`ι_injective`, while surjectivity is the image equality `ϕOverF_eq_ιOverS`. -/
+@[blueprint "thm:ι-bijective"
+  (title := "$\\iota$ is a bijection from $S$ onto $\\varphi(\\mathbb{F}_q)$")
+  (statement := /--
+  Combining the injectivity of $\iota$ with $\iota(S) = \varphi(\mathbb{F}_q)$: the map
+  $$
+  \iota : S \to \varphi(\mathbb{F}_q)
+  $$
+  is a bijection.
+  -/)]
+theorem ιToϕOverF_bijective
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (q_h1 : Fintype.card F = q)
+  (q_prime : Prime q)
+  (q_h3 : q % 4 = 3) :
+  Function.Bijective (ιToϕOverF s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3) := by
+    constructor
+    · intro τ τ' h
+      apply ι_injective s_h1 s_h2 q_h1 q_prime q_h3
+      apply Subtype.ext
+      simpa [ιToϕOverF] using congr_arg Subtype.val h
+    · intro P
+      have hP : P.val ∈ ιOverS s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3 := by
+        rw [← ϕOverF_eq_ιOverS s_h1 s_h2 q_h1 q_prime q_h3]
+        exact P.prop
+      rcases hP with ⟨τ, hτ⟩
+      refine ⟨τ, Subtype.ext ?_⟩
+      exact hτ
+
+/-- The three conclusions of Theorem 4, grouped exactly as in the paper.
+The admissible set has `(q + 1) / 2` elements; `ι` is injective into the Edwards curve; and its
+image `ι(S)` is precisely `ϕ(F)`. The stronger typed bijection is available separately as
+`ιToϕOverF_bijective`. -/
+@[blueprint "thm:thm4"
+  (title := "Theorem 4: encoding as strings")
+  (statement := /--
+  In the situation of Definition 2, assume that $q$ is prime, and define
+  $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
+  $\sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i$. Define
+  $S = \sigma^{-1}(\{0, 1, 2, \ldots, (q-1)/2\})$. Define $\iota : S \to E(\mathbb{F}_q)$ as
+  follows: $\iota(\tau) = \varphi(\sigma(\tau))$. Then $\#S = (q + 1)/2$; $\iota$ is an
+  injective map from $S$ to $E(\mathbb{F}_q)$; and $\iota(S) = \varphi(\mathbb{F}_q)$.
+  -/)]
+theorem string_encoding_theorem
+  (s_h1 : s ≠ 0)
+  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (q_h1 : Fintype.card F = q)
+  (q_prime : Prime q)
+  (q_h3 : q % 4 = 3) :
+    (@S q).card = (q + 1) / 2 ∧
+    Function.Injective (fun τ : @S q => ι τ s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3) ∧
+    ιOverS s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3 = ϕOverF s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3 :=
+      ⟨S_card q_h3,
+      ι_injective s_h1 s_h2 q_h1 q_prime q_h3,
+      (ϕOverF_eq_ιOverS s_h1 s_h2 q_h1 q_prime q_h3).symm⟩
 
 end Elligator.Elligator1

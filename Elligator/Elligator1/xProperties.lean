@@ -22,7 +22,7 @@ In this file we introduce some generally helpful lemmas for `x` as introduced in
 
 ## References
 
-See [bernstein2013a] chapter 3.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -35,7 +35,12 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-@[blueprint "lemma:x_ne_zero"]
+@[blueprint "lemma:x_ne_zero"
+  (title := "$x \\neq 0$")
+  (statement := /--
+  In the situation of Theorem 1, $x = (c - 1)sX(1 + X)/Y \neq 0$, since $c \neq 1$, $s \neq 0$,
+  $X \neq 0$ and $1 + X \neq 0$.
+  -/)]
 lemma x_ne_zero
   (s_h1 : s ≠ 0)
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -63,7 +68,6 @@ lemma x_ne_zero
       · apply one_add_X_ne_zero s_h1 q_h1 q_h2 q_h3 t
     · apply Y_ne_zero s_h1 q_h1 q_h2 q_h3 t
 
-@[blueprint "lemma:x_comparison"]
 lemma x_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (s_h1 : s ≠ 0)
@@ -91,7 +95,6 @@ lemma x_comparison
       _ = (c - 1) * s * X1 * (1 + X1) / Y1 := by simp_all; grind
       _ = x1 := by rfl
 
-@[blueprint "lemma:x_y_eq_zero_sign_one"]
 lemma x_y_eq_zero_sign_one
   (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (q_h1 : Fintype.card F = q)

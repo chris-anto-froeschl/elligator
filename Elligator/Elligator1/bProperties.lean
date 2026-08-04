@@ -14,7 +14,7 @@ In this file we introduce some generally helpful lemmas for `b`.
 
 ## References
 
-See [bernstein2013a] chapter 3, theorem 4.
+See [bernstein2013a], Section 3.4, Theorem 4.
 -/
 
 @[expose] public section
@@ -22,17 +22,26 @@ See [bernstein2013a] chapter 3, theorem 4.
 namespace Elligator.Elligator1
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {q : ℕ} (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
+variable {q : ℕ}
 
-@[blueprint "lemma:two_pow_b_le_q"]
+@[blueprint "lemma:two_pow_b_le_q"
+  (title := "$2^b \\leq q$")
+  (statement := /--
+  With $b = \lfloor \log_2 q \rfloor$ we have $2^b \leq q$; hence the integers
+  $0, 1, \ldots, 2^b - 1$ are distinct in $\mathbb{F}_q$.
+  -/)]
 lemma two_pow_b_le_q (q_h3 : q % 4 = 3) : 2^(@b q) ≤ q := by
   apply Nat.pow_log_le_self
   grind
 
-@[blueprint "lemma:q_lt_two_pow_b_succ"]
 lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) := Nat.lt_pow_succ_log_self (by decide) _
 
-@[blueprint "lemma:two_pow_b_gt_q_over_two"]
+@[blueprint "lemma:two_pow_b_gt_q_over_two"
+  (title := "$2^b > q/2$")
+  (statement := /--
+  With $b = \lfloor \log_2 q \rfloor$ we have $2^b > q/2$; hence
+  $\{0, 1, \ldots, (q-1)/2\}$ is a subset of $\{0, 1, \ldots, 2^b - 1\}$.
+  -/)]
 lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) (q_h3 : q % 4 = 3)
   : 2^(@b q) > q / 2 := by
     let h1 := two_pow_b_le_q q_h3
@@ -43,7 +52,6 @@ lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h2 : IsPrimePow q) 
     apply h4.mpr
     grind
 
-@[blueprint "lemma:half_q_lt_two_pow_b"]
 lemma half_q_lt_two_pow_b : (q - 1) / 2 < 2^(@b q) := by
   rw [ Nat.div_lt_iff_lt_mul (by norm_num), mul_comm];
   rw [← pow_succ']
