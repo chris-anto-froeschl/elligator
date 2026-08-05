@@ -48,7 +48,7 @@ lemma z_eq_zero
     simp_all
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def z'
+def z'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)

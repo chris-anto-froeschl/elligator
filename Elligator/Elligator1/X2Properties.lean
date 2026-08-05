@@ -526,7 +526,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         ring_nf
 
 /-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def Y'
+def Y'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)

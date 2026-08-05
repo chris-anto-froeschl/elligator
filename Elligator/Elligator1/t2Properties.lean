@@ -143,7 +143,7 @@ lemma t2_in_t_or_neg_t
       grind
 
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def t'
+def t'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
@@ -333,7 +333,7 @@ lemma Y'_eq_Y
     rfl
 
 /-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def x'
+def x'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
@@ -377,7 +377,7 @@ lemma x'_eq_x
     grind
 
 /-- `y'` is the `y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def y'
+def y'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)

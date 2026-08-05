@@ -38,7 +38,7 @@ Original:, Section "3.2 The map": Theorem 1
   c = 2/s^2 .
   $$
   -/)]
-noncomputable def c (s : F) : F := 2 / s^2
+def c (s : F) : F := 2 / s^2
 
 /-- r(s) is a function defined in the paper.
 
@@ -52,7 +52,7 @@ Original:, Section "3.2 The map": Theorem 1
   r = c + 1/c .
   $$
   -/)]
-noncomputable def r (s : F) : F :=
+def r (s : F) : F :=
   let c := c s;
   c + 1 / c
 
@@ -69,7 +69,7 @@ Original:, Section "3.2 The map": Theorem 1
   $$
   the coefficient of the complete Edwards curve $E : x^2 + y^2 = 1 + d x^2 y^2$.
   -/)]
-noncomputable def d (s : F) : F :=
+def d (s : F) : F :=
   let c := c s;
   -(c + 1)^2 / (c - 1)^2
 
@@ -85,7 +85,7 @@ Original:, Section "3.2 The map": Theorem 1
   u = (1 - t)/(1 + t) .
   $$
   -/)]
-noncomputable def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
+def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
   let t := t.val;
   (1 - t) / (1 + t)
 
@@ -101,7 +101,7 @@ Original:, Section "3.2 The map": Theorem 1
   v = u^5 + (r^2 - 2)u^3 + u .
   $$
   -/)]
-noncomputable def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
+def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u := u t
   let r := r s
   u^5 + (r^2 - 2) * u^3 + u
@@ -119,7 +119,7 @@ Original:, Section "3.2 The map": Theorem 1
   X = \chi(v) u .
   $$
   -/)]
-noncomputable def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
+def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u := u t
   let v := v t s
   (χ v) * u
@@ -140,7 +140,7 @@ Original:, Section "3.2 The map": Theorem 1
   Y = (\chi(v)v)^{(q+1)/4} \chi(v) \chi(u^2 + 1/c^2) .
   $$
   -/)]
-noncomputable def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
+def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
   let u := u t
   let c := c s
   let v := v t s
@@ -158,7 +158,7 @@ Original:, Section "3.2 The map": Theorem 1
   x = (c - 1)sX(1 + X)/Y .
   $$
   -/)]
-noncomputable def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
+def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
   let c := c s
   let X := X t s
   let Y := Y t s q
@@ -176,7 +176,7 @@ Original:, Section "3.2 The map": Theorem 1
   y = (rX - (1 + X)^2)/(rX + (1 + X)^2) .
   $$
   -/)]
-noncomputable def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
+def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let r := r s
   let X := X t s
   (r * X - (1 + X)^2) / (r * X + (1 + X)^2)
@@ -193,7 +193,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \eta = \frac{y - 1}{2(y + 1)} .
   $$
   -/)]
-noncomputable def η (P : F × F) : F :=
+def η (P : F × F) : F :=
   let y := P.snd
   (y - 1) / (2 * (y + 1))
 
@@ -209,7 +209,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \bar X = -(1 + \eta r) + ((1 + \eta r)^2 - 1)^{(q+1)/4} .
   $$
   -/)]
-noncomputable def X2 (s : F) (P : F × F) (q : ℕ) : F :=
+def X2 (s : F) (P : F × F) (q : ℕ) : F :=
   let η := η P
   let r := r s
   (-(1 + η * r) + ((1 + η * r)^2 - 1)^((q + 1) / 4))
@@ -226,7 +226,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   z = \chi\bigl((c - 1)s\bar X(1 + \bar X)x(\bar X^2 + 1/c^2)\bigr) .
   $$
   -/)]
-noncomputable def z (s : F) (P : F × F) (q : ℕ) : F :=
+def z (s : F) (P : F × F) (q : ℕ) : F :=
   let x := P.fst
   let c := c s
   let X2 := X2 s P q
@@ -245,7 +245,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \bar u = z\bar X .
   $$
   -/)]
-noncomputable def u2 (s : F) (P : F × F) (q : ℕ) : F :=
+def u2 (s : F) (P : F × F) (q : ℕ) : F :=
   let X2 := X2 s P q
   let z := z s P q
   z * X2
@@ -262,7 +262,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \bar t = (1 - \bar u)/(1 + \bar u) .
   $$
   -/)]
-noncomputable def t2 (s : F) (P : F × F) (q : ℕ) : F :=
+def t2 (s : F) (P : F × F) (q : ℕ) : F :=
   let u2 := u2 s P q
   (1 - u2) / (1 + u2)
 
@@ -278,7 +278,7 @@ Original:, Section "3.4 Encoding as strings": Theorem 4
   b = \lfloor \log_2 q \rfloor .
   $$
   -/)]
-noncomputable def b (q : ℕ) : ℕ := Nat.log 2 q
+def b (q : ℕ) : ℕ := Nat.log 2 q
 
 /-- Convert a bit vector (τ₀, τ₁, ..., τ_{b-1}) to a natural number via binary
 expansion: bitsToNat(τ) = Σᵢ τᵢ · 2^i.
@@ -307,7 +307,7 @@ Original:, Section "3.4 Encoding as strings": Theorem 4
   \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i .
   $$
   -/)]
-noncomputable def σ {q : ℕ} (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)
+def σ {q : ℕ} (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)
 
 /-- S = σ⁻¹({0, 1, 2, ..., (q-1)/2}), the set of bit vectors whose binary value
 falls in the lower half {0, 1, ..., (q-1)/2} of F_q.
@@ -323,7 +323,7 @@ Original:, Section "3.4 Encoding as strings": Theorem 4
   $$
   i.e. the strings whose binary value lies in the lower half of $\mathbb{F}_q$.
   -/)]
-noncomputable def S {q : ℕ} : Finset (Fin (@b q) → Bool) :=
+def S {q : ℕ} : Finset (Fin (@b q) → Bool) :=
   Finset.univ.filter (fun τ => (bitsToNat τ) ≤ (q - 1) / 2)
 
 end Elligator.Elligator1

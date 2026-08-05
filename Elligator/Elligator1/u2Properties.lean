@@ -324,7 +324,7 @@ lemma one_add_u2_ne_zero
       grind
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def u'
+def u'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
@@ -436,7 +436,7 @@ lemma u'_ne_zero
     grind
 
 /-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-noncomputable def v'
+def v'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)

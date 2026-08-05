@@ -48,7 +48,7 @@ Original: definition at, Section 3.2.
   If $a$ is a nonzero square then $\chi(a) = 1$; if $a$ is a non-square then $\chi(a) = -1$;
   if $a = 0$ then $\chi(a) = 0$.
   -/)]
-noncomputable def χ (a : F) : F := a^((Fintype.card F - 1) / 2)
+def χ (a : F) : F := a^((Fintype.card F - 1) / 2)
 
 @[simp]
 lemma χ_a_zero_eq_zero

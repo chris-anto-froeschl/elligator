@@ -65,7 +65,7 @@ theorem edwardsCurveEquation_iff (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1}) 
     simp [edwardsCurveEquation, edwardsCurve]
 
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
-noncomputable def curve (s : F) : TwistedEdwardsCurve F :=
+def curve (s : F) : TwistedEdwardsCurve F :=
   edwardsCurve (d s)
 
 /-- The Elligator 1 coefficient hypotheses imply that its specialized curve is valid. -/

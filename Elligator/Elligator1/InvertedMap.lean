@@ -175,7 +175,7 @@ theorem X2_defined
       rcases h1_1 with ⟨t, h1_2⟩
       unfold ϕ at h1_2
       by_cases h1_3 : t ≠ 1 ∧ t ≠ -1
-      · grind [y_add_one_ne_zero ]
+      · grind [y_add_one_ne_zero]
       · simp only [] at h1_2
         rw [dif_neg h1_3] at h1_2
         let h1_4 := congrArg Prod.snd h1_2

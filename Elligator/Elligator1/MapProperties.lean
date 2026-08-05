@@ -525,7 +525,7 @@ Original: Section "3.3 Inverting the map", Theorem 3
   y + 1 \neq 0 .
   $$
   -/)]
-noncomputable def ϕOverFProp1 (P : F × F) : Prop :=
+def ϕOverFProp1 (P : F × F) : Prop :=
   let y := P.snd
   y + 1 ≠ 0
 
@@ -595,7 +595,7 @@ Original: Section "3.2 The map", Definition 2
   \varphi(\mathbb{F}_q) = \{\varphi(t) : t \in \mathbb{F}_q\} \subseteq E(\mathbb{F}_q) .
   $$
   -/)]
-noncomputable def ϕOverF
+def ϕOverF
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
