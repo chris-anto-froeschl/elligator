@@ -144,7 +144,7 @@ def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
   let u := u t
   let c := c s
   let v := v t s
-  ((χ v) * v)^((q+ 1) / 4) * (χ v) * χ (u^2 + 1 / c^2)
+  ((χ v) * v)^((q + 1) / 4) * (χ v) * χ (u^2 + 1 / c^2)
 
 /-- x(t, s) is a function defined in the paper. It is the x-coordinate of the point on the curve.
 

@@ -16,4 +16,5 @@ by Daniel J. Bernstein, Mike Hamburg, Anna Krasnova, and Tanja Lange.
 | Definition 6 | TODO                                  |
 | Theorem 7    | TODO                                  |
 | Theorem 8    | TODO                                  |
+| Section 4    | [Elligator.Elligator1.Curve1174](https://chris-anto-froeschl.github.io/elligator/docs/Elligator/Elligator1/Curve1174.html) |
 
