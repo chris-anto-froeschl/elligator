@@ -281,8 +281,7 @@ lemma χ_of_χ_of_a_eq_χ_of_a
   (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   : χ (χ a) = χ a := by
-    let h : χ a = 0 ∨ χ a = -1 ∨ χ a = 1 :=
-      by exact χ_values hq_card hq_primePow hq_mod
+    have h : χ a = 0 ∨ χ a = -1 ∨ χ a = 1 := χ_values hq_card hq_primePow hq_mod
     rcases h with h' | h' | h'
     · simp_all
     · rw [h']
@@ -319,7 +318,7 @@ lemma one_div_χ_of_a_eq_χ_a
       -- If a is zero, then χ(a) is zero by definition, so 1/χ(a) is also zero.
     by_cases ha : a = 0
     · simp_all
-    · have h : χ a ≠ 0 := by exact χ_a_ne_zero ha hq_card
+    · have h : χ a ≠ 0 := χ_a_ne_zero ha hq_card
       rw [← mul_left_inj' h]
       unfold χ
       rw [← mul_pow, ← pow_two]

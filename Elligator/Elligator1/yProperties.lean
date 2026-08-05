@@ -274,7 +274,7 @@ lemma curve_equation
         rw [← mul_one 1, ← pow_two, ← div_pow _ _ 2] at h6_1
         rw [← h6_1, pow_two]
         apply IsSquare.mul_self
-      have h6_3 : ¬IsSquare d := by exact d_nonsquare sq_ne_pm_two hq_card hq_mod
+      have h6_3 : ¬IsSquare d := d_nonsquare sq_ne_pm_two hq_card hq_mod
       contradiction
     have h7 : Y^2 * (1 - d * x^2) ≠ 0 := by
       apply mul_ne_zero

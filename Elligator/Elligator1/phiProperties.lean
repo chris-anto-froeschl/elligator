@@ -131,8 +131,8 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_main_case
     let x2 := x ⟨t2, t_h⟩ s q
     let y1 := y t s
     let y2 := y ⟨t2, t_h⟩ s
-    have h : y2 = y1 := by exact y_comparison t hq_card hq_primePow hq_mod
-    have h' : x2 = x1 := by exact x_comparison t hs_ne_zero hq_card hq_primePow hq_mod
+    have h : y2 = y1 := y_comparison t hq_card hq_primePow hq_mod
+    have h' : x2 = x1 := x_comparison t hs_ne_zero hq_card hq_primePow hq_mod
     change (ϕ t1 hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
       = (ϕ t2 hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
     grind [ϕ]

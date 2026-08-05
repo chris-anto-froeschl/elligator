@@ -237,13 +237,13 @@ lemma P_comparison
   :
   let t1 := t.val
   let t2 := -t1
-  have h2_2 : (t2 ≠ 1 ∧ t2 ≠ -1) := by exact neg_t_ne_one_and_neg_t_ne_neg_one t
+  have t_h : (t2 ≠ 1 ∧ t2 ≠ -1) := neg_t_ne_one_and_neg_t_ne_neg_one t
   let y1 := y t s
-  let y2 := y ⟨t2, h2_2⟩ s
+  let y2 := y ⟨t2, t_h⟩ s
   let x1 := x t s q
-  let x2 := x ⟨t2, h2_2⟩ s q
+  let x2 := x ⟨t2, t_h⟩ s q
   (x1, y1) = (x2, y2) := by
-    intro t1 t2 h2_2 y1 y2 x1 x2
+    intro t1 t2 t_h y1 y2 x1 x2
     unfold x2 y2
     rw [x_comparison t hs_ne_zero hq_card hq_primePow hq_mod]
     rw [y_comparison t hq_card hq_primePow hq_mod]

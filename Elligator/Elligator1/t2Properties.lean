@@ -66,7 +66,7 @@ lemma t2_eq_t
     intro P t2_of_P
     let u := u t
     let u2 := u2 s P q
-    have h : u2 = u := by exact u2_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod X_h
+    have h : u2 = u := u2_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod X_h
     unfold u Elligator1.u at h
     unfold t2_of_P t2
     change (1 - u2) / (1 + u2) = t.val
@@ -436,7 +436,7 @@ theorem x'_and_y'_fulfill_curve_equation
   let x' := x' sq_ne_pm_two hq_card hq_mod P
   let y' := y' sq_ne_pm_two hq_card hq_mod P
   let d := d s
-  have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
+  have d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
   edwardsCurveEquation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
     let t := t' sq_ne_pm_two hq_card hq_mod P

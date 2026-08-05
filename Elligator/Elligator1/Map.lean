@@ -196,7 +196,7 @@ theorem map_fulfills_curve_equation
   let x := x t s q
   let y := y t s
   let d := d s
-  have d_h : d ≠ 0 ∧ d ≠ 1 := by exact d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
+  have d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
   edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
     rw [edwardsCurveEquation_iff]

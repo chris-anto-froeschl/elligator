@@ -130,7 +130,7 @@ lemma ringChar_of_F_eq_q (hq_card : Fintype.card F = q) (q_prime : Prime q) : ri
   have := FiniteField.card F (ringChar F)
   aesop
 
-lemma fin_to_finfield_func_injective (hq_card : Fintype.card F = q) (q_prime : Prime q)
+lemma fin_to_finfield_injective (hq_card : Fintype.card F = q) (q_prime : Prime q)
   : Function.Injective (fun n : Fin q => (n : F)) := by
     have h : CharP F q := by
       rw [← ringChar_of_F_eq_q hq_card q_prime]
@@ -147,7 +147,7 @@ lemma exists_fin_cast_eq (hq_card : Fintype.card F = q) (q_prime : Prime q) (t :
     -- An injective map between finite types of equal cardinality is automatically bijective.
     have h : Function.Bijective (fun n : Fin q => (n : F)) :=
       (Fintype.bijective_iff_injective_and_card _).mpr
-        ⟨fin_to_finfield_func_injective hq_card q_prime, hcard⟩
+        ⟨fin_to_finfield_injective hq_card q_prime, hcard⟩
     exact h.surjective t
 
 /- Every element of F can be written as (n : F) for some n < q because Fintype.card F = q and
