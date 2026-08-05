@@ -33,13 +33,13 @@ variable {q : ℕ}
 
 lemma X2_eq_neg_one
   (t : { t : F // t = 1 ∨ t = -1})
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
-  let P := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
   let X2 := X2 s P.1 q
   X2 = -1 := by
     intro P X2
@@ -47,14 +47,14 @@ lemma X2_eq_neg_one
     let η := η P.1
     change -(1 + η * (r s)) + ((1 + η * (r s)) ^ 2 - 1) ^ ((q + 1) / 4) = -1
     unfold η
-    rw [η_eq_zero t s_h1 s_h2 q_h1 q_h2 q_h3]
+    rw [η_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod]
     ring_nf
     rw [zero_pow, add_zero]
-    exact q_add_one_over_four_ne_zero q_h3
+    exact q_add_one_div_four_ne_zero hq_mod
 
 lemma X2_h1
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
   let η_of_P := η P.val
@@ -69,14 +69,14 @@ lemma X2_h1
     ring_nf
     unfold a a_sqr
     nth_rw 2 [add_comm]
-    rw [← pow_mul, one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
+    rw [← pow_mul, one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
     unfold η_of_P
     nth_rw 2 [add_comm]
-    rw [a_pow_q_add_one_over_two_eq_a P.prop.2.1 q_h1 q_h3]
+    rw [a_pow_q_add_one_div_two_eq_a P.prop.2.1 hq_card hq_mod]
 
 lemma X2_h2
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
   let η := η P.val
@@ -84,20 +84,20 @@ lemma X2_h2
   let X2 := X2 s P q
   X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 := by
     intro η r X2
-    have h := X2_h1 q_h1 q_h3 P
+    have h := X2_h1 hq_card hq_mod P
     grind
 
 lemma X2_h3
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
-  let P := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
   let X' := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   let X := X t s
   let X2 := X2 s P.val q
@@ -105,44 +105,46 @@ lemma X2_h3
     intro t1 t2 P X' X X2
     let η := η P.val
     let r := r s
-    let P_of_ϕ_fulfills_ϕOverFProps := P_of_ϕ_fulfills_ϕOverFProps t s_h1 s_h2 q_h1 q_h2 q_h3
+    let P_of_ϕ_fulfills_ϕOverFProps :=
+      P_of_ϕ_fulfills_ϕOverFProps t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
     calc
       (X2 - X) * (X2 - X') = X2^2 - (X + X') * X2 + X * X' := by grind
       _ = X2^2 + 2 * (1 + η * r) * X2 + 1 := by
-        rw [X_comparison_implication t s_h1 s_h2 q_h1 q_h2 q_h3]
+        rw [X_comparison_implication t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod]
         change X2 ^ 2 - -2 * (1 + η * r) * X2 + X * X' = X2 ^ 2 + 2 * (1 + η * r) * X2 + 1
-        rw [mul_add, mul_comm X _, X_comparison_implication2 t s_h1 q_h1 q_h2 q_h3]
+        rw [mul_add, mul_comm X _]
+        rw [X_comparison_implication2 t hs_ne_zero hq_card hq_primePow hq_mod]
         grind
-      _ = 0 := X2_h2 q_h1 q_h3 ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
+      _ = 0 := X2_h2 hq_card hq_mod ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
 
 lemma X2_h4
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
-  let P := ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
   let X' := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   let X := X t s
   let X2 := X2 s P q
   X2 = X ∨ X2 = X' := by
     intro t1 t2 P X' X X2
-    have h := X2_h3 t s_h1 s_h2 q_h1 q_h2 q_h3
+    have h := X2_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
     grind
 
 lemma X2_ne_zero
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
   let X2 := X2 s P q
   X2 ≠ 0 := by
     intro X2
-    have h := X2_h2 q_h1 q_h3 P
+    have h := X2_h2 hq_card hq_mod P
     let η := η P.val
     let r := r s
     change X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 at h
@@ -151,9 +153,9 @@ lemma X2_ne_zero
     simp at h
 
 lemma y_divisor_ne_zero_with_X2_for_X
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
   let r := r s
@@ -161,11 +163,12 @@ lemma y_divisor_ne_zero_with_X2_for_X
   r * X2 + (1 + X2)^2 ≠ 0 := by
     intro r X2 h1
     let η := η P.val
-    have h2 := X2_h2 q_h1 q_h3 P
+    have h2 := X2_h2 hq_card hq_mod P
     change X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 at h2
     let y := P.val.2
     have h3 : 2 * η = 1 := by
-      have hne : r * X2 ≠ 0 := mul_ne_zero (r_ne_zero s_h1 q_h1 q_h3) (X2_ne_zero q_h1 q_h3 P)
+      have hne : r * X2 ≠ 0 :=
+        mul_ne_zero (r_ne_zero hs_ne_zero hq_card hq_mod) (X2_ne_zero hq_card hq_mod P)
       rw [← div_left_inj' hne]
       grind
     have h4 : y - 1 = y + 1 := by
@@ -175,9 +178,9 @@ lemma y_divisor_ne_zero_with_X2_for_X
     contradiction
 
 lemma X2_ne_neg_one
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
   :
@@ -185,7 +188,7 @@ lemma X2_ne_neg_one
   X2 ≠ -1 := by
     intro X2 h1
     let η := η P.val
-    let X2_equation := X2_h2 q_h1 q_h3 P
+    let X2_equation := X2_h2 hq_card hq_mod P
     let r := r s
     let P_prop := P.prop
     let y := P.val.2
@@ -193,13 +196,13 @@ lemma X2_ne_neg_one
     rw [h1] at X2_equation
     have h2 : η = 0 := by
       ring_nf at X2_equation
-      let r_ne_zero := r_ne_zero s_h1 q_h1 q_h3
-      rw [← div_left_inj' (two_ne_zero q_h1 q_h3)] at X2_equation
+      let r_ne_zero := r_ne_zero hs_ne_zero hq_card hq_mod
+      rw [← div_left_inj' (two_ne_zero hq_card hq_mod)] at X2_equation
       rw [← div_left_inj' r_ne_zero] at X2_equation
       ring_nf at X2_equation
       have h2_1 : -(η * r * 2⁻¹ * r⁻¹ * 2) = -(η * (r * r⁻¹) * (2 * 2⁻¹)) := by grind
       rw [h2_1] at X2_equation
-      rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (two_ne_zero q_h1 q_h3)] at X2_equation
+      rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (two_ne_zero hq_card hq_mod)] at X2_equation
       grind
     have h3 : η ≠ 0 := by
       unfold η Elligator1.η
@@ -208,17 +211,17 @@ lemma X2_ne_neg_one
         intro h3_2_1
         let y_add_one_ne_zero := P_prop.1
         unfold ϕOverFProp1 at y_add_one_ne_zero
-        rw [← div_left_inj' (two_ne_zero q_h1 q_h3)] at h3_2_1
+        rw [← div_left_inj' (two_ne_zero hq_card hq_mod)] at h3_2_1
         ring_nf at h3_2_1
-        rw [inv_mul_cancel₀ (two_ne_zero q_h1 q_h3)] at h3_2_1
+        rw [inv_mul_cancel₀ (two_ne_zero hq_card hq_mod)] at h3_2_1
         grind
       apply div_ne_zero h3_1 h3_2
     contradiction
 
 lemma X2_add_one_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_ne_one : P.val.2 ≠ 1)
   :
@@ -226,9 +229,9 @@ lemma X2_add_one_ne_zero
   X2 + 1 ≠ 0 := by grind [X2_ne_neg_one]
 
 lemma y_with_X2
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
   :
@@ -237,12 +240,12 @@ lemma y_with_X2
   let y := P.val.2
   y = (r * X2 - (1 + X2)^2) / (r * X2 + (1 + X2)^2) := by
     intro X2 r y
-    let X2_equation := X2_h2 q_h1 q_h3 P
+    let X2_equation := X2_h2 hq_card hq_mod P
     let η := η P.val
     let y_add_one_ne_zero := P.prop.1
-    let X2_ne_zero := X2_ne_zero q_h1 q_h3 P
-    let two_ne_zero := two_ne_zero q_h1 q_h3
-    let r_ne_zero := r_ne_zero s_h1 q_h1 q_h3
+    let X2_ne_zero := X2_ne_zero hq_card hq_mod P
+    let two_ne_zero := two_ne_zero hq_card hq_mod
+    let r_ne_zero := r_ne_zero hs_ne_zero hq_card hq_mod
     change X2^2 + 2 * (1 + η * r) * X2 + 1 = 0 at X2_equation
     have h1 : y = (1 + 2 * η) / (1 - 2 * η) := by
       have h1_1 : η = (y - 1) / (2 * (y + 1)) := by simp [η, Elligator1.η, y]
@@ -277,9 +280,9 @@ lemma y_with_X2
     exact h1
 
 lemma y_with_X2_of_X2_eq_one
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
   :
@@ -289,8 +292,8 @@ lemma y_with_X2_of_X2_eq_one
   X2 = 1 → y = (r - 4) / (r + 4) := by grind [y_with_X2]
 
 lemma η_mul_r_eq_neg_two_of_X2_eq_one
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
   let η := η P
@@ -298,17 +301,17 @@ lemma η_mul_r_eq_neg_two_of_X2_eq_one
   let r := r s
   X2 = 1 → η * r = -2 := by
     intro η  X2 r X2_h
-    let h1 := X2_h2 q_h1 q_h3 P
-    let two_ne_zero := two_ne_zero q_h1 q_h3
+    let h1 := X2_h2 hq_card hq_mod P
+    let two_ne_zero := two_ne_zero hq_card hq_mod
     change X2^2 + 2 * (1 + η *r) * X2 + 1 = 0 at h1
     rw [X2_h, ← add_left_inj (-4), ← div_left_inj' two_ne_zero] at h1
     ring_nf at h1
     grind
 
 lemma X2_observation1_of_X2_ne_one
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
   :
@@ -317,23 +320,23 @@ lemma X2_observation1_of_X2_ne_one
   let r := r s
   X2 ≠ 1 → (r * X2 + (1 + X2)^2)^2 * (1 - y^2) = 4 * r * X2 * (1 + X2)^2 := by
     intro X2 y r X2_h
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 P y_eq_one
-    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h3
+    let y_with_X2 := y_with_X2 hs_ne_zero hq_card hq_mod P y_eq_one
+    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X hs_ne_zero hq_card hq_mod
     change y = (r * X2 - (1 + X2)^2) / (r * X2 + (1 + X2)^2) at y_with_X2
     have h1 : (r * X2 + (1 + X2)^2)^2 * (1 - y^2)
       = (r * X2 + (1 + X2)^2)^2 - (r * X2 - (1 + X2)^2)^2 := by
       rw [y_with_X2, div_pow, mul_sub, ← mul_div_assoc]
       nth_rw 3 [mul_comm]
-      have h1_1 : (r * X2 + (1 + X2) ^ 2) ^ 2 ≠ 0 := pow_two_ne_zero (by simp_all; grind)
+      have h1_1 : (r * X2 + (1 + X2) ^ 2) ^ 2 ≠ 0 := pow_ne_zero 2 (by simp_all; grind)
       rw [mul_div_assoc, div_self h1_1]
       ring_nf
     grind
 
 lemma X2_observation2_of_X2_ne_one
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_eq_one : P.val.2 ≠ 1)
   :
@@ -344,17 +347,18 @@ lemma X2_observation2_of_X2_ne_one
   X2 ≠ 1 → (r * X2 + (1 + X2)^2)^2 * (1 - d * y^2)
     = ((2 * r) / (r - 2)) * (X2^4 + (r^2 - 2) * X2^2 + 1) := by
     intro X2 y r d X2_h
-    let neg_d_eq_r_add_two_over_r_sub_two := neg_d_eq_r_add_two_over_r_sub_two s_h1 q_h1 q_h3
-    change -d = (r + 2) / (r - 2) at neg_d_eq_r_add_two_over_r_sub_two
-    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h3
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 P y_eq_one
+    let neg_d_eq_r_add_two_div_r_sub_two :=
+      neg_d_eq_r_add_two_div_r_sub_two hs_ne_zero hq_card hq_mod
+    change -d = (r + 2) / (r - 2) at neg_d_eq_r_add_two_div_r_sub_two
+    let y_divisor_ne_zero_with_X2_for_X := y_divisor_ne_zero_with_X2_for_X hs_ne_zero hq_card hq_mod
+    let y_with_X2 := y_with_X2 hs_ne_zero hq_card hq_mod P y_eq_one
     change y = (r * X2 - (1 + X2)^2) / (r * X2 + (1 + X2)^2) at y_with_X2
     have h1 : (r * X2 + (1 + X2)^2)^2 * (1 - d * y^2)
       = (r * X2 + (1 + X2)^2)^2 + (r + 2) / (r - 2) * ((r * X2 - (1 + X2)^2)^2) := by
       rw [sub_eq_add_neg, neg_eq_neg_one_mul, ← mul_assoc, ← neg_eq_neg_one_mul]
-      rw [neg_d_eq_r_add_two_over_r_sub_two, y_with_X2, div_pow, mul_add]
+      rw [neg_d_eq_r_add_two_div_r_sub_two, y_with_X2, div_pow, mul_add]
       nth_rw 3 [mul_comm]
-      have h1_1 : (r * X2 + (1 + X2)^2)^2 ≠ 0 := pow_two_ne_zero (by simp_all; grind)
+      have h1_1 : (r * X2 + (1 + X2)^2)^2 ≠ 0 := pow_ne_zero 2 (by simp_all; grind)
       rw [← mul_div_assoc, div_mul, mul_div_assoc, div_self h1_1]
       grind
     have h2 : (1 + X2)^2 = X2^2 + 2 * X2 + 1 := by grind
@@ -367,7 +371,7 @@ lemma X2_observation2_of_X2_ne_one
     have h4 : B^2 = X2^ 4 - 2 * (r - 2) * X2^3 + ((r - 2)^2 + 2) * X2^2 - 2 * (r - 2) * X2 + 1 := by
       grind
     rw [h3, h4]
-    let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h3
+    let r_sub_two_ne_zero := r_sub_two_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
     have X_pow_four_term : X2^4 + (r + 2) / (r - 2) * X2^4 = X2^4 * (2 * r) / (r - 2) := by grind
     have X_pow_three_term : X2^3 * 2 * (r + 2) + (r + 2) / (r - 2) * (-2 * (r - 2) * X2^3) = 0 := by
       grind
@@ -389,16 +393,16 @@ lemma X2_observation2_of_X2_ne_one
     grind
 
 lemma one_sub_d_mul_y_pow_two_ne_zero
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   :
   let y := P.val.2
   let d := d s;
   1 - d * y^2 ≠ 0 := by
     intro y d h1
-    let d_ne_zero := d_ne_zero s_h2 q_h1 q_h3
+    let d_ne_zero := d_ne_zero sq_ne_pm_two hq_card hq_mod
     rw [← add_left_inj (d * y^2)] at h1
     ring_nf at h1
     rw [mul_comm, ← div_left_inj' d_ne_zero, mul_div_assoc, div_self d_ne_zero, mul_one] at h1
@@ -407,15 +411,15 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
       unfold IsSquare
       use y
       grind
-    let h3 := one_over_d_nonsquare s_h2 q_h1 q_h3
+    let h3 := one_div_d_nonsquare sq_ne_pm_two hq_card hq_mod
     change ¬IsSquare (1 / d) at h3
     contradiction
 
 lemma x_pow_two_of_X2_ne_one_eq1
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
+  (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
   :
   let x := P.val.1
@@ -427,7 +431,7 @@ lemma x_pow_two_of_X2_ne_one_eq1
     unfold EOverF at curve_equation
     simp_all only [edwardsCurveEquation_iff]
     let one_sub_d_mul_y_pow_two_ne_zero :=
-      one_sub_d_mul_y_pow_two_ne_zero s_h2 q_h1 q_h3 ⟨P.val, P_props⟩
+      one_sub_d_mul_y_pow_two_ne_zero sq_ne_pm_two hq_card hq_mod ⟨P.val, P_props⟩
     change 1 - d * y^2 ≠ 0 at one_sub_d_mul_y_pow_two_ne_zero
     rw [Set.mem_setOf_eq] at curve_equation
     change x^2 + y^2 = 1 + d * x^2 * y^2  at curve_equation
@@ -440,11 +444,11 @@ lemma x_pow_two_of_X2_ne_one_eq1
     grind
 
 lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
+  (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
   (y_eq_one : P.val.2 ≠ 1)
   :
@@ -455,27 +459,28 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
     intro x X r Xh
     let y := P.val.2
     let d := d s;
-    let x_pow_two_of_X2_ne_one_eq1 := x_pow_two_of_X2_ne_one_eq1 s_h2 q_h1 q_h3 P P_props
+    let x_pow_two_of_X2_ne_one_eq1 :=
+      x_pow_two_of_X2_ne_one_eq1 sq_ne_pm_two hq_card hq_mod P P_props
     change x^2 = (1 - y^2) / (1 - d*y^2) at x_pow_two_of_X2_ne_one_eq1
-    let y_with_X2 := y_with_X2 s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
+    let y_with_X2 := y_with_X2 hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
     change y = (r * X - (1 + X)^2) / (r * X + (1 + X)^2) at y_with_X2
     let y_divisor_ne_zero_with_X2_for_X :=
-      y_divisor_ne_zero_with_X2_for_X s_h1 q_h1 q_h3 ⟨P.val, P_props⟩
+      y_divisor_ne_zero_with_X2_for_X hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
     change r * X + (1 + X)^2 ≠ 0 at y_divisor_ne_zero_with_X2_for_X
     have h1 : (r * X + (1 + X)^2)^2 ≠ 0 := by grind
     have h2 : 1 = ((r * X + (1 + X)^2)^2) / ((r * X + (1 + X)^2)^2) := by grind
     let X2_observation1_of_X2_ne_one :=
-      X2_observation1_of_X2_ne_one s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
+      X2_observation1_of_X2_ne_one hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
     change X ≠ 1 →
       (r * X + (1 + X)^2)^2 * (1 - y^2) = 4 * r * X * (1 + X)^2 at X2_observation1_of_X2_ne_one
     have h3 : (r * X + (1 + X)^2)^2 * (1 - y^2) = 4 * r * X * (1 + X)^2 := by grind
     let X2_observation2_of_X2_ne_one :=
-      X2_observation2_of_X2_ne_one s_h1 s_h2 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
+      X2_observation2_of_X2_ne_one hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
     change X ≠ 1 → (r * X + (1 + X)^2)^2 * (1 - d * y^2)
       = ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) at X2_observation2_of_X2_ne_one
     have h4 : (r * X + (1 + X)^2)^2 * (1 - d * y^2)
       = ((2 * r) / (r - 2)) * (X^4 + (r^2 - 2) * X^2 + 1) := by grind
-    let X_ne_zero := X2_ne_zero q_h1 q_h3 ⟨P.val, P_props⟩
+    let X_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
     change X ≠ 0 at X_ne_zero
     calc
       x^2 = (1 - y^2) / (1 - d*y^2) := by grind
@@ -485,7 +490,7 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
         rw [mul_div_assoc, div_mul_div_comm]
         grind
       _ = (2 * (r - 2) * X * (1 + X)^2) / (X^4 + (r^2 - 2) * X^2 + 1) := by
-        let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h3
+        let r_sub_two_ne_zero := r_sub_two_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
         change r - 2 ≠ 0 at r_sub_two_ne_zero
         have h' : 1 = (r - 2) / (r - 2) := by grind
         rw [← one_mul ((4 * r * X * (1 + X)^2) / ((2 * r) / (r - 2) * (X^4 + (r^2 - 2) * X^2 + 1)))]
@@ -500,8 +505,8 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
           (r - 2) * (4 * r * X * (1 + X)^2) / (2 * r * 1 * (X^4 + (r^2 - 2) * X^2 + 1))
           = (r - 2) * (2 * X * (1 + X)^2) / ((X^4 + (r^2 - 2) * X^2 + 1)) := by
           have h''' : (4 * r) / (2 * r) = 2 := by
-            let two_ne_zero := two_ne_zero q_h1 q_h3
-            let r_ne_zero := (r_ne_zero s_h1 q_h1 q_h3)
+            let two_ne_zero := two_ne_zero hq_card hq_mod
+            let r_ne_zero := (r_ne_zero hs_ne_zero hq_card hq_mod)
             rw [← mul_left_inj' two_ne_zero]
             ring_nf
             rw [mul_inv_cancel₀ r_ne_zero]
@@ -522,10 +527,10 @@ lemma x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
 
 /-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 noncomputable def Y'
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
+  (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   : F :=
   let x := P.val.1
   let c := c s
@@ -534,24 +539,25 @@ noncomputable def Y'
   (c - 1) * s * X * (1 + X) / x
 
 lemma Y'_pow_two_eq_of_X2_ne_one
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  (P : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
+  (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
   (y_eq_one : P.val.2 ≠ 1)
   :
   let X := X2 s P q
   let r := r s
-  let Y := Y' s_h2 q_h1 q_h3 P
+  let Y := Y' sq_ne_pm_two hq_card hq_mod P
   -- This is just `def x` with the denominator `Y` replaced by `x` of P
   X ≠ 1 → Y^2 = X^5 + (r^2 - 2) * X^3 + X := by
     intro X r Y Xh
     let c := c s
     let x := P.val.1
-    let h := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one s_h1 s_h2 q_h1 q_h3 P P_props y_eq_one
-    let two_ne_zero := two_ne_zero q_h1 q_h3
+    let h := x_pow_two_of_X2_ne_one_eq2_of_X2_ne_one
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_eq_one
+    let two_ne_zero := two_ne_zero hq_card hq_mod
     have h' : x^2 = (2 * (r -2) * X^2 * (1 + X)^2) / (X^5 + (r^2 - 2) * X^3 + X) := h Xh
     calc
      Y^2 = (c - 1)^2 * s^2 * X^2 * (1 + X)^2 / (x^2) := by
@@ -562,29 +568,30 @@ lemma Y'_pow_two_eq_of_X2_ne_one
     _ = 2 * (r - 2) * X^2 * (1 + X)^2 / (x^2) := by
       have h : (c - 1)^2 * s^2 = 2 * (r - 2) := by
         unfold r Elligator1.r c Elligator1.c
-        field_simp [s_h1]
+        field_simp [hs_ne_zero]
         ring_nf
       rw [h]
     _ = X^5 + (r^2 - 2) * X^3 + X := by
       have h'' : (2 * (r - 2) * X^2 * (1 + X)^2) ≠ 0 := by
-        let X2_add_one_ne_zero := X2_add_one_ne_zero s_h1 q_h1 q_h3 ⟨P.val, P_props⟩ y_eq_one
-        let r_sub_two_ne_zero := r_sub_two_ne_zero s_h1 s_h2 q_h1 q_h3
-        let X2_ne_zero := X2_ne_zero q_h1 q_h3 ⟨P.val, P_props⟩
+        let X2_add_one_ne_zero :=
+          X2_add_one_ne_zero hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
+        let r_sub_two_ne_zero := r_sub_two_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
+        let X2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
         rw [add_comm]
         apply mul_ne_zero
         · apply mul_ne_zero
           · apply mul_ne_zero two_ne_zero r_sub_two_ne_zero
-          · apply pow_two_ne_zero X2_ne_zero
-        · apply pow_two_ne_zero X2_add_one_ne_zero
+          · apply pow_ne_zero 2 X2_ne_zero
+        · apply pow_ne_zero 2 X2_add_one_ne_zero
       rw [h']
       nth_rw 1 [← div_one (2 * (r - 2) * X^2 * (1 + X)^2)]
       rw [div_div_div_comm, div_self h'']
       grind
 
 lemma X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
   (y_ne_one : P.val.2 ≠ 1)
   :

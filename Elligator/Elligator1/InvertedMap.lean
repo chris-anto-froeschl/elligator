@@ -17,13 +17,13 @@ preimage and image of `ϕ`, and verifies the paper's explicit inverse formula on
 
 ## Main results
 
-- `ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages`: the preimage of `ϕ t` consists exactly of `t` and `-t`;
+* `ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages`: the preimage of `ϕ t` consists exactly of `t` and `-t`;
   in particular, `ϕ t = ϕ (-t)` and there are no other preimages.
-- `props_iff_mem_ϕOverF`: membership in the image `ϕ(F)` is equivalent to the three
+* `props_iff_mem_ϕOverF`: membership in the image `ϕ(F)` is equivalent to the three
   algebraic point conditions stated in part 2 of Theorem 3.
-- `X2_defined`, `z_defined`, `t2_defined`: the denominators required by the inverse construction
+* `X2_defined`, `z_defined`, `t2_defined`: the denominators required by the inverse construction
   are nonzero on `ϕ(F)`.
-- `ϕ_of_t2_eq_x_y`: applying `ϕ` to the reconstructed parameter `t2` recovers the original point.
+* `ϕ_of_t2_eq_x_y`: applying `ϕ` to the reconstructed parameter `t2` recovers the original point.
 
 ## References
 
@@ -54,22 +54,23 @@ field element distinct from both `t` and `-t` maps to `ϕ t`. -/
   -/)]
 theorem ϕ_of_t_eq_ϕ_of_neg_t_iff_ϕ_preimages
   (t : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
-  let ϕ_of_t := (ϕ t s_h1 s_h2 q_h1 q_h2 q_h3).val
-  let ϕ_of_neg_t := (ϕ (-t) s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let ϕ_of_t := (ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+  let ϕ_of_neg_t := (ϕ (-t) hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
   ϕ_of_t = ϕ_of_neg_t
-  ↔ ¬(∃ (p : { n : F // n ≠ t ∧ n ≠ -t}), ϕ p.val s_h1 s_h2 q_h1 q_h2 q_h3 = ϕ_of_t) := by
+  ↔ ¬(∃ (p : { n : F // n ≠ t ∧ n ≠ -t}),
+    ϕ p.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod = ϕ_of_t) := by
     intro ϕ_of_t ϕ_of_neg_t
     constructor
     · intro h
-      exact ϕ_preimages t s_h1 s_h2 q_h1 q_h2 q_h3
+      exact ϕ_preimages t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
     · intro h
-      exact ϕ_of_t_eq_ϕ_of_neg_t t s_h1 s_h2 q_h1 q_h2 q_h3
+      exact ϕ_of_t_eq_ϕ_of_neg_t t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
 
 /-- Characterization of the image of `ϕ` by the three conditions in part 2 of Theorem 3.
 For `P = ϕ t`, membership in `ϕ(F)` is equivalent to `ϕOverFProps s P`: `y + 1 ≠ 0`,
@@ -91,18 +92,18 @@ makes this more concrete.
   -/)]
 theorem props_iff_mem_ϕOverF
   (t : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
-  let P := ϕ t s_h1 s_h2 q_h1 q_h2 q_h3
-  ϕOverFProps s P ↔ P.val ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3 := by
+  let P := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+  ϕOverFProps s P ↔ P.val ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod := by
     intro P
     constructor
-    · exact P_in_ϕOverF_of_P_props s_h1 s_h2 q_h1 q_h2 q_h3 P
-    · exact P_props_of_P_in_ϕOverF t s_h1 s_h2 q_h1 q_h2 q_h3
+    · exact P_in_ϕOverF_of_P_props hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P
+    · exact P_props_of_P_in_ϕOverF t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
 
 /-- The explicit inverse formula in part 3 of Theorem 3 recovers a point in `ϕ(F)`.
 
@@ -124,28 +125,29 @@ quantities `X2`, `z`, `u2`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coo
 theorem ϕ_of_t2_eq_x_y
   -- Fix t ∈ F_q
   (t : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
   -- Define (x, y) = ϕ(t)
-  let P := (ϕ t s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let P := (ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
   let x_of_t := P.1
   let y_of_t := P.2
   -- t2 defined (and used to build ϕ(t2))
   let t' := t2 s P q
-  let ϕ_of_t' := (ϕ t' s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let ϕ_of_t' := (ϕ t' hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro P x_of_P y_of_P t' ϕ_of_t'
     unfold x_of_P y_of_P P ϕ
     simp only []
     split
     · rename_i h
-      exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ s_h1 s_h2 q_h1 q_h2 q_h3
+      exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
     · rename_i h
-      exact ϕ_of_t2_eq_x_y_base_case ⟨t, by grind⟩ s_h1 s_h2 q_h1 q_h2 q_h3
+      exact ϕ_of_t2_eq_x_y_base_case
+        ⟨t, by grind⟩ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
 
 /-- The denominator `2 * (y + 1)` in the inverse construction is nonzero on `ϕ(F)`.
 This supplies the definedness of `η`, and hence of `X2`, in part 3 of Theorem 3. -/
@@ -156,12 +158,12 @@ This supplies the definedness of `η`, and hence of `X2`, in part 3 of Theorem 3
   $\eta$ and hence $\bar X$ of Theorem 3.3 are defined.
   -/)]
 theorem X2_defined
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  (P : {p : F × F // p ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3})
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
+  (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod})
   :
   let y := P.val.snd
   2 * (y + 1) ≠ 0 := by
@@ -179,8 +181,8 @@ theorem X2_defined
         let h1_4 := congrArg Prod.snd h1_2
         rw [← h1_4]
         ring_nf
-        exact two_ne_zero q_h1 q_h3
-    exact mul_ne_zero (two_ne_zero q_h1 q_h3) h1
+        exact two_ne_zero hq_card hq_mod
+    exact mul_ne_zero (two_ne_zero hq_card hq_mod) h1
 
 /-- The denominator `c²` occurring in the definition of `z` is nonzero. -/
 @[blueprint "thm:z_defined"
@@ -188,8 +190,8 @@ theorem X2_defined
   (statement := /--
   The denominator $c^2$ occurring in $z$ of Theorem 3.3 is nonzero, so $z$ is defined.
   -/)]
-theorem z_defined (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
-  : (c s)^2 ≠ 0 := c_pow_two_ne_zero s_h1 q_h1 q_h3
+theorem z_defined (hs_ne_zero : s ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
+  : (c s)^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
 
 /-- The denominator `1 + u2` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/
 @[blueprint "thm:t2_defined"
@@ -199,14 +201,14 @@ theorem z_defined (s_h1 : s ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3
   Theorem 3.3 is nonzero, so $\bar t$ is defined.
   -/)]
 theorem t2_defined
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  (P : {p : F × F // p ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3})
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
+  (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod})
   :
   let u2_of_P := u2 s P.val q
-  (1 + u2_of_P) ≠ 0 := one_add_u2_ne_zero s_h1 s_h2 q_h1 q_h2 q_h3 P
+  (1 + u2_of_P) ≠ 0 := one_add_u2_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P
 
 end Elligator.Elligator1

@@ -16,7 +16,7 @@ for every other `t`, returns the coordinates constructed in Theorem 1.
 
 ## Main results
 
-- `DecodingFunction`: the Elligator 1 decoding map `F → F × F`, obtained from the curve-valued
+* `DecodingFunction`: the Elligator 1 decoding map `F → F × F`, obtained from the curve-valued
   map `ϕ` by forgetting its proof of curve membership.
 
 ## References
@@ -46,11 +46,11 @@ variable {q : ℕ}
   -/)]
 noncomputable def DecodingFunction
   (t : F)
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  : F × F := ϕ t s_h1 s_h2 q_h1 q_h2 q_h3
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
+  : F × F := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
 
 end Elligator.Elligator1

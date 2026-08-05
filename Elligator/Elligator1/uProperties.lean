@@ -39,10 +39,6 @@ lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) :=
   div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t)
 
 omit [Fintype F] in
-lemma u_pow_two_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (u t)^2 ≠ (0 : F) :=
-  pow_two_ne_zero (u_ne_zero t)
-
-omit [Fintype F] in
 lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
@@ -62,14 +58,14 @@ lemma u_of_zero :
 
 lemma one_add_u_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : 1 + (u t) ≠ 0 := by
     unfold u
     rw [add_div' _ _ _ (one_add_t_ne_zero t)]
     norm_num
     split_ands
-    · exact two_ne_zero q_h1 q_h3;
+    · exact two_ne_zero hq_card hq_mod;
     · exact one_add_t_ne_zero t
 
 end Elligator.Elligator1

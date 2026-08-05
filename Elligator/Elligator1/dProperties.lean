@@ -34,9 +34,9 @@ variable {q : ℕ}
   otherwise $-1 = d(c - 1)^2/(c + 1)^2$ would be a square, a contradiction.
   -/)]
 lemma d_nonsquare
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : ¬IsSquare (d s) := by
     rw [isSquare_iff_exists_mul_self (d s)]
     change ¬∃ r, (-((2 / s^2) + 1)^2 / ((2 / s^2) - 1)^2) = r * r
@@ -59,16 +59,16 @@ lemma d_nonsquare
       apply IsSquare.mul h5 h6
     have h7 : q % 4 ≠ 3 := by
       rw [FiniteField.isSquare_neg_one_iff] at h4
-      rw [q_h1] at h4
+      rw [hq_card] at h4
       exact h4
     contradiction
 
 lemma d_ne_zero
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : (d s) ≠ 0 := by
-    let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
+    let d_nonsquare := d_nonsquare sq_ne_pm_two hq_card hq_mod
     intro h
     have h' : IsSquare (d s) := by
       unfold IsSquare
@@ -76,15 +76,15 @@ lemma d_ne_zero
       grind
     contradiction
 
-lemma one_over_d_nonsquare
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+lemma one_div_d_nonsquare
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : ¬IsSquare (1 / (d s)) := by
       intro h
       unfold IsSquare at h
-      let d_nonsquare := d_nonsquare s_h2 q_h1 q_h3
-      let d_ne_zero := d_ne_zero s_h2 q_h1 q_h3
+      let d_nonsquare := d_nonsquare sq_ne_pm_two hq_card hq_mod
+      let d_ne_zero := d_ne_zero sq_ne_pm_two hq_card hq_mod
       rcases h with ⟨a, ah⟩
       rw [← pow_two, ← mul_left_inj' d_ne_zero] at ah
       ring_nf at ah
@@ -100,22 +100,23 @@ lemma one_over_d_nonsquare
           grind
         contradiction
 
-lemma d_ne_one (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
+lemma d_ne_one
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : (d s) ≠ 1 := by grind [d_nonsquare]
 
 lemma d_ne_zero_and_d_ne_one
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : (d s) ≠ 0 ∧ (d s) ≠ 1 := by
     split_ands
-    · exact d_ne_zero s_h2 q_h1 q_h3
-    · exact d_ne_one s_h2 q_h1 q_h3
+    · exact d_ne_zero sq_ne_pm_two hq_card hq_mod
+    · exact d_ne_one sq_ne_pm_two hq_card hq_mod
 
-lemma neg_d_eq_r_add_two_over_r_sub_two
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+lemma neg_d_eq_r_add_two_div_r_sub_two
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   :
   let r := r s;
   let d := d s;
@@ -132,7 +133,7 @@ lemma neg_d_eq_r_add_two_over_r_sub_two
         have h : 1 / c ≠ 0 := by
           rw [← inv_eq_one_div]
           apply inv_ne_zero
-          apply c_ne_zero s_h1 q_h1 q_h3
+          apply c_ne_zero hs_ne_zero hq_card hq_mod
         grind
       _ = (r + 2) / (r - 2) := by
         rw [add_assoc, add_comm 2 (1 / c), ← add_assoc]

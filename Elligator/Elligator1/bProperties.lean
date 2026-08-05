@@ -30,16 +30,16 @@ variable {q : ℕ}
   With $b = \lfloor \log_2 q \rfloor$ we have $2^b \leq q$; hence the integers
   $0, 1, \ldots, 2^b - 1$ are distinct in $\mathbb{F}_q$.
   -/)]
-lemma two_pow_b_le_q (q_h3 : q % 4 = 3) : 2^(@b q) ≤ q := by
+lemma two_pow_b_le_q (hq_mod : q % 4 = 3) : 2^(@b q) ≤ q := by
   apply Nat.pow_log_le_self
   grind
 
 lemma q_lt_two_pow_b_succ : q < 2^((@b q) + 1) := Nat.lt_pow_succ_log_self (by grind) _
 
-lemma two_pow_b_gt_q_over_two (q_h1 : Fintype.card F = q) (q_h3 : q % 4 = 3)
+lemma two_pow_b_gt_q_div_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : 2^(@b q) > q / 2 := by
-    let h1 := two_pow_b_le_q q_h3
-    let h2 := FiniteFieldBasic.two_ne_zero q_h1 q_h3
+    let h1 := two_pow_b_le_q hq_mod
+    let h2 := FiniteFieldBasic.two_ne_zero hq_card hq_mod
     unfold b
     let h3 := @q_lt_two_pow_b_succ q
     have h4 : 2^(@b q) > q / 2 ↔ q < 2^((@b q) + 1) := by grind

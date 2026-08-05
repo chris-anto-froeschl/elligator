@@ -22,10 +22,10 @@ the lower half removes the sign ambiguity `ϕ t = ϕ (-t)`.
 
 ## Main results
 
-- `ι`: the paper's encoding `ι(τ) = ϕ(σ(τ))` from admissible bit strings to curve points.
-- `S_card`: the admissible set has `(q + 1) / 2` elements.
-- `ι_injective`: `ι` is injective, so encoded strings have distinct curve images.
-- `ϕOverF_eq_ιOverS`: the image of `ι` is exactly the image of the Elligator map `ϕ`.
+* `ι`: the paper's encoding `ι(τ) = ϕ(σ(τ))` from admissible bit strings to curve points.
+* `S_card`: the admissible set has `(q + 1) / 2` elements.
+* `ι_injective`: `ι` is injective, so encoded strings have distinct curve images.
+* `ϕOverF_eq_ιOverS`: the image of `ι` is exactly the image of the Elligator map `ϕ`.
 
 Together, the last two results formalize the paper's conclusion that `ι` is a bijection from `S`
 onto `ϕ(F)`.
@@ -58,12 +58,13 @@ records that this point lies on the Edwards curve. -/
   -/)]
 noncomputable def ι
   (τ : (@S q))
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  : {P : F × F // P ∈ EOverF s_h2 q_h1 q_h3} := ϕ (σ τ.1) s_h1 s_h2 q_h1 q_h2 q_h3
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
+  : {P : F × F // P ∈ EOverF sq_ne_pm_two hq_card hq_mod} :=
+    ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
 
 /-- The admissible string set `S` has `(q + 1) / 2` elements.
 This is the cardinality assertion in Theorem 4. Here `S` consists of the `b`-bit strings whose
@@ -76,14 +77,15 @@ binary values lie in the integer interval from `0` through `(q - 1) / 2`. -/
   \#S = (q + 1)/2 .
   $$
   -/)]
-theorem S_card (q_h3 : q % 4 = 3) : (@S q).card = (q + 1) / 2 := S_card_eq_q_add_one_over_two q_h3
+theorem S_card (hq_mod : q % 4 = 3) : (@S q).card = (q + 1) / 2 :=
+  S_card_eq_q_add_one_div_two hq_mod
 
 /-- Lower-half representatives resolve the sign ambiguity of `ϕ`.
 
 If two strings in `S` represent equal or opposite field elements, then they in fact represent the
 same field element: two distinct integers in `[0, (q - 1) / 2]` cannot be negatives modulo `q`. -/
 lemma σ_eq_of_eq_or_eq_neg
-  (q_h1 : Fintype.card F = q)
+  (hq_card : Fintype.card F = q)
   (q_prime : Prime q)
   (τ τ' : @S q)
   (h : (@σ F _ q τ.1) = (@σ F _ q τ'.1) ∨ (@σ F _ q τ.1) = -(@σ F _ q τ'.1)) :
@@ -92,8 +94,8 @@ lemma σ_eq_of_eq_or_eq_neg
     · exact h
     · unfold σ at h
       unfold σ
-      rw [lower_half_neg_eq q_h1 q_prime
-        (bitsToNat_le_q_sub_one_over_two τ) (bitsToNat_le_q_sub_one_over_two τ') h]
+      rw [lower_half_neg_eq hq_card q_prime
+        (bitsToNat_le_q_sub_one_div_two τ) (bitsToNat_le_q_sub_one_div_two τ') h]
 
 /-- The Elligator string encoding `ι : S → E(F)` is injective.
 
@@ -106,18 +108,18 @@ negative case, and injectivity of binary evaluation then identifies the original
   In the situation of Theorem 4, $\iota$ is an injective map from $S$ to $E(\mathbb{F}_q)$.
   -/)]
 theorem ι_injective
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
   (q_prime : Prime q)
-  (q_h3 : q % 4 = 3) :
-  let q_h2 := q_prime.isPrimePow
-  Function.Injective (fun τ : S => ι τ s_h1 s_h2 q_h1 q_h2 q_h3) := by
-    intro q_h2 τ τ' h
+  (hq_mod : q % 4 = 3) :
+  let hq_primePow := q_prime.isPrimePow
+  Function.Injective (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod) := by
+    intro hq_primePow τ τ' h
     apply Subtype.ext
-    apply σ_injective q_h1 q_prime q_h3
-    apply σ_eq_of_eq_or_eq_neg q_h1 q_prime
-    exact eq_or_eq_neg_of_ϕ_eq _ _ s_h1 s_h2 q_h1 q_h2 q_h3 h
+    apply σ_injective hq_card q_prime hq_mod
+    apply σ_eq_of_eq_or_eq_neg hq_card q_prime
+    exact eq_or_eq_neg_of_ϕ_eq _ _ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod h
 
 /-- The set of curve points produced by the string encoding `ι`.
 This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
@@ -130,12 +132,12 @@ This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
   $$
   -/)]
 noncomputable def ιOverS
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
-  : Set (F × F) := Set.range (fun τ : S => ι τ s_h1 s_h2 q_h1 q_h2 q_h3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
+  : Set (F × F) := Set.range (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod)
 
 /-- The string encoding and the Elligator map have exactly the same image: `ι(S) = ϕ(F)`.
 For each `t : F`, one of `t` and `-t` has a lower-half representative `σ τ` with `τ ∈ S`; since
@@ -148,30 +150,31 @@ Theorem 4. -/
   In the situation of Theorem 4, $\iota(S) = \varphi(\mathbb{F}_q)$.
   -/)]
 theorem ϕOverF_eq_ιOverS
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
   (q_prime : Prime q)
-  (q_h3 : q % 4 = 3)
+  (hq_mod : q % 4 = 3)
   :
-  let ϕOverF := ϕOverF s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3
-  let ιOverS := ιOverS s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3
+  let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod
+  let ιOverS := ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod
   ϕOverF = ιOverS := by
     dsimp only
     unfold Elligator1.ϕOverF ιOverS ι
     ext P
     constructor
     · rintro ⟨t, rfl⟩
-      obtain ⟨τ, hτ | hτ⟩ := exists_σ_preimage_or_neg q_h1 q_prime q_h3 t
+      obtain ⟨τ, hτ | hτ⟩ := exists_σ_preimage_or_neg hq_card q_prime hq_mod t
       · refine ⟨τ, ?_⟩
-        change (ϕ (σ τ.1) s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3).val =
-          (ϕ t s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3).val
+        change (ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val =
+          (ϕ t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val
         rw [hτ]
       · refine ⟨τ, ?_⟩
-        change (ϕ (σ τ.1) s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3).val =
-          (ϕ t s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3).val
+        change (ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val =
+          (ϕ t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val
         rw [hτ]
-        exact (ϕ_of_t_eq_ϕ_of_neg_t t s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3).symm
+        exact
+          (ϕ_of_t_eq_ϕ_of_neg_t t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).symm
     · rintro ⟨τ, rfl⟩
       exact ⟨σ τ.1, rfl⟩
 
@@ -189,14 +192,14 @@ stronger fact that every encoded point belongs to the image of `ϕ`. -/
   with codomain the image of $\varphi$ rather than all of $E(\mathbb{F}_q)$.
   -/)]
 noncomputable def ιToϕOverF
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   (τ : @S q) :
-  {P : F × F // P ∈ ϕOverF s_h1 s_h2 q_h1 q_h2 q_h3} :=
-    ⟨(ι τ s_h1 s_h2 q_h1 q_h2 q_h3).val, ⟨σ τ.1, rfl⟩⟩
+  {P : F × F // P ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod} :=
+    ⟨(ι τ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val, ⟨σ τ.1, rfl⟩⟩
 
 /-- The encoding `ι` is a bijection from `S` onto `ϕ(F)`.
 The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in the type. Injectivity is
@@ -211,50 +214,23 @@ The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in th
   is a bijection.
   -/)]
 theorem ιToϕOverF_bijective
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
   (q_prime : Prime q)
-  (q_h3 : q % 4 = 3) :
-  Function.Bijective (ιToϕOverF s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3) := by
+  (hq_mod : q % 4 = 3) :
+  Function.Bijective (ιToϕOverF hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod) := by
     constructor
     · intro τ τ' h
-      apply ι_injective s_h1 s_h2 q_h1 q_prime q_h3
+      apply ι_injective hs_ne_zero sq_ne_pm_two hq_card q_prime hq_mod
       apply Subtype.ext
       simpa [ιToϕOverF] using congr_arg Subtype.val h
     · intro P
-      have hP : P.val ∈ ιOverS s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3 := by
-        rw [← ϕOverF_eq_ιOverS s_h1 s_h2 q_h1 q_prime q_h3]
+      have hP : P.val ∈ ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod := by
+        rw [← ϕOverF_eq_ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime hq_mod]
         exact P.prop
       rcases hP with ⟨τ, hτ⟩
       refine ⟨τ, Subtype.ext ?_⟩
       exact hτ
-
-/-- The three conclusions of Theorem 4, grouped exactly as in the paper.
-The admissible set has `(q + 1) / 2` elements; `ι` is injective into the Edwards curve; and its
-image `ι(S)` is precisely `ϕ(F)`. The stronger typed bijection is available separately as
-`ιToϕOverF_bijective`. -/
-@[blueprint "thm:thm4"
-  (title := "Theorem 4: encoding as strings")
-  (statement := /--
-  In the situation of Definition 2, assume that $q$ is prime, and define
-  $b = \lfloor \log_2 q \rfloor$. Define $\sigma : \{0, 1\}^b \to \mathbb{F}_q$ by
-  $\sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i$. Define
-  $S = \sigma^{-1}(\{0, 1, 2, \ldots, (q-1)/2\})$. Define $\iota : S \to E(\mathbb{F}_q)$ as
-  follows: $\iota(\tau) = \varphi(\sigma(\tau))$. Then $\#S = (q + 1)/2$; $\iota$ is an
-  injective map from $S$ to $E(\mathbb{F}_q)$; and $\iota(S) = \varphi(\mathbb{F}_q)$.
-  -/)]
-theorem string_encoding_theorem
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_prime : Prime q)
-  (q_h3 : q % 4 = 3) :
-    (@S q).card = (q + 1) / 2 ∧
-    Function.Injective (fun τ : @S q => ι τ s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3) ∧
-    ιOverS s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3 = ϕOverF s_h1 s_h2 q_h1 q_prime.isPrimePow q_h3 :=
-      ⟨S_card q_h3,
-      ι_injective s_h1 s_h2 q_h1 q_prime q_h3,
-      (ϕOverF_eq_ιOverS s_h1 s_h2 q_h1 q_prime q_h3).symm⟩
 
 end Elligator.Elligator1

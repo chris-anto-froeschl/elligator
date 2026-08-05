@@ -19,8 +19,8 @@ Theorem 4, and computes its cardinality.
 
 ## Main results
 
-- `bitsToNat_image_S`: binary evaluation maps `S` onto the integer interval `[0, (q - 1) / 2]`.
-- `S_card_eq_q_add_one_over_two`: when `q ≡ 3 (mod 4)`, the set `S` has `(q + 1) / 2` elements.
+* `bitsToNat_image_S`: binary evaluation maps `S` onto the integer interval `[0, (q - 1) / 2]`.
+* `S_card_eq_q_add_one_div_two`: when `q ≡ 3 (mod 4)`, the set `S` has `(q + 1) / 2` elements.
 
 ## References
 
@@ -73,7 +73,7 @@ lemma S_card_eq_Icc_card
 
 /-- The lower-half string set `S` has `(q + 1) / 2` elements when `q ≡ 3 (mod 4)`.
 This is the cardinality computation used in Theorem 4 of the paper. -/
-@[blueprint "lemma:S_card_eq_q_add_one_over_two"
+@[blueprint "lemma:S_card_eq_q_add_one_div_two"
   (title := "$\\#S = (q + 1)/2$")
   (statement := /--
   For $q \equiv 3 \pmod 4$, the set $S$ has exactly
@@ -82,7 +82,7 @@ This is the cardinality computation used in Theorem 4 of the paper. -/
   $$
   elements.
   -/)]
-lemma S_card_eq_q_add_one_over_two (q_h3 : q % 4 = 3)
+lemma S_card_eq_q_add_one_div_two (hq_mod : q % 4 = 3)
   : (@S q).card = (q + 1) / 2 := by
     rw [S_card_eq_Icc_card, Nat.card_Icc]
     grind

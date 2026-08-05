@@ -33,10 +33,10 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-lemma X_pow_two_add_one_over_c_pow_two_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+lemma X_pow_two_add_one_div_c_pow_two_ne_zero
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (X t s)^2 + 1 / (c s)^2 ≠ 0 := by
     let X := X t s
@@ -44,7 +44,7 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
     intro h
     have h' : X^2 * c^2 + c⁻¹^2 * c^2 = 0 := by grind
     have h'' : X^2 * c^2 = -1 := by grind [c_ne_zero]
-    have h''' : ¬IsSquare (-1 : F) := neg_one_non_square q_h1 q_h3
+    have h''' : ¬IsSquare (-1 : F) := neg_one_non_square hq_card hq_mod
     have h'''' : IsSquare (-1 : F) := by
       rw [← h'', ← mul_pow]
       apply IsSquare.sq (X * c)
@@ -57,20 +57,20 @@ lemma X_pow_two_add_one_over_c_pow_two_ne_zero
   $\chi(v) \neq 0$.
   -/)]
 lemma X_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (X t s) ≠ 0 := by
     apply mul_ne_zero
-    · apply χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h3 t) q_h1
+    · apply χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t) hq_card
     · apply u_ne_zero t
 
 lemma X_comparison
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
@@ -88,21 +88,21 @@ lemma X_comparison
       X2 = χ_of_v2 * u2 := by rfl
       _ = χ_of_v1 / u1 := by
         unfold χ_of_v2 v2 t2
-        rw [v_comparison_implication4 t q_h1 q_h3]
+        rw [v_comparison_implication4 t hq_card hq_mod]
         unfold u2
         rw [u_comparison t]
         change χ_of_v1 * (1 / u1) = χ_of_v1 / u1
         ring_nf
       _ = 1 / (χ_of_v1 * u1) := by
         unfold χ_of_v1
-        nth_rw 1 [LegendreSymbol.one_over_χ_of_a_eq_χ_a q_h1 q_h2 q_h3]
+        nth_rw 1 [LegendreSymbol.one_div_χ_of_a_eq_χ_a hq_card hq_primePow hq_mod]
         ring_nf
       _ = 1 / X1 := by rfl
 
 lemma X_of_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   :
   let X_of_zero := X ⟨(0 : F), zero_h1⟩ s
   X_of_zero = 1 := by
@@ -113,7 +113,7 @@ lemma X_of_zero
     change χ_of_v * 1 = 1
     unfold χ_of_v
     rw [v_of_zero]
-    rw [χ_of_a_pow_two_eq_one (r_ne_zero s_h1 q_h1 q_h3) q_h1 q_h3]
+    rw [χ_of_a_pow_two_eq_one (r_ne_zero hs_ne_zero hq_card hq_mod) hq_card hq_mod]
     simp
 
 end Elligator.Elligator1

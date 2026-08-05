@@ -31,13 +31,13 @@ variable {q : ℕ}
 
 lemma η_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
-  let P := (ϕ t.val s_h1 s_h2 q_h1 q_h2 q_h3).val
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
   let η := η P
   η = 0 := by
     intro P η
@@ -45,7 +45,7 @@ lemma η_eq_zero
     let y := P.2
     change (y - 1) / (2 * (y + 1)) = 0
     unfold y P
-    rw [ϕ_of_t_eq_zero_one t s_h1 s_h2 q_h1 q_h2 q_h3]
+    rw [ϕ_of_t_eq_zero_one t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod]
     simp
 
 end Elligator.Elligator1

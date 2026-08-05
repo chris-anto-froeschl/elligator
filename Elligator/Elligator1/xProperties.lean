@@ -42,11 +42,11 @@ variable {q : ℕ}
   $X \neq 0$ and $1 + X \neq 0$.
   -/)]
 lemma x_ne_zero
-  (s_h1 : s ≠ 0)
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let x := x t s q
@@ -61,19 +61,19 @@ lemma x_ne_zero
         · apply mul_ne_zero
           · intro h1
             have h1_1 : c = 1 := by grind
-            have h1_2 := c_ne_one s_h2
+            have h1_2 := c_ne_one sq_ne_pm_two
             contradiction
-          · apply s_h1
-        · apply X_ne_zero s_h1 q_h1 q_h3 t
-      · apply one_add_X_ne_zero s_h1 q_h1 q_h2 q_h3 t
-    · apply Y_ne_zero s_h1 q_h1 q_h3 t
+          · apply hs_ne_zero
+        · apply X_ne_zero hs_ne_zero hq_card hq_mod t
+      · apply one_add_X_ne_zero hs_ne_zero hq_card hq_primePow hq_mod t
+    · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
 
 lemma x_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
@@ -88,7 +88,7 @@ lemma x_comparison
     let X2 := X ⟨t2, t_h⟩ s
     let Y1 := Y t s q
     let Y2 := Y ⟨t2, t_h⟩ s q
-    have X_pow_three_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero s_h1 q_h1 q_h3 t)
+    have X_pow_three_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero hs_ne_zero hq_card hq_mod t)
     calc
       x2 = (c - 1) * s * X2 * (1 + X2) / Y2 := by rfl
       _ = (c - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by grind [X_comparison, Y_comparison]
@@ -96,10 +96,10 @@ lemma x_comparison
       _ = x1 := by rfl
 
 lemma x_y_eq_zero_sign_one
-  (s_h2 : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF s_h2 q_h1 q_h3})
+  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
+  (point : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (x_eq_zero : point.val.1 = 0)
   : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
     let d := d s

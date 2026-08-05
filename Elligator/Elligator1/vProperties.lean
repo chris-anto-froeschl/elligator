@@ -33,24 +33,24 @@ variable {s : F}
 variable {q : ℕ}
 
 lemma v_h1_third_factor_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (u t)^2 + 1 / (c s)^2 ≠ 0 := by
     intro h
-    have h' : -1 = ((u t) * (c s))^2 := by grind [c_pow_two_ne_zero, div_left_inj']
+    have h' : -1 = ((u t) * (c s))^2 := by grind [pow_ne_zero, c_ne_zero, div_left_inj']
     have h'' : IsSquare (-1 : F) := by
       rw [h', pow_two]
       apply IsSquare.mul_self
     rw [FiniteField.isSquare_neg_one_iff] at h''
-    rw [q_h1] at h''
+    rw [hq_card] at h''
     contradiction
 
 lemma v_h1
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let v := v t s
@@ -60,25 +60,25 @@ lemma v_h1
     intro v c u
     let r := r s
     change u^5 + (r^2 - 2) * u^3 + u = u * (u^2 + c^2) * (u^2 + 1 / c^2)
-    have h1 : c^2 ≠ 0 := by exact pow_two_ne_zero (c_ne_zero s_h1 q_h1 q_h3)
+    have h : c^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
     grind [r_h1]
 
 lemma v_h1_second_factor_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (u t)^2 + (c s)^2 ≠ 0 := by
     intro h
     let c := c s
     let u := u t
     have h' : -1 = (u / c)^2 := by
-      let h'' := c_pow_two_ne_zero s_h1 q_h1 q_h3
+      let h'' := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
       grind
     have h'' : IsSquare (-1 : F) := by
       rw [h', pow_two]
       apply IsSquare.mul_self (u / c)
-    rw [FiniteField.isSquare_neg_one_iff, q_h1] at h''
+    rw [FiniteField.isSquare_neg_one_iff, hq_card] at h''
     contradiction
 
 @[blueprint "lemma:v_ne_zero"
@@ -87,31 +87,31 @@ lemma v_h1_second_factor_ne_zero
   In the situation of Theorem 1, $v \neq 0$.
   -/)]
 lemma v_ne_zero
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : v t s ≠ (0 : F) := by
-    rw [v_h1 s_h1 q_h1 q_h3 t]
+    rw [v_h1 hs_ne_zero hq_card hq_mod t]
     apply mul_ne_zero
     · apply mul_ne_zero
       · apply u_ne_zero t
-      · exact (v_h1_second_factor_ne_zero s_h1 q_h1 q_h3 t)
-    · exact (v_h1_third_factor_ne_zero s_h1 q_h1 q_h3 t)
+      · exact (v_h1_second_factor_ne_zero hs_ne_zero hq_card hq_mod t)
+    · exact (v_h1_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)
 
-lemma χ_of_v_mul_v_of_t_pow_q_add_one_over_four_ne_zero
+lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-  (s_h1 : s ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   :
   let v := v t s
   ((χ v) * v)^((q + 1) / 4) ≠ 0 := by
     intro v
     rw [mul_pow (χ v) v ((q + 1) / 4)]
     apply mul_ne_zero
-    · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero s_h1 q_h1 q_h3 t) q_h1)
-    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero s_h1 q_h1 q_h3 t)
+    · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t) hq_card)
+    · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero hs_ne_zero hq_card hq_mod t)
 
 omit [Fintype F] in
 lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
@@ -164,21 +164,21 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
 
 lemma v_comparison_implication3
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ ((u t)^6) = 1 := by
     let u := u t
     have h : u^6 = u^2 * u^2 * u^2 := by ring_nf
     rw [h]
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) q_h1 q_h3]
+    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) hq_card hq_mod]
     simp
 
 lemma v_comparison_implication4
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
@@ -191,7 +191,7 @@ lemma v_comparison_implication4
     rw [← v_comparison_implication1 t]
     change χ v2= χ (v2 * u^6)
     rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [v_comparison_implication3 t q_h1 q_h3]
+    rw [v_comparison_implication3 t hq_card hq_mod]
     simp
 
 omit [Fintype F] in

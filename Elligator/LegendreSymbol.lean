@@ -50,36 +50,36 @@ Original: definition at, Section 3.2.
   -/)]
 noncomputable def χ (a : F) : F := a^((Fintype.card F - 1) / 2)
 
-@[simp, blueprint "lemma:χ_a_zero_eq_zero"]
+@[simp]
 lemma χ_a_zero_eq_zero
   {a : F}
   (a_eq_zero : a = 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : χ a = 0 := by
     unfold χ
-    rw [q_h1, a_eq_zero]
-    apply zero_pow (q_sub_one_over_two_ne_zero q_h1 q_h2 q_h3)
+    rw [hq_card, a_eq_zero]
+    apply zero_pow (q_sub_one_div_two_ne_zero hq_card hq_primePow hq_mod)
 
 lemma χ_a_ne_zero
   {a : F}
   (a_ne_zero : a ≠ 0)
-  (q_h1 : Fintype.card F = q)
+  (hq_card : Fintype.card F = q)
   : χ a ≠ 0 := by
     unfold χ
-    rw [q_h1]
+    rw [hq_card]
     apply pow_ne_zero ((q - 1) / 2) at a_ne_zero
     exact a_ne_zero
 
 lemma neg_χ_a_ne_χ_a
   {a : F}
   (a_ne_zero : a ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ a ≠ -(χ a) := by
     unfold χ
-    rw [q_h1]
+    rw [hq_card]
     intro h
     rw [← add_right_inj (a ^ ((q - 1) / 2))] at h
     ring_nf at h
@@ -88,13 +88,13 @@ lemma neg_χ_a_ne_χ_a
       grind [FiniteFieldBasic.two_ne_zero]
     contradiction
 
-@[simp, blueprint "lemma:χ_a_eq_one"]
+@[simp]
 lemma χ_a_eq_one
   {a : F}
   (a_ne_zero : a ≠ 0)
   (a_square : IsSquare a)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ a = 1 := by
     unfold χ
     have h1 : ∃ r, a = r * r := by apply IsSquare.exists_mul_self a a_square
@@ -102,16 +102,16 @@ lemma χ_a_eq_one
     rw [r_h, ← pow_two]
     ring_nf
     have h2 : (Fintype.card F - 1) / 2 * 2 = Fintype.card F - 1 := by
-      rw [q_h1]
-      apply Nat.div_two_mul_two_of_even (q_sub_one_even q_h3)
+      rw [hq_card]
+      apply Nat.div_two_mul_two_of_even (q_sub_one_even hq_mod)
     rw [h2]
     have h3 : r ≠ 0 := by grind
     apply FiniteField.pow_card_sub_one_eq_one r h3
 
 lemma a_IsSquare
   {a : F}
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   (χ_a_eq_one : χ a = 1)
   : IsSquare a := by
     let χ_of_a := χ a
@@ -120,8 +120,8 @@ lemma a_IsSquare
     let b := a^((Fintype.card F + 1) / 4 )
     use b
     unfold b
-    rw [← pow_two, ← pow_mul, add_comm, q_h1]
-    rw [one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
+    rw [← pow_two, ← pow_mul, add_comm, hq_card]
+    rw [one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
     have h : (1 + Fintype.card F) / 2 = (Fintype.card F - 1 + 2) / 2 := by omega
     simp_all
     grind
@@ -129,23 +129,23 @@ lemma a_IsSquare
 lemma χ_a_eq_one_iff_a_square
   {a : F}
   (a_ne_zero : a ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ a = 1 ↔ IsSquare a := by
     constructor
     · intro χ_a_eq_one
-      exact a_IsSquare q_h1 q_h3 χ_a_eq_one
+      exact a_IsSquare hq_card hq_mod χ_a_eq_one
     · intro a_square
-      exact χ_a_eq_one a_ne_zero a_square q_h1 q_h3
+      exact χ_a_eq_one a_ne_zero a_square hq_card hq_mod
 
-lemma a_pow_q_add_one_over_two_eq_χ_of_a_mul_a
+lemma a_pow_q_add_one_div_two_eq_χ_of_a_mul_a
   {a : F}
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : a^((q + 1) / 2) = (χ a) * a := by
     unfold χ
-    rw [q_h1]
-    rw [q_sub_one_over_four_mul_two_eq_one_add_q_over_two]
+    have h : (q - 1) / 2 = (q + 1) / 2 - 1 := by omega
+    rw [hq_card, h]
     nth_rw 3 [← pow_one a]
     rw [← pow_add]
     have h'' : (q + 1) / 2 - 1 + 1 = (q + 1) / 2 := by omega
@@ -155,42 +155,42 @@ lemma χ_a_mul_a_eq_a
   {a : F}
   (a_ne_zero : a ≠ 0)
   (a_square : IsSquare a)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : (χ a) * a = a := by simp_all
 
-@[simp, blueprint "lemma:a_pow_q_add_one_over_two_eq_a"]
-lemma a_pow_q_add_one_over_two_eq_a
+@[simp]
+lemma a_pow_q_add_one_div_two_eq_a
   {a : F}
   (a_square : IsSquare a)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : a^((q + 1) / 2) = a := by
     by_cases h : a = 0
     · rw [h, add_comm, zero_pow,]
-      exact q_add_one_over_two_ne_zero q_h3
-    · rw [a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
-      rw [χ_a_mul_a_eq_a h a_square q_h1 q_h3]
+      exact q_add_one_div_two_ne_zero hq_mod
+    · rw [a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
+      rw [χ_a_mul_a_eq_a h a_square hq_card hq_mod]
 
-@[simp, blueprint "lemma:χ_of_a_pow_two_eq_one"]
+@[simp]
 lemma χ_of_a_pow_two_eq_one
   {a : F}
   (a_ne_zero : a ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ (a^2) = 1 := by
     unfold χ
     rw [← pow_mul, mul_comm]
-    rw [q_h1, Nat.div_mul_cancel (even_iff_two_dvd.mp
-        (q_sub_one_even q_h3))]
-    rw [← q_h1, FiniteField.pow_card_sub_one_eq_one a a_ne_zero]
+    rw [hq_card, Nat.div_mul_cancel (even_iff_two_dvd.mp
+        (q_sub_one_even hq_mod))]
+    rw [← hq_card, FiniteField.pow_card_sub_one_eq_one a a_ne_zero]
 
 lemma χ_of_a_eq_neg_one
   {a : F}
   (a_ne_zero : a ≠ 0)
   (a_nonsquare : ¬IsSquare a)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ a = -1 := by
     -- Euler's criterion
     have h : (a^((Fintype.card F - 1) / 2))^2 = 1 := by
@@ -201,9 +201,10 @@ lemma χ_of_a_eq_neg_one
     rcases h with h' | h'
     · contrapose a_nonsquare
       unfold IsSquare
+      have h' : (q + 1) / 4 * 2 = (q - 1) / 2 + 1 := by grind
       have h_square : ∃ b : F, a = b^2 := by
         use a^((Fintype.card F + 1) / 4)
-        rw [← pow_mul, FiniteFieldBasic.q_h1 (by omega)]
+        rw [← pow_mul, hq_card, h']
         grind
       obtain ⟨b, b_h⟩ := h_square
       use b
@@ -212,24 +213,24 @@ lemma χ_of_a_eq_neg_one
     · exact h'
 
 lemma χ_of_neg_one_eq_neg_one
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ (-1 : F) = -1 := by
     let h1 := @FiniteFieldBasic.neg_one_ne_zero F _
-    let h2 := neg_one_non_square q_h1 q_h3
-    apply χ_of_a_eq_neg_one h1 h2 q_h1 q_h3
+    let h2 := neg_one_non_square hq_card hq_mod
+    apply χ_of_a_eq_neg_one h1 h2 hq_card hq_mod
 
 lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} : χ (a * b) = (χ a) * χ b := by
   unfold χ
   rw [mul_pow]
 
-@[simp, blueprint "lemma:χ_of_a_even_pow_n_eq_one"]
+@[simp]
 lemma χ_of_a_even_pow_n_eq_one
   {a : F}
   (a_ne_zero : a ≠ 0)
   (n : {n : ℕ | Even n})
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ a^(n.val) = 1 := by
     have n_even := n.prop
     unfold Even at n_even
@@ -237,107 +238,107 @@ lemma χ_of_a_even_pow_n_eq_one
     rw [← mul_two] at kh
     rw [kh, mul_comm, pow_mul, pow_two]
     rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
-    rw [χ_of_a_pow_two_eq_one a_ne_zero q_h1 q_h3]
+    rw [χ_of_a_pow_two_eq_one a_ne_zero hq_card hq_mod]
     rw [one_pow]
 
-@[simp, blueprint "lemma:χ_of_a_pow_n_eq_χ_a"]
+@[simp]
 lemma χ_of_a_pow_n_eq_χ_a
   (a : F)
   (n : {n : ℕ | Odd n})
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : (χ a)^(n.val) = χ a := by
     obtain ⟨k, hk⟩ := n.2
     rw [hk, pow_add]
     have h : Even (2 * k) := by simp only [even_two, Even.mul_right]
     by_cases h_a : a = 0
     · simp_all
-    · rw [χ_of_a_even_pow_n_eq_one h_a ⟨2 * k, h⟩  q_h1 q_h3]
+    · rw [χ_of_a_even_pow_n_eq_one h_a ⟨2 * k, h⟩  hq_card hq_mod]
       simp
 
 lemma χ_values
   {a : F}
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : χ a = 0 ∨ χ a = -1 ∨ χ a = 1 := by
     by_cases h : a = 0
     · left
-      exact χ_a_zero_eq_zero h q_h1 q_h2 q_h3
+      exact χ_a_zero_eq_zero h hq_card hq_primePow hq_mod
     · rw [← ne_eq] at h
       by_cases h' : IsSquare a
       · right
         right
-        apply χ_a_eq_one h h' q_h1 q_h3
+        apply χ_a_eq_one h h' hq_card hq_mod
       · right
         left
-        apply χ_of_a_eq_neg_one h h' q_h1 q_h3
+        apply χ_of_a_eq_neg_one h h' hq_card hq_mod
 
 lemma χ_of_χ_of_a_eq_χ_of_a
   {a : F}
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : χ (χ a) = χ a := by
     let h : χ a = 0 ∨ χ a = -1 ∨ χ a = 1 :=
-      by exact χ_values q_h1 q_h2 q_h3
+      by exact χ_values hq_card hq_primePow hq_mod
     rcases h with h' | h' | h'
     · simp_all
     · rw [h']
       unfold χ
-      rw [q_h1]
-      apply Odd.neg_one_pow (q_sub_one_over_two_odd q_h3)
+      rw [hq_card]
+      apply Odd.neg_one_pow (q_sub_one_div_two_odd hq_mod)
     · rw [h']
       unfold χ
       rw [one_pow]
 
-lemma χ_of_one_over_a_eq_χ_a
+lemma χ_of_one_div_a_eq_χ_a
   {a : F}
   (a_ne_zero : a ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ a = χ (1 / a) := by
     unfold χ;
-    rw [div_pow, one_pow, q_h1]
+    rw [div_pow, one_pow, hq_card]
     have h : a ^ ((q - 1) / 2) ≠ 0 := by simp_all
     rw [← mul_left_inj' h]
     rw [← pow_add]
     have h' : (q - 1) / 2 + (q - 1) / 2 = q - 1 := by grind
     rw [h']
-    rw [← q_h1]
+    rw [← hq_card]
     rw [FiniteField.pow_card_sub_one_eq_one a a_ne_zero]
     simp_all
 
-lemma one_over_χ_of_a_eq_χ_a
+lemma one_div_χ_of_a_eq_χ_a
   {a : F}
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : χ a = 1 / χ a := by
       -- If a is zero, then χ(a) is zero by definition, so 1/χ(a) is also zero.
     by_cases ha : a = 0
     · simp_all
-    · have h : χ a ≠ 0 := by exact χ_a_ne_zero ha q_h1
+    · have h : χ a ≠ 0 := by exact χ_a_ne_zero ha hq_card
       rw [← mul_left_inj' h]
       unfold χ
       rw [← mul_pow, ← pow_two]
       change χ (a ^ 2) = 1 / a ^ ((Fintype.card F - 1) / 2) * a ^ ((Fintype.card F - 1) / 2)
-      rw [χ_a_eq_one (by simp_all) (by aesop) q_h1 q_h3]
+      rw [χ_a_eq_one (by simp_all) (by aesop) hq_card hq_mod]
       simp_all
 
 -- Introduced in paper theory theorem 3.A proof
 lemma χ_of_a_eq_χ_a_mul_b_pow_two {a : F} {b : F}
   (b_ne_zero : b ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : χ (a * b^2) = χ a := by
     -- By definition of χ, we know that χ(a * b^2) = (a * b^2)^((q - 1) / 2).
     unfold χ
     rw [mul_pow]
     have h : b^2 ≠ 0 := by simp_all
     change a ^ ((Fintype.card F - 1) / 2) * χ (b ^ 2) = a ^ ((Fintype.card F - 1) / 2)
-    rw [χ_a_eq_one h (by aesop) q_h1 q_h3]
+    rw [χ_a_eq_one h (by aesop) hq_card hq_mod]
     rw [mul_one]
 
 lemma b_eq_χ_of_b_mul_principal_sqrt_a
@@ -345,44 +346,44 @@ lemma b_eq_χ_of_b_mul_principal_sqrt_a
   (a_square : IsSquare a)
   {b : F}
   (b_h1 : b ^ 2 = a)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : (χ b) * a^((q + 1) / 4) = b := by
     have h : χ b = b ^ ((q - 1) / 2) := by aesop
     -- Substitute $a$ with $b^2$ in the right-hand side of the equation.
     have h' : b ^ ((q - 1) / 2) * (b ^ 2) ^ ((q + 1) / 4) = b := by
       rw [← pow_mul, ← pow_add]
       have h'' : ( q - 1 ) / 2 + 2 * ( ( q + 1 ) / 4 ) = q := by omega
-      rw [h'', ← q_h1, FiniteField.pow_card]
+      rw [h'', ← hq_card, FiniteField.pow_card]
     simp_all +decide
 
-lemma b_pow_q_add_one_over_four_eq_χ_of_a_mul_a
+lemma b_pow_q_add_one_div_four_eq_χ_of_a_mul_a
   {a : F}
-  (q_h1 : Fintype.card F = q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
   : (a^2)^((q + 1) / 4) = (χ a) * a := by
     rw [← pow_mul, mul_comm, add_comm]
-    rw [one_add_q_over_four_mul_two_eq_one_add_q_over_two q_h3]
-    rw [← a_pow_q_add_one_over_two_eq_χ_of_a_mul_a q_h1 q_h3]
-    rw [← q_h1, add_comm]
+    rw [one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
+    rw [← a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
+    rw [← hq_card, add_comm]
 
 lemma χ_a_mul_a_IsSquare
   {a : F}
   (a_ne_zero : a ≠ 0)
-  (q_h1 : Fintype.card F = q)
-  (q_h2 : IsPrimePow q)
-  (q_h3 : q % 4 = 3)
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
   : IsSquare ((χ a) * a) := by
     have h : (χ a) * a ≠ 0 := by
       apply mul_ne_zero
-      · exact χ_a_ne_zero a_ne_zero q_h1
+      · exact χ_a_ne_zero a_ne_zero hq_card
       · exact a_ne_zero
-    apply (χ_a_eq_one_iff_a_square h q_h1 q_h3).mp
+    apply (χ_a_eq_one_iff_a_square h hq_card hq_mod).mp
     rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [χ_of_χ_of_a_eq_χ_of_a q_h1 q_h2 q_h3]
+    rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod]
     rw [← pow_two]
-    rw [χ_of_a_even_pow_n_eq_one a_ne_zero ⟨2, even_two⟩ q_h1 q_h3]
+    rw [χ_of_a_even_pow_n_eq_one a_ne_zero ⟨2, even_two⟩ hq_card hq_mod]
 
 lemma a_eq_zero_of_χ_of_a_eq_zero {a : F} :
   χ a = 0 → a = 0 := by
