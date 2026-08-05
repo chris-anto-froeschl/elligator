@@ -239,7 +239,7 @@ lemma ϕ_of_zero
     let η_of_P := η ϕ_of_zero
     have h' : η_of_P * r = -2 := by
       unfold η_of_P η ϕ_of_zero ϕ
-      simp only []
+      dsimp
       rw [dif_pos h]
       let y := y ⟨(0 : F), h⟩ s
       let X := X ⟨(0 : F), h⟩ s
@@ -315,7 +315,7 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
     unfold ϕ_of_t ϕ
     let h' := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one h
-    simp only []
+    dsimp
     rw [dif_pos h']
     let x_of_t := Elligator1.x ⟨t, h'⟩ s q
     let y_of_t := Elligator1.y ⟨t, h'⟩ s
@@ -339,7 +339,7 @@ lemma ϕ_of_t2_eq_x_y_base_case
     intro P t' ϕ_of_t'
     unfold ϕ_of_t' ϕ
     have h1 : ¬ (t' ≠ 1 ∧ t' ≠ -1) := by grind [t2_eq_one]
-    simp only []
+    dsimp
     rw [dif_neg h1]
 
 lemma ϕ_of_t2_eq_x_y_main_case
@@ -362,11 +362,11 @@ lemma ϕ_of_t2_eq_x_y_main_case
     rcases (t2_in_t_or_neg_t t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod) with h | h
     · change t' = t at h
       rw [h]
-      simp only []
+      dsimp
       rw [dif_pos t.prop]
     · change t' = -t at h
       rw [h]
-      simp only []
+      dsimp
       rw [dif_pos t_h]
       unfold x_of_t y_of_t
       symm

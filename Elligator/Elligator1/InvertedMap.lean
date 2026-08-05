@@ -141,7 +141,7 @@ theorem ϕ_of_t2_eq_x_y
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro P x_of_P y_of_P t' ϕ_of_t'
     unfold x_of_P y_of_P P ϕ
-    simp only []
+    dsimp
     split
     · rename_i h
       exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
@@ -176,7 +176,7 @@ theorem X2_defined
       unfold ϕ at h1_2
       by_cases h1_3 : t ≠ 1 ∧ t ≠ -1
       · grind [y_add_one_ne_zero]
-      · simp only [] at h1_2
+      · dsimp at h1_2
         rw [dif_neg h1_3] at h1_2
         let h1_4 := congrArg Prod.snd h1_2
         rw [← h1_4]

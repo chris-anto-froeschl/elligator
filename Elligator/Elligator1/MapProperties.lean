@@ -642,7 +642,7 @@ lemma P_in_ϕOverF_with_prop1_main_case
     unfold ϕOverFProp1
     intro y
     unfold y P ϕ
-    simp only []
+    dsimp
     rw [dif_pos t.prop]
     exact y_add_one_ne_zero hs_ne_zero hq_card hq_mod t
 
