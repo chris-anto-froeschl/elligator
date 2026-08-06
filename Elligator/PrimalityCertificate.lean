@@ -112,20 +112,16 @@ theorem prime_of_pratt {p : ℕ} (a F : ℕ) (L : List ℕ) (hfuel : p - 1 < 2 ^
   (ha : powMod p F a (p - 1) = 1 % p)
   (hchk : ∀ r ∈ L, powMod p F a ((p - 1) / r) ≠ 1 % p) :
   Nat.Prime p := by
-    have key : ∀ k : ℕ, ((a : ZMod p)^k = 1) ↔ a^k % p = 1 % p := by
-      intro k
-      have h : (1 : ZMod p) = ((1 : ℕ) : ZMod p) := by simp
-      rw [← Nat.cast_pow, h]
-      exact ZMod.natCast_eq_natCast_iff' _ _ _
     refine lucas_primality p (a : ZMod p) ?_ ?_
-    · rw [key, ← powMod_eq p F a (p - 1) hfuel]
-      exact ha
+    · simpa using natCast_pow_eq_natCast a (p - 1) 1 F hfuel ha
     · intro r hr hdvd
-      have hlt : (p - 1) / r < 2^F := lt_of_le_of_lt (Nat.div_le_self _ _) hfuel
+      have hlt : (p - 1) / r < 2 ^ F := lt_of_le_of_lt (Nat.div_le_self _ _) hfuel
       obtain ⟨x, hx, hrx⟩ := (Prime.dvd_prod_iff hr.prime).1 (hprod ▸ hdvd)
       obtain rfl : r = x := (Nat.prime_dvd_prime_iff_eq hr (hL x hx)).1 hrx
       intro hcon
-      rw [key, ← powMod_eq p F a _ hlt] at hcon
-      exact hchk r hx hcon
+      apply hchk r hx
+      have h := (ZMod.natCast_eq_natCast_iff' (a ^ ((p-1)/r)) 1 p).1 (by simpa using hcon)
+      rw [powMod_eq p F a _ hlt]
+      exact h
 
 end Elligator.PrimalityCertificate
