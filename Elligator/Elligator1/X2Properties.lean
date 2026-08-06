@@ -32,6 +32,7 @@ variable {s : F}
 variable {q : ℕ}
 
 lemma X2_eq_neg_one
+  [DecidableEq F]
   (t : { t : F // t = 1 ∨ t = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -88,6 +89,7 @@ lemma X2_h2
     grind
 
 lemma X2_h3
+  [DecidableEq F]
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -118,6 +120,7 @@ lemma X2_h3
       _ = 0 := X2_h2 hq_card hq_mod ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
 
 lemma X2_h4
+  [DecidableEq F]
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)

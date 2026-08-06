@@ -50,6 +50,8 @@ Original: definition at, Section 3.2.
   -/)]
 def χ (a : F) : F := a^((Fintype.card F - 1) / 2)
 
+def χ' [DecidableEq F] (a : F) : F := ((quadraticChar F a : ℤ) : F)
+
 @[simp]
 lemma χ_a_zero_eq_zero
   {a : F}
@@ -390,5 +392,26 @@ lemma a_eq_zero_of_χ_of_a_eq_zero {a : F} :
     unfold χ at h
     apply eq_zero_of_pow_eq_zero at h
     exact h
+
+open scoped Classical in
+/-- `χ` agrees with Mathlib's `quadraticChar` (cast into `F`). -/
+theorem χ_eq_quadraticChar_cast
+  {a : F}
+  (hq_card : Fintype.card F = q)
+  (hq_primePow : IsPrimePow q)
+  (hq_mod : q % 4 = 3)
+  : χ a = ((quadraticChar F a : ℤ) : F) := by
+    by_cases ha : a = 0
+    · rw [χ_a_zero_eq_zero ha hq_card hq_primePow hq_mod]
+      symm
+      apply quadraticChar_eq_zero_iff.mpr at ha
+      simp_all
+    · by_cases hsq : IsSquare a
+      · rw [χ_a_eq_one ha hsq hq_card hq_mod,
+            (quadraticChar_one_iff_isSquare ha).mpr hsq]
+        simp
+      · rw [χ_of_a_eq_neg_one ha hsq hq_card hq_mod]
+        apply quadraticChar_neg_one_iff_not_isSquare.mpr at hsq
+        simp_all
 
 end Elligator.LegendreSymbol

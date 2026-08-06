@@ -242,7 +242,7 @@ theorem d1174_not_isSquare : ¬ IsSquare (d s1174) := by
   $$
   over $\mathbb{F}_q$, obtained from the Elligator 1 construction with the parameter $s$.
   -/)]
-noncomputable def curve1174 : TwistedEdwardsCurve F1174 := curve s1174
+def curve1174 : TwistedEdwardsCurve F1174 := curve s1174
 
 /-- Curve1174 is the Edwards curve with coefficient `-1174`. -/
 theorem curve1174_eq : curve1174 = edwardsCurve (-1174 : F1174) := by
@@ -255,7 +255,7 @@ theorem curve1174_equation (x y : F1174) :
     rw [curve1174_eq]
     unfold edwardsCurve
     rw [TwistedEdwardsCurve.ofD_equation]
-    ring_nf
+    group
 
 /-- Curve1174 is a valid (nonsingular) Edwards model. -/
 theorem curve1174_isValid : curve1174.IsValid :=
@@ -270,7 +270,7 @@ theorem curve1174_isValid : curve1174.IsValid :=
   The map $\varphi : \mathbb{F}_q \to E(\mathbb{F}_q)$ of Definition 2, specialised to
   Curve1174.
   -/)]
-noncomputable def decode1174 (t : F1174) : F1174 × F1174 :=
+def decode1174 (t : F1174) : F1174 × F1174 :=
   DecodingFunction t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_isPrimePow q1174_mod_four
 
 /-- Theorem 1 for Curve1174: every decoded value is a point of the curve. -/

@@ -24,7 +24,7 @@ namespace Elligator.Elligator1
 
 open Elligator.FiniteFieldBasic
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -151,6 +151,8 @@ def t'
   : F :=
   let u := u' sq_ne_pm_two hq_card hq_mod P
   (1 - u) / (1 + u)
+
+omit [DecidableEq F]
 
 lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
   (hs_ne_zero : s ≠ 0)

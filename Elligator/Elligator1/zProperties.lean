@@ -31,6 +31,7 @@ variable {s : F}
 variable {q : ℕ}
 
 lemma z_eq_zero
+  [DecidableEq F]
   (t : { t : F // t = 1 ∨ t = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -156,6 +157,7 @@ lemma z'_eq_one_or_z'_eq_neg_one
     let X := X2 s P q
     let c := c s
     let a := (Y * (X^2 + 1 / c^2))
+    open Classical in
     let χ_of_a := χ a
     have h1 := @χ_values _ _ _ q a hq_card hq_primePow hq_mod
     change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1

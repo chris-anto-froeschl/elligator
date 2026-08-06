@@ -24,10 +24,9 @@ See [bernstein2013a], Section 3.
 
 namespace Elligator.Elligator1
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
-
 
 lemma η_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})

@@ -45,8 +45,8 @@ See [bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 namespace Elligator.Elligator1
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-variable {q : ℕ} (hq_card : Fintype.card F = q) (hq_primePow : IsPrimePow q) (hq_mod : q % 4 = 3)
+variable {s : F}
+variable {q : ℕ}
 
 omit [Fintype F] in
 @[blueprint
@@ -218,7 +218,8 @@ records that the result satisfies the Edwards curve equation. -/
   $$
   if $t \notin \{\pm 1\}$ then $\varphi(t) = (x, y)$.
   -/)]
-noncomputable def ϕ
+def ϕ
+  [DecidableEq F]
   (t : F)
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -226,7 +227,7 @@ noncomputable def ϕ
   (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   : EOverF sq_ne_pm_two hq_card hq_mod :=
-  open scoped Classical in let P := if h : t ≠ 1 ∧ t ≠ -1
+  let P := if h : t ≠ 1 ∧ t ≠ -1
     then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s)
     else (0, 1)
   have P_in_EOverF : P ∈ (EOverF sq_ne_pm_two hq_card hq_mod) := by

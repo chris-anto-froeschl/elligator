@@ -39,7 +39,7 @@ See [bernstein2013a], Section 3.4, theorem 4.
 
 namespace Elligator.Elligator1
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -56,7 +56,7 @@ records that this point lies on the Edwards curve. -/
   $$
   by $\iota(\tau) = \varphi(\sigma(\tau))$.
   -/)]
-noncomputable def ι
+def ι
   (τ : (@S q))
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -80,6 +80,7 @@ binary values lie in the integer interval from `0` through `(q - 1) / 2`. -/
 theorem S_card (hq_mod : q % 4 = 3) : (@S q).card = (q + 1) / 2 :=
   S_card_eq_q_add_one_div_two hq_mod
 
+omit [DecidableEq F] in
 /-- Lower-half representatives resolve the sign ambiguity of `ϕ`.
 
 If two strings in `S` represent equal or opposite field elements, then they in fact represent the
@@ -131,7 +132,7 @@ This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
   \iota(S) = \{\varphi(\sigma(\tau)) : \tau \in S\} \subseteq E(\mathbb{F}_q) .
   $$
   -/)]
-noncomputable def ιOverS
+def ιOverS
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -166,12 +167,10 @@ theorem ϕOverF_eq_ιOverS
     · rintro ⟨t, rfl⟩
       obtain ⟨τ, hτ | hτ⟩ := exists_σ_preimage_or_neg hq_card q_prime hq_mod t
       · refine ⟨τ, ?_⟩
-        change (ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val =
-          (ϕ t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val
+        dsimp
         rw [hτ]
       · refine ⟨τ, ?_⟩
-        change (ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val =
-          (ϕ t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).val
+        dsimp
         rw [hτ]
         exact
           (ϕ_of_t_eq_ϕ_of_neg_t t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).symm
@@ -191,7 +190,7 @@ stronger fact that every encoded point belongs to the image of `ϕ`. -/
   $$
   with codomain the image of $\varphi$ rather than all of $E(\mathbb{F}_q)$.
   -/)]
-noncomputable def ιToϕOverF
+def ιToϕOverF
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)

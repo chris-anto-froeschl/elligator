@@ -36,7 +36,7 @@ namespace Elligator.Elligator1
 
 open Elligator.FiniteFieldBasic
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -184,6 +184,7 @@ theorem X2_defined
         exact two_ne_zero hq_card hq_mod
     exact mul_ne_zero (two_ne_zero hq_card hq_mod) h1
 
+omit [DecidableEq F] in
 /-- The denominator `c²` occurring in the definition of `z` is nonzero. -/
 @[blueprint "thm:z_defined"
   (title := "$z$ is defined")

@@ -24,10 +24,11 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
+omit [DecidableEq F] in
 lemma x_y_eq_zero_one
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -48,6 +49,7 @@ lemma x_y_eq_zero_one
       have h''' : y + 1 = 0 := by grind
       contradiction
 
+omit [DecidableEq F] in
 lemma y_ne_one
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -70,6 +72,7 @@ lemma y_ne_one
       contradiction
     contradiction
 
+omit [DecidableEq F] in
 lemma η_ne_zero
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)

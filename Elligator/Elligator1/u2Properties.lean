@@ -26,7 +26,7 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -333,6 +333,8 @@ def u'
   let z := z' sq_ne_pm_two hq_card hq_mod P
   let X := X2 s P q
   z * X
+
+omit [DecidableEq F]
 
 lemma u'_pow_two_eq_X_pow_two
   (hs_ne_zero : s ≠ 0)

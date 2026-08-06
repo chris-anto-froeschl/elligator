@@ -30,10 +30,11 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
+omit [DecidableEq F] in
 lemma Y_ne_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -47,6 +48,7 @@ lemma Y_ne_zero
     let χ_of_sum := χ (u^2 + 1 / (c s)^2)
     intro Y
     change ((χ v) * v)^((q + 1) / 4) * (χ v) * χ_of_sum ≠ 0
+    open Classical in
     let v_ne_zero := v_ne_zero hs_ne_zero hq_card hq_mod t
     apply mul_ne_zero
     · apply mul_ne_zero
@@ -59,6 +61,7 @@ lemma Y_ne_zero
       · apply χ_a_ne_zero v_ne_zero hq_card
     · apply χ_a_ne_zero (v_h1_third_factor_ne_zero hs_ne_zero hq_card hq_mod t) hq_card
 
+omit [DecidableEq F] in
 @[blueprint "lemma:X_mul_Y_ne_zero"
   (title := "$XY \\neq 0$, so $x$ is defined")
   (statement := /--
@@ -74,10 +77,12 @@ lemma X_mul_Y_ne_zero
   let X := X t s
   let Y := Y t s q
   X * Y ≠ 0 := by
+    open Classical in
     apply mul_ne_zero
     · apply X_ne_zero hs_ne_zero hq_card hq_mod t
     · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
 
+omit [DecidableEq F] in
 @[blueprint "lemma:one_add_X_ne_zero"
   (title := "$1 + X \\neq 0$, so $x \\neq 0$")
   (statement := /--
@@ -93,6 +98,7 @@ lemma one_add_X_ne_zero
   :
   let X := X t s
   (1 + X) ≠ (0 : F) := by
+    open Classical in
     let u := u t
     let v := v t s
     let r := r s
@@ -122,6 +128,7 @@ lemma one_add_X_ne_zero
     have h6 : (χ v) ≠ -(χ v) := neg_χ_a_ne_χ_a v_ne_zero hq_card hq_mod
     contradiction
 
+omit [DecidableEq F] in
 lemma Y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
@@ -151,7 +158,7 @@ lemma Y_comparison
     let χ_of_u2 := χ u2
     let χ_of_v1 := χ v1
     let χ_of_v2 := χ v2
-    let χ_of_u1_mul_v1  := LegendreSymbol.χ (u1 * v1)
+    let χ_of_u1_mul_v1  := χ (u1 * v1)
     let u_ne_zero := @u_ne_zero F _ t
     have first_factor :
       (χ_of_v2 * v2)^((q + 1) / 4) = (χ_of_v1 * v1)^((q + 1) / 4) * χ_of_u1 / u1^3 := by
@@ -174,7 +181,7 @@ lemma Y_comparison
           rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod]
           rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
           have h' : IsSquare (u1^2) := IsSquare.sq u1
-          have h'' : LegendreSymbol.χ (u1 ^ 2) = 1 := by
+          have h'' : χ (u1 ^ 2) = 1 := by
             apply (χ_a_eq_one_iff_a_square (pow_ne_zero 2 u_ne_zero) hq_card hq_mod).mpr
             exact h'
           simp [h'']

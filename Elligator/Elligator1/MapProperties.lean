@@ -31,12 +31,13 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
 -- Used in Theorem 3 Proof B part as implication for P_in_ϕOverF_with_prop2_main_case
 -- argument.
+omit [DecidableEq F] in
 lemma y_h1
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (hs_ne_zero : s ≠ 0)
@@ -164,6 +165,7 @@ lemma X_comparison_implication
     rw [X_comparison t hq_card hq_primePow hq_mod]
     exact (y_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod)
 
+omit [DecidableEq F] in
 lemma X_comparison_implication2
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
@@ -182,6 +184,7 @@ lemma X_comparison_implication2
     rw [← inv_eq_one_div]
     rw [inv_mul_cancel₀ (X_ne_zero hs_ne_zero hq_card hq_mod t)]
 
+omit [DecidableEq F] in
 lemma χ_IsSquare_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
@@ -199,6 +202,7 @@ lemma χ_IsSquare_h1
     rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
     apply IsSquare.sq
 
+omit [DecidableEq F] in
 lemma y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hq_card : Fintype.card F = q)
@@ -228,6 +232,7 @@ lemma y_comparison
         simp
         rfl
 
+omit [DecidableEq F] in
 lemma P_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
@@ -470,8 +475,9 @@ lemma y_η_h1
     rw [X_η_h2 t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod η_h1]
     ring_nf
 
+omit [DecidableEq F] in
 lemma y_of_zero (hs_ne_zero : s ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-  let y := y ⟨(0 : F), zero_h1⟩ s
+  let y := y ⟨(0 : F), by simp⟩ s
   let r := r s
   y = (r - 4) / (r + 4) := by
     intro y r

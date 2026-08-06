@@ -28,7 +28,7 @@ See [bernstein2013a], Section 3.2, Definition 2.
 
 namespace Elligator.Elligator1
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -44,7 +44,7 @@ variable {q : ℕ}
   Here $\varphi$ is regarded as a map $\mathbb{F}_q \to \mathbb{F}_q \times \mathbb{F}_q$,
   forgetting the proof that the image lies on $E$.
   -/)]
-noncomputable def DecodingFunction
+def DecodingFunction
   (t : F)
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
