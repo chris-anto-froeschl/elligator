@@ -49,22 +49,22 @@ theorem s7_sq_ne_pm_two : (s7 ^ 2 - 2) * (s7 ^ 2 + 2) ≠ 0 := by decide
 /-! ### Decoding: `ϕ : F7 → E(F7)`, Definition 2 -/
 
 -- `ϕ` at a nonexceptional point, evaluated by the compiler.
-#eval (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val
+#eval (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
 
 -- The two exceptional inputs both hit the neutral point `(0, 1)`, per Definition 2.
-#eval (ϕ (1 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val
-#eval (ϕ (-1 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val
+#eval (ϕ (1 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
+#eval (ϕ (-1 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
 
 -- Theorem 3's sign ambiguity, checked computationally: `ϕ t = ϕ (-t)`.
 #eval decide
-  ((ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val
-    = (ϕ (-3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val)
+  ((ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
+    = (ϕ (-3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val)
 
 -- Every decoded point is genuinely on the curve
 theorem decode_three_on_curve :
-  let P := (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val
+  let P := (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
   P.1 ^ 2 + P.2 ^ 2 = 1 + d s7 * P.1 ^ 2 * P.2 ^ 2 := by
-    have := (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).prop
+    have := (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).prop
     unfold EOverF at this
     simpa using this
 
@@ -87,11 +87,11 @@ theorem S7_card : (@S 7).card = 4 := S_card F7_mod_four
 
 -- The string `11` (binary value `3`), encoded via `ι` and evaluated by the compiler.
 #eval (ι ⟨mkBits 3, mkBits_mem_S 3 (by norm_num)⟩
-      s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four).val
+      s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
 
 -- `ι` is injective on `S`, per Theorem 4.2
 theorem encode_injective_showcase : Function.Injective
-  (fun τ : @S 7 => ι τ s7_ne_zero s7_sq_ne_pm_two card_F7 F7_isPrimePow F7_mod_four) := by
+  (fun τ : @S 7 => ι τ s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four) := by
     have := ι_injective s7_ne_zero s7_sq_ne_pm_two card_F7 (by decide) F7_mod_four
     simpa using this
 
