@@ -417,14 +417,14 @@ lemma Y_η_h1
         let χ_of_one_div_c := χ (1 / c)
         calc
           (χ r) * r * χ (r / c) = r * (χ r) * (χ r) * χ_of_one_div_c := by
-            grind [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+            grind [χ_mul]
           _ = r * 1 * χ_of_one_div_c := by
-            rw [mul_assoc r, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+            rw [mul_assoc r, ← χ_mul]
             rw [← pow_two]
-            rw [χ_of_a_pow_two_eq_one r_ne_zero]
+            rw [χ_sq r_ne_zero]
           _ = r * (χ c) := by
             unfold χ_of_one_div_c
-            rw [← χ_of_one_div_a_eq_χ_a]
+            rw [← χ_inv]
             rw [mul_one]
 
 -- Implicated by main case of Theorem 3 proof part B.
@@ -594,15 +594,9 @@ lemma P_in_ϕOverF_with_prop1_base_case
     intro P
     unfold ϕOverFProp1
     intro y
-    have h1 : ¬(t.val ≠ 1 ∧ t.val ≠ -1) := by
-      rcases t.property with h1_1 | h1_1
-      · rw [h1_1]
-        simp
-      · rw [h1_1]
-        simp
     unfold y P ϕ
     let two_ne_zero := two_ne_zero hq_card hq_mod
-    simp [h1]
+    simp [not_t_ne_one_and_t_ne_neg_one]
     grind
 
 lemma P_in_ϕOverF_with_prop1_main_case
@@ -656,18 +650,9 @@ lemma P_in_ϕOverF_with_prop2_base_case
     unfold ϕOverFProp2
     intro r η
     have h1 : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
-      rcases t.property with h1_1 | h1_1
-      · rw [h1_1]
-        simp
-      · rw [h1_1]
-        simp
+      rcases t.prop with h'' | h'' <;> simp [h'']
     unfold η Elligator1.η P ϕ
-    simp only [ne_eq]
-    rw [dif_neg h1]
-    ring_nf
-    rw [isSquare_iff_exists_sq 0]
-    use 0
-    simp
+    simp_all [not_t_ne_one_and_t_ne_neg_one]
 
 lemma P_in_ϕOverF_with_prop2_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
@@ -737,8 +722,7 @@ lemma P_in_ϕOverF_with_prop3_base_case
     intro P
     unfold ϕOverFProp3
     intro x c r η h
-    have h' : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by
-      rcases t.property with h'' | h'' <;> simp [h'']
+    have h' : ¬ (t.val ≠ 1 ∧ t.val ≠ -1) := by simp [not_t_ne_one_and_t_ne_neg_one]
     simp only [η, Elligator1.η, P, ϕ, ne_eq] at h
     rw [dif_neg h'] at h
     ring_nf at h

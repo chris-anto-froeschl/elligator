@@ -101,7 +101,7 @@ lemma ϕ_of_t_eq_ϕ_of_neg_t_base_case
   let ϕ_of_t := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let ϕ_of_neg_t := (ϕ (-t.val) hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   ϕ_of_t = ϕ_of_neg_t := by
-    rcases t.property with h2_1 | h2_1
+    rcases t.prop with h2_1 | h2_1
     · change (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
         = (ϕ (-t.val) hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
       rw [h2_1]

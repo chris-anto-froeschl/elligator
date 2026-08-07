@@ -19,7 +19,7 @@ field `F` with `Fintype.card F = q` and `q % 4 = 3`.
 
 ## References
 
-See [bernstein2013a], Section 3.1 for the original account on this version of the Legendre Symbol.
+See [bernstein2013a], Section 3.1.
 -/
 
 @[expose] public section
@@ -68,9 +68,7 @@ lemma χ_eq_pow (a : F) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
 lemma χ_values {a : F} : χ a = 0 ∨ χ a = -1 ∨ χ a = 1 := by
   rcases eq_or_ne a 0 with ha | ha
   · simp [ha]
-  · rcases quadraticChar_dichotomy ha with h | h
-    · exact Or.inr (Or.inr (by simp [χ, h]))
-    · exact Or.inr (Or.inl (by simp [χ, h]))
+  · rcases quadraticChar_dichotomy ha with h | h <;> simp [χ, h]
 
 lemma χ_a_ne_zero {a : F} (a_ne_zero : a ≠ 0) : χ a ≠ 0 := by
   rcases quadraticChar_dichotomy a_ne_zero with h | h <;> simp [χ, h]
@@ -78,43 +76,44 @@ lemma χ_a_ne_zero {a : F} (a_ne_zero : a ≠ 0) : χ a ≠ 0 := by
 lemma a_eq_zero_of_χ_of_a_eq_zero {a : F} : χ a = 0 → a = 0 := by
   intro h
   by_contra ha
-  exact χ_a_ne_zero ha h
+  apply χ_a_ne_zero ha
+  exact h
 
 @[simp]
-lemma χ_a_eq_one {a : F}
-  (a_ne_zero : a ≠ 0) (a_square : IsSquare a)
-  : χ a = 1 := by
+lemma χ_a_eq_one {a : F} (a_ne_zero : a ≠ 0) (a_square : IsSquare a) : χ a = 1 := by
   rw [χ, (quadraticChar_one_iff_isSquare a_ne_zero).mpr a_square]
   simp
 
-lemma χ_a_eq_one_iff_a_square {a : F}
+lemma χ_eq_one_iff_isSquare {a : F}
   (a_ne_zero : a ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ a = 1 ↔ IsSquare a := by
-    refine ⟨fun h => ?_, χ_a_eq_one a_ne_zero⟩
-    rcases quadraticChar_dichotomy a_ne_zero with h' | h'
-    · exact (quadraticChar_one_iff_isSquare a_ne_zero).mp h'
-    · rw [χ, h'] at h
-      push_cast at h
-      exact absurd h (Ring.neg_one_ne_one_of_char_ne_two (ringChar_ne_two hq_card hq_mod))
+    constructor
+    · intro h
+      rcases quadraticChar_dichotomy a_ne_zero with h' | h'
+      · exact (quadraticChar_one_iff_isSquare a_ne_zero).mp h'
+      · simp_all only [χ]
+        have heq : (2 : F) = 0 := by grind
+        have hne : (2 : F) ≠ 0 := by grind [FiniteFieldBasic.two_ne_zero]
+        contradiction
+    · exact χ_a_eq_one a_ne_zero
 
 @[simp]
-lemma χ_of_a_pow_two_eq_one {a : F} (a_ne_zero : a ≠ 0) : χ (a ^ 2) = 1 := by
-  rw [χ, quadraticChar_sq_one' a_ne_zero]
-  simp
+lemma χ_sq {a : F} (a_ne_zero : a ≠ 0) : χ (a ^ 2) = 1 := by
+  rw [χ, quadraticChar_sq_one' a_ne_zero, Int.cast_one]
 
-lemma χ_of_neg_one_eq_neg_one (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
+lemma χ_neg_one (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ (-1 : F) = -1 := by
     rw [χ, quadraticChar_neg_one_iff_not_isSquare.mpr (neg_one_non_square hq_card hq_mod)]
     simp
 
-lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} : χ (a * b) = (χ a) * (χ b) := by
+lemma χ_mul {a b : F} : χ (a * b) = (χ a) * (χ b) := by
   simp [χ, quadraticCharFun_mul]
 
 lemma neg_χ_a_ne_χ_a {a : F}
   (a_ne_zero : a ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ a ≠ -(χ a) := by
     intro h
-    have h1 : (2 : F) * χ a = 0 := by linear_combination h
+    have h1 : (2 : F) * χ a = 0 := by grind
     rcases mul_eq_zero.mp h1 with h2 | h2
     · exact two_ne_zero hq_card hq_mod h2
     · exact χ_a_ne_zero a_ne_zero h2
@@ -139,27 +138,25 @@ lemma χ_of_a_pow_n_eq_χ_a (a : F) (n : {n : ℕ | Odd n})
       exact hn.neg_one_pow
     · rw [h, one_pow]
 
-lemma χ_of_χ_of_a_eq_χ_of_a {a : F}
+lemma χ_χ_eq_χ {a : F}
   (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ (χ a) = χ a := by
     rcases χ_values (a := a) with h | h | h
     · rw [h, χ_zero]
-    · rw [h, χ_of_neg_one_eq_neg_one hq_card hq_mod]
+    · rw [h, χ_neg_one hq_card hq_mod]
     · rw [h, χ_one]
 
-lemma χ_of_one_div_a_eq_χ_a {a : F} : χ a = χ (1 / a) := by
+lemma χ_inv {a : F} : χ a = χ (1 / a) := by
   rcases eq_or_ne a 0 with rfl | ha
   · simp
   · have h1 : χ (1 / a) * χ a = 1 := by
-      rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, one_div, inv_mul_cancel₀ ha, χ_one]
+      rw [← χ_mul, one_div, inv_mul_cancel₀ ha, χ_one]
     rcases χ_values (a := a) with h | h | h
     · exact absurd h (χ_a_ne_zero ha)
-    · rw [h] at h1
-      rw [h]
-      linear_combination h1
-    · rw [h] at h1
-      rw [h]
-      linear_combination -h1
+    · rw [h] at h1 ⊢
+      grind
+    · rw [h] at h1 ⊢
+      grind
 
 lemma one_div_χ_of_a_eq_χ_a {a : F} : χ a = 1 / χ a := by
   rcases χ_values (a := a) with h | h | h <;> rw [h] <;> norm_num
@@ -168,8 +165,7 @@ lemma one_div_χ_of_a_eq_χ_a {a : F} : χ a = 1 / χ a := by
 Introduced in paper theory theorem 3.A proof. -/
 lemma χ_of_a_eq_χ_a_mul_b_pow_two {a b : F} (b_ne_zero : b ≠ 0)
   : χ (a * b ^ 2) = χ a := by
-  rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-  rw [χ_of_a_pow_two_eq_one b_ne_zero, mul_one]
+    rw [χ_mul, χ_sq b_ne_zero, mul_one]
 
 lemma a_pow_q_add_one_div_two_eq_χ_of_a_mul_a
   {a : F}
@@ -185,10 +181,10 @@ omit [DecidableEq F] in
 lemma a_pow_q_add_one_div_two_eq_a {a : F}
   (a_square : IsSquare a) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : a ^ ((q + 1) / 2) = a := by
-    classical
     rcases eq_or_ne a 0 with rfl | ha
     · exact zero_pow (by omega)
-    · rw [a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
+    · classical
+      rw [a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
       rw [χ_a_eq_one ha a_square, one_mul]
 
 lemma b_pow_q_add_one_div_four_eq_χ_of_a_mul_a {a : F}
@@ -202,8 +198,8 @@ lemma χ_a_mul_a_IsSquare {a : F}
   (a_ne_zero : a ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : IsSquare ((χ a) * a) := by
     have h : (χ a) * a ≠ 0 := mul_ne_zero (χ_a_ne_zero a_ne_zero) a_ne_zero
-    apply (χ_a_eq_one_iff_a_square h hq_card hq_mod).mp
-    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod, ← pow_two]
+    apply (χ_eq_one_iff_isSquare h hq_card hq_mod).mp
+    rw [χ_mul, χ_χ_eq_χ hq_card hq_mod, ← pow_two]
     exact χ_of_a_even_pow_n_eq_one a_ne_zero ⟨2, even_two⟩
 
 end Elligator.LegendreSymbol

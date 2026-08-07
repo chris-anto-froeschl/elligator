@@ -109,7 +109,7 @@ lemma d_ne_zero_and_d_ne_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   : (d s) ≠ 0 ∧ (d s) ≠ 1 := by
-    split_ands
+    constructor
     · exact d_ne_zero sq_ne_pm_two hq_card hq_mod
     · exact d_ne_one sq_ne_pm_two hq_card hq_mod
 

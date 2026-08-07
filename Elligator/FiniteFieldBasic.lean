@@ -65,10 +65,7 @@ lemma q_add_one_div_four_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by 
 
 lemma q_add_one_div_two_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by grind
 
-lemma two_ne_zero {F : Type*} [Field F] [Fintype F] {q : ℕ}
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  : (2 : F) ≠ 0 := by
+lemma two_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (2 : F) ≠ 0 := by
   intro h
   -- turn `(2 : F) = 0` into a divisibility statement about the characteristic
   have hdvd : ringChar F ∣ 2 := (CharP.cast_eq_zero_iff F (ringChar F) 2).mp h
@@ -77,7 +74,7 @@ lemma two_ne_zero {F : Type*} [Field F] [Fintype F] {q : ℕ}
     rcases (Nat.dvd_prime Nat.prime_two).mp hdvd with h1 | h1
     · exact absurd h1 (CharP.char_ne_one F (ringChar F))
     · exact h1
-  haveI : CharP F 2 := by
+  have hchar : CharP F 2 := by
     rw [← hp]
     exact ringChar.charP F
   -- a finite field of characteristic 2 has cardinality a power of 2
@@ -86,25 +83,21 @@ lemma two_ne_zero {F : Type*} [Field F] [Fintype F] {q : ℕ}
   have hdvd2 : (2 : ℕ) ∣ q := by
     rw [hqeq]
     exact dvd_pow_self 2 n.pos.ne'
-  -- 2 ∣ q contradicts q % 4 = 3
+  -- q even contradicts q % 4 = 3
   omega
 
-lemma four_ne_zero
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  : (4 : F) ≠ 0 := by
-    have h1 : (4 : F) = 2 * 2 := by norm_num
-    rw [h1]
-    apply mul_ne_zero
-    · exact (two_ne_zero hq_card hq_mod)
-    · exact (two_ne_zero hq_card hq_mod)
+lemma four_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (4 : F) ≠ 0 := by
+  have h1 : (4 : F) = 2 * 2 := by norm_num
+  rw [h1]
+  apply mul_ne_zero
+  · exact (two_ne_zero hq_card hq_mod)
+  · exact (two_ne_zero hq_card hq_mod)
 
-lemma ringChar_ne_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-  : ringChar F ≠ 2 := by
-    intro h
-    refine two_ne_zero hq_card hq_mod ?_
-    have h' : ((2 : ℕ) : F) = 0 := (ringChar.spec F 2).mpr (by rw [h])
-    exact h'
+lemma ringChar_ne_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : ringChar F ≠ 2 := by
+  intro h
+  apply two_ne_zero  hq_card hq_mod
+  have h' : (2 : F) = 0 := (ringChar.spec F 2).mpr (by rw [h])
+  exact h'
 
 omit [Fintype F] in
 lemma neg_one_ne_zero : (-1 : F) ≠ 0 := neg_ne_zero.mpr one_ne_zero
@@ -114,46 +107,68 @@ lemma neg_one_non_square (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
 
 omit [Fintype F] in
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 :=
-  sub_ne_zero.mpr t.property.1.symm
+  sub_ne_zero.mpr t.prop.1.symm
 
 omit [Fintype F] in
 lemma one_add_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) + t.val ≠ 0 := by
   intro h
   rw [add_comm] at h
-  exact t.property.2 (eq_neg_of_add_eq_zero_left h)
+  exact t.prop.2 (eq_neg_of_add_eq_zero_left h)
 
 omit [Fintype F] in
 lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
-  -t.val ≠ 1 ∧ -t.val ≠ -1 :=
-    ⟨fun h => t.property.2 (neg_eq_iff_eq_neg.mp h), fun h => t.property.1 (neg_inj.mp h)⟩
+  -t.val ≠ 1 ∧ -t.val ≠ -1 := by
+  constructor
+  · intro h
+    apply t.prop.2
+    have := congrArg Neg.neg h
+    simpa using this
+  · intro h
+    apply t.prop.1
+    have := congrArg Neg.neg h
+    simpa using this
+
+omit [Fintype F] in
+lemma not_t_ne_one_and_t_ne_neg_one (t : { t : F // t = 1 ∨  t = -1}) :
+  ¬(t.val ≠ 1 ∧ t.val ≠ -1) := by
+    rcases t.prop with h'' | h'' <;> simp [h'']
 
 omit [Field F] in
 lemma one_add_q_div_four_mul_two_eq_one_add_q_div_two (hq_mod : q % 4 = 3)
   : ((1 + q) / 4 * 2) = (1 + q) / 2 := by omega
 
+/-- If `F` has `q` elements and `q` is prime, `q` is literally the characteristic of `F`. -/
 lemma ringChar_of_F_eq_q (hq_card : Fintype.card F = q) (q_prime : Prime q) : ringChar F = q := by
-  have := FiniteField.card F (ringChar F)
-  aesop
+  -- Every finite field's cardinality is a power of its characteristic, and the
+  -- characteristic itself is prime.
+  obtain ⟨n, h_char_prime, h_card_eq_pow⟩ := FiniteField.card F (ringChar F)
+  have h_q_eq_pow : q = (ringChar F) ^ (n : ℕ) := by rw [← hq_card, h_card_eq_pow]
+  -- In particular `ringChar F` divides `q` (the exponent `n` is at least `1`).
+  have h_dvd : ringChar F ∣ q := h_q_eq_pow ▸ dvd_pow_self _ n.pos.ne'
+  -- `q` is prime, so its only divisors are `1` and `q` - and a field's characteristic
+  -- is never `1`, so it must be `q` itself.
+  rcases (Nat.dvd_prime (Nat.prime_iff.mpr q_prime)).1 h_dvd with h1 | hq
+  · exact absurd h1 h_char_prime.ne_one
+  · exact hq
 
+/-- The cast `Fin q → F` is injective -/
 lemma fin_to_finfield_injective (hq_card : Fintype.card F = q) (q_prime : Prime q)
   : Function.Injective (fun n : Fin q => (n : F)) := by
+    intro a b hab
     have h : CharP F q := by
       rw [← ringChar_of_F_eq_q hq_card q_prime]
       exact ringChar.charP F
-    intro a b hab
     exact Fin.ext (CharP.natCast_injOn_Iio F q a.isLt b.isLt hab)
 
-/-- Every element of `F` is the cast of some `n : Fin q`: the cast `Fin q → F` is injective
-and `Fin q` and `F` have the same cardinality, so it is bijective. -/
-lemma exists_fin_cast_eq (hq_card : Fintype.card F = q) (q_prime : Prime q) (t : F)
-  : ∃ n : Fin q, (n : F) = t := by
-    -- `Fin q` and `F` have matching cardinalities.
-    have hcard : Fintype.card (Fin q) = Fintype.card F := by rw [Fintype.card_fin, hq_card]
-    -- An injective map between finite types of equal cardinality is automatically bijective.
-    have h : Function.Bijective (fun n : Fin q => (n : F)) :=
-      (Fintype.bijective_iff_injective_and_card _).mpr
-        ⟨fin_to_finfield_injective hq_card q_prime, hcard⟩
-    exact h.surjective t
+lemma fin_to_finfield_bijective (hq_card : Fintype.card F = q) (q_prime : Prime q) :
+  Function.Bijective (fun n : Fin q => (n : F)) :=
+    (Fintype.bijective_iff_injective_and_card _).mpr
+      ⟨fin_to_finfield_injective hq_card q_prime, by rw [Fintype.card_fin, hq_card]⟩
+
+/-- Every element of `F` is the cast of some `n : Fin q`:
+this cast is injective and `Fin q` and `F` have the same cardinality, so it is bijective. -/
+lemma exists_fin_cast_eq (hq_card : Fintype.card F = q) (q_prime : Prime q) (t : F) :
+  ∃ n : Fin q, (n : F) = t := (fin_to_finfield_bijective hq_card q_prime).surjective t
 
 /- Every element of F can be written as (n : F) for some n < q because Fintype.card F = q and
 the natural cast n ↦ (n : F) has period equal to ringChar F = q (since q is prime),
@@ -166,26 +181,25 @@ lemma exists_nat_cast_eq
     obtain ⟨n, hn⟩ : ∃ n : Fin q, (n : F) = t := exists_fin_cast_eq hq_card q_prime t
     exact ⟨n.val, n.isLt, hn⟩
 
+/-- A natural number `q` is the cardinality of some finite field iff it is a prime power.
 
-/-- A natural number `q` is the cardinality of some finite field if and only if it is a prime
-power. Together with `Elligator.FiniteFieldBasic.card_isPrimePow` this says that the standing
+Together with `Elligator.FiniteFieldBasic.card_isPrimePow` this says that the standing
 hypotheses `Fintype.card F = q`, `q % 4 = 3` of this development describe exactly the setting of
 [bernstein2013a], Section 3.1: an arbitrary prime power `q ≡ 3 (mod 4)`. -/
-theorem exists_field_card_eq_iff_isPrimePow (q : ℕ) :
-    (∃ (F : Type) (_ : Field F) (_ : Fintype F), Fintype.card F = q) ↔ IsPrimePow q := by
-  constructor
-  · rintro ⟨F, _, _, hcard⟩
-    exact card_isPrimePow hcard
-  · rintro ⟨p, k, hp, hk, rfl⟩
-    have hp' : Nat.Prime p := Nat.prime_iff.mpr (by exact_mod_cast hp)
-    haveI : Fact (Nat.Prime p) := ⟨hp'⟩
-    have hk0 : k ≠ 0 := hk.ne'
-    classical
-    haveI : Fintype (GaloisField p k) := Fintype.ofFinite _
-    refine ⟨GaloisField p k, inferInstance, inferInstance, ?_⟩
-    have := GaloisField.card p k hk0
-    rw [Nat.card_eq_fintype_card] at this
-    exact this
+lemma exists_field_card_eq_iff_isPrimePow (q : ℕ) :
+  (∃ (F : Type) (_ : Field F) (_ : Fintype F), Fintype.card F = q) ↔ IsPrimePow q := by
+    constructor
+    · rintro ⟨F, _, _, hcard⟩
+      exact card_isPrimePow hcard
+    · rintro ⟨p, k, hp, hk, rfl⟩
+      have hp' : Nat.Prime p := Nat.prime_iff.mpr (by exact_mod_cast hp)
+      have hfact : Fact (Nat.Prime p) := ⟨hp'⟩
+      have hk0 : k ≠ 0 := hk.ne'
+      have htype : Fintype (GaloisField p k) := Fintype.ofFinite _
+      refine ⟨GaloisField p k, inferInstance, inferInstance, ?_⟩
+      have hcard := GaloisField.card p k hk0
+      rw [Nat.card_eq_fintype_card] at hcard
+      exact hcard
 
 /-- If every element of `F` is the image of a natural number under the canonical cast, then the
 cardinality of `F` is *prime*, not merely a *prime power*.
@@ -196,22 +210,25 @@ formalized for prime `q` only: it represents field elements by the naturals
 development makes no such assumption and therefore covers all *prime powers*. -/
 lemma prime_of_natCast_surjective
   (hq_card : Fintype.card F = q)
-  (hsurj : ∀ t : F, ∃ n : ℕ, (n : F) = t)
+  (hsurj : Function.Surjective (Nat.cast : ℕ → F))
   : q.Prime := by
-    have hpp : (ringChar F).Prime := CharP.char_is_prime F (ringChar F)
-    have hfin : Function.Surjective (fun n : Fin (ringChar F) => ((n : ℕ) : F)) := by
+    have h_char_prime : (ringChar F).Prime := CharP.char_is_prime F (ringChar F)
+    -- Step 1: the cast `Fin (ringChar F) → F` is surjective.
+    have h_surj : Function.Surjective (fun k : Fin (ringChar F) => ((k : ℕ) : F)) := by
       intro t
       obtain ⟨n, hn⟩ := hsurj t
-      exact ⟨⟨n % ringChar F, Nat.mod_lt _ hpp.pos⟩,
-        by simpa [CharP.cast_eq_mod F (ringChar F) n] using hn⟩
-    have hle : Fintype.card F ≤ ringChar F := by
-      simpa using Fintype.card_le_of_surjective _ hfin
-    have hge : ringChar F ≤ Fintype.card F := by
-      have hinj : Function.Injective (fun n : Fin (ringChar F) => ((n : ℕ) : F)) := fun a b hab =>
-        Fin.ext (CharP.natCast_injOn_Iio F (ringChar F) a.isLt b.isLt hab)
-      simpa using Fintype.card_le_of_injective _ hinj
-    have hq : q = ringChar F := by omega
-    rw [hq]
-    exact hpp
+      refine ⟨⟨n % ringChar F, Nat.mod_lt _ h_char_prime.pos⟩, ?_⟩
+      simpa [CharP.cast_eq_mod F (ringChar F) n] using hn
+    -- Step 2: the same cast is always injective below the characteristic - the defining
+    -- property of `ringChar`.
+    have h_inj : Function.Injective (fun k : Fin (ringChar F) => ((k : ℕ) : F)) := fun a b hab =>
+      Fin.ext (CharP.natCast_injOn_Iio F (ringChar F) a.isLt b.isLt hab)
+    -- Step 3: surjective gives `card F ≤ ringChar F`; injective gives `ringChar F ≤ card F`.
+    -- Together, `card F = ringChar F` exactly.
+    have h_le : Fintype.card F ≤ ringChar F := by simpa using Fintype.card_le_of_surjective _ h_surj
+    have h_ge : ringChar F ≤ Fintype.card F := by simpa using Fintype.card_le_of_injective _ h_inj
+    have h_eq : q = ringChar F := by omega
+    rw [h_eq]
+    exact h_char_prime
 
 end Elligator.FiniteFieldBasic

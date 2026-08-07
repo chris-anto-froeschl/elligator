@@ -105,7 +105,7 @@ lemma X_of_zero
     change χ_of_v * 1 = 1
     unfold χ_of_v
     rw [v_of_zero]
-    rw [χ_of_a_pow_two_eq_one (r_ne_zero hs_ne_zero hq_card hq_mod)]
+    rw [χ_sq (r_ne_zero hs_ne_zero hq_card hq_mod)]
     simp
 
 end Elligator.Elligator1

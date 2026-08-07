@@ -118,10 +118,10 @@ lemma one_add_X_ne_zero
       rw [h2] at h1
       change (χ v) * -(χ v) = -1 at h1
       nth_rw 1 [h4] at h1
-      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b] at h1
+      rw [χ_mul] at h1
       nth_rw 1 [← neg_one_mul] at h1
-      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_neg_one_eq_neg_one hq_card hq_mod] at h1
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod] at h1
+      rw [χ_mul, χ_neg_one hq_card hq_mod] at h1
+      rw [χ_χ_eq_χ hq_card hq_mod] at h1
       have h5_1 : r^2 ≠ 0 := pow_ne_zero 2 (r_ne_zero hs_ne_zero hq_card hq_mod)
       have h5_2 : IsSquare (r^2) := IsSquare.sq r
       grind [χ_a_eq_one]
@@ -174,15 +174,15 @@ lemma Y_comparison
             apply mul_ne_zero
             · apply χ_a_ne_zero u_ne_zero
             · apply pow_ne_zero 3 u_ne_zero
-          apply (χ_a_eq_one_iff_a_square h1_2_1 hq_card hq_mod).mp
+          apply (χ_eq_one_iff_isSquare h1_2_1 hq_card hq_mod).mp
           have h : (3 : ℕ) = 1 + 2 := by norm_num
           rw [h, pow_add u1 1 2, ← mul_assoc, pow_one]
-          rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-          rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
-          rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
+          rw [χ_mul, χ_mul]
+          rw [χ_χ_eq_χ hq_card hq_mod]
+          rw [← χ_mul, ← pow_two]
           have h' : IsSquare (u1^2) := IsSquare.sq u1
           have h'' : χ (u1 ^ 2) = 1 := by
-            apply (χ_a_eq_one_iff_a_square (pow_ne_zero 2 u_ne_zero) hq_card hq_mod).mpr
+            apply (χ_eq_one_iff_isSquare (pow_ne_zero 2 u_ne_zero) hq_card hq_mod).mpr
             exact h'
           simp [h'']
         have h''' : (u1^6)^((q + 1) / 4) = χ_of_u1 * u1^3  := by
@@ -224,7 +224,7 @@ lemma Y_comparison
         unfold Y2 Y
         change (χ_of_v2 * v2)^((q + 1) / 4) * χ_of_v2 * χ (u2^2 + 1 / c^2)
           = Y1 * χ_of_u1 * χ_of_u1_mul_v1 / u1^3
-        rw [first_factor, second_factor, third_factor, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+        rw [first_factor, second_factor, third_factor, χ_mul]
         change
           (χ_of_v1 * v1)^((q + 1) / 4) * χ_of_u1 / u1^3 * χ_of_v1
           * (χ_of_u1_mul_v1 * (χ (u1 ^ 2 + 1 / c^2)))
@@ -238,9 +238,9 @@ lemma Y_comparison
         rfl
       _ = Y1 / (χ_of_v1 * u1)^3 := by
         unfold χ_of_u1_mul_v1 χ_of_u1
-        rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← mul_assoc, mul_assoc Y1 (χ u1) (χ u1)]
-        rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
-        rw [χ_of_a_pow_two_eq_one u_ne_zero]
+        rw [χ_mul, ← mul_assoc, mul_assoc Y1 (χ u1) (χ u1)]
+        rw [← χ_mul, ← pow_two]
+        rw [χ_sq u_ne_zero]
         rw [one_div_χ_of_a_eq_χ_a]
         let v_ne_zero := v_ne_zero hs_ne_zero hq_card hq_mod t
         rw [← χ_of_a_pow_n_eq_χ_a v1 ⟨3, by trivial⟩]

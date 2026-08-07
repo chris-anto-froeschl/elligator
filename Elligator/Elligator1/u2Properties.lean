@@ -92,7 +92,7 @@ lemma u2_eq_u
           rw [X_h]
           ring_nf
         _ = χ_of_Y * χ (X^2 + 1 / c^2) := by
-          rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+          rw [χ_mul, χ_mul]
           rw [χ_a_eq_one (pow_ne_zero 2
             (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t))
             (IsSquare.sq x)]
@@ -102,7 +102,7 @@ lemma u2_eq_u
       unfold X Elligator1.X
       rw [mul_pow]
       nth_rw 3 [pow_two]
-      rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+      rw [← χ_mul]
       rw [← pow_two, χ_a_eq_one
         (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) (IsSquare.sq v)]
       unfold u
@@ -112,17 +112,17 @@ lemma u2_eq_u
       unfold χ_of_Y Y Elligator1.Y
       let χ_sum := χ (u^2 + 1 / c^2)
       change χ ((χ_of_v * v)^((q + 1) / 4) * χ_of_v * χ_sum) = χ_of_v * χ_sum
-      rw [mul_assoc, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+      rw [mul_assoc, χ_mul]
       rw [χ_a_eq_one
         (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero t hs_ne_zero hq_card hq_mod)
         (χ_IsSquare_h1 t hs_ne_zero hq_card hq_mod)]
-      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
+      rw [χ_mul]
+      rw [χ_χ_eq_χ hq_card hq_mod]
+      rw [χ_χ_eq_χ hq_card hq_mod]
       unfold χ_of_v χ_sum
       simp_all
     have h5 : z = χ_of_v := by
-      rw [h2, h4, mul_assoc, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
+      rw [h2, h4, mul_assoc, ← χ_mul, ← pow_two]
       rw [χ_a_eq_one
         (pow_ne_zero 2 (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod t))
         (IsSquare.sq (X^2 + 1 / c^2))]
@@ -130,7 +130,7 @@ lemma u2_eq_u
     rw [h5]
     unfold X Elligator1.X
     change χ_of_v * (χ_of_v * u) = u
-    rw [← mul_assoc, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
+    rw [← mul_assoc, ← χ_mul, ← pow_two]
     have h6 : IsSquare (v^2) := IsSquare.sq v
     rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) h6]
     simp
@@ -193,8 +193,8 @@ lemma u2_eq_u'
           rw [X_h]
           ring_nf
         _ = χ_of_Y' * χ (X'^2 + 1 / c^2) := by
-          rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-          rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+          rw [χ_mul]
+          rw [χ_mul]
           rw [χ_a_eq_one (pow_ne_zero 2
             (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨-t, t_h⟩))
             (IsSquare.sq x')]
@@ -204,7 +204,7 @@ lemma u2_eq_u'
       unfold X' Elligator1.X
       rw [mul_pow]
       nth_rw 3 [pow_two]
-      rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+      rw [← χ_mul]
       rw [← pow_two, χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t, t_h⟩))
         (IsSquare.sq v')]
       unfold u'
@@ -214,17 +214,17 @@ lemma u2_eq_u'
       unfold χ_of_Y' Y' Elligator1.Y
       let χ_sum := χ (u'^2 + 1 / c^2);
       change (χ ((χ_of_v' * v')^((q + 1) / 4) * χ_of_v' * χ_sum)) = χ_of_v' * χ_sum
-      rw [mul_assoc, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+      rw [mul_assoc, χ_mul]
       rw [χ_a_eq_one
         (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_mod)
         (χ_IsSquare_h1 ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_mod)]
-      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
+      rw [χ_mul, χ_χ_eq_χ hq_card hq_mod]
+      rw [χ_χ_eq_χ hq_card hq_mod]
       unfold χ_of_v' χ_sum
       simp_all
     have h5 : z = χ_of_v' := by
       rw [h2, h4, mul_assoc]
-      rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
+      rw [← χ_mul, ← pow_two]
       rw [χ_a_eq_one (pow_ne_zero 2
           (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩))
         (IsSquare.sq (X'^2 + 1 / c^2))]
@@ -232,7 +232,7 @@ lemma u2_eq_u'
     rw [h5]
     unfold X' Elligator1.X
     change χ_of_v' * (χ_of_v' * u' ) = u'
-    rw [← mul_assoc, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
+    rw [← mul_assoc, ← χ_mul, ← pow_two]
     have h6 : IsSquare (v'^2) := IsSquare.sq v'
     rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)) h6]
     simp
@@ -525,7 +525,7 @@ lemma χ_of_z'_eq_z'
   let χ_of_z := χ z
   X ≠ 1 → χ_of_z = z := by
     intro X z χ_of_z h1
-    exact χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod
+    exact χ_χ_eq_χ hq_card hq_mod
 
 lemma χ_of_v'_eq_z'
   (hs_ne_zero : s ≠ 0)
@@ -711,7 +711,7 @@ lemma Y'_observation1
     let χ_term2 := χ term2
     have h2 : (χ v) * χ (u^2 + 1 / c^2) = χ_term2 * χ (u^2 + 1 / c^2) := by grind
     have h3 : (χ v) * χ (u^2 + 1 / c^2) = (χ Y) * χ_term1 * χ (u^2 + 1 / c^2) := by
-      grind [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+      grind [χ_mul]
     rw [h3]
     have h4 : χ_term1 * χ (u^2 + 1 / c^2) = 1 := by
       rw [← pow_two]
@@ -754,9 +754,9 @@ lemma Y'_observation2
     rw [one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
     rw [add_comm, a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
     rw [mul_comm, ← mul_assoc]
-    rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
+    rw [← χ_mul, ← pow_two]
     let Y'_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [χ_of_a_pow_two_eq_one Y'_ne_zero]
+    rw [χ_sq Y'_ne_zero]
     grind
 
 end Elligator.Elligator1

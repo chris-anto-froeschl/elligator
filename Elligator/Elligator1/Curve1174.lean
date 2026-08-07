@@ -227,7 +227,7 @@ theorem d1174_not_isSquare : ¬ IsSquare (d s1174) := by
   have hne : d s1174 ≠ 0 := by
     rw [d1174_eq]
     decide
-  have h1 : χ (d s1174) = 1 := (χ_a_eq_one_iff_a_square hne card_F1174 q1174_mod_four).2 hsq
+  have h1 : χ (d s1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174 q1174_mod_four).2 hsq
   rw [chi_d1174_eq_neg_one] at h1
   exact absurd h1 (by decide)
 

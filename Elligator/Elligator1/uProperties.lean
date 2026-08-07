@@ -53,7 +53,7 @@ lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
 
 omit [Fintype F] in
 lemma u_of_zero :
-  let u := u ⟨(0 : F), zero_h1⟩
+  let u := u ⟨(0 : F), by simp⟩
   u = 1 := by simp [u]
 
 lemma one_add_u_ne_zero
@@ -64,8 +64,8 @@ lemma one_add_u_ne_zero
     unfold u
     rw [add_div' _ _ _ (one_add_t_ne_zero t)]
     norm_num
-    split_ands
-    · exact two_ne_zero hq_card hq_mod;
+    constructor
+    · exact two_ne_zero hq_card hq_mod
     · exact one_add_t_ne_zero t
 
 end Elligator.Elligator1

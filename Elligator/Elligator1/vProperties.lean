@@ -170,9 +170,9 @@ lemma v_comparison_implication3
     let u := u t
     have h : u^6 = u^2 * u^2 * u^2 := by ring_nf
     rw [h]
-    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [χ_of_a_pow_two_eq_one (u_ne_zero t)]
+    rw [χ_mul]
+    rw [χ_mul]
+    rw [χ_sq (u_ne_zero t)]
     simp
 
 lemma v_comparison_implication4
@@ -189,13 +189,13 @@ lemma v_comparison_implication4
     unfold v1
     rw [← v_comparison_implication1 t]
     change χ v2= χ (v2 * u^6)
-    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+    rw [χ_mul]
     rw [v_comparison_implication3 t]
     simp
 
 omit [Fintype F] in
 lemma v_of_zero :
-  let v := v ⟨(0 : F), zero_h1⟩ s
+  let v := v ⟨(0 : F), by simp⟩ s
   v = (r s)^2 := by
     intro v_of_t
     unfold v_of_t v

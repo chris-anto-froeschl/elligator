@@ -15,17 +15,15 @@ This file contains the curve-level definitions that are independent of any speci
 A twisted Edwards curve with coefficients `a` and `d` has affine equation
 `a * x^2 + y^2 = 1 + d * x^2 * y^2`.
 
-The definitions are made over a commutative ring.  Finiteness and the hypotheses used by a
+The definitions are made over a commutative ring. Finiteness and the hypotheses used by a
 particular cryptographic construction belong in that construction, rather than in the definition
 of a curve or its affine points.
 
-Mathlib's elliptic-curve API is currently centred on Weierstrass models.  A twisted Edwards model
+Mathlib's elliptic-curve API is currently centred on Weierstrass models. A twisted Edwards model
 is not itself a Weierstrass equation, so using `WeierstrassCurve.Affine.Equation` here would require
 a birational coordinate conversion and extra invertibility hypotheses.  The API below follows the
 same useful separation as that API: coefficients, an affine equation, a set of affine points, and
 a bundled point type.
-
-TODO does there exist more generic existing infrastructure that I can just reuse?
 -/
 
 @[expose] public section
@@ -69,10 +67,10 @@ def neg (p : R × R) : R × R := (-p.1, p.2)
 
 @[simp]
 theorem neg_mem_affinePoints (E : TwistedEdwardsCurve R) (p : R × R) :
-    neg p ∈ E.affinePoints ↔ p ∈ E.affinePoints := by
-  change E.a * (-p.1)^2 + p.2^2 = 1 + E.d * (-p.1)^2 * p.2^2 ↔
-    E.a * p.1^2 + p.2^2 = 1 + E.d * p.1^2 * p.2^2
-  rw [neg_sq]
+  neg p ∈ E.affinePoints ↔ p ∈ E.affinePoints := by
+    change E.a * (-p.1)^2 + p.2^2 = 1 + E.d * (-p.1)^2 * p.2^2 ↔
+      E.a * p.1^2 + p.2^2 = 1 + E.d * p.1^2 * p.2^2
+    rw [neg_sq]
 
 /-- The usual coefficient conditions for a nonsingular twisted Edwards model over a field.
 Keeping this predicate separate from `TwistedEdwardsCurve` permits the equation and its points to
