@@ -3,6 +3,7 @@ import Elligator.Elligator1.Curve1174
 import Elligator.Elligator1.Curve1174Prime
 import Elligator.Elligator1.DecodingFunction
 import Elligator.Elligator1.EdwardsCurve
+import Elligator.Elligator1.Example
 import Elligator.Elligator1.InvertedMap
 import Elligator.Elligator1.Map
 import Elligator.Elligator1.MapProperties
