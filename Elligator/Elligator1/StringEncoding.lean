@@ -61,10 +61,9 @@ def ι
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   : {P : F × F // P ∈ EOverF sq_ne_pm_two hq_card hq_mod} :=
-    ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+    ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The admissible string set `S` has `(q + 1) / 2` elements.
 This is the cardinality assertion in Theorem 4. Here `S` consists of the `b`-bit strings whose
@@ -114,13 +113,12 @@ theorem ι_injective
   (hq_card : Fintype.card F = q)
   (q_prime : Prime q)
   (hq_mod : q % 4 = 3) :
-  let hq_primePow := q_prime.isPrimePow
-  Function.Injective (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod) := by
-    intro hq_primePow τ τ' h
+  Function.Injective (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_mod) := by
+    intro τ τ' h
     apply Subtype.ext
     apply σ_injective hq_card q_prime hq_mod
     apply σ_eq_of_eq_or_eq_neg hq_card q_prime
-    exact eq_or_eq_neg_of_ϕ_eq _ _ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod h
+    exact eq_or_eq_neg_of_ϕ_eq _ _ hs_ne_zero sq_ne_pm_two hq_card hq_mod h
 
 /-- The set of curve points produced by the string encoding `ι`.
 This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
@@ -136,9 +134,8 @@ def ιOverS
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
-  : Set (F × F) := Set.range (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod)
+  : Set (F × F) := Set.range (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_mod)
 
 /-- The string encoding and the Elligator map have exactly the same image: `ι(S) = ϕ(F)`.
 For each `t : F`, one of `t` and `-t` has a lower-half representative `σ τ` with `τ ∈ S`; since
@@ -157,8 +154,8 @@ theorem ϕOverF_eq_ιOverS
   (q_prime : Prime q)
   (hq_mod : q % 4 = 3)
   :
-  let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod
-  let ιOverS := ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod
+  let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  let ιOverS := ιOverS hs_ne_zero sq_ne_pm_two hq_card hq_mod
   ϕOverF = ιOverS := by
     dsimp only
     unfold Elligator1.ϕOverF ιOverS ι
@@ -173,7 +170,7 @@ theorem ϕOverF_eq_ιOverS
         dsimp
         rw [hτ]
         exact
-          (ϕ_of_t_eq_ϕ_of_neg_t t hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod).symm
+          (ϕ_of_t_eq_ϕ_of_neg_t t hs_ne_zero sq_ne_pm_two hq_card hq_mod).symm
     · rintro ⟨τ, rfl⟩
       exact ⟨σ τ.1, rfl⟩
 
@@ -194,11 +191,10 @@ def ιToϕOverF
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (τ : @S q) :
-  {P : F × F // P ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod} :=
-    ⟨(ι τ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val, ⟨σ τ.1, rfl⟩⟩
+  {P : F × F // P ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod} :=
+    ⟨(ι τ hs_ne_zero sq_ne_pm_two hq_card hq_mod).val, ⟨σ τ.1, rfl⟩⟩
 
 /-- The encoding `ι` is a bijection from `S` onto `ϕ(F)`.
 The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in the type. Injectivity is
@@ -218,14 +214,14 @@ theorem ιToϕOverF_bijective
   (hq_card : Fintype.card F = q)
   (q_prime : Prime q)
   (hq_mod : q % 4 = 3) :
-  Function.Bijective (ιToϕOverF hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod) := by
+  Function.Bijective (ιToϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod) := by
     constructor
     · intro τ τ' h
       apply ι_injective hs_ne_zero sq_ne_pm_two hq_card q_prime hq_mod
       apply Subtype.ext
       simpa [ιToϕOverF] using congr_arg Subtype.val h
     · intro P
-      have hP : P.val ∈ ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime.isPrimePow hq_mod := by
+      have hP : P.val ∈ ιOverS hs_ne_zero sq_ne_pm_two hq_card hq_mod := by
         rw [← ϕOverF_eq_ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime hq_mod]
         exact P.prop
       rcases hP with ⟨τ, hτ⟩

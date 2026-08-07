@@ -42,10 +42,10 @@ variable {q : ℕ}
   $X \neq 0$ and $1 + X \neq 0$.
   -/)]
 lemma x_ne_zero
+  [DecidableEq F]
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
@@ -65,14 +65,14 @@ lemma x_ne_zero
             contradiction
           · apply hs_ne_zero
         · apply X_ne_zero hs_ne_zero hq_card hq_mod t
-      · apply one_add_X_ne_zero hs_ne_zero hq_card hq_primePow hq_mod t
+      · apply one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
     · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
 
 lemma x_comparison
+  [DecidableEq F]
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let t1 := t.val

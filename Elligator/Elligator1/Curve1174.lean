@@ -211,8 +211,7 @@ theorem chi_d1174_eq_neg_one : χ (d s1174) = -1 := by
   have hone :
     ((3618502788666131106986593281521497120414687020801267626233049500247285301238 : ℕ) : F1174)
     = -1 := by decide
-  change (d s1174) ^ ((Fintype.card F1174 - 1) / 2) = -1
-  rw [d1174_eq, card_F1174, ← hneg, ← hone]
+  rw [χ_eq_pow (d s1174) card_F1174 q1174_mod_four, d1174_eq, ← hneg, ← hone]
   exact natCast_pow_eq_natCast _ _ _ 256 (by decide) (by decide)
 
 /-- `-1174` is not a square in `F1174`; by [bernstein2013a], Section 4.1 this is what makes
@@ -273,11 +272,11 @@ theorem curve1174_isValid : curve1174.IsValid :=
   Curve1174.
   -/)]
 def decode1174 (t : F1174) : F1174 × F1174 :=
-  DecodingFunction t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_isPrimePow q1174_mod_four
+  DecodingFunction t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
 
 /-- Theorem 1 for Curve1174: every decoded value is a point of the curve. -/
 theorem decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.affinePoints :=
-  (ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_isPrimePow q1174_mod_four).prop
+  (ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four).prop
 
 /-- Theorem 1 for Curve1174, in coordinates. -/
 @[blueprint "thm:decode1174"
@@ -293,14 +292,14 @@ theorem decode1174_equation (t : F1174) :
 /-- Theorem 3 for Curve1174: `φ` identifies `t` and `-t`. -/
 theorem decode1174_neg (t : F1174) : decode1174 (-t) = decode1174 t :=
   (ϕ_of_t_eq_ϕ_of_neg_t t
-    s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_isPrimePow
+    s1174_ne_zero s1174_sq_ne_pm_two card_F1174
     q1174_mod_four
   ).symm
 
 /-- Theorem 3 for Curve1174: `t` and `-t` are the only preimages of `φ t`. -/
 theorem decode1174_preimages (t : F1174) :
   ¬ ∃ p : {n : F1174 // n ≠ t ∧ n ≠ -t}, decode1174 p.val = decode1174 t :=
-    ϕ_preimages t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_isPrimePow q1174_mod_four
+    ϕ_preimages t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
 
 /-! ### The string encoding for Curve1174 -/
 
@@ -319,7 +318,7 @@ theorem S1174_card : (@S q1174).card = (q1174 + 1) / 2 := S_card q1174_mod_four
 
 /-- Theorem 4 for Curve1174: the string encoding `ι : S → E(F_q)` is injective. -/
 theorem encode1174_injective : Function.Injective fun τ : @S q1174 =>
-  ι τ s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_isPrimePow q1174_mod_four :=
+  ι τ s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four :=
     ι_injective s1174_ne_zero s1174_sq_ne_pm_two card_F1174 prime_q1174.prime q1174_mod_four
 
 /-- Theorem 4 for Curve1174: the string encoding is a bijection from `S` onto `φ(F_q)`. -/
@@ -330,8 +329,7 @@ theorem encode1174_injective : Function.Injective fun τ : @S q1174 =>
   $\varphi(\mathbb{F}_q)$.
   -/)]
 theorem encode1174_bijective :
-  Function.Bijective (ιToϕOverF s1174_ne_zero s1174_sq_ne_pm_two card_F1174
-    q1174_isPrimePow q1174_mod_four) :=
+  Function.Bijective (ιToϕOverF s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four) :=
     ιToϕOverF_bijective s1174_ne_zero s1174_sq_ne_pm_two card_F1174 prime_q1174.prime q1174_mod_four
 
 /-! ### The base point -/

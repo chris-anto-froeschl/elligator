@@ -12,7 +12,7 @@ public import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
 # Finite Field Basic
 
 In this file we introduce some generally helpful lemmas for the finite field `F` with
-`q` fulfilling `IsPrimePow`, `Fintype.card F = q` and `q % 4 = 3`.
+`q` fulfilling `IsPrimePow`/`Prime`, `Fintype.card F = q` and `q % 4 = 3`.
 
 ## References
 
@@ -39,15 +39,6 @@ lemma q_sub_one_div_two_odd (hq_mod : q % 4 = 3) : Odd ((q - 1) / 2) := by
 omit [Field F] in
 lemma q_sub_one_even (hq_mod : q % 4 = 3) : Even (q - 1) := by
   rw [Nat.even_iff]
-  omega
-
-lemma primepow_ne_one (hq_primePow : IsPrimePow q) : q ≠ 1 := by
-  have := hq_primePow.two_le
-  omega
-
-lemma odd_prime_power_gt_two (hq_primePow : IsPrimePow q) (hq : Odd q) : q > 2 := by
-  have h2le := hq_primePow.two_le
-  have hmod := Nat.odd_iff.mp hq
   omega
 
 omit [Fintype F] in
@@ -91,21 +82,18 @@ lemma four_ne_zero
     · exact (two_ne_zero hq_card hq_mod)
     · exact (two_ne_zero hq_card hq_mod)
 
+lemma ringChar_ne_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
+  : ringChar F ≠ 2 := by
+    intro h
+    refine two_ne_zero hq_card hq_mod ?_
+    have h' : ((2 : ℕ) : F) = 0 := (ringChar.spec F 2).mpr (by rw [h])
+    exact h'
+
 omit [Fintype F] in
 lemma neg_one_ne_zero : (-1 : F) ≠ 0 := neg_ne_zero.mpr one_ne_zero
 
 lemma neg_one_non_square (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : ¬IsSquare (-1 : F) := by grind [FiniteField.isSquare_neg_one_iff]
-
-omit [Field F] in
-lemma q_sub_one_div_two_ne_zero
-  (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
-  (hq_mod : q % 4 = 3)
-  : (q - 1) / 2 ≠ 0 := by
-    have hodd : Odd q := by grind [q_odd]
-    have hgt : q > 2 := odd_prime_power_gt_two hq_primePow hodd
-    omega
 
 omit [Fintype F] in
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 :=

@@ -26,26 +26,26 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
+omit [DecidableEq F] in
 lemma z_eq_zero
   [DecidableEq F]
   (t : { t : F // t = 1 ∨ t = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let z := z s P q
   z = 0 := by
     intro P z
     unfold z Elligator1.z
     let c := c s
-    repeat rw [X2_eq_neg_one t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod]
+    repeat rw [X2_eq_neg_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
     simp_all
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
@@ -79,6 +79,7 @@ lemma Y'_ne_zero
     unfold Y Y'
     grind
 
+omit [DecidableEq F] in
 lemma X_pow_two_add_1_div_c_pow_two_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -137,13 +138,12 @@ lemma z'_ne_zero
     let z'_argument_ne_zero :=
       z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let a := (Y * (X^2 + 1 / c^2))
-    exact χ_a_ne_zero z'_argument_ne_zero hq_card
+    exact χ_a_ne_zero z'_argument_ne_zero
 
 lemma z'_eq_one_or_z'_eq_neg_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -159,7 +159,7 @@ lemma z'_eq_one_or_z'_eq_neg_one
     let a := (Y * (X^2 + 1 / c^2))
     open Classical in
     let χ_of_a := χ a
-    have h1 := @χ_values _ _ _ q a hq_card hq_primePow hq_mod
+    have h1 := χ_values (a := a)
     change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1
     have h2 := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     change χ_of_a ≠ 0 at h2

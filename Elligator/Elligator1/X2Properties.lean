@@ -27,20 +27,20 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
+omit [DecidableEq F] in
 lemma X2_eq_neg_one
   [DecidableEq F]
   (t : { t : F // t = 1 ∨ t = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
-  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let X2 := X2 s P.1 q
   X2 = -1 := by
     intro P X2
@@ -48,7 +48,7 @@ lemma X2_eq_neg_one
     let η := η P.1
     change -(1 + η * (r s)) + ((1 + η * (r s)) ^ 2 - 1) ^ ((q + 1) / 4) = -1
     unfold η
-    rw [η_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod]
+    rw [η_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
     ring_nf
     rw [zero_pow, add_zero]
     exact q_add_one_div_four_ne_zero hq_mod
@@ -88,18 +88,18 @@ lemma X2_h2
     have h := X2_h1 hq_card hq_mod P
     grind
 
+omit [DecidableEq F] in
 lemma X2_h3
   [DecidableEq F]
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
-  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let X' := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   let X := X t s
   let X2 := X2 s P.val q
@@ -108,35 +108,35 @@ lemma X2_h3
     let η := η P.val
     let r := r s
     let P_of_ϕ_fulfills_ϕOverFProps :=
-      P_of_ϕ_fulfills_ϕOverFProps t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+      P_of_ϕ_fulfills_ϕOverFProps t hs_ne_zero sq_ne_pm_two hq_card hq_mod
     calc
       (X2 - X) * (X2 - X') = X2^2 - (X + X') * X2 + X * X' := by grind
       _ = X2^2 + 2 * (1 + η * r) * X2 + 1 := by
-        rw [X_comparison_implication t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod]
+        rw [X_comparison_implication t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
         change X2 ^ 2 - -2 * (1 + η * r) * X2 + X * X' = X2 ^ 2 + 2 * (1 + η * r) * X2 + 1
         rw [mul_add, mul_comm X _]
-        rw [X_comparison_implication2 t hs_ne_zero hq_card hq_primePow hq_mod]
+        rw [X_comparison_implication2 t hs_ne_zero hq_card hq_mod]
         grind
       _ = 0 := X2_h2 hq_card hq_mod ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
 
+omit [DecidableEq F] in
 lemma X2_h4
   [DecidableEq F]
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
-  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let X' := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   let X := X t s
   let X2 := X2 s P q
   X2 = X ∨ X2 = X' := by
     intro t1 t2 P X' X X2
-    have h := X2_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+    have h := X2_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
     grind
 
 lemma X2_ne_zero

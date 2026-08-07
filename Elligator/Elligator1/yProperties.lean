@@ -34,7 +34,7 @@ namespace Elligator.Elligator1
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -42,7 +42,6 @@ lemma helper_eq
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let r := r s
@@ -61,13 +60,13 @@ lemma helper_eq
         change (χ_of_v * u)^5 + (r^2 - 2) * (χ_of_v * u)^3 + (χ_of_v * u)
           = χ_of_v * (u^5 + (r^2 -2 ) * u^3 + u)
         rw [mul_pow (χ_of_v) (u) 5, mul_pow (χ_of_v) (u) 3]
-        rw [χ_of_a_pow_n_eq_χ_a v ⟨5, by trivial⟩ hq_card hq_primePow hq_mod]
-        rw [χ_of_a_pow_n_eq_χ_a v ⟨3, by trivial⟩ hq_card hq_primePow hq_mod]
+        rw [χ_of_a_pow_n_eq_χ_a v ⟨5, by trivial⟩]
+        rw [χ_of_a_pow_n_eq_χ_a v ⟨3, by trivial⟩]
         change χ_of_v * u^5 + (r^2 - 2) * (χ_of_v * u^3) + (χ_of_v * u)
           = χ_of_v * (u^5 + (r^2 -2 ) * u^3 + u)
         ring_nf
       _ = χ_of_v * v := by rfl
-    have h2 := χ_a_mul_a_IsSquare v_ne_zero hq_card hq_primePow hq_mod
+    have h2 := χ_a_mul_a_IsSquare v_ne_zero hq_card hq_mod
     have h3 : (χ_of_v * v)^((q + 1) / 2) = χ_of_v * v :=
       a_pow_q_add_one_div_two_eq_a h2 hq_card hq_mod
     let χ_of_sum := χ (u^2 + 1 / c^2)
@@ -79,9 +78,9 @@ lemma helper_eq
           ring_nf
           rw [one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
         _ = (χ_of_v * v)^((q + 1) / 2) * 1 := by
-          rw [χ_of_a_even_pow_n_eq_one v_ne_zero ⟨2, even_two⟩ hq_card hq_mod]
+          rw [χ_of_a_even_pow_n_eq_one v_ne_zero ⟨2, even_two⟩]
           rw [χ_of_a_even_pow_n_eq_one
-            (v_h1_third_factor_ne_zero hs_ne_zero hq_card hq_mod t) ⟨2, even_two⟩ hq_card hq_mod]
+            (v_h1_third_factor_ne_zero hs_ne_zero hq_card hq_mod t) ⟨2, even_two⟩]
           rw [mul_one]
         _ = χ_of_v * v := by rw [h3, mul_one]
     rw [h1]
@@ -91,7 +90,6 @@ lemma y_divisor_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
@@ -126,7 +124,7 @@ lemma y_divisor_ne_zero
           apply pow_ne_zero 2
           apply mul_ne_zero
           · apply mul_ne_zero
-            · apply one_add_X_ne_zero hs_ne_zero hq_card hq_primePow hq_mod t
+            · apply one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
             · apply X_ne_zero hs_ne_zero hq_card hq_mod t
           · grind
         rw [← div_left_inj' h4_1_1, mul_div_assoc, div_self h4_1_1, mul_one] at h3
@@ -174,7 +172,6 @@ lemma variable_mul_ne_zero'
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let u := u t
@@ -193,7 +190,7 @@ lemma variable_mul_ne_zero'
             · apply v_ne_zero hs_ne_zero hq_card hq_mod t
           · apply X_ne_zero hs_ne_zero hq_card hq_mod t
         · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
-      · apply x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod t
+      · apply x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t
     · apply y_add_one_ne_zero hs_ne_zero hq_card hq_mod t
 
 lemma curve_equation
@@ -201,7 +198,6 @@ lemma curve_equation
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let x := x t s q
@@ -209,8 +205,8 @@ lemma curve_equation
   let d := d s
   x^2 + y^2 = 1 + d * x^2 * y^2 := by
     let c := c s
-    let d := d s;
-    let r := r s;
+    let d := d s
+    let r := r s
     let X := X t s
     let Y := Y t s q
     intro x y d
@@ -236,7 +232,7 @@ lemma curve_equation
           have h2_1 : Y^2 ≠ 0 := pow_ne_zero 2 (Y_ne_zero hs_ne_zero hq_card hq_mod t)
           grind
        _ = X^5 + (r^2 - 2) * X^3 + X - 2 * (r - 2) * X^2 * (1 + X)^2 := by
-          rw [h1, helper_eq t hs_ne_zero hq_card hq_primePow hq_mod]
+          rw [h1, helper_eq t hs_ne_zero hq_card hq_mod]
        _ = X * (r * X - (1 + X)^2)^2 := by ring_nf
     have h4 : -d * (c - 1)^2 * s^2 = 2 * (r + 2) := by
       rw [neg_d_eq_r_add_two_div_r_sub_two hs_ne_zero hq_card hq_mod, mul_assoc, h1]
@@ -268,7 +264,7 @@ lemma curve_equation
         have h6_2_1 : 1 - d * x^2 + d * x^2 = 1 := by ring
         rw [add_zero, h6_2_1] at h6_1
         have h6_2_2 : x^2 ≠ 0 := pow_ne_zero 2
-          (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod t)
+          (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t)
         rw [← div_left_inj' h6_2_2] at h6_1
         rw [mul_div_assoc, div_self h6_2_2, mul_one] at h6_1
         rw [← mul_one 1, ← pow_two, ← div_pow _ _ 2] at h6_1

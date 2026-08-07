@@ -44,11 +44,11 @@ See [bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 
 namespace Elligator.Elligator1
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
-omit [Fintype F] in
+omit [Fintype F] [DecidableEq F] in
 @[blueprint
   (title := "$u$ is defined")
   (statement := /--
@@ -64,6 +64,7 @@ theorem u_defined :
     intro t
     exact FiniteFieldBasic.one_add_t_ne_zero t
 
+omit [DecidableEq F] in
 @[blueprint
   (title := "$Y$ is defined")
   (statement := /--
@@ -113,12 +114,11 @@ theorem y_defined
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   : ∀ t : {n : F // n ≠ 1 ∧ n ≠ -1},
   ((r s) * (X t s) + (1 + (X t s))^2) ≠ 0 := by
     intro t
-    exact y_divisor_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod t
+    exact y_divisor_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t
 
 /-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
 `Y² = X⁵ + (r² - 2)X³ + X`. -/
@@ -135,7 +135,6 @@ theorem map_fulfills_auxiliary_equation
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let r := r s
@@ -143,7 +142,7 @@ theorem map_fulfills_auxiliary_equation
   let Y := Y t s q
   Y^2 = X^5 + (r^2 - 2) * X^3 + X := by
     intro r_of_s X_of_t Y_of_t
-    exact helper_eq t hs_ne_zero hq_card hq_primePow hq_mod
+    exact helper_eq t hs_ne_zero hq_card hq_mod
 
 /-- The quantities constructed for a nonexceptional input are all nonzero as asserted in
 Theorem 1: `u * v * X * Y * x * (y + 1) ≠ 0`. -/
@@ -161,7 +160,6 @@ theorem variable_mul_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let u := u t
@@ -171,7 +169,7 @@ theorem variable_mul_ne_zero
   let x := x t s q
   let y := y t s
   u * v * X  * Y * x * (y + 1) ≠ 0 :=
-    variable_mul_ne_zero' t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+    variable_mul_ne_zero' t hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The coordinates produced from a nonexceptional input satisfy the Edwards curve equation
 `x² + y² = 1 + d * x² * y²`. This is the final conclusion of Theorem 1. -/
@@ -190,7 +188,6 @@ theorem map_fulfills_curve_equation
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
   let x := x t s q
@@ -200,7 +197,7 @@ theorem map_fulfills_curve_equation
   edwardsCurveEquation x y ⟨d, d_h⟩ := by
     intro x_of_t y_of_t d_of_s
     rw [edwardsCurveEquation_iff]
-    exact curve_equation t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+    exact curve_equation t hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The total Elligator map `ϕ : F → E(F)` from Definition 2 of the paper.
 
@@ -219,12 +216,10 @@ records that the result satisfies the Edwards curve equation. -/
   if $t \notin \{\pm 1\}$ then $\varphi(t) = (x, y)$.
   -/)]
 def ϕ
-  [DecidableEq F]
   (t : F)
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   : EOverF sq_ne_pm_two hq_card hq_mod :=
   let P := if h : t ≠ 1 ∧ t ≠ -1
@@ -236,7 +231,7 @@ def ϕ
     unfold P
     by_cases h1 : t ≠ 1 ∧ t ≠ -1
     · rw [dif_pos h1]
-      exact map_fulfills_curve_equation ⟨t, h1⟩ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+      exact map_fulfills_curve_equation ⟨t, h1⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
     · rw [dif_neg h1]
       simp
   ⟨P, P_in_EOverF⟩

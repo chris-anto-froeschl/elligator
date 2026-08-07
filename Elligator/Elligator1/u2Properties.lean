@@ -35,10 +35,9 @@ lemma u2_eq_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let u2 := u2 s P q
   u2 = 0 := by grind [z_eq_zero, u2]
 
@@ -47,15 +46,14 @@ lemma u2_eq_u
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (X_h :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
     let X := X t s
     let X2 := X2 s P q
     X2 = X)
   :
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let u := u t
   let u2 := u2 s P q
   u2 = u := by
@@ -96,8 +94,8 @@ lemma u2_eq_u
         _ = χ_of_Y * χ (X^2 + 1 / c^2) := by
           rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
           rw [χ_a_eq_one (pow_ne_zero 2
-            (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod t))
-            (IsSquare.sq x) hq_card hq_mod]
+            (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t))
+            (IsSquare.sq x)]
           unfold χ_of_Y
           ring_nf
     have h3 : χ (u^2 + 1 / c^2) = χ (X^2 + 1 / c^2) := by
@@ -106,7 +104,7 @@ lemma u2_eq_u
       nth_rw 3 [pow_two]
       rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
       rw [← pow_two, χ_a_eq_one
-        (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) (IsSquare.sq v) hq_card hq_mod]
+        (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) (IsSquare.sq v)]
       unfold u
       simp_all
     have h4 : χ_of_Y = χ_of_v * χ (X^2 + 1 / c^2) := by
@@ -117,24 +115,24 @@ lemma u2_eq_u
       rw [mul_assoc, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
       rw [χ_a_eq_one
         (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero t hs_ne_zero hq_card hq_mod)
-        (χ_IsSquare_h1 t hs_ne_zero hq_card hq_primePow hq_mod) hq_card hq_mod]
+        (χ_IsSquare_h1 t hs_ne_zero hq_card hq_mod)]
       rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod]
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod]
+      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
+      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
       unfold χ_of_v χ_sum
       simp_all
     have h5 : z = χ_of_v := by
       rw [h2, h4, mul_assoc, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
       rw [χ_a_eq_one
         (pow_ne_zero 2 (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod t))
-        (IsSquare.sq (X^2 + 1 / c^2)) hq_card hq_mod]
+        (IsSquare.sq (X^2 + 1 / c^2))]
       simp
     rw [h5]
     unfold X Elligator1.X
     change χ_of_v * (χ_of_v * u) = u
     rw [← mul_assoc, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
     have h6 : IsSquare (v^2) := IsSquare.sq v
-    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) h6 hq_card hq_mod]
+    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) h6]
     simp
 
 lemma u2_eq_u'
@@ -142,16 +140,15 @@ lemma u2_eq_u'
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (X_h :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
     let X' := X ⟨-t.val, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
     let X2 := X2 s P q
     X2 = X')
   :
   let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).val
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let u' := u ⟨-t.val, t_h⟩
   let u2 := u2 s P q
   u2 = u' := by
@@ -192,15 +189,15 @@ lemma u2_eq_u'
           rw [dif_pos t.prop]
           change χ (x' * Y' * x * (X2^2 + 1 / c^2)) = χ (x'^2 * Y' * (X'^2 + 1 / c^2))
           unfold X2 X' x' x
-          rw [x_comparison t hs_ne_zero hq_card hq_primePow hq_mod]
+          rw [x_comparison t hs_ne_zero hq_card hq_mod]
           rw [X_h]
           ring_nf
         _ = χ_of_Y' * χ (X'^2 + 1 / c^2) := by
           rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
           rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
           rw [χ_a_eq_one (pow_ne_zero 2
-            (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod ⟨-t, t_h⟩))
-            (IsSquare.sq x') hq_card hq_mod]
+            (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨-t, t_h⟩))
+            (IsSquare.sq x')]
           unfold χ_of_Y'
           ring_nf
     have h3 : (χ (u'^2 + 1 / c^2)) = (χ (X'^2 + 1 / c^2)) := by
@@ -209,7 +206,7 @@ lemma u2_eq_u'
       nth_rw 3 [pow_two]
       rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
       rw [← pow_two, χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t, t_h⟩))
-        (IsSquare.sq v') hq_card hq_mod]
+        (IsSquare.sq v')]
       unfold u'
       simp_all
     have h4 : χ_of_Y' = χ_of_v' * (χ (X'^2 + 1 / c^2)) := by
@@ -220,9 +217,9 @@ lemma u2_eq_u'
       rw [mul_assoc, χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
       rw [χ_a_eq_one
         (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_mod)
-        (χ_IsSquare_h1 ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_primePow hq_mod) hq_card hq_mod]
-      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod]
-      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod]
+        (χ_IsSquare_h1 ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_mod)]
+      rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
+      rw [χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod]
       unfold χ_of_v' χ_sum
       simp_all
     have h5 : z = χ_of_v' := by
@@ -230,15 +227,14 @@ lemma u2_eq_u'
       rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
       rw [χ_a_eq_one (pow_ne_zero 2
           (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩))
-        (IsSquare.sq (X'^2 + 1 / c^2)) hq_card hq_mod]
+        (IsSquare.sq (X'^2 + 1 / c^2))]
       simp
     rw [h5]
     unfold X' Elligator1.X
     change χ_of_v' * (χ_of_v' * u' ) = u'
     rw [← mul_assoc, ← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
     have h6 : IsSquare (v'^2) := IsSquare.sq v'
-    rw [χ_a_eq_one
-      (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)) h6 hq_card hq_mod]
+    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)) h6]
     simp
 
 lemma u2_h1
@@ -246,21 +242,20 @@ lemma u2_h1
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
-  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+  let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
   let u' := u ⟨-t.val, t_h⟩
   let u := u t
   let u2 := u2 s P.val q
   u2 = u ∨ u2 = u' := by
     intro P t_h u' u u2
-    rcases (X2_h4 t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod) with h | h
+    rcases (X2_h4 t hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
     · left
-      exact u2_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod h
+      exact u2_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
     · right
-      exact u2_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod h
+      exact u2_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
 
 /-- The key step: rewriting `1 + u2(ϕ(t))` in the main case (t ≠ ±1) to show it is ne_zero,
     using `u2_h1` which gives `u2 = u(t)` or `u2 = u(-t)`. -/
@@ -269,15 +264,14 @@ lemma one_add_u2_ne_zero_main_case
   (hs_ne_zero : (s : F) ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).1
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).1
   let u2 := u2 s P q
   1 + u2 ≠ 0 := by
     intro P u2
     unfold u2
-    obtain h|h := u2_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+    obtain h|h := u2_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
     · rw [h]
       exact one_add_u_ne_zero t hq_card hq_mod
     · rw [h]
@@ -289,10 +283,9 @@ lemma one_add_u2_ne_zero_base_case
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   :
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod).1
+  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).1
   let u2 := u2 s P q
   1 + u2 ≠ 0 := by
     intro P u2
@@ -304,9 +297,8 @@ lemma one_add_u2_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
-  (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod})
+  (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod})
   :
   let u2 := u2 s P q
   (1 + u2) ≠ 0 := by
@@ -315,12 +307,10 @@ lemma one_add_u2_ne_zero
     unfold ϕOverF at P_prop
     obtain ⟨t, ht⟩ := P_prop
     by_cases h : t ≠ 1 ∧ t ≠ -1
-    · let h2 := one_add_u2_ne_zero_main_case
-        ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+    · let h2 := one_add_u2_ne_zero_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
       grind
     · have h2 : t = 1 ∨ t = -1 := by grind
-      have h3 := one_add_u2_ne_zero_base_case
-        ⟨t, h2⟩ hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+      have h3 := one_add_u2_ne_zero_base_case ⟨t, h2⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
       grind
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
@@ -334,13 +324,10 @@ def u'
   let X := X2 s P q
   z * X
 
-omit [DecidableEq F]
-
 lemma u'_pow_two_eq_X_pow_two
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -349,13 +336,12 @@ lemma u'_pow_two_eq_X_pow_two
   :
   let u := u' sq_ne_pm_two hq_card hq_mod P
   let X := X2 s P q
-  u^2 = X^2 := by grind [u, u', z', z'_eq_one_or_z'_eq_neg_one ]
+  u^2 = X^2 := by grind [u, u', z', z'_eq_one_or_z'_eq_neg_one]
 
 lemma u'_eq_X2_or_u'_eq_neg_X2
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -370,7 +356,6 @@ lemma u'_ne_neg_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -382,7 +367,7 @@ lemma u'_ne_neg_one
   X ≠ 1 → u ≠ -1 := by
     intro u X h1
     let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one
-        hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+        hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
       hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
@@ -393,7 +378,6 @@ lemma one_add_u'_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -405,7 +389,7 @@ lemma one_add_u'_ne_zero
   X ≠ 1 → 1 + u ≠ 0 := by
     intro u X h1
     let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
       hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
@@ -416,7 +400,6 @@ lemma u'_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -428,7 +411,7 @@ lemma u'_ne_zero
   X ≠ 1 → u ≠ 0 := by
     intro u X h1
     let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let z_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let X2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
@@ -453,7 +436,6 @@ lemma v'_eq_z'_mul_Y'_pow_two
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -471,11 +453,9 @@ lemma v'_eq_z'_mul_Y'_pow_two
       X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
     let Y'_pow_two_eq_of_X2_ne_one := Y'_pow_two_eq_of_X2_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-    let z_pow_three_eq_z := χ_of_a_pow_n_eq_χ_a
-      (Y * (X^2 + 1 / c^2)) ⟨3, by grind⟩ hq_card hq_primePow hq_mod
+    let z_pow_three_eq_z := χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨3, by grind⟩
     change z^3 = z at z_pow_three_eq_z
-    let z_pow_five_eq_z := χ_of_a_pow_n_eq_χ_a
-      (Y * (X^2 + 1 / c^2)) ⟨5, by grind⟩ hq_card hq_primePow hq_mod
+    let z_pow_five_eq_z := χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨5, by grind⟩
     change z^5 = z at z_pow_five_eq_z
     let x := P.val.1
     have h2 : v = z * (X^5 + (r^2 - 2) * X^3 + X) := by
@@ -489,7 +469,6 @@ lemma v'_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -501,7 +480,7 @@ lemma v'_ne_zero
   X ≠ 1 → v ≠ 0 := by
     intro X v h1
     let v'_eq_z'_mul_Y'_pow_two :=
-      v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props y_ne_one
+      v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
     have h2 : v = z * Y^2 := by grind
@@ -514,7 +493,6 @@ lemma χ_of_v'_eq_χ_of_z'
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -530,16 +508,15 @@ lemma χ_of_v'_eq_χ_of_z'
     intro X z v χ_of_v χ_of_z h
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
     let v'_eq_z'_mul_Y'_pow_two :=
-      v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props y_ne_one
+      v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
     unfold χ_of_v v
     rw [v'_eq_z'_mul_Y'_pow_two h]
     let h' := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [χ_of_a_eq_χ_a_mul_b_pow_two h' hq_card hq_mod]
+    rw [χ_of_a_eq_χ_a_mul_b_pow_two h']
 
 lemma χ_of_z'_eq_z'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   :
@@ -548,13 +525,12 @@ lemma χ_of_z'_eq_z'
   let χ_of_z := χ z
   X ≠ 1 → χ_of_z = z := by
     intro X z χ_of_z h1
-    exact χ_of_χ_of_a_eq_χ_of_a hq_card hq_primePow hq_mod
+    exact χ_of_χ_of_a_eq_χ_of_a hq_card hq_mod
 
 lemma χ_of_v'_eq_z'
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -571,7 +547,6 @@ lemma X'_eq_χ_of_v'_mul_u'
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -585,7 +560,7 @@ lemma X'_eq_χ_of_v'_mul_u'
   X ≠ 1 → X = χ_of_v * u := by
     intro X v u χ_of_v h1
     let χ_of_v'_eq_z' := χ_of_v'_eq_z'
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     unfold χ_of_v v
     rw [χ_of_v'_eq_z' h1]
     let z := z' sq_ne_pm_two hq_card hq_mod P
@@ -600,14 +575,13 @@ lemma X'_eq_χ_of_v'_mul_u'
     let a := (Y * (X^2 + 1 / c^2))
     nth_rw 1 [← mul_one X]
     unfold z z'
-    rw [mul_div_assoc, ← one_div_χ_of_a_eq_χ_a hq_card hq_primePow hq_mod]
+    rw [mul_div_assoc, ← one_div_χ_of_a_eq_χ_a]
     grind
 
 lemma Y'_pow_two_eq_χ_of_v'_mul_v'
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -621,7 +595,7 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
   X ≠ 1 → Y^2 = χ_of_v * v := by
     intro X Y v χ_of_v h1
     let v'_eq_z'_mul_Y'_pow_two :=
-      v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props y_ne_one
+      v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
     let z :=z' sq_ne_pm_two hq_card hq_mod P
     have h2 : v = z * Y^2 := by grind
     let z_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
@@ -636,10 +610,10 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
     let a := u^5 + (r^2 - 2) * u^3 + u
     rw [← h2, mul_comm]
     unfold χ_of_v v v'
-    rw [one_div_χ_of_a_eq_χ_a hq_card hq_primePow hq_mod]
+    rw [one_div_χ_of_a_eq_χ_a]
     change v / z = v * (1 / χ_of_v)
     let χ_of_v'_eq_z' := χ_of_v'_eq_z'
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     unfold χ_of_v v
     rw [χ_of_v'_eq_z' h1]
     grind
@@ -648,7 +622,6 @@ lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -665,7 +638,7 @@ lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
   X ≠ 1 → χ_of_v = χ_term := by
     intro X Y v χ_of_v c term χ_term h1
     let χ_of_v'_eq_z' := χ_of_v'_eq_z'
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let X2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
     change X ≠ 0 at X2_ne_zero
     unfold χ_of_v χ_term term
@@ -676,7 +649,6 @@ lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -715,7 +687,6 @@ lemma Y'_observation1
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -730,10 +701,10 @@ lemma Y'_observation1
   X ≠ 1 → (χ Y) = (χ v) * χ (u^2 + 1 / c^2)  := by
     intro X Y v u c h1
     let χ_of_v'_eq_z'_unfold_of_X'_ne_one := χ_of_v'_eq_z'_unfold_of_X'_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one h1
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
     let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two :=
       χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
-        hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one
+        hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let term1 := (u^2 + 1 / c^2)
     let term2 := Y * term1
     let χ_term1 := χ term1
@@ -746,14 +717,13 @@ lemma Y'_observation1
       rw [← pow_two]
       let term1_ne_zero := u'_pow_two_add_one_div_c_pow_two_ne_zero
         hs_ne_zero sq_ne_pm_two hq_card hq_mod P
-      rw [χ_of_a_even_pow_n_eq_one term1_ne_zero ⟨2, even_two⟩ hq_card hq_mod]
+      rw [χ_of_a_even_pow_n_eq_one term1_ne_zero ⟨2, even_two⟩]
     grind
 
 lemma Y'_observation2
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
@@ -768,15 +738,15 @@ lemma Y'_observation2
   X ≠ 1 → Y = ((χ v) * v)^((q + 1) / 4) * (χ v) * χ (u^2 + 1 / c^2) := by
     intro X Y v u c h1
     let χ_of_v'_eq_z'_unfold_of_X'_ne_one := χ_of_v'_eq_z'_unfold_of_X'_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one h1
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
     let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two :=
       χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
-        hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one h1
+        hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
     let Y'_observation1 := Y'_observation1
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one h1
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
     change (χ Y) = (χ v) * χ (u^2 + 1 / c^2) at Y'_observation1
     let Y'_pow_two_eq_χ_of_v'_mul_v' := Y'_pow_two_eq_χ_of_v'_mul_v'
-      hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod P P_props x_ne_zero y_ne_one h1
+      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
     rw [← Y'_pow_two_eq_χ_of_v'_mul_v', mul_assoc, ← Y'_observation1]
     rw [← pow_mul, add_comm]
     change Y = Y^(2 * ((1 + q) / 4)) * (χ Y)
@@ -786,7 +756,7 @@ lemma Y'_observation2
     rw [mul_comm, ← mul_assoc]
     rw [← χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, ← pow_two]
     let Y'_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [χ_of_a_pow_two_eq_one Y'_ne_zero hq_card hq_mod]
+    rw [χ_of_a_pow_two_eq_one Y'_ne_zero]
     grind
 
 end Elligator.Elligator1

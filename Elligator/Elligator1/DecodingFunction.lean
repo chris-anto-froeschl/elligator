@@ -49,8 +49,7 @@ def DecodingFunction
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_primePow : IsPrimePow q)
   (hq_mod : q % 4 = 3)
-  : F × F := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_primePow hq_mod
+  : F × F := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 end Elligator.Elligator1

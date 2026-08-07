@@ -100,6 +100,7 @@ lemma v_ne_zero
     · exact (v_h1_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)
 
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero
+  [DecidableEq F]
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -110,7 +111,7 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero
     intro v
     rw [mul_pow (χ v) v ((q + 1) / 4)]
     apply mul_ne_zero
-    · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t) hq_card)
+    · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t))
     · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero hs_ne_zero hq_card hq_mod t)
 
 omit [Fintype F] in
@@ -163,22 +164,20 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     grind
 
 lemma v_comparison_implication3
+  [DecidableEq F]
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
   : χ ((u t)^6) = 1 := by
     let u := u t
     have h : u^6 = u^2 * u^2 * u^2 := by ring_nf
     rw [h]
-    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [LegendreSymbol.χ_of_a_pow_two_eq_one (u_ne_zero t) hq_card hq_mod]
+    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+    rw [χ_of_a_pow_two_eq_one (u_ne_zero t)]
     simp
 
 lemma v_comparison_implication4
+  [DecidableEq F]
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
   :
   let t1 := t.val
   let t2 := -t1
@@ -190,8 +189,8 @@ lemma v_comparison_implication4
     unfold v1
     rw [← v_comparison_implication1 t]
     change χ v2= χ (v2 * u^6)
-    rw [LegendreSymbol.χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
-    rw [v_comparison_implication3 t hq_card hq_mod]
+    rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+    rw [v_comparison_implication3 t]
     simp
 
 omit [Fintype F] in

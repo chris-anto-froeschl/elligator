@@ -23,7 +23,7 @@ namespace Elligator.Elligator1
 
 open Elligator.LegendreSymbol
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 
 /-- c(s) is a function defined in the paper.
 
