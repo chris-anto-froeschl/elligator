@@ -7,12 +7,19 @@ module
 
 public import Elligator.Basic
 public import Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic
+public import Mathlib.FieldTheory.Finite.GaloisField
 
 /-!
 # Finite Field Basic
 
 In this file we introduce some generally helpful lemmas for the finite field `F` with
 `q` fulfilling `IsPrimePow`/`Prime`, `Fintype.card F = q` and `q % 4 = 3`.
+
+The assumption `IsPrimePow q` of [bernstein2013a] never has to be stated: by
+`card_isPrimePow` it is a consequence of `Fintype.card F = q`, so `q` ranges over exactly the
+prime powers congruent to `3` modulo `4`. Conversely, `prime_of_natCast_surjective` shows that
+representing field elements by the naturals `0, 1, …, q - 1`, as the string encoding of
+Section 3.4 does, is possible only when `q` is prime.
 
 ## References
 
@@ -25,6 +32,16 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ}
 
 namespace Elligator.FiniteFieldBasic
+
+/-- The cardinality of a finite field is always a prime power.
+
+This is why no statement of this development has to assume `IsPrimePow q`: the hypothesis
+`Fintype.card F = q` already forces `q` to be a prime power, so all results proved for a finite
+field `F` with `Fintype.card F = q` and `q % 4 = 3` are exactly the results of [bernstein2013a]
+for an arbitrary prime power `q ≡ 3 (mod 4)`. -/
+lemma card_isPrimePow (hq_card : Fintype.card F = q) : IsPrimePow q := by
+  rw [← hq_card]
+  exact FiniteField.isPrimePow_card F
 
 omit [Field F] in
 lemma q_odd (hq_mod : q % 4 = 3) : Odd q := by
@@ -148,5 +165,53 @@ lemma exists_nat_cast_eq
   : ∃ (n : ℕ), n < q ∧ (n : F) = t := by
     obtain ⟨n, hn⟩ : ∃ n : Fin q, (n : F) = t := exists_fin_cast_eq hq_card q_prime t
     exact ⟨n.val, n.isLt, hn⟩
+
+
+/-- A natural number `q` is the cardinality of some finite field if and only if it is a prime
+power. Together with `Elligator.FiniteFieldBasic.card_isPrimePow` this says that the standing
+hypotheses `Fintype.card F = q`, `q % 4 = 3` of this development describe exactly the setting of
+[bernstein2013a], Section 3.1: an arbitrary prime power `q ≡ 3 (mod 4)`. -/
+theorem exists_field_card_eq_iff_isPrimePow (q : ℕ) :
+    (∃ (F : Type) (_ : Field F) (_ : Fintype F), Fintype.card F = q) ↔ IsPrimePow q := by
+  constructor
+  · rintro ⟨F, _, _, hcard⟩
+    exact card_isPrimePow hcard
+  · rintro ⟨p, k, hp, hk, rfl⟩
+    have hp' : Nat.Prime p := Nat.prime_iff.mpr (by exact_mod_cast hp)
+    haveI : Fact (Nat.Prime p) := ⟨hp'⟩
+    have hk0 : k ≠ 0 := hk.ne'
+    classical
+    haveI : Fintype (GaloisField p k) := Fintype.ofFinite _
+    refine ⟨GaloisField p k, inferInstance, inferInstance, ?_⟩
+    have := GaloisField.card p k hk0
+    rw [Nat.card_eq_fintype_card] at this
+    exact this
+
+/-- If every element of `F` is the image of a natural number under the canonical cast, then the
+cardinality of `F` is *prime*, not merely a *prime power*.
+
+This is the precise reason why the string encoding `ι` of [bernstein2013a], Section 3.4, is
+formalized for prime `q` only: it represents field elements by the naturals
+`0, 1, ..., q - 1`, which requires the natural casts to exhaust `F`. The `ϕ` part of the
+development makes no such assumption and therefore covers all *prime powers*. -/
+lemma prime_of_natCast_surjective
+  (hq_card : Fintype.card F = q)
+  (hsurj : ∀ t : F, ∃ n : ℕ, (n : F) = t)
+  : q.Prime := by
+    have hpp : (ringChar F).Prime := CharP.char_is_prime F (ringChar F)
+    have hfin : Function.Surjective (fun n : Fin (ringChar F) => ((n : ℕ) : F)) := by
+      intro t
+      obtain ⟨n, hn⟩ := hsurj t
+      exact ⟨⟨n % ringChar F, Nat.mod_lt _ hpp.pos⟩,
+        by simpa [CharP.cast_eq_mod F (ringChar F) n] using hn⟩
+    have hle : Fintype.card F ≤ ringChar F := by
+      simpa using Fintype.card_le_of_surjective _ hfin
+    have hge : ringChar F ≤ Fintype.card F := by
+      have hinj : Function.Injective (fun n : Fin (ringChar F) => ((n : ℕ) : F)) := fun a b hab =>
+        Fin.ext (CharP.natCast_injOn_Iio F (ringChar F) a.isLt b.isLt hab)
+      simpa using Fintype.card_le_of_injective _ hinj
+    have hq : q = ringChar F := by omega
+    rw [hq]
+    exact hpp
 
 end Elligator.FiniteFieldBasic

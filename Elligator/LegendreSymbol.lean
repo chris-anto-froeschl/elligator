@@ -19,7 +19,7 @@ field `F` with `Fintype.card F = q` and `q % 4 = 3`.
 
 ## References
 
-See [bernstein2013a], Section 3.2 for the original account on this version of the Legendre Symbol.
+See [bernstein2013a], Section 3.1 for the original account on this version of the Legendre Symbol.
 -/
 
 @[expose] public section
@@ -36,8 +36,6 @@ prime congruent to 3 modulo 4, viewed as an element of `F`.
 
 This is Mathlib's `quadraticChar` composed with the cast `ℤ → F`, since
 `Mathlib.NumberTheory.LegendreSymbol.Basic` is restricted to `ℤ`.
-
-Original: definition at, Section 3.2.
 -/
 @[blueprint "def:χ"
   (title := "The quadratic character $\\chi$")
@@ -56,6 +54,7 @@ def χ (a : F) : F := ((quadraticChar F a : ℤ) : F)
 @[simp]
 lemma χ_zero : χ (0 : F) = 0 := by simp [χ]
 
+@[simp]
 lemma χ_one : χ (1 : F) = 1 := by simp [χ]
 
 /-- Euler's criterion: `χ` is given by the `(q - 1) / 2`-th power. -/
@@ -83,15 +82,14 @@ lemma a_eq_zero_of_χ_of_a_eq_zero {a : F} : χ a = 0 → a = 0 := by
   exact χ_a_ne_zero ha h
 
 @[simp]
-lemma χ_a_eq_one {a : F} (a_ne_zero : a ≠ 0) (a_square : IsSquare a) : χ a = 1 := by
+lemma χ_a_eq_one {a : F}
+  (a_ne_zero : a ≠ 0) (a_square : IsSquare a)
+  : χ a = 1 := by
   rw [χ, (quadraticChar_one_iff_isSquare a_ne_zero).mpr a_square]
   simp
 
-lemma χ_a_eq_one_iff_a_square
-  {a : F}
-  (a_ne_zero : a ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma χ_a_eq_one_iff_a_square {a : F}
+  (a_ne_zero : a ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ a = 1 ↔ IsSquare a := by
     refine ⟨fun h => ?_, χ_a_eq_one a_ne_zero⟩
     rcases quadraticChar_dichotomy a_ne_zero with h' | h'
@@ -105,23 +103,16 @@ lemma χ_of_a_pow_two_eq_one {a : F} (a_ne_zero : a ≠ 0) : χ (a ^ 2) = 1 := b
   rw [χ, quadraticChar_sq_one' a_ne_zero]
   simp
 
-lemma χ_of_neg_one_eq_neg_one
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma χ_of_neg_one_eq_neg_one (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ (-1 : F) = -1 := by
     rw [χ, quadraticChar_neg_one_iff_not_isSquare.mpr (neg_one_non_square hq_card hq_mod)]
     simp
 
-lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} : χ (a * b) = (χ a) * χ b := by
-  rw [χ, χ, χ, map_mul]
-  push_cast
-  ring
+lemma χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b {a b : F} : χ (a * b) = (χ a) * (χ b) := by
+  simp [χ, quadraticCharFun_mul]
 
-lemma neg_χ_a_ne_χ_a
-  {a : F}
-  (a_ne_zero : a ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma neg_χ_a_ne_χ_a {a : F}
+  (a_ne_zero : a ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ a ≠ -(χ a) := by
     intro h
     have h1 : (2 : F) * χ a = 0 := by linear_combination h
@@ -130,10 +121,8 @@ lemma neg_χ_a_ne_χ_a
     · exact χ_a_ne_zero a_ne_zero h2
 
 @[simp]
-lemma χ_of_a_even_pow_n_eq_one
-  {a : F}
-  (a_ne_zero : a ≠ 0)
-  (n : {n : ℕ | Even n})
+lemma χ_of_a_even_pow_n_eq_one {a : F}
+  (a_ne_zero : a ≠ 0) (n : {n : ℕ | Even n})
   : χ a ^ (n.val) = 1 := by
     rcases χ_values (a := a) with h | h | h
     · exact absurd h (χ_a_ne_zero a_ne_zero)
@@ -142,9 +131,7 @@ lemma χ_of_a_even_pow_n_eq_one
     · rw [h, one_pow]
 
 @[simp]
-lemma χ_of_a_pow_n_eq_χ_a
-  (a : F)
-  (n : {n : ℕ | Odd n})
+lemma χ_of_a_pow_n_eq_χ_a (a : F) (n : {n : ℕ | Odd n})
   : (χ a) ^ (n.val) = χ a := by
     have hn := n.prop
     rcases χ_values (a := a) with h | h | h
@@ -153,10 +140,8 @@ lemma χ_of_a_pow_n_eq_χ_a
       exact hn.neg_one_pow
     · rw [h, one_pow]
 
-lemma χ_of_χ_of_a_eq_χ_of_a
-  {a : F}
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma χ_of_χ_of_a_eq_χ_of_a {a : F}
+  (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : χ (χ a) = χ a := by
     rcases χ_values (a := a) with h | h | h
     · rw [h, χ_zero]
@@ -182,8 +167,10 @@ lemma one_div_χ_of_a_eq_χ_a {a : F} : χ a = 1 / χ a := by
 
 /-- Multiplying by a nonzero square does not change the quadratic character.
 Introduced in paper theory theorem 3.A proof. -/
-lemma χ_of_a_eq_χ_a_mul_b_pow_two {a b : F} (b_ne_zero : b ≠ 0) : χ (a * b ^ 2) = χ a := by
-  rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b, χ_of_a_pow_two_eq_one b_ne_zero, mul_one]
+lemma χ_of_a_eq_χ_a_mul_b_pow_two {a b : F} (b_ne_zero : b ≠ 0)
+  : χ (a * b ^ 2) = χ a := by
+  rw [χ_of_a_mul_b_eq_χ_of_a_mul_χ_of_b]
+  rw [χ_of_a_pow_two_eq_one b_ne_zero, mul_one]
 
 lemma a_pow_q_add_one_div_two_eq_χ_of_a_mul_a
   {a : F}
@@ -196,32 +183,24 @@ lemma a_pow_q_add_one_div_two_eq_χ_of_a_mul_a
 
 omit [DecidableEq F] in
 @[simp]
-lemma a_pow_q_add_one_div_two_eq_a
-  {a : F}
-  (a_square : IsSquare a)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma a_pow_q_add_one_div_two_eq_a {a : F}
+  (a_square : IsSquare a) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : a ^ ((q + 1) / 2) = a := by
     classical
     rcases eq_or_ne a 0 with rfl | ha
     · exact zero_pow (by omega)
-    · rw [a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod,
-        χ_a_eq_one ha a_square, one_mul]
+    · rw [a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
+      rw [χ_a_eq_one ha a_square, one_mul]
 
-lemma b_pow_q_add_one_div_four_eq_χ_of_a_mul_a
-  {a : F}
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma b_pow_q_add_one_div_four_eq_χ_of_a_mul_a {a : F}
+  (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : (a ^ 2) ^ ((q + 1) / 4) = (χ a) * a := by
     rw [← pow_mul]
     have h : 2 * ((q + 1) / 4) = (q + 1) / 2 := by omega
     rw [h, a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
 
-lemma χ_a_mul_a_IsSquare
-  {a : F}
-  (a_ne_zero : a ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
+lemma χ_a_mul_a_IsSquare {a : F}
+  (a_ne_zero : a ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : IsSquare ((χ a) * a) := by
     have h : (χ a) * a ≠ 0 := mul_ne_zero (χ_a_ne_zero a_ne_zero) a_ne_zero
     apply (χ_a_eq_one_iff_a_square h hq_card hq_mod).mp
