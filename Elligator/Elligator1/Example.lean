@@ -5,12 +5,14 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.Elligator1.Map
+public meta import Elligator.Elligator1.Map
+public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.Curve1174Prime
 public import Elligator.Elligator1.DecodingFunction
 public import Elligator.Elligator1.InvertedMap
-public import Elligator.Elligator1.StringEncoding
-public meta import Mathlib.Data.ZMod.Defs
+public meta import Elligator.Elligator1.StringEncoding
+public meta import Mathlib.Algebra.Field.Defs
+public meta import Mathlib.Algebra.Field.ZMod
 
 /-!
 # Computational sanity checks
@@ -33,6 +35,7 @@ open Elligator.Elligator1
 
 /-! ### The field and parameter -/
 
+/-- The field with 7 elements -/
 abbrev F7 : Type := ZMod 7
 
 instance : Fact (Nat.Prime 7) := ⟨by norm_num⟩
@@ -42,6 +45,7 @@ theorem F7_isPrimePow : IsPrimePow (7 : ℕ) := q7_prime.isPrimePow
 theorem card_F7 : Fintype.card F7 = 7 := ZMod.card 7
 theorem F7_mod_four : (7 : ℕ) % 4 = 3 := by decide
 
+/-- A non-zero element of `F7` -/
 def s7 : F7 := 2
 theorem s7_ne_zero : s7 ≠ 0 := by decide
 theorem s7_sq_ne_pm_two : (s7 ^ 2 - 2) * (s7 ^ 2 + 2) ≠ 0 := by decide

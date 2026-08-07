@@ -54,7 +54,6 @@ def χ (a : F) : F := ((quadraticChar F a : ℤ) : F)
 @[simp]
 lemma χ_zero : χ (0 : F) = 0 := by simp [χ]
 
-@[simp]
 lemma χ_one : χ (1 : F) = 1 := by simp [χ]
 
 /-- Euler's criterion: `χ` is given by the `(q - 1) / 2`-th power. -/
