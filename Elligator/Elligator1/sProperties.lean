@@ -22,28 +22,14 @@ See [bernstein2013a], Section 3.
 
 namespace Elligator.Elligator1
 
-variable {F : Type*} [Field F] [Fintype F]
+variable {F : Type*} [Field F]
 variable {s : F}
 
-omit [Fintype F] in
-lemma s_pow_two_ne_two (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  : s^2 ≠ 2 := by
-  have h1 : s^2 - 2 ≠ 0 := by
-    intro h
-    rw [h] at sq_ne_pm_two
-    norm_num at sq_ne_pm_two
-  intro h
-  rw [h] at h1
-  norm_num at h1
+lemma s_pow_two_ne_two (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : s ^ 2 ≠ 2 :=
+  sub_ne_zero.mp (left_ne_zero_of_mul sq_ne_pm_two)
 
-omit [Fintype F] in
-lemma s_pow_two_ne_neg_two (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : s^2 ≠ -2 := by
-  have h1 : s^2 + 2 ≠ 0 := by
-    intro h
-    rw [h] at sq_ne_pm_two
-    norm_num at sq_ne_pm_two
-  intro h
-  rw [h] at h1
-  norm_num at h1
+lemma s_pow_two_ne_neg_two (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : s ^ 2 ≠ -2 := by
+  have h := right_ne_zero_of_mul sq_ne_pm_two
+  rwa [ne_eq, add_eq_zero_iff_eq_neg] at h
 
 end Elligator.Elligator1

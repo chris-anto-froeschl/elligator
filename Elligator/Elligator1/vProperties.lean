@@ -61,7 +61,7 @@ lemma v_h1
     let r := r s
     change u^5 + (r^2 - 2) * u^3 + u = u * (u^2 + c^2) * (u^2 + 1 / c^2)
     have h : c^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
-    grind [r_h1]
+    grind [r_sq_sub_two_eq_c_sq_add_inv_c_sq]
 
 lemma v_h1_second_factor_ne_zero
   (hs_ne_zero : s ≠ 0)

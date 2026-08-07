@@ -52,6 +52,7 @@ lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
      _ = 1 / u1 := by simp [u1, u]
 
 omit [Fintype F] in
+@[simp]
 lemma u_of_zero :
   let u := u ⟨(0 : F), by simp⟩
   u = 1 := by simp [u]

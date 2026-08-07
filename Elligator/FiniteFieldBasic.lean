@@ -59,11 +59,19 @@ lemma q_sub_one_even (hq_mod : q % 4 = 3) : Even (q - 1) := by
   omega
 
 omit [Fintype F] in
-lemma one_ne_zero : (1 : F) ≠ 0 := by grind
+lemma one_ne_zero : (1 : F) ≠ 0 := by exact one_ne_zero' F
 
-lemma q_add_one_div_four_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by grind
+lemma q_add_one_div_four_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by
+  apply Nat.div_ne_zero_iff.mpr
+  norm_num
+  have hqle : q ≥ 3 := by lia
+  exact Nat.sub_le_iff_le_add'.mp hqle
 
-lemma q_add_one_div_two_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by grind
+lemma q_add_one_div_two_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by
+  apply Nat.div_ne_zero_iff.mpr
+  norm_num
+  have hqle : q ≥ 2 := by lia
+  exact Nat.le_add_left_of_le hqle
 
 lemma two_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (2 : F) ≠ 0 := by
   intro h
@@ -71,9 +79,9 @@ lemma two_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (2 : F) 
   have hdvd : ringChar F ∣ 2 := (CharP.cast_eq_zero_iff F (ringChar F) 2).mp h
   -- ringChar F ∣ 2 and ringChar F ≠ 1 (F is nontrivial) forces ringChar F = 2
   have hp : ringChar F = 2 := by
-    rcases (Nat.dvd_prime Nat.prime_two).mp hdvd with h1 | h1
-    · exact absurd h1 (CharP.char_ne_one F (ringChar F))
-    · exact h1
+    rcases (Nat.dvd_prime Nat.prime_two).mp hdvd with hchar | hchar
+    · exact absurd hchar (CharP.char_ne_one F (ringChar F))
+    · exact hchar
   have hchar : CharP F 2 := by
     rw [← hp]
     exact ringChar.charP F
@@ -87,8 +95,8 @@ lemma two_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (2 : F) 
   omega
 
 lemma four_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (4 : F) ≠ 0 := by
-  have h1 : (4 : F) = 2 * 2 := by norm_num
-  rw [h1]
+  have hnum : (4 : F) = 2 * 2 := by norm_num
+  rw [hnum]
   apply mul_ne_zero
   · exact (two_ne_zero hq_card hq_mod)
   · exact (two_ne_zero hq_card hq_mod)
@@ -104,6 +112,11 @@ lemma neg_one_ne_zero : (-1 : F) ≠ 0 := neg_ne_zero.mpr one_ne_zero
 
 lemma neg_one_non_square (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : ¬IsSquare (-1 : F) := by grind [FiniteField.isSquare_neg_one_iff]
+
+/-- If some algebraic identity would force `-1` to be a square, contradiction — `-1` is never
+a square when `q % 4 = 3`. A common closing step for the `r`/`d` nonvanishing proofs. -/
+lemma false_of_isSquare_neg_one (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
+  (h : IsSquare (-1 : F)) : False := neg_one_non_square hq_card hq_mod h
 
 omit [Fintype F] in
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 :=
@@ -147,9 +160,9 @@ lemma ringChar_of_F_eq_q (hq_card : Fintype.card F = q) (q_prime : Prime q) : ri
   have h_dvd : ringChar F ∣ q := h_q_eq_pow ▸ dvd_pow_self _ n.pos.ne'
   -- `q` is prime, so its only divisors are `1` and `q` - and a field's characteristic
   -- is never `1`, so it must be `q` itself.
-  rcases (Nat.dvd_prime (Nat.prime_iff.mpr q_prime)).1 h_dvd with h1 | hq
-  · exact absurd h1 h_char_prime.ne_one
-  · exact hq
+  rcases (Nat.dvd_prime (Nat.prime_iff.mpr q_prime)).1 h_dvd with hchar | hchar
+  · exact absurd hchar h_char_prime.ne_one
+  · exact hchar
 
 /-- The cast `Fin q → F` is injective -/
 lemma fin_to_finfield_injective (hq_card : Fintype.card F = q) (q_prime : Prime q)
