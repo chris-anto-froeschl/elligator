@@ -50,7 +50,7 @@ lemma x_ne_zero
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   :
   let x := x t s q
-  x ≠ (0 : F) := by
+  x ≠ 0 := by
     let c := c s
     let X := X t s
     let Y := Y t s q
@@ -59,10 +59,9 @@ lemma x_ne_zero
     · apply mul_ne_zero
       · apply mul_ne_zero
         · apply mul_ne_zero
-          · intro h1
-            have h1_1 : c = 1 := by grind
-            have h1_2 := c_ne_one sq_ne_pm_two
-            contradiction
+          · intro hc_eq_one
+            have hc_eq_one' : c = 1 := by grind
+            exact (c_ne_one sq_ne_pm_two) hc_eq_one'
           · apply hs_ne_zero
         · apply X_ne_zero hs_ne_zero hq_card hq_mod t
       · apply one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
@@ -82,13 +81,12 @@ lemma x_comparison
   x2 = x1 := by
     intro t1 t2 x1 x2
     let c := c s
-    let r := r s
     let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     let X1 := X t s
     let X2 := X ⟨t2, t_h⟩ s
     let Y1 := Y t s q
     let Y2 := Y ⟨t2, t_h⟩ s q
-    have X_pow_three_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero hs_ne_zero hq_card hq_mod t)
+    have hX1_pow3_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero hs_ne_zero hq_card hq_mod t)
     calc
       x2 = (c - 1) * s * X2 * (1 + X2) / Y2 := by rfl
       _ = (c - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by grind [X_comparison, Y_comparison]
@@ -99,27 +97,23 @@ lemma x_y_eq_zero_sign_one
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (point : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
-  (x_eq_zero : point.val.1 = 0)
-  : point.val = ((0 : F), (1 : F)) ∨ point.val = ((0 : F), (-1 : F)) := by
+  (P : {P : F × F // P ∈ EOverF sq_ne_pm_two hq_card hq_mod})
+  (hx_eq_zero : P.val.1 = 0)
+  : P.val = ((0 : F), (1 : F)) ∨ P.val = ((0 : F), (-1 : F)) := by
     let d := d s
-    let x := point.val.1
-    let y := point.val.2
-    unfold EOverF at point
+    let x := P.val.1
+    let y := P.val.2
+    unfold EOverF at P
     change (x, y) = (0, 1) ∨ (x, y) = (0, -1)
-    change x = 0 at x_eq_zero
-    rw [← x_eq_zero]
-    have h' : x^2 + y^2 = 1 + d * x^2 * y^2 := by
-      let point_h := point.prop
-      simp only [edwardsCurveEquation_iff] at point_h
-      exact point_h
-    have h'' : y = 1 ∨ y = -1 := by grind
-    rcases h'' with h | h
-    · rw [← h]
-      left
-      rfl
-    · rw [← h]
-      right
-      rfl
+    change x = 0 at hx_eq_zero
+    rw [← hx_eq_zero]
+    have h_curve_eq : x^2 + y^2 = 1 + d * x^2 * y^2 := by
+      let hP := P.prop
+      simp only [edwardsCurveEquation_iff] at hP
+      exact hP
+    have hy_eq_pm_one : y = 1 ∨ y = -1 := by grind
+    rcases hy_eq_pm_one with h | h
+    · rw [← h]; left; rfl
+    · rw [← h]; right; rfl
 
 end Elligator.Elligator1

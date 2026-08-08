@@ -32,22 +32,7 @@ variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}
 variable {q : ℕ}
 
-lemma v_h1_third_factor_ne_zero
-  (hs_ne_zero : s ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  : (u t)^2 + 1 / (c s)^2 ≠ 0 := by
-    intro h
-    have h' : -1 = ((u t) * (c s))^2 := by grind [pow_ne_zero, c_ne_zero, div_left_inj']
-    have h'' : IsSquare (-1 : F) := by
-      rw [h', pow_two]
-      apply IsSquare.mul_self
-    rw [FiniteField.isSquare_neg_one_iff] at h''
-    rw [hq_card] at h''
-    contradiction
-
-lemma v_h1
+lemma v_factored
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
@@ -60,25 +45,40 @@ lemma v_h1
     intro v c u
     let r := r s
     change u^5 + (r^2 - 2) * u^3 + u = u * (u^2 + c^2) * (u^2 + 1 / c^2)
-    have h : c^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
+    have hc_sq_ne_zero : c^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
     grind [r_sq_sub_two_eq_c_sq_add_inv_c_sq]
 
-lemma v_h1_second_factor_ne_zero
+lemma v_factored_second_factor_ne_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : (u t)^2 + (c s)^2 ≠ 0 := by
-    intro h
+    intro h_sum_eq_zero
     let c := c s
     let u := u t
-    have h' : -1 = (u / c)^2 := by
-      let h'' := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
+    have h_neg_one_sq : -1 = (u / c)^2 := by
+      have hc_sq_ne_zero := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
       grind
-    have h'' : IsSquare (-1 : F) := by
-      rw [h', pow_two]
+    have h_isSquare : IsSquare (-1 : F) := by
+      rw [h_neg_one_sq, pow_two]
       apply IsSquare.mul_self (u / c)
-    rw [FiniteField.isSquare_neg_one_iff, hq_card] at h''
+    rw [FiniteField.isSquare_neg_one_iff, hq_card] at h_isSquare
+    contradiction
+
+lemma v_factored_third_factor_ne_zero
+  (hs_ne_zero : s ≠ 0)
+  (hq_card : Fintype.card F = q)
+  (hq_mod : q % 4 = 3)
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+  : (u t)^2 + 1 / (c s)^2 ≠ 0 := by
+    intro h_sum_eq_zero
+    have h_neg_one_sq : -1 = ((u t) * (c s))^2 := by
+      grind [pow_ne_zero, c_ne_zero, div_left_inj']
+    have h_isSquare : IsSquare (-1 : F) := by
+      rw [h_neg_one_sq, pow_two]
+      apply IsSquare.mul_self
+    rw [FiniteField.isSquare_neg_one_iff, hq_card] at h_isSquare
     contradiction
 
 @[blueprint "lemma:v_ne_zero"
@@ -92,12 +92,12 @@ lemma v_ne_zero
   (hq_mod : q % 4 = 3)
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   : v t s ≠ (0 : F) := by
-    rw [v_h1 hs_ne_zero hq_card hq_mod t]
+    rw [v_factored hs_ne_zero hq_card hq_mod t]
     apply mul_ne_zero
     · apply mul_ne_zero
       · apply u_ne_zero t
-      · exact (v_h1_second_factor_ne_zero hs_ne_zero hq_card hq_mod t)
-    · exact (v_h1_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)
+      · exact (v_factored_second_factor_ne_zero hs_ne_zero hq_card hq_mod t)
+    · exact (v_factored_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)
 
 lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero
   [DecidableEq F]
@@ -157,8 +157,8 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   v2 = v1 / u1^6 := by
     intro t1 t2 u1 v1 v2
-    have h2_6_1 : u1^6 ≠ 0 := by apply pow_ne_zero 6 (u_ne_zero t)
-    rw [← mul_right_inj' h2_6_1]
+    have hu1_pow6_ne_zero : u1^6 ≠ 0 := pow_ne_zero 6 (u_ne_zero t)
+    rw [← mul_right_inj' hu1_pow6_ne_zero]
     unfold v1
     rw [← v_comparison_implication1 t]
     grind
@@ -169,11 +169,8 @@ lemma v_comparison_implication3
   : χ ((u t)^6) = 1 := by
     let u := u t
     have h : u^6 = u^2 * u^2 * u^2 := by ring_nf
-    rw [h]
-    rw [χ_mul]
-    rw [χ_mul]
-    rw [χ_sq (u_ne_zero t)]
-    simp
+    rw [h, χ_mul, χ_mul, χ_sq (u_ne_zero t)]
+    rw [mul_one, mul_one]
 
 lemma v_comparison_implication4
   [DecidableEq F]
@@ -194,6 +191,7 @@ lemma v_comparison_implication4
     simp
 
 omit [Fintype F] in
+@[simp]
 lemma v_of_zero :
   let v := v ⟨(0 : F), by simp⟩ s
   v = (r s)^2 := by

@@ -53,10 +53,10 @@ lemma c_ne_neg_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) ≠ 
 
 omit [Fintype F] in
 lemma c_add_one_ne_zero (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) + 1 ≠ 0 := by
-  intro h
-  have h' := c_ne_neg_one sq_ne_pm_two
-  rw [← add_left_inj (-1)] at h
-  ring_nf at h
+  intro hceq
+  have hc_ne_neg_one  := c_ne_neg_one sq_ne_pm_two
+  rw [← add_left_inj (-1)] at hceq
+  ring_nf at hceq
   contradiction
 
 @[blueprint "lemma:c_mul_sub_one_mul_add_one_ne_zero"

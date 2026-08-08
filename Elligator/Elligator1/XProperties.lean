@@ -41,12 +41,12 @@ lemma X_pow_two_add_one_div_c_pow_two_ne_zero
   : (X t s)^2 + 1 / (c s)^2 ≠ 0 := by
     let X := X t s
     let c := c s
-    intro h
-    have h1 : X^2 * c^2 + c⁻¹^2 * c^2 = 0 := by grind
-    have h2 : X^2 * c^2 = -1 := by grind [c_ne_zero]
-    have h3 : ¬IsSquare (-1 : F) := neg_one_non_square hq_card hq_mod
-    have h4 : IsSquare (-1 : F) := by
-      rw [← h2, ← mul_pow]
+    intro h_sum_eq_zero
+    have h_cleared : X^2 * c^2 + c⁻¹^2 * c^2 = 0 := by grind
+    have h_prod_eq_neg_one : X^2 * c^2 = -1 := by grind [c_ne_zero]
+    have h_not_isSquare : ¬IsSquare (-1 : F) := neg_one_non_square hq_card hq_mod
+    have h_isSquare : IsSquare (-1 : F) := by
+      rw [← h_prod_eq_neg_one, ← mul_pow]
       apply IsSquare.sq (X * c)
     contradiction
 
@@ -91,15 +91,16 @@ lemma X_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
         ring_nf
       _ = 1 / X1 := by rfl
 
+@[simp]
 lemma X_of_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   :
-  let X_of_zero := X ⟨(0 : F), by simp⟩ s
-  X_of_zero = 1 := by
-    intro X_of_zero
-    unfold X_of_zero X
+  let X0 := X ⟨(0 : F), by simp⟩ s
+  X0 = 1 := by
+    intro X0
+    unfold X0 X
     let χ_of_v := χ (v ⟨(0 : F), by simp⟩ s)
     rw [u_of_zero]
     change χ_of_v * 1 = 1

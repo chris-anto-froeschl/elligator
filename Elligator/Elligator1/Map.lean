@@ -105,7 +105,6 @@ theorem x_defined
   In the situation of Theorem 1, $rX + (1 + X)^2 \neq 0$ for each
   $t \in \mathbb{F}_q \setminus \{\pm 1\}$, so that
   $$
-  y = (rX - (1 + X)^2)/(rX + (1 + X)^2).
   y = (rX - (1 + X)^2)/(rX + (1 + X)^2)
   $$
   is defined.
@@ -128,7 +127,7 @@ theorem y_defined
   In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let $r$, $X$,
   $Y$ be as above. Then
   $$
-  Y^2 = X^5 + (r^2 - 2)X^3 + X .
+  Y^2 = X^5 + (r^2 - 2)X^3 + X
   $$
   -/)]
 theorem map_fulfills_auxiliary_equation
@@ -229,10 +228,10 @@ def ϕ
     unfold EOverF
     rw [Set.mem_setOf_eq]
     unfold P
-    by_cases h1 : t ≠ 1 ∧ t ≠ -1
-    · rw [dif_pos h1]
-      exact map_fulfills_curve_equation ⟨t, h1⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    · rw [dif_neg h1]
+    by_cases ht : t ≠ 1 ∧ t ≠ -1
+    · rw [dif_pos ht]
+      exact map_fulfills_curve_equation ⟨t, ht⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+    · rw [dif_neg ht]
       simp
   ⟨P, P_in_EOverF⟩
 

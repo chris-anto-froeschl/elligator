@@ -102,10 +102,10 @@ lemma four_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (4 : F)
   · exact (two_ne_zero hq_card hq_mod)
 
 lemma ringChar_ne_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : ringChar F ≠ 2 := by
-  intro h
+  intro hchar
   apply two_ne_zero  hq_card hq_mod
-  have h' : (2 : F) = 0 := (ringChar.spec F 2).mpr (by rw [h])
-  exact h'
+  have hcon : (2 : F) = 0 := (ringChar.spec F 2).mpr (by rw [hchar])
+  exact hcon
 
 omit [Fintype F] in
 lemma neg_one_ne_zero : (-1 : F) ≠ 0 := neg_ne_zero.mpr one_ne_zero
@@ -144,7 +144,7 @@ lemma neg_t_ne_one_and_neg_t_ne_neg_one (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
 omit [Fintype F] in
 lemma not_t_ne_one_and_t_ne_neg_one (t : { t : F // t = 1 ∨  t = -1}) :
   ¬(t.val ≠ 1 ∧ t.val ≠ -1) := by
-    rcases t.prop with h'' | h'' <;> simp [h'']
+    rcases t.prop with th | th <;> simp [th]
 
 omit [Field F] in
 lemma one_add_q_div_four_mul_two_eq_one_add_q_div_two (hq_mod : q % 4 = 3)
