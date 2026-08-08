@@ -113,7 +113,7 @@ lemma neg_one_ne_zero : (-1 : F) ≠ 0 := neg_ne_zero.mpr one_ne_zero
 lemma neg_one_non_square (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : ¬IsSquare (-1 : F) := by grind [FiniteField.isSquare_neg_one_iff]
 
-/-- If some algebraic identity would force `-1` to be a square, contradiction — `-1` is never
+/-- If some algebraic identity would force `-1` to be a square, contradiction - `-1` is never
 a square when `q % 4 = 3`. A common closing step for the `r`/`d` nonvanishing proofs. -/
 lemma false_of_isSquare_neg_one (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   (h : IsSquare (-1 : F)) : False := neg_one_non_square hq_card hq_mod h

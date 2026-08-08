@@ -66,7 +66,7 @@ lemma four_add_r_ne_zero
       unfold r at h_contra
       field_simp at h_contra
       linear_combination h_contra
-    -- Step 2: substitute `c = 2/s²`, clear denominators — `(s²+4)² = 12`.
+    -- Step 2: substitute `c = 2/s²`, clear denominators - `(s²+4)² = 12`.
     set a : F := s ^ 2 + 4 with ha_def
     have ha_sq : a ^ 2 = 12 := by
       unfold c at h_quad
@@ -83,6 +83,7 @@ lemma four_add_r_ne_zero
       rw [mul_one]
     have h_neg_one_sq : (-1 : F) = ((u - 1) / s) ^ 2 := by
       rw [div_pow, eq_div_iff (pow_ne_zero 2 hs_ne_zero)]
+      simp_all
       grind
     exact neg_one_non_square hq_card hq_mod ⟨_, h_neg_one_sq.trans (sq _)⟩
 

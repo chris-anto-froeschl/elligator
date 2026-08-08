@@ -130,6 +130,7 @@ lemma neg_d_eq_r_add_two_div_r_sub_two
           rw [← inv_eq_one_div]
           apply inv_ne_zero
           apply c_ne_zero hs_ne_zero hq_card hq_mod
+        simp_all
         grind
       _ = (r + 2) / (r - 2) := by
         rw [add_assoc, add_comm 2 (1 / c), ← add_assoc]

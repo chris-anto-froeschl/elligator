@@ -134,7 +134,7 @@ lemma prime_of_pratt {p : ℕ}
     -- product of primes must actually *equal* one of the factors (unique factorization).
     obtain ⟨x, hx_mem, hr_dvd_x⟩ := (Prime.dvd_prod_iff hr_prime.prime).1 (hprod ▸ hr_dvd)
     obtain rfl : r = x := (Nat.prime_dvd_prime_iff_eq hr_prime (hL x hx_mem)).1 hr_dvd_x
-    -- So `r ∈ L`, and `hchk` directly rules out `a^((p-1)/r) = 1` — we just need to unwind
+    -- So `r ∈ L`, and `hchk` directly rules out `a^((p-1)/r) = 1` - we just need to unwind
     -- that into the `ZMod p` statement Lucas' criterion wants.
     intro hcon_zmod
     apply hchk r hx_mem

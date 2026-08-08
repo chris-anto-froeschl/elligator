@@ -226,6 +226,7 @@ def ϕ
     else (0, 1)
   have P_in_EOverF : P ∈ (EOverF sq_ne_pm_two hq_card hq_mod) := by
     unfold EOverF
+    -- rw [Set.mem_ofPred_eq]
     rw [Set.mem_setOf_eq]
     unfold P
     by_cases ht : t ≠ 1 ∧ t ≠ -1

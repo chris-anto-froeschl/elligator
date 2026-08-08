@@ -252,7 +252,9 @@ lemma curve_equation
           have hY_sq_ne_zero : Y^2 ≠ 0 := pow_ne_zero 2 (Y_ne_zero hs_ne_zero hq_card hq_mod t)
           rw [div_pow, ← mul_assoc, mul_comm (Y^2)]
           grind
-      _ = X^5 + (r^2 - 2) * X^3 + X + 2 * (r + 2) * X^2 * (1 + X)^2 := by grind [helper_eq]
+      _ = X^5 + (r^2 - 2) * X^3 + X + 2 * (r + 2) * X^2 * (1 + X)^2 := by
+        rw [helper_eq t hs_ne_zero hq_card hq_mod]
+        grind
       _ = X * (r * X + (1 + X)^2)^2 := by grind
     have h_one_sub_d_mul_x_sq_ne_zero : (1 - d * x^2) ≠ 0 := by
       intro h_one_sub_d_mul_x_sq_eq_zero
