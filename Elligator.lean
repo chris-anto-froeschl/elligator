@@ -22,7 +22,7 @@ import Elligator.Elligator1.phiProperties
 import Elligator.Elligator1.rProperties
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.t2Properties
-import Elligator.Elligator1.u2Properties
+import Elligator.Elligator1.ubarProperties
 import Elligator.Elligator1.uProperties
 import Elligator.Elligator1.vProperties
 import Elligator.Elligator1.xProperties

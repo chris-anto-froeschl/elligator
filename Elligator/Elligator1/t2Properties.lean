@@ -5,7 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.Elligator1.u2Properties
+public import Elligator.Elligator1.ubarProperties
 
 /-!
 # t2 Variable Properties
@@ -40,10 +40,10 @@ lemma t2_eq_one
   t2_of_P = 1 := by
     intro P t2_of_P
     unfold t2_of_P t2
-    let u2_of_P := u2 s P q
-    change (1 - u2_of_P) / (1 + u2_of_P) = 1
-    unfold u2_of_P
-    rw [u2_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+    let ubar_of_P := ubar s P q
+    change (1 - ubar_of_P) / (1 + ubar_of_P) = 1
+    unfold ubar_of_P
+    rw [ubar_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
     simp
 
 lemma t2_eq_t
@@ -63,12 +63,12 @@ lemma t2_eq_t
   t2_of_P = t := by
     intro P t2_of_P
     let u := u t
-    let u2 := u2 s P q
-    have h : u2 = u := u2_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod X_h
+    let ubar := ubar s P q
+    have h : ubar = u := ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod X_h
     unfold u Elligator1.u at h
     unfold t2_of_P t2
-    change (1 - u2) / (1 + u2) = t.val
-    change u2 = (1 - t.val) / (1 + t.val) at h
+    change (1 - ubar) / (1 + ubar) = t.val
+    change ubar = (1 - t.val) / (1 + t.val) at h
     rw [h, sub_div' (one_add_t_ne_zero t)]
     rw [add_div' (1 - t.val) 1 (1 + t.val) (one_add_t_ne_zero t)]
     rw [div_div_div_eq]
@@ -94,12 +94,12 @@ lemma t2_eq_t'
     intro P t2_of_P t'
     have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     let u' := u ⟨t', t_h⟩
-    let u2 := u2 s P q
-    let h : u2 = u' := u2_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod X_h
+    let ubar := ubar s P q
+    let h : ubar = u' := ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod X_h
     unfold u' u at h
     unfold t2_of_P t2
-    change (1 - u2) / (1 + u2) = t'
-    change u2 = (1 - t') / (1 + t') at h
+    change (1 - ubar) / (1 + ubar) = t'
+    change ubar = (1 - t') / (1 + t') at h
     rw [h, sub_div' (one_add_t_ne_zero ⟨t', t_h⟩)]
     rw [add_div' (1 - t') 1 (1 + t') (one_add_t_ne_zero ⟨t', t_h⟩), div_div_div_eq]
     have h' : ((1 + t') * 2) ≠ 0 :=

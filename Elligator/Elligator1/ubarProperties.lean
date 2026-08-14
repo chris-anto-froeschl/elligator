@@ -9,9 +9,9 @@ public import Elligator.Elligator1.X2Properties
 public import Elligator.Elligator1.zProperties
 
 /-!
-# u2 Properties
+# ubar Properties
 
-In this file we introduce some generally helpful lemmas for `u2` as introduced in
+In this file we introduce some generally helpful lemmas for `ubar` as introduced in
 `Elligator.Elligator1.Variables`.
 
 ## References
@@ -30,7 +30,7 @@ variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
-lemma u2_eq_zero
+lemma ubar_eq_zero
   (t : { t : F // t = 1 ∨ t = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -38,10 +38,10 @@ lemma u2_eq_zero
   (hq_mod : q % 4 = 3)
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-  let u2 := u2 s P q
-  u2 = 0 := by grind [z_eq_zero, u2]
+  let ubar := ubar s P q
+  ubar = 0 := by grind [z_eq_zero, ubar]
 
-lemma u2_eq_u
+lemma ubar_eq_u
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -55,11 +55,9 @@ lemma u2_eq_u
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let u := u t
-  let u2 := u2 s P q
-  u2 = u := by
-    intro P u u2
-    -- NOTE: the original had `let X' := X ⟨-t.val, ...⟩ s` here — removed as dead; it was
-    -- never referenced anywhere in this proof.
+  let ubar := ubar s P q
+  ubar = u := by
+    intro P u ubar
     let X := X t s
     let X2 := X2 s P q
     let c := c s
@@ -69,7 +67,7 @@ lemma u2_eq_u
     let v := v t s;
     let χ_of_v := χ v
     let χ_of_Y := χ Y
-    unfold u2 Elligator1.u2
+    unfold ubar Elligator1.ubar
     rw [X_h]
     change z * X = u
     have hX2_expand_eq_x_mul_Y : (c - 1) * s * X2 * (1 + X2) = x * Y := by
@@ -136,7 +134,7 @@ lemma u2_eq_u
     rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) hv_sq_isSquare]
     simp
 
-lemma u2_eq_u'
+lemma ubar_eq_u'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -151,9 +149,9 @@ lemma u2_eq_u'
   let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let u' := u ⟨-t.val, t_h⟩
-  let u2 := u2 s P q
-  u2 = u' := by
-    intro t_h P u' u2
+  let ubar := ubar s P q
+  ubar = u' := by
+    intro t_h P u' ubar
     let X' := X ⟨-t.val, t_h⟩ s
     let X := X t s
     let X2 := X2 s P q
@@ -169,7 +167,7 @@ lemma u2_eq_u'
     let χ_of_v' := χ v'
     let χ_of_Y := χ Y
     let χ_of_Y' := χ Y'
-    unfold u2 Elligator1.u2
+    unfold ubar Elligator1.ubar
     rw [X_h]
     change z * X' = u'
     have hX2_expand_eq_x'_mul_Y' : (c - 1) * s * X2 * (1 + X2) = x' * Y' := by
@@ -239,7 +237,7 @@ lemma u2_eq_u'
       hv'_sq_isSquare]
     simp
 
-lemma u2_h1
+lemma ubar_h1
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -250,18 +248,18 @@ lemma u2_h1
   have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
   let u' := u ⟨-t.val, t_h⟩
   let u := u t
-  let u2 := u2 s P.val q
-  u2 = u ∨ u2 = u' := by
-    intro P t_h u' u u2
+  let ubar := ubar s P.val q
+  ubar = u ∨ ubar = u' := by
+    intro P t_h u' u ubar
     rcases (X2_h4 t hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
     · left
-      exact u2_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
+      exact ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
     · right
-      exact u2_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
+      exact ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
 
-/-- The key step: rewriting `1 + u2(ϕ(t))` in the main case (t ≠ ±1) to show it is ne_zero,
-    using `u2_h1` which gives `u2 = u(t)` or `u2 = u(-t)`. -/
-lemma one_add_u2_ne_zero_main_case
+/-- The key step: rewriting `1 + ubar(ϕ(t))` in the main case (t ≠ ±1) to show it is ne_zero,
+    using `ubar_h1` which gives `ubar = u(t)` or `ubar = u(-t)`. -/
+lemma one_add_ubar_ne_zero_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   (hs_ne_zero : (s : F) ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -269,18 +267,18 @@ lemma one_add_u2_ne_zero_main_case
   (hq_mod : q % 4 = 3)
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).1
-  let u2 := u2 s P q
-  1 + u2 ≠ 0 := by
-    intro P u2
-    unfold u2
-    obtain h|h := u2_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  let ubar := ubar s P q
+  1 + ubar ≠ 0 := by
+    intro P ubar
+    unfold ubar
+    obtain h|h := ubar_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
     · rw [h]
       exact one_add_u_ne_zero t hq_card hq_mod
     · rw [h]
       have ht_h := neg_t_ne_one_and_neg_t_ne_neg_one t
       exact one_add_u_ne_zero ⟨-t.val, ht_h⟩ hq_card hq_mod
 
-lemma one_add_u2_ne_zero_base_case
+lemma one_add_ubar_ne_zero_base_case
   (t : {n : F // n = 1 ∨ n = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -288,31 +286,31 @@ lemma one_add_u2_ne_zero_base_case
   (hq_mod : q % 4 = 3)
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).1
-  let u2 := u2 s P q
-  1 + u2 ≠ 0 := by
-    intro P u2
-    unfold u2
-    rw [u2_eq_zero, add_zero]
+  let ubar := ubar s P q
+  1 + ubar ≠ 0 := by
+    intro P ubar
+    unfold ubar
+    rw [ubar_eq_zero, add_zero]
     exact FiniteFieldBasic.one_ne_zero
 
-lemma one_add_u2_ne_zero
+lemma one_add_ubar_ne_zero
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod})
   :
-  let u2 := u2 s P q
-  (1 + u2) ≠ 0 := by
-    intro u2
+  let ubar := ubar s P q
+  (1 + ubar) ≠ 0 := by
+    intro ubar
     have hP_prop := P.prop
     unfold ϕOverF at hP_prop
     obtain ⟨t, ht⟩ := hP_prop
     by_cases h : t ≠ 1 ∧ t ≠ -1
-    · have hne := one_add_u2_ne_zero_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+    · have hne := one_add_ubar_ne_zero_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
       grind
     · have ht_eq : t = 1 ∨ t = -1 := by grind
-      have hne := one_add_u2_ne_zero_base_case ⟨t, ht_eq⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+      have hne := one_add_ubar_ne_zero_base_case ⟨t, ht_eq⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
       grind
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/

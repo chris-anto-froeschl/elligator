@@ -123,11 +123,11 @@ lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
   let r := r s
   v2 = 1 / u1^5 + (r^2 - 2) * 1 / u1^3 + 1 / u1 := by
     intro t1 t2 u1 v2 r_of_s
-    let u2 := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
+    let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
     calc
-      v2 = u2^5 + (r_of_s^2 - 2) * u2^3 + u2 := by rfl
+      v2 = ubar^5 + (r_of_s^2 - 2) * ubar^3 + ubar := by rfl
       _ = 1 / u1^5 + (r_of_s^2 - 2) * 1/ u1^3 + 1 / u1 := by
-        unfold u2 u1 t2 t1
+        unfold ubar u1 t2 t1
         rw [u_comparison t]
         ring_nf
 

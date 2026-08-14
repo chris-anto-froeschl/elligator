@@ -43,11 +43,11 @@ lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
   let u1 := u t
-  let u2 := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
-  u2 = 1 / u1 := by
-    intro t1 t2 u1 u2
+  let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
+  ubar = 1 / u1 := by
+    intro t1 t2 u1 ubar
     calc
-      u2 = (1 - t2) / (1 + t2) := by simp [u2, u]
+      ubar = (1 - t2) / (1 + t2) := by simp [ubar, u]
      _ = (1 + t) / (1 - t) := by simp [t2, t1]; ring_nf
      _ = 1 / u1 := by simp [u1, u]
 

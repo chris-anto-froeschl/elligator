@@ -146,7 +146,7 @@ lemma Y_comparison
     let c := c s
     let r := r s
     let u1 := u t
-    let u2 := u ⟨t2, t_h⟩
+    let ubar := u ⟨t2, t_h⟩
     let v1 := v t s
     let v2 := v ⟨t2, t_h⟩ s
     have hu1_ne_zero := u_ne_zero (t := t)
@@ -189,18 +189,18 @@ lemma Y_comparison
             nth_rw 2 [one_div_χ_of_a_eq_χ_a]
             grind
     have second_factor : (χ v2) = (χ v1) := v_comparison_implication4 t
-    have third_factor : χ (u2^2 + 1 / c^2) = χ (u1 * v1 * (u1^2 + 1 / c^2)) := by
+    have third_factor : χ (ubar^2 + 1 / c^2) = χ (u1 * v1 * (u1^2 + 1 / c^2)) := by
       calc
-        χ (u2^2 + 1 / c^2)
-          = χ ((c^2 * u1^4 * (u2^2 + 1 / c^2)) * (u1^2 + 1 / c^2)^2) := by
+        χ (ubar^2 + 1 / c^2)
+          = χ ((c^2 * u1^4 * (ubar^2 + 1 / c^2)) * (u1^2 + 1 / c^2)^2) := by
           rw [← χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero hs_ne_zero hq_card hq_mod)]
           rw [mul_comm, ← χ_of_a_eq_χ_a_mul_b_pow_two (pow_ne_zero 2 hu1_ne_zero)]
           rw [χ_of_a_eq_χ_a_mul_b_pow_two
             (v_factored_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)]
           grind
         _ = χ ((u1^2 * (c^2 + u1^2)) * (u1^2 + 1 / c^2)^2) := by
-          rw [pow_two u2]
-          unfold u2
+          rw [pow_two ubar]
+          unfold ubar
           rw [u_comparison t]
           change χ (c^2 * u1^4 * (1 / u1 * (1 / u1) + 1 / c^2) * (u1^2 + 1 / c^2)^2)
             = χ (u1^2 * (c^2 + u1^2) * (u1^2 + 1 / c^2)^2)
@@ -213,7 +213,7 @@ lemma Y_comparison
     calc
       Y2 = Y1 * (χ u1) * χ (u1 * v1) / u1^3 := by
         unfold Y2 Y
-        change ((χ v2) * v2)^((q + 1) / 4) * (χ v2) * χ (u2^2 + 1 / c^2)
+        change ((χ v2) * v2)^((q + 1) / 4) * (χ v2) * χ (ubar^2 + 1 / c^2)
           = Y1 * (χ u1) * χ (u1 * v1) / u1^3
         rw [first_factor, second_factor, third_factor, χ_mul]
         have h_rearrange :

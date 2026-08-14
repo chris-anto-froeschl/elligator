@@ -233,11 +233,11 @@ def z (s : F) (P : F × F) (q : ℕ) : F :=
   let a := (c - 1) * s * X2 * (1 + X2) * x * (X2^2 + 1 / c^2)
   χ a
 
-/-- u2 is a function defined in the paper.
+/-- ubar is a function defined in the paper.
 
 Original:, Section "3.3 Inverting the map": Theorem 3
 -/
-@[blueprint "def:u2"
+@[blueprint "def:ubar"
   (title := "The reconstructed quantity $\\bar u$")
   (statement := /--
   For a point $(x, y) \in \varphi(\mathbb{F}_q)$, with $z$ and $\bar X$ as above, define
@@ -245,7 +245,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \bar u = z\bar X .
   $$
   -/)]
-def u2 (s : F) (P : F × F) (q : ℕ) : F :=
+def ubar (s : F) (P : F × F) (q : ℕ) : F :=
   let X2 := X2 s P q
   let z := z s P q
   z * X2
@@ -263,8 +263,8 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   $$
   -/)]
 def t2 (s : F) (P : F × F) (q : ℕ) : F :=
-  let u2 := u2 s P q
-  (1 - u2) / (1 + u2)
+  let ubar := ubar s P q
+  (1 - ubar) / (1 + ubar)
 
 /-- `b q` is `⌊log₂ q⌋`, the number of bits needed.
 

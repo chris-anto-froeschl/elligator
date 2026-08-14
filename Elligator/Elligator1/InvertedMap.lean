@@ -105,8 +105,8 @@ theorem props_iff_mem_ϕOverF
 
 /-- The explicit inverse formula in part 3 of Theorem 3 recovers a point in `ϕ(F)`.
 
-Starting with `P = ϕ t`, the definitions `X2`, `z`, `u2`, and `t2` reproduce the paper's
-quantities `X2`, `z`, `u2`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`. -/
+Starting with `P = ϕ t`, the definitions `X2`, `z`, `ubar`, and `t2` reproduce the paper's
+quantities `X2`, `z`, `ubar`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`. -/
 @[blueprint "thm:thm3-3"
   (title := "Theorem 3.3: inverting $\\varphi$")
   (statement := /--
@@ -190,7 +190,7 @@ omit [DecidableEq F] in
 theorem z_defined (hs_ne_zero : s ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : (c s)^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
 
-/-- The denominator `1 + u2` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/
+/-- The denominator `1 + ubar` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/
 @[blueprint "thm:t2_defined"
   (title := "$\\bar t$ is defined")
   (statement := /--
@@ -204,7 +204,7 @@ theorem t2_defined
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod})
   :
-  let u2_of_P := u2 s P.val q
-  (1 + u2_of_P) ≠ 0 := one_add_u2_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P
+  let ubar_of_P := ubar s P.val q
+  (1 + ubar_of_P) ≠ 0 := one_add_ubar_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P
 
 end Elligator.Elligator1
