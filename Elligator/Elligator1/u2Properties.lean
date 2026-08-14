@@ -58,7 +58,8 @@ lemma u2_eq_u
   let u2 := u2 s P q
   u2 = u := by
     intro P u u2
-    let X' := X ⟨-t.val, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
+    -- NOTE: the original had `let X' := X ⟨-t.val, ...⟩ s` here — removed as dead; it was
+    -- never referenced anywhere in this proof.
     let X := X t s
     let X2 := X2 s P q
     let c := c s
@@ -71,21 +72,21 @@ lemma u2_eq_u
     unfold u2 Elligator1.u2
     rw [X_h]
     change z * X = u
-    have h1 : (c - 1) * s * X2 * (1 + X2) = x * Y := by
+    have hX2_expand_eq_x_mul_Y : (c - 1) * s * X2 * (1 + X2) = x * Y := by
       unfold X2
       rw [X_h]
       rw [← div_left_inj' (Y_ne_zero hs_ne_zero hq_card hq_mod t)]
       change x = x * Y / Y
       rw [mul_div_assoc, div_self (Y_ne_zero hs_ne_zero hq_card hq_mod t)]
       ring_nf
-    have h2 : z = χ_of_Y * χ (X^2 + 1 / c^2) := by
+    have hz_eq_χY_mul_χ_sum : z = χ_of_Y * χ (X^2 + 1 / c^2) := by
       calc
         z = χ (x^2 * Y * (X^2 + 1 / c^2)) := by
           unfold z Elligator1.z
           change χ ((c - 1) * s * X2 * (1 + X2) * P.1 * (X2^2 + 1 / c^2))
             = χ (x^2 * Y * (X^2 + 1 / c^2))
           unfold P ϕ
-          simp only [h1]
+          simp only [hX2_expand_eq_x_mul_Y]
           rw [dif_pos t.prop]
           change χ (x * Y * x * (X2^2 + 1 / c^2)) = χ (x^2 * Y * (X^2 + 1 / c^2))
           unfold X2 X
@@ -98,7 +99,7 @@ lemma u2_eq_u
             (IsSquare.sq x)]
           unfold χ_of_Y
           ring_nf
-    have h3 : χ (u^2 + 1 / c^2) = χ (X^2 + 1 / c^2) := by
+    have hχu_sum_eq_χX_sum : χ (u^2 + 1 / c^2) = χ (X^2 + 1 / c^2) := by
       unfold X Elligator1.X
       rw [mul_pow]
       nth_rw 3 [pow_two]
@@ -107,8 +108,8 @@ lemma u2_eq_u
         (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) (IsSquare.sq v)]
       unfold u
       simp_all
-    have h4 : χ_of_Y = χ_of_v * χ (X^2 + 1 / c^2) := by
-      rw [← h3]
+    have hχY_eq_χv_mul_χ_sum : χ_of_Y = χ_of_v * χ (X^2 + 1 / c^2) := by
+      rw [← hχu_sum_eq_χX_sum]
       unfold χ_of_Y Y Elligator1.Y
       let χ_sum := χ (u^2 + 1 / c^2)
       change χ ((χ_of_v * v)^((q + 1) / 4) * χ_of_v * χ_sum) = χ_of_v * χ_sum
@@ -121,18 +122,18 @@ lemma u2_eq_u
       rw [χ_χ_eq_χ hq_card hq_mod]
       unfold χ_of_v χ_sum
       simp_all
-    have h5 : z = χ_of_v := by
-      rw [h2, h4, mul_assoc, ← χ_mul, ← pow_two]
+    have hz_eq_χv : z = χ_of_v := by
+      rw [hz_eq_χY_mul_χ_sum, hχY_eq_χv_mul_χ_sum, mul_assoc, ← χ_mul, ← pow_two]
       rw [χ_a_eq_one
         (pow_ne_zero 2 (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod t))
         (IsSquare.sq (X^2 + 1 / c^2))]
       simp
-    rw [h5]
+    rw [hz_eq_χv]
     unfold X Elligator1.X
     change χ_of_v * (χ_of_v * u) = u
     rw [← mul_assoc, ← χ_mul, ← pow_two]
-    have h6 : IsSquare (v^2) := IsSquare.sq v
-    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) h6]
+    have hv_sq_isSquare : IsSquare (v^2) := IsSquare.sq v
+    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) hv_sq_isSquare]
     simp
 
 lemma u2_eq_u'
@@ -171,21 +172,21 @@ lemma u2_eq_u'
     unfold u2 Elligator1.u2
     rw [X_h]
     change z * X' = u'
-    have h1 : (c - 1) * s * X2 * (1 + X2) = x' * Y' := by
+    have hX2_expand_eq_x'_mul_Y' : (c - 1) * s * X2 * (1 + X2) = x' * Y' := by
       unfold X2
       rw [X_h]
       rw [← div_left_inj' (Y_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)]
       change x' = x' * Y' / Y'
       rw [mul_div_assoc, div_self (Y_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)]
       ring_nf
-    have h2 : z = χ_of_Y' * (χ (X'^2 + 1 / c^2)) := by
+    have hz_eq_χY'_mul_χ_sum : z = χ_of_Y' * (χ (X'^2 + 1 / c^2)) := by
       calc
         z = (χ (x'^2 * Y' * (X'^2 + 1 / c^2))) := by
           unfold z Elligator1.z
           change χ ((c - 1) * s * X2 * (1 + X2) * P.1 * (X2^2 + 1 / c^2))
             = χ (x'^2 * Y' * (X'^2 + 1 / c^2))
           unfold P ϕ
-          simp only [h1]
+          simp only [hX2_expand_eq_x'_mul_Y']
           rw [dif_pos t.prop]
           change χ (x' * Y' * x * (X2^2 + 1 / c^2)) = χ (x'^2 * Y' * (X'^2 + 1 / c^2))
           unfold X2 X' x' x
@@ -200,7 +201,7 @@ lemma u2_eq_u'
             (IsSquare.sq x')]
           unfold χ_of_Y'
           ring_nf
-    have h3 : (χ (u'^2 + 1 / c^2)) = (χ (X'^2 + 1 / c^2)) := by
+    have hχu'_sum_eq_χX'_sum : (χ (u'^2 + 1 / c^2)) = (χ (X'^2 + 1 / c^2)) := by
       unfold X' Elligator1.X
       rw [mul_pow]
       nth_rw 3 [pow_two]
@@ -209,8 +210,8 @@ lemma u2_eq_u'
         (IsSquare.sq v')]
       unfold u'
       simp_all
-    have h4 : χ_of_Y' = χ_of_v' * (χ (X'^2 + 1 / c^2)) := by
-      rw [← h3]
+    have hχY'_eq_χv'_mul_χ_sum : χ_of_Y' = χ_of_v' * (χ (X'^2 + 1 / c^2)) := by
+      rw [← hχu'_sum_eq_χX'_sum]
       unfold χ_of_Y' Y' Elligator1.Y
       let χ_sum := χ (u'^2 + 1 / c^2);
       change (χ ((χ_of_v' * v')^((q + 1) / 4) * χ_of_v' * χ_sum)) = χ_of_v' * χ_sum
@@ -222,19 +223,20 @@ lemma u2_eq_u'
       rw [χ_χ_eq_χ hq_card hq_mod]
       unfold χ_of_v' χ_sum
       simp_all
-    have h5 : z = χ_of_v' := by
-      rw [h2, h4, mul_assoc]
+    have hz_eq_χv' : z = χ_of_v' := by
+      rw [hz_eq_χY'_mul_χ_sum, hχY'_eq_χv'_mul_χ_sum, mul_assoc]
       rw [← χ_mul, ← pow_two]
       rw [χ_a_eq_one (pow_ne_zero 2
           (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩))
         (IsSquare.sq (X'^2 + 1 / c^2))]
       simp
-    rw [h5]
+    rw [hz_eq_χv']
     unfold X' Elligator1.X
-    change χ_of_v' * (χ_of_v' * u' ) = u'
+    change χ_of_v' * (χ_of_v' * u') = u'
     rw [← mul_assoc, ← χ_mul, ← pow_two]
-    have h6 : IsSquare (v'^2) := IsSquare.sq v'
-    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)) h6]
+    have hv'_sq_isSquare : IsSquare (v'^2) := IsSquare.sq v'
+    rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩))
+      hv'_sq_isSquare]
     simp
 
 lemma u2_h1
@@ -275,8 +277,8 @@ lemma one_add_u2_ne_zero_main_case
     · rw [h]
       exact one_add_u_ne_zero t hq_card hq_mod
     · rw [h]
-      let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-      exact one_add_u_ne_zero ⟨-t.val, t_h⟩ hq_card hq_mod
+      have ht_h := neg_t_ne_one_and_neg_t_ne_neg_one t
+      exact one_add_u_ne_zero ⟨-t.val, ht_h⟩ hq_card hq_mod
 
 lemma one_add_u2_ne_zero_base_case
   (t : {n : F // n = 1 ∨ n = -1})
@@ -303,14 +305,14 @@ lemma one_add_u2_ne_zero
   let u2 := u2 s P q
   (1 + u2) ≠ 0 := by
     intro u2
-    let P_prop := P.prop
-    unfold ϕOverF at P_prop
-    obtain ⟨t, ht⟩ := P_prop
+    have hP_prop := P.prop
+    unfold ϕOverF at hP_prop
+    obtain ⟨t, ht⟩ := hP_prop
     by_cases h : t ≠ 1 ∧ t ≠ -1
-    · let h2 := one_add_u2_ne_zero_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+    · have hne := one_add_u2_ne_zero_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
       grind
-    · have h2 : t = 1 ∨ t = -1 := by grind
-      have h3 := one_add_u2_ne_zero_base_case ⟨t, h2⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+    · have ht_eq : t = 1 ∨ t = -1 := by grind
+      have hne := one_add_u2_ne_zero_base_case ⟨t, ht_eq⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
       grind
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
@@ -366,10 +368,10 @@ lemma u'_ne_neg_one
   let X := X2 s P q
   X ≠ 1 → u ≠ -1 := by
     intro u X h1
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one
+    have hz'_cases := z'_eq_one_or_z'_eq_neg_one
         hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
+    have hX2_ne_pm_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
       hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
     unfold u u'
     grind
@@ -388,10 +390,10 @@ lemma one_add_u'_ne_zero
   let X := X2 s P q
   X ≠ 1 → 1 + u ≠ 0 := by
     intro u X h1
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one
+    have hz'_cases := z'_eq_one_or_z'_eq_neg_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
+    have hX2_ne_pm_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
       hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
     unfold u u'
     grind
@@ -410,12 +412,13 @@ lemma u'_ne_zero
   let X := X2 s P q
   X ≠ 1 → u ≠ 0 := by
     intro u X h1
-    let z'_eq_one_or_z'_eq_neg_one := z'_eq_one_or_z'_eq_neg_one
+    have hz'_cases := z'_eq_one_or_z'_eq_neg_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
-    let z_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    let X2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
+    have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
+    have hX2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
+    have hX2_ne_pm_one := X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one
       hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
     unfold u u'
     grind
@@ -449,19 +452,23 @@ lemma v'_eq_z'_mul_Y'_pow_two
     intro z Y v X h1
     let r := r s
     let c := c s
-    let X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one :=
+    have hX2_ne_pm_one :=
       X2_ne_one_and_X2_ne_neg_one_of_X2_ne_one hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-    let Y'_pow_two_eq_of_X2_ne_one := Y'_pow_two_eq_of_X2_ne_one
+    have hY'_sq := Y'_pow_two_eq_of_X2_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-    let z_pow_three_eq_z := χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨3, by grind⟩
-    change z^3 = z at z_pow_three_eq_z
-    let z_pow_five_eq_z := χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨5, by grind⟩
-    change z^5 = z at z_pow_five_eq_z
+    have hz_cube_eq_z : z^3 = z := by
+      have := χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨3, by grind⟩
+      change z^3 = z at this
+      exact this
+    have hz_pow5_eq_z : z^5 = z := by
+      have := χ_of_a_pow_n_eq_χ_a (Y * (X^2 + 1 / c^2)) ⟨5, by grind⟩
+      change z^5 = z at this
+      exact this
     let x := P.val.1
-    have h2 : v = z * (X^5 + (r^2 - 2) * X^3 + X) := by
+    have hv_eq_z_mul_expand : v = z * (X^5 + (r^2 - 2) * X^3 + X) := by
       change (z * X)^5 + (r^2 - 2) * (z * X)^3 + (z * X) = z * (X^5 + (r^2 - 2) * X^3 + X)
       repeat rw [mul_pow]
-      rw [z_pow_three_eq_z, z_pow_five_eq_z]
+      rw [hz_cube_eq_z, hz_pow5_eq_z]
       grind
     grind
 
@@ -479,14 +486,16 @@ lemma v'_ne_zero
   let v := v' sq_ne_pm_two hq_card hq_mod P
   X ≠ 1 → v ≠ 0 := by
     intro X v h1
-    let v'_eq_z'_mul_Y'_pow_two :=
+    have hv_eq_z_mul_Y_sq :=
       v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    have h2 : v = z * Y^2 := by grind
-    rw [h2]
-    let h3 := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    let z_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
+    have hv_eq_zY2 : v = z * Y^2 := by grind
+    rw [hv_eq_zY2]
+    have hY_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
+    have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
     grind
 
 lemma χ_of_v'_eq_χ_of_z'
@@ -507,12 +516,13 @@ lemma χ_of_v'_eq_χ_of_z'
   X ≠ 1 → χ_of_v = χ_of_z := by
     intro X z v χ_of_v χ_of_z h
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v'_eq_z'_mul_Y'_pow_two :=
+    have hv_eq_zY2 :=
       v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
     unfold χ_of_v v
-    rw [v'_eq_z'_mul_Y'_pow_two h]
-    let h' := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [χ_of_a_eq_χ_a_mul_b_pow_two h']
+    rw [hv_eq_zY2 h]
+    have hY_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
+    rw [χ_of_a_eq_χ_a_mul_b_pow_two hY_ne_zero]
 
 lemma χ_of_z'_eq_z'
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -559,16 +569,17 @@ lemma X'_eq_χ_of_v'_mul_u'
   let χ_of_v := χ v
   X ≠ 1 → X = χ_of_v * u := by
     intro X v u χ_of_v h1
-    let χ_of_v'_eq_z' := χ_of_v'_eq_z'
+    have hχv_eq_z := χ_of_v'_eq_z'
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     unfold χ_of_v v
-    rw [χ_of_v'_eq_z' h1]
+    rw [hχv_eq_z h1]
     let z := z' sq_ne_pm_two hq_card hq_mod P
-    let z_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [mul_comm, ← div_left_inj' z_ne_zero]
-    rw [mul_div_assoc, div_self z_ne_zero]
+    have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
+    rw [mul_comm, ← div_left_inj' hz_ne_zero]
+    rw [mul_div_assoc, div_self hz_ne_zero]
     change X / z = z * X * 1
-    let z'_argument_ne_zero :=
+    have hz_arg_ne_zero :=
       z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
     let c := c s
@@ -594,28 +605,29 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
   let χ_of_v := χ v
   X ≠ 1 → Y^2 = χ_of_v * v := by
     intro X Y v χ_of_v h1
-    let v'_eq_z'_mul_Y'_pow_two :=
+    have hv_eq_zY2 :=
       v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-    let z :=z' sq_ne_pm_two hq_card hq_mod P
-    have h2 : v = z * Y^2 := by grind
-    let z_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [mul_comm, ← div_left_inj' z_ne_zero] at h2
-    rw [mul_div_assoc, div_self z_ne_zero, mul_one] at h2
-    change v / z = Y^2 at h2
-    let z'_argument_ne_zero :=
+    let z := z' sq_ne_pm_two hq_card hq_mod P
+    have hv_eq_zY2' : v = z * Y^2 := by grind
+    have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
+    rw [mul_comm, ← div_left_inj' hz_ne_zero] at hv_eq_zY2'
+    rw [mul_div_assoc, div_self hz_ne_zero, mul_one] at hv_eq_zY2'
+    change v / z = Y^2 at hv_eq_zY2'
+    have hz_arg_ne_zero :=
       z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let c := c s
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let r := r s
     let a := u^5 + (r^2 - 2) * u^3 + u
-    rw [← h2, mul_comm]
+    rw [← hv_eq_zY2', mul_comm]
     unfold χ_of_v v v'
     rw [one_div_χ_of_a_eq_χ_a]
     change v / z = v * (1 / χ_of_v)
-    let χ_of_v'_eq_z' := χ_of_v'_eq_z'
+    have hχv_eq_z := χ_of_v'_eq_z'
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     unfold χ_of_v v
-    rw [χ_of_v'_eq_z' h1]
+    rw [hχv_eq_z h1]
     grind
 
 lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
@@ -637,12 +649,11 @@ lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
   let χ_term := χ term
   X ≠ 1 → χ_of_v = χ_term := by
     intro X Y v χ_of_v c term χ_term h1
-    let χ_of_v'_eq_z' := χ_of_v'_eq_z'
+    have hχv_eq_z := χ_of_v'_eq_z'
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    let X2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-    change X ≠ 0 at X2_ne_zero
+    have hX2_ne_zero : X ≠ 0 := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
     unfold χ_of_v χ_term term
-    rw [χ_of_v'_eq_z' h1]
+    rw [hχv_eq_z h1]
     rfl
 
 lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
@@ -674,13 +685,13 @@ lemma u'_pow_two_add_one_div_c_pow_two_ne_zero
   let c := c s
   u^2 + 1 / c^2 ≠ 0 := by
     intro u c h
-    have h' : -1 = (u * c)^2 := by grind [pow_ne_zero, c_ne_zero]
-    have h'' : IsSquare (-1 : F) := by
-      rw [h', pow_two]
+    have hneg_one_sq : -1 = (u * c)^2 := by grind [pow_ne_zero, c_ne_zero]
+    have hisSquare : IsSquare (-1 : F) := by
+      rw [hneg_one_sq, pow_two]
       apply IsSquare.mul_self (u * c)
-    have h''' : q % 4 ≠ 3 := by
-      rw [FiniteField.isSquare_neg_one_iff, hq_card] at h''
-      exact h''
+    have hmod_ne_three : q % 4 ≠ 3 := by
+      rw [FiniteField.isSquare_neg_one_iff, hq_card] at hisSquare
+      exact hisSquare
     contradiction
 
 lemma Y'_observation1
@@ -700,24 +711,23 @@ lemma Y'_observation1
   let c := c s
   X ≠ 1 → (χ Y) = (χ v) * χ (u^2 + 1 / c^2)  := by
     intro X Y v u c h1
-    let χ_of_v'_eq_z'_unfold_of_X'_ne_one := χ_of_v'_eq_z'_unfold_of_X'_ne_one
+    have hχv_eq_χ_term := χ_of_v'_eq_z'_unfold_of_X'_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-    let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two :=
-      χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
+    have hχv_eq_χ_Yu := χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
         hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     let term1 := (u^2 + 1 / c^2)
     let term2 := Y * term1
     let χ_term1 := χ term1
     let χ_term2 := χ term2
-    have h2 : (χ v) * χ (u^2 + 1 / c^2) = χ_term2 * χ (u^2 + 1 / c^2) := by grind
-    have h3 : (χ v) * χ (u^2 + 1 / c^2) = (χ Y) * χ_term1 * χ (u^2 + 1 / c^2) := by
+    have hstep2 : (χ v) * χ (u^2 + 1 / c^2) = χ_term2 * χ (u^2 + 1 / c^2) := by grind
+    have hstep3 : (χ v) * χ (u^2 + 1 / c^2) = (χ Y) * χ_term1 * χ (u^2 + 1 / c^2) := by
       grind [χ_mul]
-    rw [h3]
-    have h4 : χ_term1 * χ (u^2 + 1 / c^2) = 1 := by
+    rw [hstep3]
+    have hterm1_mul_self_eq_one : χ_term1 * χ (u^2 + 1 / c^2) = 1 := by
       rw [← pow_two]
-      let term1_ne_zero := u'_pow_two_add_one_div_c_pow_two_ne_zero
+      have hterm1_ne_zero := u'_pow_two_add_one_div_c_pow_two_ne_zero
         hs_ne_zero sq_ne_pm_two hq_card hq_mod P
-      rw [χ_of_a_even_pow_n_eq_one term1_ne_zero ⟨2, even_two⟩]
+      rw [χ_of_a_even_pow_n_eq_one hterm1_ne_zero ⟨2, even_two⟩]
     grind
 
 lemma Y'_observation2
@@ -737,17 +747,16 @@ lemma Y'_observation2
   let c := c s
   X ≠ 1 → Y = ((χ v) * v)^((q + 1) / 4) * (χ v) * χ (u^2 + 1 / c^2) := by
     intro X Y v u c h1
-    let χ_of_v'_eq_z'_unfold_of_X'_ne_one := χ_of_v'_eq_z'_unfold_of_X'_ne_one
+    have hχv_eq_χ_term := χ_of_v'_eq_z'_unfold_of_X'_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-    let χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two :=
-      χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
+    have hχv_eq_χ_Yu := χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
         hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-    let Y'_observation1 := Y'_observation1
+    have hobs1 := Y'_observation1
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-    change (χ Y) = (χ v) * χ (u^2 + 1 / c^2) at Y'_observation1
-    let Y'_pow_two_eq_χ_of_v'_mul_v' := Y'_pow_two_eq_χ_of_v'_mul_v'
+    change (χ Y) = (χ v) * χ (u^2 + 1 / c^2) at hobs1
+    have hY_sq := Y'_pow_two_eq_χ_of_v'_mul_v'
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-    rw [← Y'_pow_two_eq_χ_of_v'_mul_v', mul_assoc, ← Y'_observation1]
+    rw [← hY_sq, mul_assoc, ← hobs1]
     rw [← pow_mul, add_comm]
     change Y = Y^(2 * ((1 + q) / 4)) * (χ Y)
     nth_rw 2 [mul_comm]
@@ -755,8 +764,9 @@ lemma Y'_observation2
     rw [add_comm, a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
     rw [mul_comm, ← mul_assoc]
     rw [← χ_mul, ← pow_two]
-    let Y'_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    rw [χ_sq Y'_ne_zero]
+    have hY_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
+      y_ne_one
+    rw [χ_sq hY_ne_zero]
     grind
 
 end Elligator.Elligator1

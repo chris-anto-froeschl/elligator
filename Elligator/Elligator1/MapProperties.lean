@@ -374,7 +374,7 @@ lemma v_η_h1
     intro v r
     unfold v Elligator1.v
     rw [u_η_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_mod η_h1]
-    grind
+    ring
 
 -- Used in the main case of Theorem 3 Proof part B
 lemma Y_η_h1
@@ -596,8 +596,9 @@ lemma P_in_ϕOverF_with_prop1_base_case
     intro y
     unfold y P ϕ
     let two_ne_zero := two_ne_zero hq_card hq_mod
-    simp [not_t_ne_one_and_t_ne_neg_one]
-    grind
+    simp only [not_t_ne_one_and_t_ne_neg_one]
+    norm_num
+    exact two_ne_zero
 
 lemma P_in_ϕOverF_with_prop1_main_case
   (t : {n : F // n ≠ 1 ∧ n ≠ -1})
