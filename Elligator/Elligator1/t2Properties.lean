@@ -55,8 +55,8 @@ lemma t2_eq_t
   (X_h :
     let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
     let X := X t s
-    let X2 := X2 s P q
-    X2 = X)
+    let Xbar := Xbar s P q
+    Xbar = X)
   :
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let t2_of_P := t2 s P q
@@ -84,8 +84,8 @@ lemma t2_eq_t'
   (X_h :
     let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
     let X' := X ⟨-t.val, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    let X2 := X2 s P q
-    X2 = X')
+    let Xbar := Xbar s P q
+    Xbar = X')
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let t2_of_P := t2 s P q
@@ -126,7 +126,7 @@ lemma t2_in_t_or_neg_t
   t2_of_P = t ∨ t2_of_P = t' := by
     intro P t' t2_of_P
     by_cases h : t ≠ 1 ∧ t ≠ -1
-    · rcases (X2_h4 ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h1 | h1
+    · rcases (Xbar_h4 ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h1 | h1
       · left
         exact t2_eq_t ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
       · right
@@ -148,7 +148,7 @@ def t'
   let u := u' sq_ne_pm_two hq_card hq_mod P
   (1 - u) / (1 + u)
 
-lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+lemma t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -158,15 +158,15 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   :
-  let X := X2 s P q
+  let X := Xbar s P q
   let t := t' sq_ne_pm_two hq_card hq_mod P
   X ≠ 1 → t ≠ 1 ∧ t ≠ -1 := by
     intro X t h1
     unfold t t'
     let u := u' sq_ne_pm_two hq_card hq_mod P
-    let u'_eq_X2_or_u'_eq_neg_X2 := u'_eq_X2_or_u'_eq_neg_X2
+    let u'_eq_Xbar_or_u'_eq_neg_Xbar := u'_eq_Xbar_or_u'_eq_neg_Xbar
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-    change u = X ∨ u = -X at u'_eq_X2_or_u'_eq_neg_X2
+    change u = X ∨ u = -X at u'_eq_Xbar_or_u'_eq_neg_Xbar
     change (1 - u) / (1 + u) ≠ 1 ∧ (1 - u) / (1 + u) ≠ -1
     let one_add_u'_ne_zero := one_add_u'_ne_zero
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
@@ -191,9 +191,9 @@ lemma one_add_t'_ne_zero
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   :
-  let X := X2 s P q
+  let X := Xbar s P q
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  X ≠ 1 → t + 1 ≠ 0 := by grind [t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one]
+  X ≠ 1 → t + 1 ≠ 0 := by grind [t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one]
 
 lemma u'_eq_one_sub_t'_div_one_add_t'
   (hs_ne_zero : s ≠ 0)
@@ -205,7 +205,7 @@ lemma u'_eq_one_sub_t'_div_one_add_t'
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   :
-  let X := X2 s P.val q
+  let X := Xbar s P.val q
   let u := u' sq_ne_pm_two hq_card hq_mod P
   let t := t' sq_ne_pm_two hq_card hq_mod P
   X ≠ 1 → u = (1 - t) / (1 + t) := by
@@ -227,12 +227,12 @@ lemma u'_eq_u
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X := X2 s P q
+    let X := Xbar s P q
     X ≠ 1)
   :
   let u' := u' sq_ne_pm_two hq_card hq_mod P
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let u := u ⟨t, t_h⟩
   u' = u := by grind [u', u, u'_eq_one_sub_t'_div_one_add_t']
@@ -247,12 +247,12 @@ lemma v'_eq_v
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X := X2 s P.val q;
+    let X := Xbar s P.val q;
     X ≠ 1)
   :
   let v' := v' sq_ne_pm_two hq_card hq_mod P
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let v := v ⟨t, t_h⟩ s
   v' = v := by grind [v', v, u'_eq_one_sub_t'_div_one_add_t', u'_eq_u]
@@ -267,12 +267,12 @@ lemma X'_eq_X
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X := X2 s P q;
+    let X := Xbar s P q;
     X ≠ 1)
   :
-  let X' := X2 s P q
+  let X' := Xbar s P q
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let X := X ⟨t, t_h⟩ s
   X' = X := by
@@ -300,12 +300,12 @@ lemma Y'_eq_Y
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X := X2 s P q;
+    let X := Xbar s P q;
     X ≠ 1)
   :
   let Y' := Y' sq_ne_pm_two hq_card hq_mod P
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let Y := Y ⟨t, t_h⟩ s q
   Y' = Y := by
@@ -329,7 +329,7 @@ def x'
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   : F :=
   let c := c s
-  let X' := X2 s P q
+  let X' := Xbar s P q
   let Y' := Y' sq_ne_pm_two hq_card hq_mod P
   (c - 1) * s * X' * (1 + X') / Y'
 
@@ -343,11 +343,11 @@ lemma x'_eq_x
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X' := X2 s P q
+    let X' := Xbar s P q
     X' ≠ 1)
   :
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let x := x ⟨t, t_h⟩ s q
   let x' := x' sq_ne_pm_two hq_card hq_mod P
@@ -371,7 +371,7 @@ def y'
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   : F :=
-  let X' := X2 s P q
+  let X' := Xbar s P q
   let r := r s
   (r * X' - (1 + X')^2) / (r * X' + (1 + X')^2)
 
@@ -385,11 +385,11 @@ lemma y'_eq_y
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X' := X2 s P q
+    let X' := Xbar s P q
     X' ≠ 1)
   :
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let y := y ⟨t, t_h⟩ s
   let y' := y' sq_ne_pm_two hq_card hq_mod P
@@ -416,7 +416,7 @@ theorem x'_and_y'_fulfill_curve_equation
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X' := X2 s P q
+    let X' := Xbar s P q
     X' ≠ 1)
   :
   let x' := x' sq_ne_pm_two hq_card hq_mod P
@@ -426,7 +426,7 @@ theorem x'_and_y'_fulfill_curve_equation
   edwardsCurveEquation x' y' ⟨d, d_h⟩ := by
     intro x' y' d
     let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
     let x := x ⟨t, t_h⟩ s q
     let y := y ⟨t, t_h⟩ s
@@ -448,19 +448,19 @@ lemma y_eq_y_of_P
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X' := X2 s P q
+    let X' := Xbar s P q
     X' ≠ 1)
   :
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let y := y ⟨t, t_h⟩ s
   let y_of_P := P.val.2
   y = y_of_P := by
     intro t t_h y y_of_P
-    let y_with_X2 := y_with_X2 hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
+    let y_with_Xbar := y_with_Xbar hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
     unfold y_of_P
-    rw [y_with_X2]
+    rw [y_with_Xbar]
     unfold y Elligator1.y
     let h := X'_eq_X hs_ne_zero sq_ne_pm_two
       hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
@@ -476,11 +476,11 @@ lemma x_eq_x_of_P
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X' := X2 s P q
+    let X' := Xbar s P q
     X' ≠ 1)
   :
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let x := x ⟨t, t_h⟩ s q
   let x_of_P := P.val.1
@@ -488,7 +488,7 @@ lemma x_eq_x_of_P
     intro t t_h x x_of_P
     let Y' := Y' sq_ne_pm_two hq_card hq_mod P
     let c := c s
-    let X := X2 s P q
+    let X := Xbar s P q
     let Y'_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
     change x_of_P ≠ 0 at x_ne_zero
     have h1 : Y' = (c - 1) * s * X * (1 + X) / x_of_P := by grind [Y', Elligator1.Y']
@@ -517,11 +517,11 @@ lemma x_y_of_P_eq_x_y
   (x_ne_zero : P.val.1 ≠ 0)
   (y_ne_one : P.val.2 ≠ 1)
   (X_h :
-    let X' := X2 s P q
+    let X' := Xbar s P q
     X' ≠ 1)
   :
   let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X_h
   let y := y ⟨t, t_h⟩ s
   let y_of_P := P.val.2

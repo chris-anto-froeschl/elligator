@@ -83,12 +83,12 @@ lemma x_comparison
     let c := c s
     let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     let X1 := X t s
-    let X2 := X ⟨t2, t_h⟩ s
+    let Xbar := X ⟨t2, t_h⟩ s
     let Y1 := Y t s q
     let Y2 := Y ⟨t2, t_h⟩ s q
     have hX1_pow3_ne_zero : X1^3 ≠ 0 := pow_ne_zero 3 (X_ne_zero hs_ne_zero hq_card hq_mod t)
     calc
-      x2 = (c - 1) * s * X2 * (1 + X2) / Y2 := by rfl
+      x2 = (c - 1) * s * Xbar * (1 + Xbar) / Y2 := by rfl
       _ = (c - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1^3) := by grind [X_comparison, Y_comparison]
       _ = (c - 1) * s * X1 * (1 + X1) / Y1 := by simp_all; grind
       _ = x1 := by rfl

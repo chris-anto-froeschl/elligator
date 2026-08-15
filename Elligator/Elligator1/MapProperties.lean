@@ -150,13 +150,13 @@ lemma X_comparison_implication
   let t1 := t.val
   let t2 := -t1
   let X1 := X t s
-  let X2 := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
+  let Xbar := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let η_of_P := η P
   let r := r s
-  X1 + X2 = -2 * (1 + η_of_P * r) := by
-    intro t1 t2 X1 X2 P η_of_P r
-    unfold X2
+  X1 + Xbar = -2 * (1 + η_of_P * r) := by
+    intro t1 t2 X1 Xbar P η_of_P r
+    unfold Xbar
     rw [X_comparison t]
     exact (y_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_mod)
 
@@ -169,10 +169,10 @@ lemma X_comparison_implication2
   let t1 := t.val
   let t2 := -t1
   let X1 := X t s
-  let X2 := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-  X2 * X1 = 1 := by
-    intro t1 t2 X1 X2
-    unfold X2
+  let Xbar := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
+  Xbar * X1 = 1 := by
+    intro t1 t2 X1 Xbar
+    unfold Xbar
     rw [X_comparison t]
     rw [← inv_eq_one_div]
     rw [inv_mul_cancel₀ (X_ne_zero hs_ne_zero hq_card hq_mod t)]
@@ -204,11 +204,11 @@ lemma y_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
     let r := r s
     let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     let X1 := X t s
-    let X2 := X ⟨t2, t_h⟩ s
+    let Xbar := X ⟨t2, t_h⟩ s
     calc
-      y2 = (r * X2 - (1 + X2)^2) / (r * X2 + (1 + X2)^2) := by rfl
+      y2 = (r * Xbar - (1 + Xbar)^2) / (r * Xbar + (1 + Xbar)^2) := by rfl
       _ = (r * (1 / X1) - (1 + (1 / X1))^2) / (r * (1 / X1) + (1 + (1 / X1))^2) := by
-        unfold X2
+        unfold Xbar
         rw [X_comparison t]
       _ = (r * X1 - (X1 + 1)^2) / (r * X1 + (X1 + 1)^2) := by grind
       _ = y1 := by

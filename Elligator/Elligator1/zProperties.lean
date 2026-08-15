@@ -6,7 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Elligator.Elligator1.etaProperties
-public import Elligator.Elligator1.X2Properties
+public import Elligator.Elligator1.XbarProperties
 
 /-!
 # z Properties
@@ -45,7 +45,7 @@ lemma z_eq_zero
     intro P z
     unfold z Elligator1.z
     let c := c s
-    repeat rw [X2_eq_neg_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+    repeat rw [Xbar_eq_neg_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
     simp_all
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
@@ -56,7 +56,7 @@ def z'
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   : F :=
   let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  let X := X2 s P q
+  let X := Xbar s P q
   let c := c s
   χ (Y * (X^2 + 1 / c^2))
 
@@ -73,8 +73,9 @@ lemma Y'_ne_zero
   let Y := Y' sq_ne_pm_two hq_card hq_mod P
   Y ≠ 0 := by
     intro Y
-    let X2_add_one_ne_zero := X2_add_one_ne_zero hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-    let X2_ne_zero := X2_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
+    let Xbar_add_one_ne_zero :=
+      Xbar_add_one_ne_zero hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
+    let Xbar_ne_zero := Xbar_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
     let c_sub_one_ne_zero := c_sub_one_ne_zero sq_ne_pm_two
     unfold Y Y'
     grind
@@ -87,7 +88,7 @@ lemma X_pow_two_add_1_div_c_pow_two_ne_zero
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   :
-  let X := X2 s P q
+  let X := Xbar s P q
   let c := c s
   X^2 + 1 / c^2 ≠ 0 := by
     intro X c h
@@ -115,7 +116,7 @@ lemma z'_argument_ne_zero
   (y_ne_one : P.val.2 ≠ 1)
   :
   let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  let X := X2 s P q
+  let X := Xbar s P q
   let c := c s
   Y * (X^2 + 1 / c^2) ≠ 0 := by grind [Y'_ne_zero, X_pow_two_add_1_div_c_pow_two_ne_zero]
 
@@ -133,7 +134,7 @@ lemma z'_ne_zero
   z ≠ 0 := by
     intro z
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let X := X2 s P q
+    let X := Xbar s P q
     let c := c s
     let z'_argument_ne_zero :=
       z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
@@ -154,7 +155,7 @@ lemma z'_eq_one_or_z'_eq_neg_one
   z = 1 ∨ z = -1 := by
     intro z
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let X := X2 s P q
+    let X := Xbar s P q
     let c := c s
     let a := (Y * (X^2 + 1 / c^2))
     open Classical in

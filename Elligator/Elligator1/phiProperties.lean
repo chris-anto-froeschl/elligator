@@ -263,7 +263,7 @@ lemma ϕ_of_zero
     grind
 
 -- Used in theorem 3 proof part C
-lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
+lemma x_y_eq_ϕ_of_zero_of_Xbar_eq_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -273,22 +273,22 @@ lemma x_y_eq_ϕ_of_zero_of_X2_eq_one
   :
   let x := P.val.1
   let y := P.val.2
-  let X2_of_P := X2 s P.val q
+  let Xbar_of_P := Xbar s P.val q
   let ϕ_of_zero := ϕ 0 hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  X2_of_P = 1 → ϕ_of_zero = (x, y) := by
-    intro x y X2_of_P ϕ_of_zero' X2_h
+  Xbar_of_P = 1 → ϕ_of_zero = (x, y) := by
+    intro x y Xbar_of_P ϕ_of_zero' Xbar_h
     let r := r s
     let c := c s
-    have h1 := η_mul_r_eq_neg_two_of_X2_eq_one hq_card hq_mod P X2_h
+    have h1 := η_mul_r_eq_neg_two_of_Xbar_eq_one hq_card hq_mod P Xbar_h
     have h2 : x = 2 * s * (c - 1) * (χ c) / r := P.prop.2.2 h1
     have h3 : y = (r - 4) / (r + 4) :=
-      y_with_X2_of_X2_eq_one hs_ne_zero hq_card hq_mod P y_eq_one X2_h
+      y_with_Xbar_of_Xbar_eq_one hs_ne_zero hq_card hq_mod P y_eq_one Xbar_h
     rw [h2, h3]
     let ϕ_of_zero'' := ϕ_of_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
     grind
 
 -- Used in theorem 3 proof part C
-lemma x_y_eq_ϕ_of_t_of_X2_ne_one
+lemma x_y_eq_ϕ_of_t_of_Xbar_ne_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
@@ -300,13 +300,13 @@ lemma x_y_eq_ϕ_of_t_of_X2_ne_one
   :
   let x := P.val.1
   let y := P.val.2
-  let X := X2 s P q
+  let X := Xbar s P q
   let t := t' sq_ne_pm_two hq_card hq_mod P
   let ϕ_of_t := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
   X ≠ 1 → ϕ_of_t = (x, y) := by
     intro x y X t ϕ_of_t h
     unfold ϕ_of_t ϕ
-    let h' := t'_ne_one_and_t'_ne_neg_one_of_X2_ne_one
+    let h' := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h
     dsimp
     rw [dif_pos h']
@@ -454,15 +454,15 @@ lemma P_in_ϕOverF_main_case_with_y_ne_one
     intro ϕOverF
     unfold ϕOverF Elligator1.ϕOverF
     rw [Set.mem_range]
-    let X2_of_P := X2 s P q
+    let Xbar_of_P := Xbar s P q
     let t := t' sq_ne_pm_two hq_card hq_mod P
-    by_cases X2_h : X2_of_P = (1 : F)
+    by_cases Xbar_h : Xbar_of_P = (1 : F)
     · use 0
-      exact x_y_eq_ϕ_of_zero_of_X2_eq_one
-        hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one X2_h
+      exact x_y_eq_ϕ_of_zero_of_Xbar_eq_one
+        hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one Xbar_h
     · use t
-      exact x_y_eq_ϕ_of_t_of_X2_ne_one
-        hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one X2_h
+      exact x_y_eq_ϕ_of_t_of_Xbar_ne_one
+        hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one Xbar_h
 
 lemma P_in_ϕOverF_main_case
   (hs_ne_zero : s ≠ 0)

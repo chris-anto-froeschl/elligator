@@ -197,11 +197,11 @@ def η (P : F × F) : F :=
   let y := P.snd
   (y - 1) / (2 * (y + 1))
 
-/-- X2 is a function defined in the paper.
+/-- Xbar is a function defined in the paper.
 
 Original:, Section "3.3 Inverting the map": Theorem 3
 -/
-@[blueprint "def:X2"
+@[blueprint "def:Xbar"
   (title := "The reconstructed coordinate $\\bar X$")
   (statement := /--
   For a point $(x, y) \in \varphi(\mathbb{F}_q)$, with $\eta$ as above, define
@@ -209,7 +209,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \bar X = -(1 + \eta r) + ((1 + \eta r)^2 - 1)^{(q+1)/4} .
   $$
   -/)]
-def X2 (s : F) (P : F × F) (q : ℕ) : F :=
+def Xbar (s : F) (P : F × F) (q : ℕ) : F :=
   let η := η P
   let r := r s
   (-(1 + η * r) + ((1 + η * r)^2 - 1)^((q + 1) / 4))
@@ -229,8 +229,8 @@ Original:, Section "3.3 Inverting the map": Theorem 3
 def z (s : F) (P : F × F) (q : ℕ) : F :=
   let x := P.fst
   let c := c s
-  let X2 := X2 s P q
-  let a := (c - 1) * s * X2 * (1 + X2) * x * (X2^2 + 1 / c^2)
+  let Xbar := Xbar s P q
+  let a := (c - 1) * s * Xbar * (1 + Xbar) * x * (Xbar^2 + 1 / c^2)
   χ a
 
 /-- ubar is a function defined in the paper.
@@ -246,9 +246,9 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   $$
   -/)]
 def ubar (s : F) (P : F × F) (q : ℕ) : F :=
-  let X2 := X2 s P q
+  let Xbar := Xbar s P q
   let z := z s P q
-  z * X2
+  z * Xbar
 
 /-- t2 is a function defined in the paper.
 

@@ -21,7 +21,7 @@ preimage and image of `ϕ`, and verifies the paper's explicit inverse formula on
   in particular, `ϕ t = ϕ (-t)` and there are no other preimages.
 * `props_iff_mem_ϕOverF`: membership in the image `ϕ(F)` is equivalent to the three
   algebraic point conditions stated in part 2 of Theorem 3.
-* `X2_defined`, `z_defined`, `t2_defined`: the denominators required by the inverse construction
+* `Xbar_defined`, `z_defined`, `t2_defined`: the denominators required by the inverse construction
   are nonzero on `ϕ(F)`.
 * `ϕ_of_t2_eq_x_y`: applying `ϕ` to the reconstructed parameter `t2` recovers the original point.
 
@@ -105,8 +105,9 @@ theorem props_iff_mem_ϕOverF
 
 /-- The explicit inverse formula in part 3 of Theorem 3 recovers a point in `ϕ(F)`.
 
-Starting with `P = ϕ t`, the definitions `X2`, `z`, `ubar`, and `t2` reproduce the paper's
-quantities `X2`, `z`, `ubar`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`. -/
+Starting with `P = ϕ t`, the definitions `Xbar`, `z`, `ubar`, and `t2` reproduce the paper's
+quantities `Xbar`, `z`, `ubar`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`.
+-/
 @[blueprint "thm:thm3-3"
   (title := "Theorem 3.3: inverting $\\varphi$")
   (statement := /--
@@ -147,14 +148,14 @@ theorem ϕ_of_t2_eq_x_y
         ⟨t, by grind⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The denominator `2 * (y + 1)` in the inverse construction is nonzero on `ϕ(F)`.
-This supplies the definedness of `η`, and hence of `X2`, in part 3 of Theorem 3. -/
-@[blueprint "thm:X2_defined"
+This supplies the definedness of `η`, and hence of `Xbar`, in part 3 of Theorem 3. -/
+@[blueprint "thm:Xbar_defined"
   (title := "$\\bar X$ is defined")
   (statement := /--
   For $(x, y) \in \varphi(\mathbb{F}_q)$ the denominator $2(y + 1)$ of $\eta$ is nonzero, so
   $\eta$ and hence $\bar X$ of Theorem 3.3 are defined.
   -/)]
-theorem X2_defined
+theorem Xbar_defined
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)

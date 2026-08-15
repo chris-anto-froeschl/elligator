@@ -70,15 +70,15 @@ lemma X_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
   let X1 := X t s
-  let X2 := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-  X2 = 1 / X1 := by
-    intro t1 t2 X1 X2
+  let Xbar := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
+  Xbar = 1 / X1 := by
+    intro t1 t2 X1 Xbar
     let u1 := u t
     let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
     let v1 := v t s
     let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
     calc
-      X2 = (χ v2) * ubar := by rfl
+      Xbar = (χ v2) * ubar := by rfl
       _ = (χ v1) / u1 := by
         unfold v2 t2
         rw [v_comparison_implication4 t]

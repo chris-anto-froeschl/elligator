@@ -10,7 +10,7 @@ import Elligator.Elligator1.MapProperties
 import Elligator.Elligator1.SProperties
 import Elligator.Elligator1.StringEncoding
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.X2Properties
+import Elligator.Elligator1.XbarProperties
 import Elligator.Elligator1.XProperties
 import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.bProperties
