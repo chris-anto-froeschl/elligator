@@ -10,8 +10,8 @@ import Elligator.Elligator1.MapProperties
 import Elligator.Elligator1.SProperties
 import Elligator.Elligator1.StringEncoding
 import Elligator.Elligator1.Variables
-import Elligator.Elligator1.XbarProperties
 import Elligator.Elligator1.XProperties
+import Elligator.Elligator1.XbarProperties
 import Elligator.Elligator1.YProperties
 import Elligator.Elligator1.bProperties
 import Elligator.Elligator1.bitsToNatProperties
@@ -22,8 +22,8 @@ import Elligator.Elligator1.phiProperties
 import Elligator.Elligator1.rProperties
 import Elligator.Elligator1.sProperties
 import Elligator.Elligator1.tbarProperties
-import Elligator.Elligator1.ubarProperties
 import Elligator.Elligator1.uProperties
+import Elligator.Elligator1.ubarProperties
 import Elligator.Elligator1.vProperties
 import Elligator.Elligator1.xProperties
 import Elligator.Elligator1.yProperties
