@@ -8,9 +8,9 @@ module
 public import Elligator.Elligator1.ubarProperties
 
 /-!
-# t2 Variable Properties
+# tbar Variable Properties
 
-In this file we introduce some generally helpful lemmas for `t2` as introduced in
+In this file we introduce some generally helpful lemmas for `tbar` as introduced in
 `Elligator.Elligator1.Variables`.
 
 ## References
@@ -28,7 +28,7 @@ variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
-lemma t2_eq_one
+lemma tbar_eq_one
   (t : { t : F // t = 1 ∨ t = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -36,17 +36,17 @@ lemma t2_eq_one
   (hq_mod : q % 4 = 3)
   :
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  let t2_of_P := t2 s P q
-  t2_of_P = 1 := by
-    intro P t2_of_P
-    unfold t2_of_P t2
+  let tbar_of_P := tbar s P q
+  tbar_of_P = 1 := by
+    intro P tbar_of_P
+    unfold tbar_of_P tbar
     let ubar_of_P := ubar s P q
     change (1 - ubar_of_P) / (1 + ubar_of_P) = 1
     unfold ubar_of_P
     rw [ubar_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
     simp
 
-lemma t2_eq_t
+lemma tbar_eq_t
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -59,14 +59,14 @@ lemma t2_eq_t
     Xbar = X)
   :
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  let t2_of_P := t2 s P q
-  t2_of_P = t := by
-    intro P t2_of_P
+  let tbar_of_P := tbar s P q
+  tbar_of_P = t := by
+    intro P tbar_of_P
     let u := u t
     let ubar := ubar s P q
     have h : ubar = u := ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod X_h
     unfold u Elligator1.u at h
-    unfold t2_of_P t2
+    unfold tbar_of_P tbar
     change (1 - ubar) / (1 + ubar) = t.val
     change ubar = (1 - t.val) / (1 + t.val) at h
     rw [h, sub_div' (one_add_t_ne_zero t)]
@@ -75,7 +75,7 @@ lemma t2_eq_t
     have h' : (1 + t.val) * 2 ≠ 0 := mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero hq_card hq_mod)
     grind
 
-lemma t2_eq_t'
+lemma tbar_eq_t'
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -88,16 +88,16 @@ lemma t2_eq_t'
     Xbar = X')
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-  let t2_of_P := t2 s P q
+  let tbar_of_P := tbar s P q
   let t' := -t.val
-  t2_of_P = t' := by
-    intro P t2_of_P t'
+  tbar_of_P = t' := by
+    intro P tbar_of_P t'
     have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     let u' := u ⟨t', t_h⟩
     let ubar := ubar s P q
     let h : ubar = u' := ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod X_h
     unfold u' u at h
-    unfold t2_of_P t2
+    unfold tbar_of_P tbar
     change (1 - ubar) / (1 + ubar) = t'
     change ubar = (1 - t') / (1 + t') at h
     rw [h, sub_div' (one_add_t_ne_zero ⟨t', t_h⟩)]
@@ -106,14 +106,14 @@ lemma t2_eq_t'
       mul_ne_zero (one_add_t_ne_zero ⟨t', t_h⟩) (two_ne_zero hq_card hq_mod)
     grind
 
-@[blueprint "lemma:t2_in_t_or_neg_t"
+@[blueprint "lemma:tbar_in_t_or_neg_t"
   (title := "$\\bar t = \\pm t$")
   (statement := /--
   For $t \in \mathbb{F}_q$, the parameter $\bar t$ reconstructed from $\varphi(t)$ in
   Theorem 3.3 satisfies $\bar t = t$ or $\bar t = -t$. This is the key step showing that
   $\varphi(t)$ has no preimages besides $t$ and $-t$.
   -/)]
-lemma t2_in_t_or_neg_t
+lemma tbar_in_t_or_neg_t
   (t : F)
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -122,20 +122,20 @@ lemma t2_in_t_or_neg_t
   :
   let P := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let t' := -t
-  let t2_of_P := t2 s P q
-  t2_of_P = t ∨ t2_of_P = t' := by
-    intro P t' t2_of_P
+  let tbar_of_P := tbar s P q
+  tbar_of_P = t ∨ tbar_of_P = t' := by
+    intro P t' tbar_of_P
     by_cases h : t ≠ 1 ∧ t ≠ -1
     · rcases (Xbar_h4 ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h1 | h1
       · left
-        exact t2_eq_t ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
+        exact tbar_eq_t ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
       · right
-        exact t2_eq_t' ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
+        exact tbar_eq_t' ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
     · have h' : t = 1 ∨ t = -1 := by
         rw [← not_ne_iff, ← not_ne_iff, ← Lean.Grind.not_and]
         exact h
-      unfold t2_of_P t'
-      rw [t2_eq_one ⟨t, h'⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+      unfold tbar_of_P t'
+      rw [tbar_eq_one ⟨t, h'⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod]
       grind
 
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/

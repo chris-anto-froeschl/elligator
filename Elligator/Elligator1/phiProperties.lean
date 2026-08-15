@@ -5,7 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.Elligator1.t2Properties
+public import Elligator.Elligator1.tbarProperties
 
 /-!
 # ϕ Properties
@@ -184,16 +184,16 @@ theorem ϕ_preimages
     have h' : p.val = t ∨ p.val = -t := by
       let p_P := ϕ p.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
       let t_P := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      let t2_of_p := t2 s p_P q
-      let t2_of_t := t2 s t_P q
-      have t2_h : t2_of_p = p ∨ t2_of_p = -p :=
-        t2_in_t_or_neg_t p.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      have t2_h' : t2_of_t = t ∨ t2_of_t = -t :=
-        t2_in_t_or_neg_t t hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      unfold t2_of_p p_P at t2_h
-      rw [hp] at t2_h
-      change t2_of_t = p ∨ t2_of_t = -p at t2_h
-      rcases t2_h with h | h <;> grind
+      let tbar_of_p := tbar s p_P q
+      let tbar_of_t := tbar s t_P q
+      have tbar_h : tbar_of_p = p ∨ tbar_of_p = -p :=
+        tbar_in_t_or_neg_t p.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
+      have tbar_h' : tbar_of_t = t ∨ tbar_of_t = -t :=
+        tbar_in_t_or_neg_t t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+      unfold tbar_of_p p_P at tbar_h
+      rw [hp] at tbar_h
+      change tbar_of_t = p ∨ tbar_of_t = -p at tbar_h
+      rcases tbar_h with h | h <;> grind
     have h'' := p.prop.left
     have h''' := p.prop.right
     rcases h' <;> contradiction
@@ -317,7 +317,7 @@ lemma x_y_eq_ϕ_of_t_of_Xbar_ne_one
       hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h
     grind
 
-lemma ϕ_of_t2_eq_x_y_base_case
+lemma ϕ_of_tbar_eq_x_y_base_case
   (t : { n : F // n = 1 ∨ n = -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -325,16 +325,16 @@ lemma ϕ_of_t2_eq_x_y_base_case
   (hq_mod : q % 4 = 3)
   :
   let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-  let t' := t2 s P q
+  let t' := tbar s P q
   let ϕ_of_t' := (ϕ t' hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   ϕ_of_t' = (0, 1) := by
     intro P t' ϕ_of_t'
     unfold ϕ_of_t' ϕ
-    have h1 : ¬ (t' ≠ 1 ∧ t' ≠ -1) := by grind [t2_eq_one]
+    have h1 : ¬ (t' ≠ 1 ∧ t' ≠ -1) := by grind [tbar_eq_one]
     dsimp
     rw [dif_neg h1]
 
-lemma ϕ_of_t2_eq_x_y_main_case
+lemma ϕ_of_tbar_eq_x_y_main_case
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -342,7 +342,7 @@ lemma ϕ_of_t2_eq_x_y_main_case
   (hq_mod : q % 4 = 3)
   :
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  let t' := t2 s P q
+  let t' := tbar s P q
   let ϕ_of_t' := ϕ t' hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let x_of_t := x t s q
   let y_of_t := y t s
@@ -350,7 +350,7 @@ lemma ϕ_of_t2_eq_x_y_main_case
     intro P t' ϕ_of_t' x_of_t y_of_t
     have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
     unfold ϕ_of_t' ϕ
-    rcases (t2_in_t_or_neg_t t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
+    rcases (tbar_in_t_or_neg_t t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
     · change t' = t at h
       rw [h]
       dsimp

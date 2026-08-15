@@ -250,11 +250,11 @@ def ubar (s : F) (P : F × F) (q : ℕ) : F :=
   let z := z s P q
   z * Xbar
 
-/-- t2 is a function defined in the paper.
+/-- tbar is a function defined in the paper.
 
 Original:, Section "3.3 Inverting the map": Theorem 3
 -/
-@[blueprint "def:t2"
+@[blueprint "def:tbar"
   (title := "The reconstructed preimage $\\bar t$")
   (statement := /--
   For a point $(x, y) \in \varphi(\mathbb{F}_q)$, with $\bar u$ as above, define
@@ -262,7 +262,7 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   \bar t = (1 - \bar u)/(1 + \bar u) .
   $$
   -/)]
-def t2 (s : F) (P : F × F) (q : ℕ) : F :=
+def tbar (s : F) (P : F × F) (q : ℕ) : F :=
   let ubar := ubar s P q
   (1 - ubar) / (1 + ubar)
 

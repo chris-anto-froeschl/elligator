@@ -21,9 +21,10 @@ preimage and image of `ϕ`, and verifies the paper's explicit inverse formula on
   in particular, `ϕ t = ϕ (-t)` and there are no other preimages.
 * `props_iff_mem_ϕOverF`: membership in the image `ϕ(F)` is equivalent to the three
   algebraic point conditions stated in part 2 of Theorem 3.
-* `Xbar_defined`, `z_defined`, `t2_defined`: the denominators required by the inverse construction
+* `Xbar_defined`, `z_defined`, `tbar_defined`: the denominators required by the inverse construction
   are nonzero on `ϕ(F)`.
-* `ϕ_of_t2_eq_x_y`: applying `ϕ` to the reconstructed parameter `t2` recovers the original point.
+* `ϕ_of_tbar_eq_x_y`: applying `ϕ` to the reconstructed parameter `tbar` recovers
+  the original point.
 
 ## References
 
@@ -105,8 +106,9 @@ theorem props_iff_mem_ϕOverF
 
 /-- The explicit inverse formula in part 3 of Theorem 3 recovers a point in `ϕ(F)`.
 
-Starting with `P = ϕ t`, the definitions `Xbar`, `z`, `ubar`, and `t2` reproduce the paper's
-quantities `Xbar`, `z`, `ubar`, and `t2`; evaluating `ϕ (t2 s P q)` returns the coordinates of `P`.
+Starting with `P = ϕ t`, the definitions `Xbar`, `z`, `ubar`, and `tbar` reproduce the paper's
+quantities `Xbar`, `z`, `ubar`, and `tbar`; evaluating `ϕ (tbar s P q)` returns the coordinates
+of `P`.
 -/
 @[blueprint "thm:thm3-3"
   (title := "Theorem 3.3: inverting $\\varphi$")
@@ -121,7 +123,7 @@ quantities `Xbar`, `z`, `ubar`, and `t2`; evaluating `ϕ (t2 s P q)` returns the
     \bar t &= (1 - \bar u)/(1 + \bar u).
   \end{align*}
   -/)]
-theorem ϕ_of_t2_eq_x_y
+theorem ϕ_of_tbar_eq_x_y
   -- Fix t ∈ F_q
   (t : F)
   (hs_ne_zero : s ≠ 0)
@@ -133,8 +135,8 @@ theorem ϕ_of_t2_eq_x_y
   let P := (ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   let x_of_t := P.1
   let y_of_t := P.2
-  -- t2 defined (and used to build ϕ(t2))
-  let t' := t2 s P q
+  -- tbar defined (and used to build ϕ(tbar))
+  let t' := tbar s P q
   let ϕ_of_t' := (ϕ t' hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
   ϕ_of_t' = (x_of_t, y_of_t) := by
     intro P x_of_P y_of_P t' ϕ_of_t'
@@ -142,9 +144,9 @@ theorem ϕ_of_t2_eq_x_y
     dsimp
     split
     · rename_i h
-      exact ϕ_of_t2_eq_x_y_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+      exact ϕ_of_tbar_eq_x_y_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
     · rename_i h
-      exact ϕ_of_t2_eq_x_y_base_case
+      exact ϕ_of_tbar_eq_x_y_base_case
         ⟨t, by grind⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The denominator `2 * (y + 1)` in the inverse construction is nonzero on `ϕ(F)`.
@@ -191,14 +193,14 @@ omit [DecidableEq F] in
 theorem z_defined (hs_ne_zero : s ≠ 0) (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : (c s)^2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
 
-/-- The denominator `1 + ubar` in the reconstructed parameter `t2` is nonzero on `ϕ(F)`. -/
-@[blueprint "thm:t2_defined"
+/-- The denominator `1 + ubar` in the reconstructed parameter `tbar` is nonzero on `ϕ(F)`. -/
+@[blueprint "thm:tbar_defined"
   (title := "$\\bar t$ is defined")
   (statement := /--
   For $(x, y) \in \varphi(\mathbb{F}_q)$ the denominator $1 + \bar u$ of $\bar t$ in
   Theorem 3.3 is nonzero, so $\bar t$ is defined.
   -/)]
-theorem t2_defined
+theorem tbar_defined
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
