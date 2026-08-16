@@ -43,24 +43,6 @@ lemma card_isPrimePow (hq_card : Fintype.card F = q) : IsPrimePow q := by
   rw [← hq_card]
   exact FiniteField.isPrimePow_card F
 
-omit [Field F] in
-lemma q_odd (hq_mod : q % 4 = 3) : Odd q := by
-  rw [Nat.odd_iff]
-  omega
-
-omit [Field F] in
-lemma q_sub_one_div_two_odd (hq_mod : q % 4 = 3) : Odd ((q - 1) / 2) := by
-  rw [Nat.odd_iff]
-  omega
-
-omit [Field F] in
-lemma q_sub_one_even (hq_mod : q % 4 = 3) : Even (q - 1) := by
-  rw [Nat.even_iff]
-  omega
-
-omit [Fintype F] in
-lemma one_ne_zero : (1 : F) ≠ 0 := by exact one_ne_zero' F
-
 lemma q_add_one_div_four_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by
   apply Nat.div_ne_zero_iff.mpr
   norm_num

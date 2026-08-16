@@ -222,7 +222,7 @@ lemma ϕ_of_zero
     intro ϕ_of_zero c r
     unfold ϕ_of_zero ϕ
     let h : (0 : F) ≠ 1 ∧ (0 : F) ≠ -1 :=
-      ⟨FiniteFieldBasic.one_ne_zero.symm, FiniteFieldBasic.neg_one_ne_zero.symm⟩
+      ⟨(one_ne_zero' F).symm, FiniteFieldBasic.neg_one_ne_zero.symm⟩
     let η_of_P := η ϕ_of_zero
     have h' : η_of_P * r = -2 := by
       unfold η_of_P η ϕ_of_zero ϕ

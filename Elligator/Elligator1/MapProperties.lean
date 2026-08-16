@@ -658,7 +658,7 @@ lemma P_in_ϕOverF_with_prop2_main_case
     nth_rw 1 [← one_mul X, mul_assoc] at h1
     change IsSquare ((1 + η * r) ^ 2 - 1)
     rw [@quadratic_eq_zero_iff_discrim_eq_sq
-      F _ 1 (2 * (1 + η * r)) 1 h2 _ FiniteFieldBasic.one_ne_zero X] at h1
+      F _ 1 (2 * (1 + η * r)) 1 h2 _ (one_ne_zero' F) X] at h1
     unfold discrim at h1
     rw [mul_pow 2 _ 2] at h1
     have h3 : 2^2 = (4 : F) := by norm_num

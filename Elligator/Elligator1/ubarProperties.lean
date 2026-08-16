@@ -291,7 +291,7 @@ lemma one_add_ubar_ne_zero_base_case
     intro P ubar
     unfold ubar
     rw [ubar_eq_zero, add_zero]
-    exact FiniteFieldBasic.one_ne_zero
+    exact one_ne_zero' F
 
 lemma one_add_ubar_ne_zero
   (hs_ne_zero : s ≠ 0)
