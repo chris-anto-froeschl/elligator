@@ -28,22 +28,17 @@ variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
 variable {q : ℕ}
 
-lemma η_eq_zero
-  (t : { t : F // t = 1 ∨ t = -1})
-  (hs_ne_zero : s ≠ 0)
-  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
-  let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-  let η := η P
-  η = 0 := by
-    intro P η
-    unfold η Elligator1.η
-    let y := P.2
-    change (y - 1) / (2 * (y + 1)) = 0
-    unfold y P
-    rw [ϕ_of_t_eq_zero_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
-    simp
+lemma η_eq_zero (t : { t : F // t = 1 ∨ t = -1})
+    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
+    (η P) = 0 := by
+  intro P
+  unfold η
+  let y := P.2
+  change (y - 1) / (2 * (y + 1)) = 0
+  unfold y P
+  rw [ϕ_of_t_eq_zero_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+  rw [sub_self, zero_div]
 
 end Elligator.Elligator1

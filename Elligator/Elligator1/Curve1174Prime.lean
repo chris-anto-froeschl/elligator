@@ -12,7 +12,7 @@ public import Mathlib.Tactic.NormNum.Prime
 # Primality of the Curve1174 characteristic
 
 Curve1174 of [bernstein2013a], Section 4, is defined over the prime field `F_q` with
-`q = 2^251 - 9`. This file establishes `Nat.Prime q`.
+`q = 2 ^ 251 - 9`. This file establishes `Nat.Prime q`.
 
 The proof runs the Pratt certificate machinery of `Elligator.PrimalityCertificate`: the
 factorisation
@@ -58,8 +58,8 @@ theorem prime_2032236244151 : Nat.Prime 2032236244151 := by
 verified by the Pratt certificate with base `5`. -/
 theorem prime_20387630040577 : Nat.Prime 20387630040577 := by
   refine prime_of_pratt 5 256
-      [2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 17, 401, 1947073]
-      (by norm_num) ?_ (by norm_num) (by decide) ?_
+    [2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 17, 401, 1947073]
+    (by norm_num) ?_ (by norm_num) (by decide) ?_
   · intro r hr
     fin_cases hr <;> norm_num
   · intro r hr
@@ -102,30 +102,30 @@ theorem prime_22645347980446549950250344634517843 :
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `6`. -/
 theorem prime_30510656070643106182115999270826633842178510774222732476374386585332681 :
-  Nat.Prime 30510656070643106182115999270826633842178510774222732476374386585332681 := by
-    refine prime_of_pratt 6 256
-      [2, 2, 2, 5, 31, 11783, 42853, 2151858718037429125511251,
-      22645347980446549950250344634517843]
-      (by norm_num) ?_ (by norm_num) (by decide) ?_
-    · intro r hr
-      have h0 := prime_2151858718037429125511251
-      have h1 := prime_22645347980446549950250344634517843
-      fin_cases hr <;> first | assumption | norm_num
-    · intro r hr
-      fin_cases hr <;> decide
+    Nat.Prime 30510656070643106182115999270826633842178510774222732476374386585332681 := by
+  refine prime_of_pratt 6 256
+    [2, 2, 2, 5, 31, 11783, 42853, 2151858718037429125511251,
+    22645347980446549950250344634517843]
+    (by norm_num) ?_ (by norm_num) (by decide) ?_
+  · intro r hr
+    have h0 := prime_2151858718037429125511251
+    have h1 := prime_22645347980446549950250344634517843
+    fin_cases hr <;> first | assumption | norm_num
+  · intro r hr
+    fin_cases hr <;> decide
 
 /-- The characteristic `q = 2 ^ 251 - 9` of the Curve1174 base field is prime,
 verified by the Pratt certificate with base `7`. -/
 theorem q1174_prime :
-  Nat.Prime 3618502788666131106986593281521497120414687020801267626233049500247285301239 := by
-    refine prime_of_pratt 7 256
-      [2, 19, 3121,
-      30510656070643106182115999270826633842178510774222732476374386585332681]
-      (by norm_num) ?_ (by norm_num) (by decide) ?_
-    · intro r hr
-      have h0 := prime_30510656070643106182115999270826633842178510774222732476374386585332681
-      fin_cases hr <;> first | assumption | norm_num
-    · intro r hr
-      fin_cases hr <;> decide
+    Nat.Prime 3618502788666131106986593281521497120414687020801267626233049500247285301239 := by
+  refine prime_of_pratt 7 256
+    [2, 19, 3121,
+    30510656070643106182115999270826633842178510774222732476374386585332681]
+    (by norm_num) ?_ (by norm_num) (by decide) ?_
+  · intro r hr
+    have h0 := prime_30510656070643106182115999270826633842178510774222732476374386585332681
+    fin_cases hr <;> first | assumption | norm_num
+  · intro r hr
+    fin_cases hr <;> decide
 
 end Elligator.Elligator1.Curve1174

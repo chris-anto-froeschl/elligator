@@ -33,12 +33,12 @@ Original:, Section "3.2 The map": Theorem 1
   (title := "The curve parameter $c$")
   (statement := /--
   Let $q$ be a prime power congruent to $3$ modulo $4$, and let $s$ be a nonzero element of
-  $\mathbb{F}_q$ with $(s^2 - 2)(s^2 + 2) \neq 0$. Define
+  $\mathbb{F}_q$ with $(s ^ 2 - 2)(s ^ 2 + 2) \neq 0$. Define
   $$
-  c = 2/s^2 .
+  c = 2/s ^ 2 .
   $$
   -/)]
-def c (s : F) : F := 2 / s^2
+def c (s : F) : F := 2 / s ^ 2
 
 /-- r(s) is a function defined in the paper.
 
@@ -47,13 +47,13 @@ Original:, Section "3.2 The map": Theorem 1
 @[blueprint "def:r"
   (title := "The curve parameter $r$")
   (statement := /--
-  With $c = 2/s^2$ as above, define
+  With $c = 2/s ^ 2$ as above, define
   $$
   r = c + 1/c .
   $$
   -/)]
 def r (s : F) : F :=
-  let c := c s;
+  let c := c s
   c + 1 / c
 
 /-- d(s) is a function defined in the paper.
@@ -63,15 +63,15 @@ Original:, Section "3.2 The map": Theorem 1
 @[blueprint "def:d"
   (title := "The Edwards curve coefficient $d$")
   (statement := /--
-  With $c = 2/s^2$ as above, define
+  With $c = 2/s ^ 2$ as above, define
   $$
-  d = -(c + 1)^2/(c - 1)^2 ,
+  d = -(c + 1) ^ 2/(c - 1) ^ 2 ,
   $$
-  the coefficient of the complete Edwards curve $E : x^2 + y^2 = 1 + d x^2 y^2$.
+  the coefficient of the complete Edwards curve $E : x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2$.
   -/)]
 def d (s : F) : F :=
   let c := c s;
-  -(c + 1)^2 / (c - 1)^2
+  -(c + 1) ^ 2 / (c - 1) ^ 2
 
 /-- u(t) is a function defined in the paper.
 
@@ -86,7 +86,7 @@ Original:, Section "3.2 The map": Theorem 1
   $$
   -/)]
 def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
-  let t := t.val;
+  let t := t.val
   (1 - t) / (1 + t)
 
 /-- v(t, s) is a function defined in the paper.
@@ -98,13 +98,13 @@ Original:, Section "3.2 The map": Theorem 1
   (statement := /--
   For $t \in \mathbb{F}_q \setminus \{\pm 1\}$, with $u$ and $r$ as above, define
   $$
-  v = u^5 + (r^2 - 2)u^3 + u .
+  v = u ^ 5 + (r ^ 2 - 2)u ^ 3 + u .
   $$
   -/)]
 def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let u := u t
   let r := r s
-  u^5 + (r^2 - 2) * u^3 + u
+  u ^ 5 + (r ^ 2 - 2) * u ^ 3 + u
 
 /-- X(t, s) is a function defined in the paper.
 
@@ -137,14 +137,14 @@ Original:, Section "3.2 The map": Theorem 1
   (statement := /--
   For $t \in \mathbb{F}_q \setminus \{\pm 1\}$, with $u$, $v$ and $c$ as above, define
   $$
-  Y = (\chi(v)v)^{(q+1)/4} \chi(v) \chi(u^2 + 1/c^2) .
+  Y = (\chi(v)v)^{(q+1)/4} \chi(v) \chi(u ^ 2 + 1/c ^ 2) .
   $$
   -/)]
 def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
   let u := u t
   let c := c s
   let v := v t s
-  ((χ v) * v)^((q + 1) / 4) * (χ v) * χ (u^2 + 1 / c^2)
+  ((χ v) * v) ^ ((q + 1) / 4) * (χ v) * χ (u ^ 2 + 1 / c ^ 2)
 
 /-- x(t, s) is a function defined in the paper. It is the x-coordinate of the point on the curve.
 
@@ -173,13 +173,13 @@ Original:, Section "3.2 The map": Theorem 1
   (statement := /--
   For $t \in \mathbb{F}_q \setminus \{\pm 1\}$, with $r$ and $X$ as above, define
   $$
-  y = (rX - (1 + X)^2)/(rX + (1 + X)^2) .
+  y = (rX - (1 + X) ^ 2)/(rX + (1 + X) ^ 2) .
   $$
   -/)]
 def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
   let r := r s
   let X := X t s
-  (r * X - (1 + X)^2) / (r * X + (1 + X)^2)
+  (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2)
 
 /-- η(s, q, point) is a function defined in the paper.
 
@@ -206,13 +206,13 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   (statement := /--
   For a point $(x, y) \in \varphi(\mathbb{F}_q)$, with $\eta$ as above, define
   $$
-  \bar X = -(1 + \eta r) + ((1 + \eta r)^2 - 1)^{(q+1)/4} .
+  \bar X = -(1 + \eta r) + ((1 + \eta r) ^ 2 - 1)^{(q+1)/4} .
   $$
   -/)]
 def Xbar (s : F) (P : F × F) (q : ℕ) : F :=
   let η := η P
   let r := r s
-  (-(1 + η * r) + ((1 + η * r)^2 - 1)^((q + 1) / 4))
+  (-(1 + η * r) + ((1 + η * r) ^ 2 - 1) ^ ((q + 1) / 4))
 
 /-- z is a function defined in the paper.
 
@@ -223,15 +223,14 @@ Original:, Section "3.3 Inverting the map": Theorem 3
   (statement := /--
   For a point $(x, y) \in \varphi(\mathbb{F}_q)$, with $\bar X$ as above, define
   $$
-  z = \chi\bigl((c - 1)s\bar X(1 + \bar X)x(\bar X^2 + 1/c^2)\bigr) .
+  z = \chi\bigl((c - 1)s\bar X(1 + \bar X)x(\bar X ^ 2 + 1/c ^ 2)\bigr) .
   $$
   -/)]
 def z (s : F) (P : F × F) (q : ℕ) : F :=
   let x := P.fst
   let c := c s
   let Xbar := Xbar s P q
-  let a := (c - 1) * s * Xbar * (1 + Xbar) * x * (Xbar^2 + 1 / c^2)
-  χ a
+  χ ((c - 1) * s * Xbar * (1 + Xbar) * x * (Xbar ^ 2 + 1 / c ^ 2))
 
 /-- ubar is a function defined in the paper.
 
@@ -281,18 +280,18 @@ Original:, Section "3.4 Encoding as strings": Theorem 4
 def b (q : ℕ) : ℕ := Nat.log 2 q
 
 /-- Convert a bit vector (τ₀, τ₁, ..., τ_{b-1}) to a natural number via binary
-expansion: bitsToNat(τ) = Σᵢ τᵢ · 2^i.
+expansion: bitsToNat(τ) = Σᵢ τᵢ · 2 ^ i.
 -/
 @[blueprint "def:bitsToNat"
   (title := "Binary value of a bit string")
   (statement := /--
   A bit string $(\tau_0, \tau_1, \ldots, \tau_{n-1}) \in \{0,1\}^n$ has binary value
   $$
-  \sum_i \tau_i 2^i \in \mathbb{Z}_{\geq 0} .
+  \sum_i \tau_i 2 ^ i \in \mathbb{Z}_{\geq 0} .
   $$
   -/)]
 def bitsToNat {n : ℕ} (τ : Fin n → Bool) : ℕ :=
-  ∑ i : Fin n, if τ i then 2^(i : ℕ) else 0
+  ∑ i : Fin n, if τ i then 2 ^ (i : ℕ) else 0
 
 /-- `σ` interprets a bit vector `(τ₀, τ₁, …, τ_{b−1})` as the field element
 `∑ᵢ τᵢ · 2ⁱ ∈ Fq`. This is the standard binary-to-integer conversion followed by casting into `F`.
@@ -304,7 +303,7 @@ Original:, Section "3.4 Encoding as strings": Theorem 4
   (statement := /--
   Define $\sigma : \{0,1\}^b \to \mathbb{F}_q$ by
   $$
-  \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2^i .
+  \sigma(\tau_0, \tau_1, \ldots, \tau_{b-1}) = \sum_i \tau_i 2 ^ i .
   $$
   -/)]
 def σ {q : ℕ} (τ : Fin (@b q) → Bool) : F := (bitsToNat τ : F)

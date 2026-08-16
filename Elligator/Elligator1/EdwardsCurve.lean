@@ -52,7 +52,7 @@ use `(edwardsCurve d).Equation x y`, and carry coefficient validity separately v
   For a coefficient $d \notin \{0, 1\}$, the complete Edwards curve $E$ over $\mathbb{F}_q$ is
   given by the equation
   $$
-  x^2 + y^2 = 1 + d x^2 y^2 .
+  x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2 .
   $$
   -/)]
 def edwardsCurveEquation (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1}) : Prop :=
@@ -61,51 +61,40 @@ def edwardsCurveEquation (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1}) : Prop :
 omit [Fintype F] in
 @[simp]
 theorem edwardsCurveEquation_iff (x y : F) (d : {d : F // d ≠ 0 ∧ d ≠ 1}) :
-  edwardsCurveEquation x y d ↔ x^2 + y^2 = 1 + d * x^2 * y^2 := by
-    simp [edwardsCurveEquation, edwardsCurve]
+    edwardsCurveEquation x y d ↔ x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
+  simp [edwardsCurveEquation, edwardsCurve]
 
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
-def curve (s : F) : TwistedEdwardsCurve F :=
-  edwardsCurve (d s)
+def curve (s : F) : TwistedEdwardsCurve F := edwardsCurve (d s)
 
 /-- The Elligator 1 coefficient hypotheses imply that its specialized curve is valid. -/
-theorem curve_isValid
-  {s : F}
-  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3) :
-  (curve s).IsValid := by
-    rw [curve, edwardsCurve, TwistedEdwardsCurve.ofD_isValid_iff]
-    exact d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
+theorem curve_isValid {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    (curve s).IsValid := by
+  rw [curve, edwardsCurve, TwistedEdwardsCurve.ofD_isValid_iff]
+  exact d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
 
 /-- `EOverF` is the set of affine points on the Edwards curve selected by Elligator 1.
 See `EOverF_eq_affinePoints` for the generic curve view. -/
 @[blueprint "def:EOverF"
   (title := "The point set $E(\\mathbb{F}_q)$")
   (statement := /--
-  With $d = -(c + 1)^2/(c - 1)^2$ as in Theorem 1, let
+  With $d = -(c + 1) ^ 2/(c - 1) ^ 2$ as in Theorem 1, let
   $$
   E(\mathbb{F}_q) = \{(x, y) \in \mathbb{F}_q \times \mathbb{F}_q :
-    x^2 + y^2 = 1 + d x^2 y^2\}
+    x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2\}
   $$
   be the set of affine points of the complete Edwards curve $E$.
   -/)]
-def EOverF
-  {s : F}
-  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3) : Set (F × F) :=
+def EOverF {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : Set (F × F) :=
   let d := d s
-  let d_h : d ≠ 0 ∧ d ≠ 1 :=
-    d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
+  let d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
   {p | edwardsCurveEquation p.fst p.snd ⟨d, d_h⟩}
 
 /-- The compatibility set `EOverF` is exactly the affine point set of the general curve model. -/
-theorem EOverF_eq_affinePoints
-  {s : F}
-  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3) :
+theorem EOverF_eq_affinePoints {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     EOverF sq_ne_pm_two hq_card hq_mod = (curve s).affinePoints := by
   rfl
 
@@ -113,19 +102,15 @@ theorem EOverF_eq_affinePoints
   (title := "$(0, 1)$ is a point of $E$")
   (statement := /--
   The neutral point $(0, 1)$, which is the value of $\varphi(\pm 1)$ in Definition 2, lies on the
-  complete Edwards curve $E : x^2 + y^2 = 1 + d x^2 y^2$.
+  complete Edwards curve $E : x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2$.
   -/)]
-lemma edwardsCurveEquation_zero_one
-  {s : F}
-  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
-  let d := d s
-  let d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
-  edwardsCurveEquation (0 : F) (1 : F) ⟨d, d_h⟩ := by
-    intro d_of_s d_h
-    unfold edwardsCurveEquation
-    simp [edwardsCurve]
+lemma edwardsCurveEquation_zero_one {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let d := d s
+    let d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
+    edwardsCurveEquation (0 : F) (1 : F) ⟨d, d_h⟩ := by
+  intro d_of_s d_h
+  unfold edwardsCurveEquation
+  simp [edwardsCurve]
 
 end Elligator.Elligator1

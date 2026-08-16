@@ -12,7 +12,7 @@ public import Mathlib.NumberTheory.LucasPrimality
 # Primality certificates
 
 Elligator 1 is instantiated over concrete finite fields whose cardinality is a large prime, for
-instance `q = 2^251 - 9` for Curve1174 (see [bernstein2013a], Section 4). Such a primality
+instance `q = 2 ^ 251 - 9` for Curve1174 (see [bernstein2013a], Section 4). Such a primality
 statement is far out of reach for the decision procedures that evaluate a `Nat.Prime` goal by
 trial division, so this file provides the infrastructure needed to check a *Pratt certificate*
 inside Lean.
@@ -46,7 +46,7 @@ inside `decide` for exponents with hundreds of bits. -/
   (statement := /--
   For a modulus $m$, a fuel bound $fuel$, a base $b$ and an exponent $e$
   define $\operatorname{powMod}$ by binary exponentiation, so that
-  $\operatorname{powMod}(m, fuel, b, e) = b^e \bmod m$ whenever $e < 2^{fuel}$.
+  $\operatorname{powMod}(m, fuel, b, e) = b ^ e \bmod m$ whenever $e < 2^{fuel}$.
   -/)]
 def powMod (m : ℕ) : ℕ → ℕ → ℕ → ℕ
   | 0, _, _ => 1 % m
@@ -58,7 +58,7 @@ def powMod (m : ℕ) : ℕ → ℕ → ℕ → ℕ
 
 /-- Correctness of binary modular exponentiation: as soon as the fuel bounds the bit length of
 the exponent, `powMod` computes the modular power. -/
-lemma powMod_eq (m : ℕ) : ∀ fuel b e : ℕ, e < 2^fuel → powMod m fuel b e = b^e % m := by
+lemma powMod_eq (m : ℕ) : ∀ fuel b e : ℕ, e < 2 ^ fuel → powMod m fuel b e = b ^ e % m := by
   intro fuel
   induction fuel with
   | zero =>
@@ -71,7 +71,7 @@ lemma powMod_eq (m : ℕ) : ∀ fuel b e : ℕ, e < 2^fuel → powMod m fuel b e
     by_cases he0 : e = 0
     · -- `e = 0`: both sides are `1 % m` by definition.
       simp [he0]
-    · rw [if_neg he0]
+    · rw [ite_eq_right he0]
       -- The recursive call consumes one unit of fuel to handle `e / 2` (one bit shorter);
       -- since we had enough fuel for `e`, we have enough for `e / 2`.
       have h_fuel_suffices : e / 2 < 2 ^ fuel := by
@@ -80,7 +80,7 @@ lemma powMod_eq (m : ℕ) : ∀ fuel b e : ℕ, e < 2^fuel → powMod m fuel b e
       -- By the induction hypothesis, the recursive call really computes the modular power.
       have h_recursive_call : powMod m fuel (b * b % m) (e / 2) = (b * b) ^ (e / 2) % m := by
         rw [ih _ _ h_fuel_suffices, ← Nat.pow_mod]
-      -- `(b*b)^(e/2) = b^(2*(e/2))`: squaring the base while halving the exponent is exactly
+      -- `(b*b) ^ (e/2) = b ^ (2*(e/2))`: squaring the base while halving the exponent is exactly
       -- one step of binary exponentiation.
       have h_square_base : (b * b) ^ (e / 2) = b ^ (2 * (e / 2)) := by rw [← pow_two, ← pow_mul]
       simp only [h_recursive_call, h_square_base]
@@ -88,22 +88,23 @@ lemma powMod_eq (m : ℕ) : ∀ fuel b e : ℕ, e < 2^fuel → powMod m fuel b e
       -- one extra `b`, matching `2*(e/2) + 1 = e`.
       rcases Nat.mod_two_eq_zero_or_one e with he_even | he_odd
       · have h_e_eq : 2 * (e / 2) = e := by omega
-        rw [if_neg (by omega), h_e_eq]
+        rw [ite_eq_right (by omega), h_e_eq]
       · have h_e_eq : 2 * (e / 2) + 1 = e := by omega
-        rw [if_pos he_odd, Nat.mod_mul_mod, ← pow_succ, h_e_eq]
+        rw [ite_eq_left he_odd, Nat.mod_mul_mod, ← pow_succ, h_e_eq]
 
 /-- Modular powers inside `ZMod m` computed through `powMod`: if the binary exponentiation
-of `a^e` modulo `m` returns `b % m`, then `(a : ZMod m)^e = b`. This transports a kernel
+of `a ^ e` modulo `m` returns `b % m`, then `(a : ZMod m) ^ e = b`. This transports a kernel
 computation with numerals into an equation between residues. -/
-lemma natCast_pow_eq_natCast {m : ℕ} (a e b fuel : ℕ) (hfuel : e < 2 ^ fuel)
-  (h : powMod m fuel a e = b % m) : ((a : ZMod m))^e = (b : ZMod m) := by
-    rw [← Nat.cast_pow]
-    rw [ZMod.natCast_eq_natCast_iff', ← powMod_eq m fuel a e hfuel, h]
+lemma natCast_pow_eq_natCast {m : ℕ}
+    (a e b fuel : ℕ) (hfuel : e < 2 ^ fuel) (h : powMod m fuel a e = b % m) :
+    ((a : ZMod m)) ^ e = (b : ZMod m) := by
+  rw [← Nat.cast_pow]
+  rw [ZMod.natCast_eq_natCast_iff', ← powMod_eq m fuel a e hfuel, h]
 
 /-- The Pratt (Lucas) primality criterion, phrased for kernel evaluation.
 
 If `L` is a list of primes whose product is `p - 1` and if the base `a` has order exactly `p - 1`
-modulo `p`, witnessed by `a^(p - 1) ≡ 1` and `a^((p - 1) / r) ≢ 1` for every `r ∈ L`, then `p`
+modulo `p`, witnessed by `a ^ (p - 1) ≡ 1` and `a ^ ((p - 1) / r) ≢ 1` for every `r ∈ L`, then `p`
 is prime. All modular powers are written through `powMod`, so the hypotheses are decidable by
 computation once `p`, `a`, `F` and `L` are numerals. -/
 @[blueprint "thm:pratt"
@@ -114,13 +115,13 @@ computation once `p`, `a`, `F` and `L` are numerals. -/
   every $r \in L$, then $p$ is prime.
   -/)]
 lemma prime_of_pratt {p : ℕ}
-  (a fuel : ℕ) (L : List ℕ) (hfuel : p - 1 < 2 ^ fuel)
-  (hL : ∀ r ∈ L, Nat.Prime r) (hprod : p - 1 = L.prod)
-  (ha : powMod p fuel a (p - 1) = 1 % p)
-  (hchk : ∀ r ∈ L, powMod p fuel a ((p - 1) / r) ≠ 1 % p) :
-  Nat.Prime p := by
+    (a fuel : ℕ) (L : List ℕ) (hfuel : p - 1 < 2 ^ fuel)
+    (hL : ∀ r ∈ L, Nat.Prime r) (hprod : p - 1 = L.prod)
+    (ha : powMod p fuel a (p - 1) = 1 % p)
+    (hchk : ∀ r ∈ L, powMod p fuel a ((p - 1) / r) ≠ 1 % p) :
+    Nat.Prime p := by
     -- Lucas' criterion needs exactly two facts about `a` in `ZMod p`:
-  -- (1) `a^(p-1) = 1`, and (2) for every *prime* `r ∣ (p-1)`, `a^((p-1)/r) ≠ 1`.
+  -- (1) `a ^ (p-1) = 1`, and (2) for every *prime* `r ∣ (p-1)`, `a ^ ((p-1)/r) ≠ 1`.
   apply lucas_primality p (a : ZMod p)
   · -- Fact (1): exactly what `ha` says, transported from `ℕ` into `ZMod p`.
     have h1 : (a : ZMod p) ^ (p - 1) = ((1 : ℕ) : ZMod p) :=
@@ -134,7 +135,7 @@ lemma prime_of_pratt {p : ℕ}
     -- product of primes must actually *equal* one of the factors (unique factorization).
     obtain ⟨x, hx_mem, hr_dvd_x⟩ := (Prime.dvd_prod_iff hr_prime.prime).1 (hprod ▸ hr_dvd)
     obtain rfl : r = x := (Nat.prime_dvd_prime_iff_eq hr_prime (hL x hx_mem)).1 hr_dvd_x
-    -- So `r ∈ L`, and `hchk` directly rules out `a^((p-1)/r) = 1` - we just need to unwind
+    -- So `r ∈ L`, and `hchk` directly rules out `a ^ ((p-1)/r) = 1` - we just need to unwind
     -- that into the `ZMod p` statement Lucas' criterion wants.
     intro hcon_zmod
     apply hchk r hx_mem

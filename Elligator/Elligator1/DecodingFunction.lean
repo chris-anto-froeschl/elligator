@@ -37,19 +37,17 @@ variable {q : ℕ}
   (title := "Coordinates of the decoding function")
   (statement := /--
   In the situation of Theorem 1, the decoding function for the complete Edwards curve
-  $E : x^2 + y^2 = 1 + d x^2 y^2$ is the function $\varphi : \mathbb{F}_q \to E(\mathbb{F}_q)$ with
+  $E : x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2$ is the function $\varphi :
+  \mathbb{F}_q \to E(\mathbb{F}_q)$ with
   $$
   \varphi(\pm 1) = (0, 1), \qquad \varphi(t) = (x, y) \text{ for } t \notin \{\pm 1\}.
   $$
   Here $\varphi$ is regarded as a map $\mathbb{F}_q \to \mathbb{F}_q \times \mathbb{F}_q$,
   forgetting the proof that the image lies on $E$.
   -/)]
-def DecodingFunction
-  (t : F)
-  (hs_ne_zero : s ≠ 0)
-  (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  : F × F := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+def DecodingFunction (t : F)
+  (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+  (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : F × F :=
+  ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 end Elligator.Elligator1

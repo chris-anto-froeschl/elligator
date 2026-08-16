@@ -95,9 +95,9 @@ theorem S7_card : (@S 7).card = 4 := S_card F7_mod_four
 
 -- `ι` is injective on `S`, per Theorem 4.2
 theorem encode_injective_showcase : Function.Injective
-  (fun τ : @S 7 => ι τ s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four) := by
-    have := ι_injective s7_ne_zero s7_sq_ne_pm_two card_F7 (by decide) F7_mod_four
-    simpa using this
+    (fun τ : @S 7 => ι τ s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four) := by
+  have := ι_injective s7_ne_zero s7_sq_ne_pm_two card_F7 (by decide) F7_mod_four
+  simpa using this
 
 end Elligator.Elligator1.Example
 
