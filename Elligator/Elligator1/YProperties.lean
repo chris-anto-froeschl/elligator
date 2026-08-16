@@ -40,8 +40,7 @@ lemma Y_ne_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let Y := Y t s q
   Y ≠ 0 := by
     let u := u t
@@ -73,8 +72,7 @@ lemma X_mul_Y_ne_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let X := X t s
   let Y := Y t s q
   X * Y ≠ 0 := by
@@ -94,8 +92,7 @@ lemma one_add_X_ne_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let X := X t s
   (1 + X) ≠ (0 : F) := by
     let u := u t
@@ -133,8 +130,7 @@ lemma Y_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let t1 := t.val
   let t2 := -t1
   let X1 := X t s

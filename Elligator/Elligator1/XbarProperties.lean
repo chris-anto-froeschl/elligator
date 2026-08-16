@@ -38,8 +38,7 @@ lemma Xbar_eq_neg_one
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let Xbar := Xbar s P.1 q
   Xbar = -1 := by
@@ -56,8 +55,7 @@ lemma Xbar_eq_neg_one
 lemma Xbar_h1
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (P : {P : F × F // ϕOverFProps s P})
-  :
+  (P : {P : F × F // ϕOverFProps s P}) :
   let η_of_P := η P.val
   let r := r s
   let Xbar := Xbar s P q
@@ -78,8 +76,7 @@ lemma Xbar_h1
 lemma Xbar_h2
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (P : {P : F × F // ϕOverFProps s P})
-  :
+  (P : {P : F × F // ϕOverFProps s P}) :
   let η := η P.val
   let r := r s
   let Xbar := Xbar s P q
@@ -95,8 +92,7 @@ lemma Xbar_h3
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let t1 := t.val
   let t2 := -t1
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
@@ -126,8 +122,7 @@ lemma Xbar_h4
   (hs_ne_zero : s ≠ 0)
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let t1 := t.val
   let t2 := -t1
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
@@ -142,8 +137,7 @@ lemma Xbar_h4
 lemma Xbar_ne_zero
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (P : {P : F × F // ϕOverFProps s P})
-  :
+  (P : {P : F × F // ϕOverFProps s P}) :
   let Xbar := Xbar s P q
   Xbar ≠ 0 := by
     intro Xbar
@@ -159,8 +153,7 @@ lemma y_divisor_ne_zero_with_Xbar_for_X
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (P : {P : F × F // ϕOverFProps s P})
-  :
+  (P : {P : F × F // ϕOverFProps s P}) :
   let r := r s
   let Xbar := Xbar s P q
   r * Xbar + (1 + Xbar)^2 ≠ 0 := by
@@ -185,8 +178,7 @@ lemma Xbar_ne_neg_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P q
   Xbar ≠ -1 := by
     intro Xbar h1
@@ -226,8 +218,7 @@ lemma Xbar_add_one_ne_zero
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_ne_one : P.val.2 ≠ 1)
-  :
+  (y_ne_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P q
   Xbar + 1 ≠ 0 := by grind [Xbar_ne_neg_one]
 
@@ -236,8 +227,7 @@ lemma y_with_Xbar
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P.val q
   let r := r s
   let y := P.val.2
@@ -288,8 +278,7 @@ lemma y_with_Xbar_of_Xbar_eq_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P.val q
   let r := r s
   let y := P.val.2
@@ -298,8 +287,7 @@ lemma y_with_Xbar_of_Xbar_eq_one
 lemma η_mul_r_eq_neg_two_of_Xbar_eq_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (P : {P : F × F // ϕOverFProps s P})
-  :
+  (P : {P : F × F // ϕOverFProps s P}) :
   let η := η P
   let Xbar := Xbar s P q
   let r := r s
@@ -317,8 +305,7 @@ lemma Xbar_observation1_of_Xbar_ne_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P.val q
   let y := P.val.2
   let r := r s
@@ -343,8 +330,7 @@ lemma Xbar_observation2_of_Xbar_ne_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P.val q
   let y := P.val.2
   let r := r s
@@ -406,8 +392,7 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (P : {P : F × F // ϕOverFProps s P})
-  :
+  (P : {P : F × F // ϕOverFProps s P}) :
   let y := P.val.2
   let d := d s;
   1 - d * y^2 ≠ 0 := by
@@ -430,8 +415,7 @@ lemma x_pow_two_of_Xbar_ne_one_eq1
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
-  (P_props : ϕOverFProps s P)
-  :
+  (P_props : ϕOverFProps s P) :
   let x := P.val.1
   let y := P.val.2
   let d := d s;
@@ -460,8 +444,7 @@ lemma x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let x := P.val.1
   let X := Xbar s P q
   let r := r s
@@ -555,8 +538,7 @@ lemma Y'_pow_two_eq_of_Xbar_ne_one
   (hq_mod : q % 4 = 3)
   (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
   (P_props : ϕOverFProps s P)
-  (y_eq_one : P.val.2 ≠ 1)
-  :
+  (y_eq_one : P.val.2 ≠ 1) :
   let X := Xbar s P q
   let r := r s
   let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -603,8 +585,7 @@ lemma Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
   (P : {P : F × F // ϕOverFProps s P})
-  (y_ne_one : P.val.2 ≠ 1)
-  :
+  (y_ne_one : P.val.2 ≠ 1) :
   let Xbar := Xbar s P q
   Xbar ≠ 1 → Xbar ≠ 1 ∧ Xbar ≠ -1 := by grind [Xbar_ne_neg_one]
 

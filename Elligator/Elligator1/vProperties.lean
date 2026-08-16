@@ -36,8 +36,7 @@ lemma v_factored
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let v := v t s
   let c := c s
   let u := u t
@@ -104,8 +103,7 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let v := v t s
   ((χ v) * v)^((q + 1) / 4) ≠ 0 := by
     intro v
@@ -174,8 +172,7 @@ lemma v_comparison_implication3
 
 lemma v_comparison_implication4
   [DecidableEq F]
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let t1 := t.val
   let t2 := -t1
   let v1 := v t s

@@ -47,8 +47,7 @@ lemma x_ne_zero
   (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q)
   (hq_mod : q % 4 = 3)
-  (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-  :
+  (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   let x := x t s q
   x ≠ 0 := by
     let c := c s
@@ -72,8 +71,7 @@ lemma x_comparison
   (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let t1 := t.val
   let t2 := -t1
   let x1 := x t s q

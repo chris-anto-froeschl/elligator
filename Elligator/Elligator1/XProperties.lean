@@ -95,8 +95,7 @@ lemma X_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
 lemma X_of_zero
   (hs_ne_zero : s ≠ 0)
   (hq_card : Fintype.card F = q)
-  (hq_mod : q % 4 = 3)
-  :
+  (hq_mod : q % 4 = 3) :
   let X0 := X ⟨(0 : F), by simp⟩ s
   X0 = 1 := by
     intro X0
