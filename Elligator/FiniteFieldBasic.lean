@@ -49,12 +49,6 @@ lemma q_add_one_div_four_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 4 ≠ 0 := by
   have hqle : q ≥ 3 := by lia
   exact Nat.sub_le_iff_le_add'.mp hqle
 
-lemma q_add_one_div_two_ne_zero (hq_mod : q % 4 = 3) : (1 + q) / 2 ≠ 0 := by
-  apply Nat.div_ne_zero_iff.mpr
-  norm_num
-  have hqle : q ≥ 2 := by lia
-  exact Nat.le_add_left_of_le hqle
-
 lemma two_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (2 : F) ≠ 0 := by
   intro h
   -- turn `(2 : F) = 0` into a divisibility statement about the characteristic
@@ -79,9 +73,7 @@ lemma two_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (2 : F) 
 lemma four_ne_zero (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : (4 : F) ≠ 0 := by
   have hnum : (4 : F) = 2 * 2 := by norm_num
   rw [hnum]
-  apply mul_ne_zero
-  · exact (two_ne_zero hq_card hq_mod)
-  · exact (two_ne_zero hq_card hq_mod)
+  apply mul_ne_zero <;> exact two_ne_zero hq_card hq_mod
 
 lemma ringChar_ne_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : ringChar F ≠ 2 := by
   intro hchar
@@ -89,16 +81,14 @@ lemma ringChar_ne_two (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : ring
   have hcon : (2 : F) = 0 := (ringChar.spec F 2).mpr (by rw [hchar])
   exact hcon
 
-omit [Fintype F] in
-lemma neg_one_ne_zero : (-1 : F) ≠ 0 := neg_ne_zero.mpr one_ne_zero
-
 lemma neg_one_non_square (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
   : ¬IsSquare (-1 : F) := by grind [FiniteField.isSquare_neg_one_iff]
 
 /-- If some algebraic identity would force `-1` to be a square, contradiction - `-1` is never
 a square when `q % 4 = 3`. A common closing step for the `r`/`d` nonvanishing proofs. -/
 lemma false_of_isSquare_neg_one (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-  (h : IsSquare (-1 : F)) : False := neg_one_non_square hq_card hq_mod h
+  (h : IsSquare (-1 : F)) :
+  False := neg_one_non_square hq_card hq_mod h
 
 omit [Fintype F] in
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 :=
