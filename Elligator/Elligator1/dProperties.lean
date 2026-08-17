@@ -35,7 +35,7 @@ variable {q : ℕ}
   In the situation of Theorem 1, $d = -(c + 1) ^ 2/(c - 1) ^ 2$ is not a square in $\mathbb{F}_q$:
   otherwise $-1 = d(c - 1) ^ 2/(c + 1) ^ 2$ would be a square, a contradiction.
   -/)]
-  lemma d_nonsquare (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+lemma d_nonsquare (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     ¬IsSquare (d s) := by
   rw [isSquare_iff_exists_mul_self (d s)]

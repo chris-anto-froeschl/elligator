@@ -9,7 +9,7 @@ public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.sProperties
 public import Elligator.Elligator1.cProperties
 public import Elligator.Elligator1.dProperties
-public import Elligator.Elligator1.EdwardsCurve
+public import Elligator.Primitives.ECC.EdwardsCurve
 public import Elligator.Elligator1.uProperties
 public import Elligator.Elligator1.vProperties
 public import Elligator.Elligator1.XProperties
@@ -43,6 +43,8 @@ See [bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 @[expose] public section
 
 namespace Elligator.Elligator1
+
+open Elligator.Primitives.ECC
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}

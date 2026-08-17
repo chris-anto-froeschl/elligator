@@ -5,7 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.PrimalityCertificate
+public import Elligator.Primitives.PrimalityCertificate
 public import Mathlib.Tactic.NormNum.Prime
 
 /-!
@@ -37,9 +37,9 @@ See [bernstein2013a], Section 4.1.
 
 @[expose] public section
 
-namespace Elligator.Elligator1.Curve1174
+namespace Elligator.Primitives.ECC.Curves.Curve1174
 
-open Elligator.PrimalityCertificate
+open Elligator.Primitives.PrimalityCertificate
 
 set_option maxRecDepth 20000
 
@@ -128,4 +128,4 @@ theorem q1174_prime :
   · intro r hr
     fin_cases hr <;> decide
 
-end Elligator.Elligator1.Curve1174
+end Elligator.Primitives.ECC.Curves.Curve1174

@@ -5,6 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 
 module
+public import Elligator.Basic
 public import Mathlib.Algebra.Ring.Commute
 public import Mathlib.Data.Set.Defs
 
@@ -27,7 +28,7 @@ a bundled point type.
 -/
 
 @[expose] public section
-namespace Elligator
+namespace Elligator.Primitives.ECC
 
 /-- Coefficients of the twisted Edwards equation
 `a * x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2`. -/
@@ -98,4 +99,4 @@ theorem ofD_isValid_iff [Nontrivial R] (d : R) : (ofD d).IsValid ↔ d ≠ 0 ∧
     exact ⟨one_ne_zero, hd, fun h ↦ hd1 h.symm⟩
 
 end TwistedEdwardsCurve
-end Elligator
+end Elligator.Primitives.ECC

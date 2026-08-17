@@ -26,6 +26,7 @@ namespace Elligator.Elligator1
 
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
+open Elligator.Primitives.ECC
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}

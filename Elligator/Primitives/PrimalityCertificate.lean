@@ -34,7 +34,7 @@ Two ingredients are required:
 
 @[expose] public section
 
-namespace Elligator.PrimalityCertificate
+namespace Elligator.Primitives.PrimalityCertificate
 
 /-- `powMod m f b e` computes `b ^ e % m` by binary exponentiation, with `fuel` parameter
 that has to bound the bit length of `e`; see `powMod_eq`.
@@ -144,4 +144,4 @@ lemma prime_of_pratt {p : ℕ}
     rw [powMod_eq p fuel a _ h_fuel_suffices]
     exact h_nat
 
-end Elligator.PrimalityCertificate
+end Elligator.Primitives.PrimalityCertificate

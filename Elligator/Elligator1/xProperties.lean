@@ -30,6 +30,7 @@ See [bernstein2013a], Section 3.2, Theorem 1.
 namespace Elligator.Elligator1
 
 open Elligator.FiniteFieldBasic
+open Elligator.Primitives.ECC
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {s : F}

@@ -1,6 +1,5 @@
 import Elligator.Basic
 import Elligator.Elligator1.Curve1174
-import Elligator.Elligator1.Curve1174Prime
 import Elligator.Elligator1.DecodingFunction
 import Elligator.Elligator1.EdwardsCurve
 import Elligator.Elligator1.Example
@@ -30,5 +29,8 @@ import Elligator.Elligator1.yProperties
 import Elligator.Elligator1.zProperties
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
-import Elligator.PrimalityCertificate
-import Elligator.TwistedEdwardsCurve
+import Elligator.Primitives.ECC.Curves.Curve1174
+import Elligator.Primitives.ECC.Curves.Curve1174Prime
+import Elligator.Primitives.ECC.EdwardsCurve
+import Elligator.Primitives.ECC.TwistedEdwardsCurve
+import Elligator.Primitives.PrimalityCertificate
