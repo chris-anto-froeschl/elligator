@@ -12,7 +12,7 @@ public import Mathlib.NumberTheory.LucasPrimality
 # Primality certificates
 
 Elligator 1 is instantiated over concrete finite fields whose cardinality is a large prime, for
-instance `q = 2 ^ 251 - 9` for Curve1174 (see [bernstein2013a], Section 4). Such a primality
+instance `q = 2 ^ 251 - 9` for Curve1174 (see [Bernstein2013a], Section 4). Such a primality
 statement is far out of reach for the decision procedures that evaluate a `Nat.Prime` goal by
 trial division, so this file provides the infrastructure needed to check a *Pratt certificate*
 inside Lean.

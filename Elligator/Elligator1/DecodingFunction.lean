@@ -21,7 +21,7 @@ for every other `t`, returns the coordinates constructed in Theorem 1.
 
 ## References
 
-See [bernstein2013a], Section 3.2, Definition 2.
+See [Bernstein2013a], Section 3.2, Definition 2.
 -/
 
 @[expose] public section

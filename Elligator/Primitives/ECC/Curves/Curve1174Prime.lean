@@ -11,7 +11,7 @@ public import Mathlib.Tactic.NormNum.Prime
 /-!
 # Primality of the Curve1174 characteristic
 
-Curve1174 of [bernstein2013a], Section 4, is defined over the prime field `F_q` with
+Curve1174 of [Bernstein2013a], Section 4, is defined over the prime field `F_q` with
 `q = 2 ^ 251 - 9`. This file establishes `Nat.Prime q`.
 
 The proof runs the Pratt certificate machinery of `Elligator.PrimalityCertificate`: the
@@ -32,7 +32,7 @@ checked by the Lean kernel.
 
 ## References
 
-See [bernstein2013a], Section 4.1.
+See [Bernstein2013a], Section 4.1.
 -/
 
 @[expose] public section

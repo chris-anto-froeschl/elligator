@@ -18,7 +18,7 @@ In this file we introduce some generally helpful lemmas for `v` as introduced in
 
 ## References
 
-See [bernstein2013a], Section 3.2, Theorem 1.
+See [Bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section

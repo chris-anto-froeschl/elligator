@@ -19,7 +19,7 @@ field `F` with `Fintype.card F = q` and `q % 4 = 3`.
 
 ## References
 
-See [bernstein2013a], Section 3.1.
+See [Bernstein2013a], Section 3.1.
 -/
 
 @[expose] public section

@@ -24,7 +24,7 @@ Theorem 4, and computes its cardinality.
 
 ## References
 
-See [bernstein2013a], Section 3.4, Theorem 4.
+See [Bernstein2013a], Section 3.4, Theorem 4.
 -/
 
 @[expose] public section

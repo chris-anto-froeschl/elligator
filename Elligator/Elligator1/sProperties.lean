@@ -15,7 +15,7 @@ in `Elligator.Elligator1.Variables`.
 
 ## References
 
-See [bernstein2013a], Section 3.
+See [Bernstein2013a], Section 3.
 -/
 
 @[expose] public section

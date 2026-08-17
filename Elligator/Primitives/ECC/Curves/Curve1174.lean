@@ -13,7 +13,7 @@ public meta import Mathlib.Data.ZMod.Defs
 /-!
 # Curve1174
 
-This file collects the data of the elliptic curve Curve1174 of [bernstein2013a], Section 4: its
+This file collects the data of the elliptic curve Curve1174 of [Bernstein2013a], Section 4: its
 base field, its Edwards model, the fact that its Edwards coefficient is a non-square, and the base
 point of Section 4.1.
 
@@ -31,7 +31,7 @@ modular exponentiation of `Elligator.PrimalityCertificate`.
 
 * `q1174`, `F1174`: the characteristic `q = 2 ^ 251 - 9` and the base field `F_q`.
 * `curve1174`: Curve1174 as the Edwards curve with coefficient `-1174`.
-* `basePoint1174`: the base point `(4/V, 3/5)` of [bernstein2013a], Section 4.1.
+* `basePoint1174`: the base point `(4/V, 3/5)` of [Bernstein2013a], Section 4.1.
 
 ## Main results
 
@@ -45,7 +45,7 @@ modular exponentiation of `Elligator.PrimalityCertificate`.
   Curve1174.
 
 ## References
-See [bernstein2013a], Section 4.
+See [Bernstein2013a], Section 4.
 -/
 
 @[expose] public section
@@ -145,13 +145,13 @@ theorem chi_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
   rw [χ_eq_pow (-1174 : F1174) card_F1174 q1174_mod_four, ← hneg, ← hone]
   exact natCast_pow_eq_natCast _ _ _ 256 (by decide) (by decide)
 
-/-- `-1174` is not a square in `F1174`; by [bernstein2013a], Section 4.1 this is what makes
+/-- `-1174` is not a square in `F1174`; by [Bernstein2013a], Section 4.1 this is what makes
 Curve1174 a complete Edwards curve. -/
 @[blueprint "thm:d1174-nonsquare"
   (title := "$-1174$ is a non-square")
   (statement := /--
   The coefficient $-1174$ is a non-square in $\mathbb{F}_q$; this is the criterion of
-  [bernstein2013a, Theorem 3.3] making Curve1174 a complete Edwards curve.
+  [Bernstein2013a, Theorem 3.3] making Curve1174 a complete Edwards curve.
   -/)]
 theorem neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
   intro hsq
@@ -164,18 +164,18 @@ theorem neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
 /-- The `V`-coordinate of the base point of Section 4.1 on the Montgomery model
 `(4/1175) V ^ 2 = U ^ 3 + (4/1175 - 2) U ^ 2 + U`, at `U = 4`. -/
 def basePointV : F1174 := 19225777642111670230408712442205514783403012708409058383774613284963344096
-/-- The base point `(x, y) = (4/V, 3/5)` of Curve1174 given in [bernstein2013a], Section 4.1. -/
+/-- The base point `(x, y) = (4/V, 3/5)` of Curve1174 given in [Bernstein2013a], Section 4.1. -/
 @[blueprint "def:basePoint1174"
   (title := "The Curve1174 base point")
   (statement := /--
-  The base point of [bernstein2013a], Section 4.1 is $(x, y) = (4/V, 3/5)$, where $V$ is the
+  The base point of [Bernstein2013a], Section 4.1 is $(x, y) = (4/V, 3/5)$, where $V$ is the
   $V$-coordinate of the point of order $4p_1$ on the Montgomery model at $U = 4$.
   -/)]
 def basePoint1174 : F1174 × F1174 :=
   (1732556372810548511963925612826482930760269237516198826254492409990286433383,
    2171101673199678664191955968912898272248812212480760575739829700148371180744)
 
-/-- The point `(U, V) = (4, V)` of [bernstein2013a], Section 4.1 lies on the Montgomery model
+/-- The point `(U, V) = (4, V)` of [Bernstein2013a], Section 4.1 lies on the Montgomery model
 `(4/1175) V ^ 2 = U ^ 3 + (4/1175 - 2) U ^ 2 + U` to which Curve1174 is birationally equivalent. -/
 @[blueprint "lemma:basePointMontgomery"
   (title := "The Montgomery base point")

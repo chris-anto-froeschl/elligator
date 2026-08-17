@@ -16,7 +16,7 @@ In this file we introduce some generally helpful lemmas for `ubar` as introduced
 
 ## References
 
-See [bernstein2013a], Section 3.
+See [Bernstein2013a], Section 3.
 -/
 
 @[expose] public section

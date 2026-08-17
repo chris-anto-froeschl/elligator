@@ -21,7 +21,7 @@ This hierarchy allows to have a linear dependence hierarchy without polluting ma
 
 ## References
 
-See [bernstein2013a], Section 3.
+See [Bernstein2013a], Section 3.
 -/
 
 @[expose] public section

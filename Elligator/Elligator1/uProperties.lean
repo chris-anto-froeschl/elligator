@@ -15,7 +15,7 @@ In this file we introduce some generally helpful lemmas for `u` as introduced in
 
 ## References
 
-See [bernstein2013a], Section 3.2.
+See [Bernstein2013a], Section 3.2.
 -/
 
 @[expose] public section

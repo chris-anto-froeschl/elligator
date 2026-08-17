@@ -28,7 +28,7 @@ preimage and image of `ϕ`, and verifies the paper's explicit inverse formula on
 
 ## References
 
-See [bernstein2013a] Section 3.3, Theorem 3.
+See [Bernstein2013a] Section 3.3, Theorem 3.
 -/
 
 @[expose] public section

@@ -16,7 +16,7 @@ public meta import Mathlib.Data.ZMod.Defs
 # Elligator 1 for Curve1174
 
 This file instantiates the general Elligator 1 development at the concrete curve of
-[bernstein2013a], Section 4: Curve1174, the complete Edwards curve
+[Bernstein2013a], Section 4: Curve1174, the complete Edwards curve
 
 $$ x ^ 2 + y ^ 2 = 1 - 1174 x ^ 2 y ^ 2 $$
 
@@ -50,7 +50,7 @@ residues, so `decide` evaluates ring operations directly.
 
 ## References
 
-See [bernstein2013a], Section 4.
+See [Bernstein2013a], Section 4.
 -/
 
 @[expose] public section
@@ -66,7 +66,7 @@ set_option maxRecDepth 20000
 
 /-! ### The Elligator 1 parameter `s` and the derived parameters `c`, `r`, `d` -/
 
-/-- The Elligator 1 parameter `s` chosen for Curve1174 in [bernstein2013a], Section 4.1. -/
+/-- The Elligator 1 parameter `s` chosen for Curve1174 in [Bernstein2013a], Section 4.1. -/
 @[blueprint "def:s1174"
   (title := "The Curve1174 parameter $s$")
   (statement := /--

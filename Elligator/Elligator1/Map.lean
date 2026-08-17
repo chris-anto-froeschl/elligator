@@ -37,7 +37,7 @@ point `(x, y)` on the complete Edwards curve. The exceptional inputs `t = ±1` a
 
 ## References
 
-See [bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
+See [Bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 -/
 
 @[expose] public section

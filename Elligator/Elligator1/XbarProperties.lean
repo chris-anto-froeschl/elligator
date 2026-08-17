@@ -17,7 +17,7 @@ In this file we introduce some generally helpful lemmas for `Xbar` as introduced
 
 ## References
 
-See [bernstein2013a], Section 3.3, Theorem 3.
+See [Bernstein2013a], Section 3.3, Theorem 3.
 -/
 
 @[expose] public section

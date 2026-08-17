@@ -32,7 +32,7 @@ onto `ϕ(F)`.
 
 ## References
 
-See [bernstein2013a], Section 3.4, theorem 4.
+See [Bernstein2013a], Section 3.4, theorem 4.
 -/
 
 @[expose] public section

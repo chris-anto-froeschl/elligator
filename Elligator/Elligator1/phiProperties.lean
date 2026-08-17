@@ -14,7 +14,7 @@ In this file we introduce some generally helpful lemmas for `ϕ`.
 
 ## References
 
-See [bernstein2013a], Section 3.3.
+See [Bernstein2013a], Section 3.3.
 -/
 
 @[expose] public section

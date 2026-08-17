@@ -15,7 +15,7 @@ public import Mathlib.FieldTheory.Finite.GaloisField
 In this file we introduce some generally helpful lemmas for the finite field `F` with
 `q` fulfilling `IsPrimePow`/`Prime`, `Fintype.card F = q` and `q % 4 = 3`.
 
-The assumption `IsPrimePow q` of [bernstein2013a] never has to be stated: by
+The assumption `IsPrimePow q` of [Bernstein2013a] never has to be stated: by
 `card_isPrimePow` it is a consequence of `Fintype.card F = q`, so `q` ranges over exactly the
 prime powers congruent to `3` modulo `4`. Conversely, `prime_of_natCast_surjective` shows that
 representing field elements by the naturals `0, 1, …, q - 1`, as the string encoding of
@@ -23,7 +23,7 @@ Section 3.4 does, is possible only when `q` is prime.
 
 ## References
 
-See [bernstein2013a] for the original account on this specifc finite field.
+See [Bernstein2013a] for the original account on this specifc finite field.
 -/
 
 @[expose] public section
@@ -37,7 +37,7 @@ namespace Elligator.FiniteFieldBasic
 
 This is why no statement of this development has to assume `IsPrimePow q`: the hypothesis
 `Fintype.card F = q` already forces `q` to be a prime power, so all results proved for a finite
-field `F` with `Fintype.card F = q` and `q % 4 = 3` are exactly the results of [bernstein2013a]
+field `F` with `Fintype.card F = q` and `q % 4 = 3` are exactly the results of [Bernstein2013a]
 for an arbitrary prime power `q ≡ 3 (mod 4)`. -/
 lemma card_isPrimePow (hq_card : Fintype.card F = q) : IsPrimePow q := by
   rw [← hq_card]
@@ -168,7 +168,7 @@ lemma exists_nat_cast_eq (hq_card : Fintype.card F = q) (q_prime : Prime q) (t :
 
 Together with `Elligator.FiniteFieldBasic.card_isPrimePow` this says that the standing
 hypotheses `Fintype.card F = q`, `q % 4 = 3` of this development describe exactly the setting of
-[bernstein2013a], Section 3.1: an arbitrary prime power `q ≡ 3 (mod 4)`. -/
+[Bernstein2013a], Section 3.1: an arbitrary prime power `q ≡ 3 (mod 4)`. -/
 lemma exists_field_card_eq_iff_isPrimePow (q : ℕ) :
     (∃ (F : Type) (_ : Field F) (_ : Fintype F), Fintype.card F = q) ↔ IsPrimePow q := by
   constructor
@@ -189,7 +189,7 @@ lemma exists_field_card_eq_iff_isPrimePow (q : ℕ) :
 /-- If every element of `F` is the image of a natural number under the canonical cast, then the
 cardinality of `F` is *prime*, not merely a *prime power*.
 
-This is the precise reason why the string encoding `ι` of [bernstein2013a], Section 3.4, is
+This is the precise reason why the string encoding `ι` of [Bernstein2013a], Section 3.4, is
 formalized for prime `q` only: it represents field elements by the naturals
 `0, 1, ..., q - 1`, which requires the natural casts to exhaust `F`. The `ϕ` part of the
 development makes no such assumption and therefore covers all *prime powers*. -/
