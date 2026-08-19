@@ -169,11 +169,9 @@ theorem map_fulfills_curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let x := x t s q
     let y := y t s
-    let d := d s
-    have d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
-    edwardsCurveEquation x y ⟨d, d_h⟩ := by
-  intro x_of_t y_of_t d_of_s
-  rw [edwardsCurveEquation_iff]
+   (curve s).Equation x y := by
+  intro x_of_t y_of_t
+  rw [curve_equation_iff]
   exact curve_equation t hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The total Elligator map `ϕ : F → E(F)` from Definition 2 of the paper.
@@ -197,14 +195,13 @@ def ϕ (t : F) (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) 
     EOverF sq_ne_pm_two hq_card hq_mod :=
   let P := if h : t ≠ 1 ∧ t ≠ -1 then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s) else (0, 1)
   have P_in_EOverF : P ∈ (EOverF sq_ne_pm_two hq_card hq_mod) := by
-    unfold EOverF
-    rw [Set.mem_ofPred_eq]
+    rw [mem_EOverF_iff, ← curve_equation_iff]
     unfold P
     by_cases ht : t ≠ 1 ∧ t ≠ -1
     · rw [dite_eq_left ht]
       exact map_fulfills_curve_equation ⟨t, ht⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
     · rw [dite_eq_right ht]
-      simp
+      exact (curve s).zero_mem_affinePoints
   ⟨P, P_in_EOverF⟩
 
 end Elligator.Elligator1

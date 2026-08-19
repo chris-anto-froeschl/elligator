@@ -57,9 +57,9 @@ lemma y_ne_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   let d := d s
   have h' : x = 0 := by
     have h'' : x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
-      let P_h := P.prop
-      simp only [EOverF, edwardsCurveEquation_iff] at P_h
-      exact P_h
+      have hP := P.prop
+      rw [mem_EOverF_iff] at hP
+      exact hP
     have t_h : IsSquare d := by grind
     let t_h' := d_nonsquare sq_ne_pm_two hq_card hq_mod
     contradiction
@@ -357,11 +357,9 @@ lemma P_in_ϕOverF_main_case_with_y_eq_one
   -- Note: this differs from original proof, which claims that this implies x = 0, contra
   -- I was not able to see that, thus I found an alternative way by contradiction
   have h := P.prop;
-  unfold EOverF at h
-  rw [Set.mem_ofPred_eq] at h
+  rw [mem_EOverF_iff] at h
   let d := d s;
   rw [y_eq_one] at h
-  simp only [edwardsCurveEquation_iff] at h
   change x ^ 2 + 1 ^ 2 = 1 + d * x ^ 2 * 1 ^ 2  at h
   rw [← add_right_inj (-1)] at h
   rw [← div_left_inj' x_ne_zero, ← div_left_inj' x_ne_zero] at h

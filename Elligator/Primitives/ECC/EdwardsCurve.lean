@@ -5,94 +5,128 @@ Authors: Chris Anto Fröschl
 -/
 
 module
-
 public import Elligator.Basic
-public import Elligator.Primitives.ECC.TwistedEdwardsCurve
+public import Mathlib.Algebra.Ring.Commute
+public import Mathlib.Data.Set.Defs
 
 /-!
-# Complete Edwards curves
+# Edwards curves
 
-This file develops the (untwisted) Edwards curve
-`x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2`
-as the `a = 1` specialization of `Elligator.TwistedEdwardsCurve`.
+A Edwards curve with coefficients `a` and `d` has affine equation
+`a * x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2`.
 
-Everything here is stated over an arbitrary commutative ring and for an arbitrary coefficient `d`.
-No finite field, and no cardinality assumption.
+The definitions are made over a commutative ring. Finiteness and the hypotheses used by a
+particular cryptographic construction belong in that construction, rather than in the definition
+of a curve or its affine points.
+
+Mathlib's elliptic-curve API is currently centred on Weierstrass models. A Edwards model
+is not itself a Weierstrass equation, so using `WeierstrassCurve.Affine.Equation` here would require
+a birational coordinate conversion and extra invertibility hypotheses.  The API below follows the
+same useful separation as that API: coefficients, an affine equation, a set of affine points, and
+a bundled point type.
 
 ## Main definitions
 
-* `edwardsCurve d`: the Edwards curve with coefficient `d`.
-* `edwardsCurveEquation x y d`: the Edwards curve equation for a coefficient `d ∉ {0, 1}`, packaged
-  as a subtype argument.
+* `TwistedEdwardsCurve`: the coefficients `a`, `d` of a twisted Edwards model, with its equation
+  `TwistedEdwardsCurve.Equation`, its affine points `TwistedEdwardsCurve.affinePoints` and the
+  nonsingularity condition `TwistedEdwardsCurve.IsValid`.
+* `edwardsCurve d`: the untwisted Edwards curve `x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2`.
 
-## Main results
+## TODO
 
-* `edwardsCurve_equation_iff`, `edwardsCurveEquation_iff`: unfolding lemmas for the equation.
-* `edwardsCurve_isValid_iff`: `edwardsCurve d` is a valid model iff `d ≠ 0` and `d ≠ 1`.
-* `edwardsCurveEquation_zero_one`: the neutral point `(0, 1)` lies on every Edwards curve.
+- Move into mathlib next to Mathlib.AlgebraicGeometry.EllipticCurve.Weierstrass
 
 ## References
 
-See [Bernstein2007a], Section 2.
+* [Bernstein2007a], Section 2.
+* [Bernstein2008a], Section 2, Definition 2.1.
+
 -/
 
 @[expose] public section
-
 namespace Elligator.Primitives.ECC
+
+/-- Coefficients of the twisted Edwards equation
+`a * x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2`. -/
+@[ext]
+structure TwistedEdwardsCurve (R : Type*) where
+  /-- left hand side coefficient -/
+  a : R
+  /-- right hand side coefficient -/
+  d : R
 
 variable {R : Type*} [CommRing R]
 
-/-- The Edwards curve with coefficient `d`.
-This is an alias for the `a = 1` specialization of a twisted Edwards curve. -/
-def edwardsCurve (d : R) : TwistedEdwardsCurve R := TwistedEdwardsCurve.ofD d
+namespace TwistedEdwardsCurve
 
-@[simp]
-theorem edwardsCurve_equation_iff (d x y : R) :
-    (edwardsCurve d).Equation x y ↔ x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
-  simp [edwardsCurve]
+/-- The proposition that `(x, y)` is an affine point of a twisted Edwards curve. -/
+def Equation (E : TwistedEdwardsCurve R) (x y : R) : Prop :=
+    E.a * x ^ 2 + y ^ 2 = 1 + E.d * x ^ 2 * y ^ 2
 
-@[simp]
-theorem edwardsCurve_isValid_iff [Nontrivial R] (d : R) :
-    (edwardsCurve d).IsValid ↔ d ≠ 0 ∧ d ≠ 1 := by
-  simp [edwardsCurve]
+/-- The set of affine coordinate pairs on a twisted Edwards curve. -/
+def affinePoints (E : TwistedEdwardsCurve R) : Set (R × R) := {p | E.Equation p.1 p.2}
 
-/-- `edwardsCurveEquation` is the standard Edwards curve equation, with the coefficient carried as
-a subtype element recording `d ≠ 0` and `d ≠ 1`.  New generic developments should normally use
-`(edwardsCurve d).Equation x y` and carry coefficient validity separately via
-`TwistedEdwardsCurve.IsValid`; see `edwardsCurve_isValid_iff`.
+/-- A bundled affine point on a twisted Edwards curve. -/
+abbrev Point (E : TwistedEdwardsCurve R) := {p : R × R // p ∈ E.affinePoints}
+
+/-- The neutral affine coordinate pair `(0, 1)`.  It lies on every twisted Edwards equation. -/
+def zero : R × R := (0, 1)
+
+theorem zero_mem_affinePoints (E : TwistedEdwardsCurve R) : zero ∈ E.affinePoints := by
+  change E.a * 0 ^ 2 + 1 ^ 2 = 1 + E.d * 0 ^ 2 * 1 ^ 2
+  simp
+
+/-- The neutral point, bundled as an affine point of `E`. -/
+def zeroPoint (E : TwistedEdwardsCurve R) : E.Point := ⟨zero, E.zero_mem_affinePoints⟩
+
+/-- Negation of affine coordinates on a twisted Edwards curve. -/
+def neg (p : R × R) : R × R := (-p.1, p.2)
+
+theorem neg_mem_affinePoints (E : TwistedEdwardsCurve R) (p : R × R) :
+    neg p ∈ E.affinePoints ↔ p ∈ E.affinePoints := by
+  change E.a * (-p.1) ^ 2 + p.2 ^ 2 = 1 + E.d * (-p.1) ^ 2 * p.2 ^ 2 ↔
+    E.a * p.1 ^ 2 + p.2 ^ 2 = 1 + E.d * p.1 ^ 2 * p.2 ^ 2
+  rw [neg_sq]
+
+/-- The usual coefficient conditions for a nonsingular twisted Edwards model over a field.
+Keeping this predicate separate from `TwistedEdwardsCurve` permits the equation and its points to
+be used over more general rings and also permits partially specified curves during developments.
 -/
-@[blueprint "def:edwardsCurveEquation"
+def IsValid (E : TwistedEdwardsCurve R) : Prop := E.a ≠ 0 ∧ E.d ≠ 0 ∧ E.a ≠ E.d
+
+/-- The (untwisted) Edwards curve with parameter `d`, obtained by setting `a = 1`. -/
+def ofD (d : R) : TwistedEdwardsCurve R where
+  a := 1
+  d := d
+
+end TwistedEdwardsCurve
+
+/-- The (untwisted) Edwards curve with coefficient `d`, obtained by setting `a = 1`. -/
+@[blueprint "def:edwardsCurve"
   (title := "The complete Edwards curve equation")
   (statement := /--
-  For a coefficient $d \notin \{0, 1\}$, the complete Edwards curve $E$ over $\mathbb{F}_q$ is
-  given by the equation
+  For a coefficient $d$, the complete Edwards curve $E$ over $\mathbb{F}_q$ is given by the
+  equation
   $$
   x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2 .
   $$
   -/)]
-def edwardsCurveEquation (x y : R) (d : {d : R // d ≠ 0 ∧ d ≠ 1}) : Prop :=
-  (edwardsCurve d.val).Equation x y
+def edwardsCurve (d : R) : TwistedEdwardsCurve R where
+  a := 1
+  d := d
 
-@[simp]
-theorem edwardsCurveEquation_iff (x y : R) (d : {d : R // d ≠ 0 ∧ d ≠ 1}) :
-    edwardsCurveEquation x y d ↔ x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
-  simp [edwardsCurveEquation]
+/-- The equation of `edwardsCurve d`, written out. -/
+theorem edwardsCurve_equation_iff (d x y : R) :
+    (edwardsCurve d).Equation x y ↔ x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
+  simp [TwistedEdwardsCurve.Equation, edwardsCurve]
 
-/-- The set of affine points of the Edwards curve with coefficient `d`. -/
-theorem edwardsCurve_affinePoints (d : R) :
-    (edwardsCurve d).affinePoints =
-      {p : R × R | p.1 ^ 2 + p.2 ^ 2 = 1 + d * p.1 ^ 2 * p.2 ^ 2} := by
-  ext p
-  simp [TwistedEdwardsCurve.affinePoints]
-
-@[blueprint "lemma:edwardsCurveEquation_zero_one"
-  (title := "$(0, 1)$ is a point of $E$")
-  (statement := /--
-  The neutral point $(0, 1)$, which is the value of $\varphi(\pm 1)$ in Definition 2, lies on the
-  complete Edwards curve $E : x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2$.
-  -/)]
-lemma edwardsCurveEquation_zero_one (d : {d : R // d ≠ 0 ∧ d ≠ 1}) :
-    edwardsCurveEquation (0 : R) (1 : R) d := by
-  simp
+/-- `edwardsCurve d` is a valid (nonsingular) model exactly when `d ≠ 0` and `d ≠ 1`. -/
+theorem edwardsCurve_isValid_iff [Nontrivial R] (d : R) :
+    (edwardsCurve d).IsValid ↔ d ≠ 0 ∧ d ≠ 1 := by
+  constructor
+  · rintro ⟨_, hd, had⟩
+    exact ⟨hd, fun h ↦ had h.symm⟩
+  · rintro ⟨hd, hd1⟩
+    exact ⟨one_ne_zero, hd, fun h ↦ hd1 h.symm⟩
 
 end Elligator.Primitives.ECC

@@ -70,8 +70,7 @@ theorem decode_three_on_curve :
   let P := (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).val
   P.1 ^ 2 + P.2 ^ 2 = 1 + d s7 * P.1 ^ 2 * P.2 ^ 2 := by
     have := (ϕ (3 : F7) s7_ne_zero s7_sq_ne_pm_two card_F7 F7_mod_four).prop
-    unfold EOverF at this
-    simpa using this
+    rwa [mem_EOverF_iff] at this
 
 /-- `mkBits n` reads off the bits of `n`, giving an element of `Fin (b 7) → Bool` for any `n`
 without needing to know `b 7`'s concrete value up front. -/

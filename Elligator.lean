@@ -32,5 +32,4 @@ import Elligator.LegendreSymbol
 import Elligator.Primitives.ECC.Curves.Curve1174
 import Elligator.Primitives.ECC.Curves.Curve1174Prime
 import Elligator.Primitives.ECC.EdwardsCurve
-import Elligator.Primitives.ECC.TwistedEdwardsCurve
 import Elligator.Primitives.PrimalityCertificate

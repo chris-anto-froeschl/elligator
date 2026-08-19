@@ -94,13 +94,12 @@ lemma x_y_eq_zero_sign_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   let d := d s
   let x := P.val.1
   let y := P.val.2
-  unfold EOverF at P
   change (x, y) = (0, 1) ∨ (x, y) = (0, -1)
   change x = 0 at hx_eq_zero
   rw [← hx_eq_zero]
   have h_curve_eq : x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
     let hP := P.prop
-    simp only [edwardsCurveEquation_iff] at hP
+    rw [mem_EOverF_iff] at hP
     exact hP
   have hy_eq_pm_one : y = 1 ∨ y = -1 := by simp_all
   rcases hy_eq_pm_one with h | h

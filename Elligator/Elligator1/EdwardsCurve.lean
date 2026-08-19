@@ -38,6 +38,12 @@ variable {q : ℕ}
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
 def curve (s : F) : TwistedEdwardsCurve F := edwardsCurve (d s)
 
+omit [Fintype F] in
+/-- The curve equation of the Elligator 1 curve, in explicit form. -/
+theorem curve_equation_iff (s x y : F) :
+    (curve s).Equation x y ↔ x ^ 2 + y ^ 2 = 1 + d s * x ^ 2 * y ^ 2 :=
+  edwardsCurve_equation_iff (d s) x y
+
 /-- The Elligator 1 coefficient hypotheses imply that its specialized curve is valid. -/
 theorem curve_isValid {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
@@ -46,7 +52,9 @@ theorem curve_isValid {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   exact d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
 
 /-- `EOverF` is the set of affine points on the Edwards curve selected by Elligator 1.
-See `EOverF_eq_affinePoints` for the generic curve view. -/
+
+The hypotheses record that `d s` is a valid Edwards coefficient, see `curve_isValid`.
+-/
 @[blueprint "def:EOverF"
   (title := "The point set $E(\\mathbb{F}_q)$")
   (statement := /--
@@ -59,9 +67,8 @@ See `EOverF_eq_affinePoints` for the generic curve view. -/
   -/)]
 def EOverF {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) : Set (F × F) :=
-  let d := d s
-  let d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
-  {p | edwardsCurveEquation p.fst p.snd ⟨d, d_h⟩}
+  have _hvalid : (curve s).IsValid := curve_isValid sq_ne_pm_two hq_card hq_mod
+  (curve s).affinePoints
 
 /-- The compatibility set `EOverF` is exactly the affine point set of the general curve model. -/
 theorem EOverF_eq_affinePoints {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -69,11 +76,18 @@ theorem EOverF_eq_affinePoints {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2)
     EOverF sq_ne_pm_two hq_card hq_mod = (curve s).affinePoints := by
   rfl
 
+/-- Membership in `EOverF`, written out as the Edwards curve equation. -/
+theorem mem_EOverF_iff {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) (p : F × F) :
+    p ∈ EOverF sq_ne_pm_two hq_card hq_mod ↔
+      p.1 ^ 2 + p.2 ^ 2 = 1 + d s * p.1 ^ 2 * p.2 ^ 2 :=
+  curve_equation_iff s p.1 p.2
+
 /-- The neutral point `(0, 1)` lies in `EOverF`; a specialization of
 `Elligator.edwardsCurveEquation_zero_one`. -/
 theorem zero_mem_EOverF {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     ((0 : F), (1 : F)) ∈ EOverF sq_ne_pm_two hq_card hq_mod :=
-  edwardsCurveEquation_zero_one _
+  (curve s).zero_mem_affinePoints
 
 end Elligator.Elligator1

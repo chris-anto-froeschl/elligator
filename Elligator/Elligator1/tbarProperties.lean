@@ -331,10 +331,8 @@ theorem x'_and_y'_fulfill_curve_equation
       X' ≠ 1) :
     let x' := x' sq_ne_pm_two hq_card hq_mod P
     let y' := y' sq_ne_pm_two hq_card hq_mod P
-    let d := d s
-    have d_h : d ≠ 0 ∧ d ≠ 1 := d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
-    edwardsCurveEquation x' y' ⟨d, d_h⟩ := by
-  intro x' y' d
+    (curve s).Equation x' y' := by
+  intro x' y'
   let t := t' sq_ne_pm_two hq_card hq_mod P
   let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
@@ -345,7 +343,7 @@ theorem x'_and_y'_fulfill_curve_equation
   let y'_eq_y := y'_eq_y hs_ne_zero
     sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
   let h := curve_equation ⟨t, t_h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  simp only [edwardsCurveEquation_iff]
+  rw [curve_equation_iff]
   grind [x'_eq_x, y'_eq_y]
 
 lemma y_eq_y_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
