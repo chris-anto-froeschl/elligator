@@ -94,11 +94,6 @@ be used over more general rings and also permits partially specified curves duri
 -/
 def IsValid (E : TwistedEdwardsCurve R) : Prop := E.a ≠ 0 ∧ E.d ≠ 0 ∧ E.a ≠ E.d
 
-/-- The (untwisted) Edwards curve with parameter `d`, obtained by setting `a = 1`. -/
-def ofD (d : R) : TwistedEdwardsCurve R where
-  a := 1
-  d := d
-
 end TwistedEdwardsCurve
 
 /-- The (untwisted) Edwards curve with coefficient `d`, obtained by setting `a = 1`. -/
