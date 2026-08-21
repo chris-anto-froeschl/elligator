@@ -6,7 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Elligator.Elligator1.Map
-public import Elligator.Elligator1.ReconstructionCoordinates
+public import Elligator.Elligator1.ReverseProofVehicle
 
 /-!
 # Inverted Map
@@ -41,6 +41,7 @@ open Elligator.Elligator1.CurveParameters
 open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
+open Elligator.Elligator1.ReverseProofVehicle
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
