@@ -45,7 +45,7 @@ set_option maxRecDepth 20000
 
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `7`. -/
-theorem prime_2032236244151 : Nat.Prime 2032236244151 := by
+lemma prime_2032236244151 : Nat.Prime 2032236244151 := by
   refine prime_of_pratt 7 256
     [2, 5, 5, 7, 5113, 1135613]
     (by norm_num) ?_ (by norm_num) (by decide) ?_
@@ -56,7 +56,7 @@ theorem prime_2032236244151 : Nat.Prime 2032236244151 := by
 
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `5`. -/
-theorem prime_20387630040577 : Nat.Prime 20387630040577 := by
+lemma prime_20387630040577 : Nat.Prime 20387630040577 := by
   refine prime_of_pratt 5 256
     [2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 17, 401, 1947073]
     (by norm_num) ?_ (by norm_num) (by decide) ?_
@@ -67,7 +67,7 @@ theorem prime_20387630040577 : Nat.Prime 20387630040577 := by
 
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `5`. -/
-theorem prime_297581916939273464475253 : Nat.Prime 297581916939273464475253 := by
+lemma prime_297581916939273464475253 : Nat.Prime 297581916939273464475253 := by
   refine prime_of_pratt 5 256
     [2, 2, 3, 11, 1109324011, 2032236244151]
     (by norm_num) ?_ (by norm_num) (by decide) ?_
@@ -78,7 +78,7 @@ theorem prime_297581916939273464475253 : Nat.Prime 297581916939273464475253 := b
 
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `2`. -/
-theorem prime_2151858718037429125511251 : Nat.Prime 2151858718037429125511251 := by
+lemma prime_2151858718037429125511251 : Nat.Prime 2151858718037429125511251 := by
   refine prime_of_pratt 2 256
     [2, 3, 5, 5, 5, 5, 28145939, 20387630040577]
     (by norm_num) ?_ (by norm_num) (by decide) ?_
@@ -89,7 +89,7 @@ theorem prime_2151858718037429125511251 : Nat.Prime 2151858718037429125511251 :=
 
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `2`. -/
-theorem prime_22645347980446549950250344634517843 :
+lemma prime_22645347980446549950250344634517843 :
   Nat.Prime 22645347980446549950250344634517843 := by
     refine prime_of_pratt 2 256
       [2, 7, 13, 53, 7889059, 297581916939273464475253]
@@ -101,7 +101,7 @@ theorem prime_22645347980446549950250344634517843 :
 
 /-- An auxiliary prime occurring in the Pratt certificate for `q`,
 verified by the Pratt certificate with base `6`. -/
-theorem prime_30510656070643106182115999270826633842178510774222732476374386585332681 :
+lemma prime_30510656070643106182115999270826633842178510774222732476374386585332681 :
     Nat.Prime 30510656070643106182115999270826633842178510774222732476374386585332681 := by
   refine prime_of_pratt 6 256
     [2, 2, 2, 5, 31, 11783, 42853, 2151858718037429125511251,

@@ -40,12 +40,12 @@ def curve (s : F) : TwistedEdwardsCurve F := edwardsCurve (d s)
 
 omit [Fintype F] in
 /-- The curve equation of the Elligator 1 curve, in explicit form. -/
-theorem curve_equation_iff (s x y : F) :
+lemma curve_equation_iff (s x y : F) :
     (curve s).Equation x y ↔ x ^ 2 + y ^ 2 = 1 + d s * x ^ 2 * y ^ 2 :=
   edwardsCurve_equation_iff (d s) x y
 
 /-- The Elligator 1 coefficient hypotheses imply that its specialized curve is valid. -/
-theorem curve_isValid {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+lemma curve_isValid {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     (curve s).IsValid := by
   rw [curve, edwardsCurve_isValid_iff]
@@ -71,13 +71,13 @@ def EOverF {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (curve s).affinePoints
 
 /-- The compatibility set `EOverF` is exactly the affine point set of the general curve model. -/
-theorem EOverF_eq_affinePoints {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+lemma EOverF_eq_affinePoints {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     EOverF sq_ne_pm_two hq_card hq_mod = (curve s).affinePoints := by
   rfl
 
 /-- Membership in `EOverF`, written out as the Edwards curve equation. -/
-theorem mem_EOverF_iff {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+lemma mem_EOverF_iff {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) (p : F × F) :
     p ∈ EOverF sq_ne_pm_two hq_card hq_mod ↔
       p.1 ^ 2 + p.2 ^ 2 = 1 + d s * p.1 ^ 2 * p.2 ^ 2 :=
@@ -85,7 +85,7 @@ theorem mem_EOverF_iff {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 
 /-- The neutral point `(0, 1)` lies in `EOverF`; a specialization of
 `Elligator.edwardsCurveEquation_zero_one`. -/
-theorem zero_mem_EOverF {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+lemma zero_mem_EOverF {s : F} (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     ((0 : F), (1 : F)) ∈ EOverF sq_ne_pm_two hq_card hq_mod :=
   (curve s).zero_mem_affinePoints

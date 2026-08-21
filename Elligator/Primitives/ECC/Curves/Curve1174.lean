@@ -70,7 +70,7 @@ set_option maxRecDepth 20000
 def q1174 : ℕ := 3618502788666131106986593281521497120414687020801267626233049500247285301239
 
 /-- The numeral defining `q1174` is `2 ^ 251 - 9`. -/
-theorem q1174_eq_two_pow : q1174 = 2 ^ 251 - 9 := by
+lemma q1174_eq_two_pow : q1174 = 2 ^ 251 - 9 := by
   unfold q1174
   norm_num
 @[blueprint "lemma:q1174-prime"
@@ -78,7 +78,7 @@ theorem q1174_eq_two_pow : q1174 = 2 ^ 251 - 9 := by
   (statement := /--
   The number $q = 2^{251} - 9$ is prime.
   -/)]
-theorem prime_q1174 : Nat.Prime q1174 := q1174_prime
+lemma prime_q1174 : Nat.Prime q1174 := q1174_prime
 
 instance : Fact (Nat.Prime q1174) := ⟨prime_q1174⟩
 instance : NeZero q1174 := ⟨by trivial⟩
@@ -92,7 +92,7 @@ instance : NeZero q1174 := ⟨by trivial⟩
 abbrev F1174 : Type := ZMod q1174
 
 /-- `F1174` has `q1174` elements. -/
-theorem card_F1174 : Fintype.card F1174 = q1174 := ZMod.card q1174
+lemma card_F1174 : Fintype.card F1174 = q1174 := ZMod.card q1174
 
 /-- `q ≡ 3 (mod 4)`; among other things this is one of the standing hypotheses of Elligator 1. -/
 @[blueprint "lemma:q1174-mod-four"
@@ -100,10 +100,10 @@ theorem card_F1174 : Fintype.card F1174 = q1174 := ZMod.card q1174
   (statement := /--
   The characteristic satisfies $q \equiv 3 \pmod 4$.
   -/)]
-theorem q1174_mod_four : q1174 % 4 = 3 := by decide
+lemma q1174_mod_four : q1174 % 4 = 3 := by decide
 
 /-- `q1174` is a prime power. -/
-theorem q1174_isPrimePow : IsPrimePow q1174 := prime_q1174.prime.isPrimePow
+lemma q1174_isPrimePow : IsPrimePow q1174 := prime_q1174.prime.isPrimePow
 
 /-! ### The curve -/
 /-- Curve1174, the complete Edwards curve with coefficient `-1174` over `F1174`. -/
@@ -119,13 +119,13 @@ theorem q1174_isPrimePow : IsPrimePow q1174 := prime_q1174.prime.isPrimePow
 def curve1174 : TwistedEdwardsCurve F1174 := edwardsCurve (-1174 : F1174)
 
 /-- The defining equation of Curve1174: `x ^ 2 + y ^ 2 = 1 - 1174 x ^ 2 y ^ 2`. -/
-theorem curve1174_equation (x y : F1174) :
+lemma curve1174_equation (x y : F1174) :
     curve1174.Equation x y ↔ x ^ 2 + y ^ 2 = 1 - 1174 * x ^ 2 * y ^ 2 := by
   rw [curve1174, edwardsCurve_equation_iff]
   ring_nf
 
 /-- Curve1174 is a valid (nonsingular) Edwards model. -/
-theorem curve1174_isValid : curve1174.IsValid := by
+lemma curve1174_isValid : curve1174.IsValid := by
   rw [curve1174, edwardsCurve_isValid_iff]
   exact ⟨by decide, by decide⟩
 /-! ### The Edwards coefficient is a non-square -/
@@ -135,7 +135,7 @@ theorem curve1174_isValid : curve1174.IsValid := by
   (statement := /--
   The quadratic character of the Edwards coefficient satisfies $\chi(-1174) = -1$.
   -/)]
-theorem chi_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
+lemma chi_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
   have hneg :
     ((3618502788666131106986593281521497120414687020801267626233049500247285300065 : ℕ) : F1174)
     = -1174 := by decide
@@ -153,7 +153,7 @@ Curve1174 a complete Edwards curve. -/
   The coefficient $-1174$ is a non-square in $\mathbb{F}_q$; this is the criterion of
   [Bernstein2013a, Theorem 3.3] making Curve1174 a complete Edwards curve.
   -/)]
-theorem neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
+lemma neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
   intro hsq
   have hne : (-1174 : F1174) ≠ 0 := by decide
   have h1 : χ (-1174 : F1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174 q1174_mod_four).2 hsq
@@ -185,7 +185,7 @@ def basePoint1174 : F1174 × F1174 :=
   (4/1175) V ^ 2 = U ^ 3 + (4/1175 - 2) U ^ 2 + U .
   $$
   -/)]
-theorem basePointV_montgomery :
+lemma basePointV_montgomery :
     (4 / 1175 : F1174) * basePointV ^ 2 = 4 ^ 3 + (4 / 1175 - 2) * 4 ^ 2 + 4 := by
   have h : (1175 : F1174) ≠ 0 := by decide
   have key : (4 / 1175 : F1174)
@@ -196,10 +196,10 @@ theorem basePointV_montgomery :
   decide
 
 /-- The first coordinate of the base point is `4/V`. -/
-theorem basePoint1174_fst : basePoint1174.1 * basePointV = 4 := by decide
+lemma basePoint1174_fst : basePoint1174.1 * basePointV = 4 := by decide
 
 /-- The second coordinate of the base point is `3/5`. -/
-theorem basePoint1174_snd : basePoint1174.2 * 5 = 3 := by decide
+lemma basePoint1174_snd : basePoint1174.2 * 5 = 3 := by decide
 
 /-- The base point of Section 4.1 lies on Curve1174. -/
 @[blueprint "lemma:basePoint1174"
@@ -207,7 +207,7 @@ theorem basePoint1174_snd : basePoint1174.2 * 5 = 3 := by decide
   (statement := /--
   The point $(4/V, 3/5)$ satisfies the Curve1174 equation.
   -/)]
-theorem basePoint1174_mem_affinePoints : basePoint1174 ∈ curve1174.affinePoints := by
+lemma basePoint1174_mem_affinePoints : basePoint1174 ∈ curve1174.affinePoints := by
   rw [TwistedEdwardsCurve.affinePoints, Set.mem_ofPred_eq, curve1174_equation]
   decide
 

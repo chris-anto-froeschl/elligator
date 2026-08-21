@@ -78,7 +78,7 @@ set_option maxRecDepth 20000
 def s1174 : F1174 := 1806494121122717992522804053500797229648438766985538871240722010849934886421
 
 /-- The parameter `s` is nonzero. -/
-theorem s1174_ne_zero : s1174 ≠ 0 := by trivial
+lemma s1174_ne_zero : s1174 ≠ 0 := by trivial
 
 /-- The parameter `s` satisfies `(s ^ 2 - 2)(s ^ 2 + 2) ≠ 0`. -/
 @[blueprint "lemma:s1174-hypotheses"
@@ -86,7 +86,7 @@ theorem s1174_ne_zero : s1174 ≠ 0 := by trivial
   (statement := /--
   The element $s$ is nonzero and satisfies $(s ^ 2 - 2)(s ^ 2 + 2) \neq 0$.
   -/)]
-theorem s1174_sq_ne_pm_two : (s1174 ^ 2 - 2) * (s1174 ^ 2 + 2) ≠ 0 := by decide
+lemma s1174_sq_ne_pm_two : (s1174 ^ 2 - 2) * (s1174 ^ 2 + 2) ≠ 0 := by decide
 
 /-- The value of the curve parameter `c = 2/s ^ 2` for Curve1174. -/
 @[blueprint "lemma:c1174"
@@ -97,7 +97,7 @@ theorem s1174_sq_ne_pm_two : (s1174 ^ 2 - 2) * (s1174 ^ 2 + 2) ≠ 0 := by decid
   2179648967284864129978754827181620133949030013113193603783078030367640144353 .
   $$
   -/)]
-theorem c1174_eq :
+lemma c1174_eq :
     c s1174 = 2179648967284864129978754827181620133949030013113193603783078030367640144353 := by
   have h : s1174 ^ 2 ≠ 0 := by decide
   change (2 : F1174) / s1174 ^ 2 = _
@@ -113,7 +113,7 @@ theorem c1174_eq :
   169665518650159600071835149602457239235130252467237612483220564802728637315 .
   $$
   -/)]
-theorem r1174_eq :
+lemma r1174_eq :
     r s1174 = 169665518650159600071835149602457239235130252467237612483220564802728637315 := by
   have h : c s1174 ≠ 0 := by
     rw [c1174_eq]
@@ -128,7 +128,7 @@ theorem r1174_eq :
   ring
 
 /-- The Edwards coefficient produced by Elligator 1 from `(q, s)` is `-1174`: the curve of
-Theorem 1 and Definition 2 for this choice of parameters is exactly Curve1174. -/
+lemma 1 and Definition 2 for this choice of parameters is exactly Curve1174. -/
 @[blueprint "thm:d1174"
   (title := "The Elligator 1 curve for $(q, s)$ is Curve1174")
   (statement := /--
@@ -139,7 +139,7 @@ Theorem 1 and Definition 2 for this choice of parameters is exactly Curve1174. -
   so the complete Edwards curve of Theorem 1 and Definition 2 for this choice of $(q, s)$ is
   exactly Curve1174, $x ^ 2 + y ^ 2 = 1 - 1174 x ^ 2 y ^ 2$.
   -/)]
-theorem d1174_eq : d s1174 = -1174 := by
+lemma d1174_eq : d s1174 = -1174 := by
   have h : ((c s1174 : F1174) - 1) ^ 2 ≠ 0 := by
     rw [c1174_eq]
     decide
@@ -148,24 +148,24 @@ theorem d1174_eq : d s1174 = -1174 := by
   decide
 
 /-- The quadratic character of the Elligator 1 coefficient for `(q, s)` is `-1`. -/
-theorem chi_d1174_eq_neg_one : χ (d s1174) = -1 := by
+lemma chi_d1174_eq_neg_one : χ (d s1174) = -1 := by
   rw [d1174_eq]
   exact chi_neg1174_eq_neg_one
 
 /-- The Elligator 1 coefficient for `(q, s)` is not a square in `F1174`. -/
-theorem d1174_not_isSquare : ¬IsSquare (d s1174) := by
+lemma d1174_not_isSquare : ¬IsSquare (d s1174) := by
   rw [d1174_eq]
   exact neg1174_not_isSquare
 
 /-! ### The curve -/
 
 /-- The Edwards curve selected by the Elligator 1 parameter `s` is Curve1174. -/
-theorem curve_s1174_eq : curve s1174 = curve1174 := by
+lemma curve_s1174_eq : curve s1174 = curve1174 := by
   unfold curve curve1174
   rw [d1174_eq]
 
 /-- Curve1174 is a valid (nonsingular) Edwards model, seen through the Elligator 1 hypotheses. -/
-theorem curve_s1174_isValid : (curve s1174).IsValid :=
+lemma curve_s1174_isValid : (curve s1174).IsValid :=
   curve_isValid s1174_sq_ne_pm_two card_F1174 q1174_mod_four
 
 /-! ### The Elligator 1 maps for Curve1174 -/
@@ -181,7 +181,7 @@ def decode1174 (t : F1174) : F1174 × F1174 :=
   DecodingFunction t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
 
 /-- Theorem 1 for Curve1174: every decoded value is a point of the curve. -/
-theorem decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.affinePoints :=
+lemma decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.affinePoints :=
   curve_s1174_eq ▸ (ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four).prop
 
 /-- Theorem 1 for Curve1174, in coordinates. -/
@@ -190,21 +190,21 @@ theorem decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.aff
   (statement := /--
   For every $t \in \mathbb{F}_q$ the point $\varphi(t)$ lies on Curve1174.
   -/)]
-theorem decode1174_equation (t : F1174) :
+lemma decode1174_equation (t : F1174) :
     let x := (decode1174 t).1
     let y := (decode1174 t).2
     x ^ 2 + y ^ 2 = 1 - 1174 * x ^ 2 * y ^ 2 :=
   (curve1174_equation _ _).1 (decode1174_mem_affinePoints t)
 
 /-- Theorem 3 for Curve1174: `φ` identifies `t` and `-t`. -/
-theorem decode1174_neg (t : F1174) : decode1174 (-t) = decode1174 t :=
+lemma decode1174_neg (t : F1174) : decode1174 (-t) = decode1174 t :=
   (ϕ_of_t_eq_ϕ_of_neg_t t
     s1174_ne_zero s1174_sq_ne_pm_two card_F1174
     q1174_mod_four
   ).symm
 
 /-- Theorem 3 for Curve1174: `t` and `-t` are the only preimages of `φ t`. -/
-theorem decode1174_preimages (t : F1174) :
+lemma decode1174_preimages (t : F1174) :
     ¬∃ p : {n : F1174 // n ≠ t ∧ n ≠ -t}, decode1174 p.val = decode1174 t :=
   ϕ_preimages t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
 
@@ -216,15 +216,15 @@ theorem decode1174_preimages (t : F1174) :
   (statement := /--
   For Curve1174 the string length of Theorem 4 is $b = \lfloor \log_2 q \rfloor = 250$.
   -/)]
-theorem b1174 : b q1174 = 250 := by
+lemma b1174 : b q1174 = 250 := by
   rw [b, q1174]
   refine Nat.log_eq_of_pow_le_of_lt_pow ?_ ?_ <;> norm_num
 
 /-- Theorem 4 for Curve1174: there are `(q + 1)/2` admissible bit strings. -/
-theorem S1174_card : (@S q1174).card = (q1174 + 1) / 2 := S_card q1174_mod_four
+lemma S1174_card : (@S q1174).card = (q1174 + 1) / 2 := S_card q1174_mod_four
 
 /-- Theorem 4 for Curve1174: the string encoding `ι : S → E(F_q)` is injective. -/
-theorem encode1174_injective : Function.Injective fun τ : @S q1174 =>
+lemma encode1174_injective : Function.Injective fun τ : @S q1174 =>
     ι τ s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four :=
   ι_injective s1174_ne_zero s1174_sq_ne_pm_two card_F1174 prime_q1174.prime q1174_mod_four
 
@@ -235,7 +235,7 @@ theorem encode1174_injective : Function.Injective fun τ : @S q1174 =>
   For Curve1174 the string encoding $\iota$ is a bijection from $S$ onto
   $\varphi(\mathbb{F}_q)$.
   -/)]
-theorem encode1174_bijective :
+lemma encode1174_bijective :
     Function.Bijective (ιToϕOverF s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four) :=
   ιToϕOverF_bijective s1174_ne_zero s1174_sq_ne_pm_two card_F1174 prime_q1174.prime q1174_mod_four
 
