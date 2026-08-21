@@ -61,6 +61,8 @@ open Elligator.LegendreSymbol
 open Elligator.Primitives.ECC
 open Elligator.Primitives.PrimalityCertificate
 open Elligator.Primitives.ECC.Curves.Curve1174
+open Elligator.Elligator1.CurveParameters
+open Elligator.Elligator1.OutputCoordinates
 
 set_option maxRecDepth 20000
 

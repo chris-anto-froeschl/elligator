@@ -6,7 +6,6 @@ Authors: Chris Anto Fröschl
 module
 
 public meta import Elligator.Elligator1.Map
-public import Elligator.Elligator1.Variables
 public import Elligator.Elligator1.DecodingFunction
 public import Elligator.Elligator1.InvertedMap
 public import Elligator.Primitives.ECC.Curves.Curve1174Prime
@@ -32,7 +31,8 @@ namespace Elligator.Elligator1.Example
 open Elligator.LegendreSymbol
 open Elligator.Primitives.PrimalityCertificate
 open Elligator.Primitives.ECC
-open Elligator.Elligator1
+open Elligator.Elligator1.CurveParameters
+open Elligator.Elligator1.OutputCoordinates
 
 /-! ### The field and parameter -/
 

@@ -5,17 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
-public import Elligator.Elligator1.cProperties
-public import Elligator.Elligator1.dProperties
-public import Elligator.Primitives.ECC.EdwardsCurve
-public import Elligator.Elligator1.uProperties
-public import Elligator.Elligator1.vProperties
-public import Elligator.Elligator1.XProperties
-public import Elligator.Elligator1.YProperties
-public import Elligator.Elligator1.xProperties
-public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.OutputCoordinates
 
 /-!
 # Map
@@ -45,6 +35,9 @@ See [Bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 namespace Elligator.Elligator1
 
 open Elligator.Primitives.ECC
+open Elligator.Elligator1.CurveParameters
+open Elligator.Elligator1.AuxiliaryCoordinates
+open Elligator.Elligator1.OutputCoordinates
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}

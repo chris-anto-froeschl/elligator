@@ -6,7 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Elligator.Primitives.ECC.EdwardsCurve
-public import Elligator.Elligator1.dProperties
+public import Elligator.Elligator1.CurveParameters
 
 /-!
 # The Edwards curve used by Elligator 1
@@ -31,6 +31,7 @@ See [Bernstein2013a], Section 3.
 namespace Elligator.Elligator1
 
 open Elligator.Primitives.ECC
+open Elligator.Elligator1.CurveParameters
 
 variable {F : Type*} [Field F] [Fintype F]
 variable {q : ℕ}
