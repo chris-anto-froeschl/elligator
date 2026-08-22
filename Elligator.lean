@@ -8,8 +8,11 @@ import Elligator.Elligator1.Example
 import Elligator.Elligator1.InvertedMap
 import Elligator.Elligator1.Map
 import Elligator.Elligator1.OutputCoordinates
+import Elligator.Elligator1.PhiOverFCharacterization
 import Elligator.Elligator1.ReconstructionCoordinates
+import Elligator.Elligator1.ReverseProofVehicle
 import Elligator.Elligator1.StringEncoding
+import Elligator.Elligator1.XbarConsequences
 import Elligator.FiniteFieldBasic
 import Elligator.LegendreSymbol
 import Elligator.Primitives.ECC.Curves.Curve1174
