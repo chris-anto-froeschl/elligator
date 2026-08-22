@@ -5,7 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.Elligator1.ReconstructionCoordinates
+public import Elligator.Elligator1.ImageCharacterization
 public import Mathlib.Algebra.QuadraticDiscriminant
 
 /-!
@@ -36,6 +36,7 @@ open Elligator.Elligator1.CurveParameters
 open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
+open Elligator.Elligator1.ImageCharacterization
 
 section Y'
 

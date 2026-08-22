@@ -150,6 +150,17 @@ def y
     let X := X t s
     (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2)
 
+lemma y_of_zero (hs_ne_zero : s ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let y := y ⟨(0 : F), by simp⟩ s
+    let r := r s
+    y = (r - 4) / (r + 4) := by
+  intro y r
+  unfold y OutputCoordinates.y
+  rw [X_of_zero hs_ne_zero hq_card hq_mod]
+  change (r * 1 - (1 + 1) ^ 2) / (r * 1 + (1 + 1) ^ 2) = (r - 4) / (r + 4)
+  ring
+
 lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let r := r s
@@ -386,6 +397,42 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
         rfl
   grind
 
+lemma y_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
+    let t1 := t.val
+    let t2 := -t1
+    let y1 := y t s
+    let y2 := y ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
+    y2 = y1 := by
+  intro t1 t2 y1 y2
+  let c := c s
+  let r := r s
+  let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
+  let X1 := X t s
+  let Xbar := X ⟨t2, t_h⟩ s
+  calc
+    y2 = (r * Xbar - (1 + Xbar) ^ 2) / (r * Xbar + (1 + Xbar) ^ 2) := by rfl
+    _ = (r * (1 / X1) - (1 + (1 / X1)) ^ 2) / (r * (1 / X1) + (1 + (1 / X1)) ^ 2) := by
+      unfold Xbar
+      rw [X_comparison t]
+    _ = (r * X1 - (X1 + 1) ^ 2) / (r * X1 + (X1 + 1) ^ 2) := by grind
+    _ = y1 := by
+      rw [add_comm]
+      rfl
+
+lemma P_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let t1 := t.val
+    let t2 := -t1
+    have t_h : (t2 ≠ 1 ∧ t2 ≠ -1) := neg_t_ne_one_and_neg_t_ne_neg_one t
+    let y1 := y t s
+    let y2 := y ⟨t2, t_h⟩ s
+    let x1 := x t s q
+    let x2 := x ⟨t2, t_h⟩ s q
+    (x1, y1) = (x2, y2) := by
+  intro t1 t2 t_h y1 y2 x1 x2
+  unfold x2 y2
+  rw [x_comparison t hs_ne_zero hq_card hq_mod]
+  rw [y_comparison]
 
 end y
 

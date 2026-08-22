@@ -262,6 +262,20 @@ lemma v_of_zero :
   rw [u_of_zero]
   ring
 
+lemma χ_IsSquare_h1 [DecidableEq F]
+    (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+    (hs_ne_zero : s ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let v := v t s
+    IsSquare (((χ v) * v) ^ ((q + 1) / 4)) := by
+  intro v
+  have hv_ne_zero := v_ne_zero hs_ne_zero hq_card hq_mod t
+  have hχ_a_mul_a_IsSquare := χ_a_mul_a_IsSquare hv_ne_zero hq_card hq_mod
+  unfold IsSquare at hχ_a_mul_a_IsSquare
+  rcases hχ_a_mul_a_IsSquare with ⟨r, hr⟩
+  rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
+  apply IsSquare.sq
+
 end v
 
 variable [DecidableEq F]
