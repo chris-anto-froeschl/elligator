@@ -42,7 +42,8 @@ open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
 open Elligator.Elligator1.ReverseProofVehicle
-open Elligator.Elligator1.ImageCharacterization
+open Elligator.Elligator1.XbarConsequences
+open Elligator.Elligator1.PhiOverFCharacterization
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
@@ -399,7 +400,7 @@ lemma P_in_ϕOverF_main_case_with_y_ne_one
     let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
     P.val ∈ ϕOverF := by
   intro ϕOverF
-  unfold ϕOverF ImageCharacterization.ϕOverF
+  unfold ϕOverF PhiOverFCharacterization.ϕOverF
   rw [Set.mem_range]
   let Xbar_of_P := Xbar s P q
   let t := t' sq_ne_pm_two hq_card hq_mod P

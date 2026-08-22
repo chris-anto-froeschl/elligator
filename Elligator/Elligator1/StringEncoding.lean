@@ -40,7 +40,8 @@ open Elligator.Elligator1.CurveParameters
 open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
-open Elligator.Elligator1.ImageCharacterization
+open Elligator.Elligator1.XbarConsequences
+open Elligator.Elligator1.PhiOverFCharacterization
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 variable {s : F}
@@ -458,7 +459,7 @@ theorem ϕOverF_eq_ιOverS (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * 
     let ιOverS := ιOverS hs_ne_zero sq_ne_pm_two hq_card hq_mod
     ϕOverF = ιOverS := by
   dsimp only
-  unfold ImageCharacterization.ϕOverF ιOverS ι
+  unfold PhiOverFCharacterization.ϕOverF ιOverS ι
   ext P
   constructor
   · rintro ⟨t, rfl⟩
