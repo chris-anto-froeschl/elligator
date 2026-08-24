@@ -60,12 +60,6 @@ def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
 lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) :=
   div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t)
 
-@[simp]
-lemma u_of_zero :
-    let u := u ⟨(0 : F), by simp⟩
-    u = 1 := by
-  simp [u]
-
 lemma one_add_u_ne_zero [Fintype F] (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     1 + (u t) ≠ 0 := by
@@ -176,16 +170,6 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero [DecidableEq F]
   · exact pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t))
   · exact pow_ne_zero ((q + 1) / 4) (v_ne_zero hs_ne_zero hq_card hq_mod t)
 
-omit [Fintype F] in
-@[simp]
-lemma v_of_zero :
-    let v := v ⟨(0 : F), by simp⟩ s
-    v = (r s) ^ 2 := by
-  intro v_of_t
-  unfold v_of_t v
-  rw [u_of_zero]
-  ring
-
 lemma χ_IsSquare_h1 [DecidableEq F]
     (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     (hs_ne_zero : s ≠ 0)
@@ -198,7 +182,7 @@ lemma χ_IsSquare_h1 [DecidableEq F]
   unfold IsSquare at hχ_a_mul_a_IsSquare
   rcases hχ_a_mul_a_IsSquare with ⟨r, hr⟩
   rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
-  apply IsSquare.sq
+  exact IsSquare.sq _
 
 end v
 
@@ -252,20 +236,6 @@ lemma X_ne_zero (hs_ne_zero : s ≠ 0)
   apply mul_ne_zero
   · apply χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t)
   · apply u_ne_zero t
-
-@[simp]
-lemma X_of_zero (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let X := X ⟨(0 : F), by simp⟩ s
-    X = 1 := by
-  intro X
-  unfold X AuxiliaryCoordinates.X
-  let χ_of_v := χ (v ⟨(0 : F), by simp⟩ s)
-  rw [u_of_zero]
-  change χ_of_v * 1 = 1
-  unfold χ_of_v
-  rw [v_of_zero]
-  rw [χ_sq (r_ne_zero hs_ne_zero hq_card hq_mod), mul_one]
 
 end X
 

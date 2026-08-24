@@ -202,11 +202,11 @@ lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
     let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
     let r := r s
     v2 = 1 / u1 ^ 5 + (r ^ 2 - 2) * 1 / u1 ^ 3 + 1 / u1 := by
-  intro t1 t2 u1 v2 r_of_s
+  intro t1 t2 u1 v2 r
   let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
   calc
-    v2 = ubar ^ 5 + (r_of_s ^ 2 - 2) * ubar ^ 3 + ubar := by rfl
-    _ = 1 / u1 ^ 5 + (r_of_s ^ 2 - 2) * 1/ u1 ^ 3 + 1 / u1 := by
+    v2 = ubar ^ 5 + (r ^ 2 - 2) * ubar ^ 3 + ubar := by rfl
+    _ = 1 / u1 ^ 5 + (r ^ 2 - 2) * 1/ u1 ^ 3 + 1 / u1 := by
       unfold ubar u1 t2 t1
       rw [u_comparison t]
       ring
@@ -241,15 +241,15 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   rw [← v_comparison_implication1 t]
   grind
 
-lemma v_comparison_implication3 [DecidableEq F]
+lemma v_comparison_implication3
     (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     χ ((u t) ^ 6) = 1 := by
   let u := u t
-  have h : u ^ 6 = u ^ 2 * u ^ 2 * u ^ 2 := by ring
-  rw [h, χ_mul, χ_mul, χ_sq (u_ne_zero t)]
+  have hu6_eq_u2_mul_u2_mul_u2 : u ^ 6 = u ^ 2 * u ^ 2 * u ^ 2 := by ring
+  rw [hu6_eq_u2_mul_u2_mul_u2, χ_mul, χ_mul, χ_sq (u_ne_zero t)]
   rw [mul_one, mul_one]
 
-lemma v_comparison_implication4 [DecidableEq F]
+lemma v_comparison_implication4
     (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     let t1 := t.val
     let t2 := -t1
@@ -260,7 +260,7 @@ lemma v_comparison_implication4 [DecidableEq F]
   let u := u t
   unfold v1
   rw [← v_comparison_implication1 t]
-  change χ v2= χ (v2 * u ^ 6)
+  change χ v2 = χ (v2 * u ^ 6)
   rw [χ_mul, v_comparison_implication3 t, mul_one]
 
 lemma X_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :

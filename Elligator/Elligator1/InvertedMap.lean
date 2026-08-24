@@ -208,6 +208,48 @@ lemma eq_or_eq_neg_of_ϕ_eq (t t' : F)
   use ⟨t', by grind⟩
   simp_all
 
+-- TODO order properly with main result for ϕ below
+-----------------------
+omit [Fintype F] [DecidableEq F] in
+lemma u_of_zero :
+    let u := u ⟨(0 : F), by simp⟩
+    u = 1 := by
+  simp [u]
+
+omit [Fintype F] [DecidableEq F] in
+lemma v_of_zero :
+    let v := v ⟨(0 : F), by simp⟩ s
+    v = (r s) ^ 2 := by
+  intro v_of_t
+  unfold v_of_t v
+  rw [u_of_zero]
+  ring
+
+lemma X_of_zero (hs_ne_zero : s ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let X := X ⟨(0 : F), by simp⟩ s
+    X = 1 := by
+  intro X
+  unfold X AuxiliaryCoordinates.X
+  let χ_of_v := χ (v ⟨(0 : F), by simp⟩ s)
+  rw [u_of_zero]
+  change χ_of_v * 1 = 1
+  unfold χ_of_v
+  rw [v_of_zero]
+  rw [χ_sq (r_ne_zero hs_ne_zero hq_card hq_mod), mul_one]
+
+lemma y_of_zero (hs_ne_zero : s ≠ 0)
+    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
+    let y := y ⟨(0 : F), by simp⟩ s
+    let r := r s
+    y = (r - 4) / (r + 4) := by
+  intro y r
+  unfold y OutputCoordinates.y
+  rw [X_of_zero hs_ne_zero hq_card hq_mod]
+  change (r * 1 - (1 + 1) ^ 2) / (r * 1 + (1 + 1) ^ 2) = (r - 4) / (r + 4)
+  ring
+-----------------------
+
 -- Implicated by main case of Theorem 3 Proof part B
 lemma ϕ_of_zero (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :

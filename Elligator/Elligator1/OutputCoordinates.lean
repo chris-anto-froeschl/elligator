@@ -128,17 +128,6 @@ def y
     let X := X t s
     (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2)
 
-lemma y_of_zero (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let y := y ⟨(0 : F), by simp⟩ s
-    let r := r s
-    y = (r - 4) / (r + 4) := by
-  intro y r
-  unfold y OutputCoordinates.y
-  rw [X_of_zero hs_ne_zero hq_card hq_mod]
-  change (r * 1 - (1 + 1) ^ 2) / (r * 1 + (1 + 1) ^ 2) = (r - 4) / (r + 4)
-  ring
-
 lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let r := r s
