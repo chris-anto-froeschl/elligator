@@ -233,11 +233,11 @@ lemma ϕ_of_zero (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2
     rw [y_of_zero hs_ne_zero hq_card hq_mod]
     change ((r - 4) / (r + 4) - 1) / (2 * ((r - 4) / (r + 4) + 1)) * r = -2
     have t_h : 1 = (r + 4) / (r + 4) := by
-      rw [add_comm, div_self (four_add_r_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod)]
+      rw [add_comm, div_self (four_add_r_ne_zero hs_ne_zero hq_card hq_mod)]
     rw [t_h, ← sub_div, ← add_div, ← sub_sub, ← add_assoc]
     ring_nf
     rw [inv_inv, mul_comm r, mul_assoc _ r, mul_inv_cancel₀ (r_ne_zero hs_ne_zero hq_card hq_mod)]
-    rw [mul_one, inv_mul_cancel₀ (four_add_r_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod)]
+    rw [mul_one, inv_mul_cancel₀ (four_add_r_ne_zero hs_ne_zero hq_card hq_mod)]
     rw [one_mul, ← mul_neg_one, ← mul_right_inj' (four_ne_zero hq_card hq_mod)]
     rw [← mul_assoc, ← mul_assoc, mul_inv_cancel₀ (four_ne_zero hq_card hq_mod)]
     ring
