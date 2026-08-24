@@ -144,7 +144,7 @@ lemma z'_argument_ne_zero
     let X := Xbar s P q
     let c := c s
     Y * (X ^ 2 + 1 / c ^ 2) ≠ 0 := by
-  grind [Y'_ne_zero, X_pow_two_add_1_div_c_pow_two_ne_zero]
+  grind [Y'_ne_zero, Xbar_pow_two_add_one_div_c_pow_two_ne_zero]
 
 lemma z'_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
