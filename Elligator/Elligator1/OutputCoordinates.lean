@@ -84,28 +84,6 @@ lemma x_ne_zero [DecidableEq F]
     · apply one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
   · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
 
-lemma x_comparison [DecidableEq F]
-    (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let t1 := t.val
-    let t2 := -t1
-    let x1 := x t s q
-    let x2 := x ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s q
-    x2 = x1 := by
-  intro t1 t2 x1 x2
-  let c := c s
-  let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-  let X1 := X t s
-  let Xbar := X ⟨t2, t_h⟩ s
-  let Y1 := Y t s q
-  let Y2 := Y ⟨t2, t_h⟩ s q
-  have hX1_pow3_ne_zero : X1 ^ 3 ≠ 0 := pow_ne_zero 3 (X_ne_zero hs_ne_zero hq_card hq_mod t)
-  calc
-    x2 = (c - 1) * s * Xbar * (1 + Xbar) / Y2 := by rfl
-    _ = (c - 1) * s * 1 / X1 * (1 + 1 / X1) / (Y1 / X1 ^ 3) := by grind [X_comparison, Y_comparison]
-    _ = (c - 1) * s * X1 * (1 + X1) / Y1 := by simp_all; grind
-    _ = x1 := by rfl
-
 lemma x_y_eq_zero_sign_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
     (P : {P : F × F // P ∈ EOverF sq_ne_pm_two hq_card hq_mod})
@@ -396,43 +374,6 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
         rw [← div_pow _ _ 2]
         rfl
   grind
-
-lemma y_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let y1 := y t s
-    let y2 := y ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    y2 = y1 := by
-  intro t1 t2 y1 y2
-  let c := c s
-  let r := r s
-  let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-  let X1 := X t s
-  let Xbar := X ⟨t2, t_h⟩ s
-  calc
-    y2 = (r * Xbar - (1 + Xbar) ^ 2) / (r * Xbar + (1 + Xbar) ^ 2) := by rfl
-    _ = (r * (1 / X1) - (1 + (1 / X1)) ^ 2) / (r * (1 / X1) + (1 + (1 / X1)) ^ 2) := by
-      unfold Xbar
-      rw [X_comparison t]
-    _ = (r * X1 - (X1 + 1) ^ 2) / (r * X1 + (X1 + 1) ^ 2) := by grind
-    _ = y1 := by
-      rw [add_comm]
-      rfl
-
-lemma P_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let t1 := t.val
-    let t2 := -t1
-    have t_h : (t2 ≠ 1 ∧ t2 ≠ -1) := neg_t_ne_one_and_neg_t_ne_neg_one t
-    let y1 := y t s
-    let y2 := y ⟨t2, t_h⟩ s
-    let x1 := x t s q
-    let x2 := x ⟨t2, t_h⟩ s q
-    (x1, y1) = (x2, y2) := by
-  intro t1 t2 t_h y1 y2 x1 x2
-  unfold x2 y2
-  rw [x_comparison t hs_ne_zero hq_card hq_mod]
-  rw [y_comparison]
 
 end y
 

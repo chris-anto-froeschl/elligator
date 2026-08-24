@@ -60,18 +60,6 @@ def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
 lemma u_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : u t ≠ (0 : F) :=
   div_ne_zero (one_sub_t_ne_zero t) (one_add_t_ne_zero t)
 
-lemma u_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let u1 := u t
-    let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
-    ubar = 1 / u1 := by
-  intro t1 t2 u1 ubar
-  calc
-    ubar = (1 - t2) / (1 + t2) := by simp [ubar, u]
-    _ = (1 + t) / (1 - t) := by simp [t2, t1]; ring
-    _ = 1 / u1 := by simp [u1, u]
-
 @[simp]
 lemma u_of_zero :
     let u := u ⟨(0 : F), by simp⟩
@@ -84,9 +72,7 @@ lemma one_add_u_ne_zero [Fintype F] (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   unfold u
   rw [add_div' _ _ _ (one_add_t_ne_zero t)]
   norm_num
-  constructor
-  · exact two_ne_zero hq_card hq_mod
-  · exact one_add_t_ne_zero t
+  exact ⟨two_ne_zero hq_card hq_mod, one_add_t_ne_zero t⟩
 
 end u
 
@@ -122,36 +108,46 @@ lemma v_factored (hs_ne_zero : s ≠ 0)
   let r := r s
   change u ^ 5 + (r ^ 2 - 2) * u ^ 3 + u = u * (u ^ 2 + c ^ 2) * (u ^ 2 + 1 / c ^ 2)
   have hc_sq_ne_zero : c ^ 2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
-  grind [r_sq_sub_two_eq_c_sq_add_inv_c_sq]
+  rw [r_sq_sub_two_eq_c_sq_add_inv_c_sq hs_ne_zero hq_card hq_mod]
+  ring_nf
+  change u + u ^ 3 * c ^ 2 + u ^ 3 * c⁻¹ ^ 2 + u ^ 5
+    = u * c ^ 2 * c⁻¹ ^ 2 + u ^ 3 * c ^ 2 + u ^ 3 * c⁻¹ ^ 2 + u ^ 5
+  rw [inv_pow, mul_assoc, mul_inv_cancel₀ (pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod))]
+  ring
 
 lemma v_factored_second_factor_ne_zero (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
     (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     (u t) ^ 2 + (c s) ^ 2 ≠ 0 := by
-  intro h_sum_eq_zero
+  intro h_contra
   let c := c s
   let u := u t
   have h_neg_one_sq : -1 = (u / c) ^ 2 := by
-    have hc_sq_ne_zero := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
-    grind
+    have hcpow_ne_zero := (pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod))
+    rw [← mul_left_inj' hcpow_ne_zero]
+    rw [div_pow, div_mul_comm, div_self hcpow_ne_zero, neg_mul, one_mul, one_mul]
+    exact neg_eq_of_add_eq_zero_left h_contra
   have h_isSquare : IsSquare (-1 : F) := by
     rw [h_neg_one_sq, pow_two]
-    apply IsSquare.mul_self (u / c)
-  rw [FiniteField.isSquare_neg_one_iff, hq_card] at h_isSquare
-  contradiction
+    exact IsSquare.mul_self (u / c)
+  exact false_of_isSquare_neg_one hq_card hq_mod h_isSquare
 
 lemma v_factored_third_factor_ne_zero (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
     (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     (u t) ^ 2 + 1 / (c s) ^ 2 ≠ 0 := by
-  intro h_sum_eq_zero
+  intro h_contra
   have h_neg_one_sq : -1 = ((u t) * (c s)) ^ 2 := by
-    grind [pow_ne_zero, c_ne_zero, div_left_inj']
+    have hcpow_ne_zero := (pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod))
+    rw [← div_left_inj' hcpow_ne_zero]
+    rw [mul_pow, mul_div_assoc, div_self hcpow_ne_zero]
+    rw [← add_left_inj (1 / c s ^ 2), neg_div, neg_add_cancel (1 / c s ^ 2), mul_one]
+    symm
+    exact h_contra
   have h_isSquare : IsSquare (-1 : F) := by
     rw [h_neg_one_sq, pow_two]
-    apply IsSquare.mul_self
-  rw [FiniteField.isSquare_neg_one_iff, hq_card] at h_isSquare
-  contradiction
+    exact IsSquare.mul_self _
+  exact false_of_isSquare_neg_one hq_card hq_mod h_isSquare
 
 @[blueprint "lemma:v_ne_zero"
   (title := "$v \\neq 0$")
@@ -165,7 +161,7 @@ lemma v_ne_zero (hs_ne_zero : s ≠ 0)
   rw [v_factored hs_ne_zero hq_card hq_mod t]
   apply mul_ne_zero
   · apply mul_ne_zero
-    · apply u_ne_zero t
+    · exact u_ne_zero t
     · exact (v_factored_second_factor_ne_zero hs_ne_zero hq_card hq_mod t)
   · exact (v_factored_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)
 
@@ -177,80 +173,8 @@ lemma χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero [DecidableEq F]
   intro v
   rw [mul_pow (χ v) v ((q + 1) / 4)]
   apply mul_ne_zero
-  · apply pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t))
-  · apply pow_ne_zero ((q + 1) / 4) (v_ne_zero hs_ne_zero hq_card hq_mod t)
-
--- TODO move comparisons out
-omit [Fintype F] in
-lemma v_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let u1 := u t
-    let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    let r := r s
-    v2 = 1 / u1 ^ 5 + (r ^ 2 - 2) * 1 / u1 ^ 3 + 1 / u1 := by
-  intro t1 t2 u1 v2 r_of_s
-  let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
-  calc
-    v2 = ubar ^ 5 + (r_of_s ^ 2 - 2) * ubar ^ 3 + ubar := by rfl
-    _ = 1 / u1 ^ 5 + (r_of_s ^ 2 - 2) * 1/ u1 ^ 3 + 1 / u1 := by
-      unfold ubar u1 t2 t1
-      rw [u_comparison t]
-      ring_nf
-
-omit [Fintype F] in
-lemma v_comparison_implication1 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let u1 := u t
-    let v1 := v t s
-    let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    v2 * u1 ^ 6 = v1 := by
-  intro t1 t2 u1 v1 v2
-  let r := r s
-  calc
-    v2 * u1 ^ 6 = u1 + (r ^ 2 - 2) * u1 ^ 3 + u1 ^ 5 := by
-      unfold v2
-      rw [v_comparison t]
-      grind
-    _ = v1 := by grind [v]
-
-omit [Fintype F] in
-lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let u1 := u t
-    let v1 := v t s
-    let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    v2 = v1 / u1 ^ 6 := by
-  intro t1 t2 u1 v1 v2
-  have hu1_pow6_ne_zero : u1 ^ 6 ≠ 0 := pow_ne_zero 6 (u_ne_zero t)
-  rw [← mul_right_inj' hu1_pow6_ne_zero]
-  unfold v1
-  rw [← v_comparison_implication1 t]
-  grind
-
-lemma v_comparison_implication3 [DecidableEq F]
-    (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
-    χ ((u t) ^ 6) = 1 := by
-  let u := u t
-  have h : u ^ 6 = u ^ 2 * u ^ 2 * u ^ 2 := by ring
-  rw [h, χ_mul, χ_mul, χ_sq (u_ne_zero t)]
-  rw [mul_one, mul_one]
-
-lemma v_comparison_implication4 [DecidableEq F]
-    (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let v1 := v t s
-    let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    χ v2 = χ v1 := by
-  intro t1 t2 v1 v2
-  let u := u t
-  unfold v1
-  rw [← v_comparison_implication1 t]
-  change χ v2= χ (v2 * u ^ 6)
-  rw [χ_mul, v_comparison_implication3 t, mul_one]
+  · exact pow_ne_zero ((q + 1) / 4) (χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t))
+  · exact pow_ne_zero ((q + 1) / 4) (v_ne_zero hs_ne_zero hq_card hq_mod t)
 
 omit [Fintype F] in
 @[simp]
@@ -328,31 +252,6 @@ lemma X_ne_zero (hs_ne_zero : s ≠ 0)
   apply mul_ne_zero
   · apply χ_a_ne_zero (v_ne_zero hs_ne_zero hq_card hq_mod t)
   · apply u_ne_zero t
-
-lemma X_comparison (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
-    let t1 := t.val
-    let t2 := -t1
-    let X1 := X t s
-    let Xbar := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    Xbar = 1 / X1 := by
-  intro t1 t2 X1 Xbar
-  let u1 := u t
-  let ubar := u ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩
-  let v1 := v t s
-  let v2 := v ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-  calc
-    Xbar = (χ v2) * ubar := by rfl
-    _ = (χ v1) / u1 := by
-      unfold v2 t2
-      rw [v_comparison_implication4 t]
-      unfold ubar
-      rw [u_comparison t]
-      change (χ v1) * (1 / u1) = (χ v1) / u1
-      ring
-    _ = 1 / ((χ v1) * u1) := by
-      nth_rw 1 [one_div_χ_of_a_eq_χ_a]
-      ring
-    _ = 1 / X1 := by rfl
 
 @[simp]
 lemma X_of_zero (hs_ne_zero : s ≠ 0)
@@ -471,107 +370,6 @@ lemma one_add_X_ne_zero (hs_ne_zero : s ≠ 0)
     grind [χ_a_eq_one]
   have h_chi_v_ne_neg_chi_v : (χ v) ≠ -(χ v) := neg_χ_a_ne_χ_a hv_ne_zero hq_card hq_mod
   contradiction
-
-lemma Y_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let t1 := t.val
-    let t2 := -t1
-    let X1 := X t s
-    let Y1 := Y t s q
-    let Y2 := Y ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s q
-    Y2 = Y1 / X1 ^ 3 := by
-  intro t1 t2 X1 Y1 Y2
-  let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-  let c := c s
-  let r := r s
-  let u1 := u t
-  let ubar := u ⟨t2, t_h⟩
-  let v1 := v t s
-  let v2 := v ⟨t2, t_h⟩ s
-  have hu1_ne_zero := u_ne_zero (t := t)
-  have first_factor :
-    ((χ v2) * v2) ^ ((q + 1) / 4) = ((χ v1) * v1) ^ ((q + 1) / 4) * (χ u1) / u1 ^ 3 := by
-      have h_v2_mul_v2_eq_v1_mul_v1_div_u1_pow6 : (χ v2) * v2 = (χ v1) * v1 / u1 ^ 6 := by
-        rw [v_comparison_implication4 t]
-        unfold v2
-        rw [v_comparison_implication2 t]
-        change (χ v1) * (v1 / u1 ^ 6) = (χ v1) * v1 / u1 ^ 6
-        rw [← mul_div_assoc]
-      have h_chi_u1_mul_u1_cubed_isSquare : IsSquare ((χ u1) * u1 ^ 3) := by
-        have h_chi_u1_mul_u1_cubed_ne_zero : (χ u1) * u1 ^ 3 ≠ 0 := by
-          apply mul_ne_zero
-          · apply χ_a_ne_zero hu1_ne_zero
-          · apply pow_ne_zero 3 hu1_ne_zero
-        apply (χ_eq_one_iff_isSquare h_chi_u1_mul_u1_cubed_ne_zero hq_card hq_mod).mp
-        have h_three_eq_one_add_two : (3 : ℕ) = 1 + 2 := by norm_num
-        rw [h_three_eq_one_add_two, pow_add u1 1 2, ← mul_assoc, pow_one]
-        rw [χ_mul, χ_mul]
-        rw [χ_χ_eq_χ hq_card hq_mod]
-        rw [← χ_mul, ← pow_two]
-        have h_u1_sq_isSquare : IsSquare (u1 ^ 2) := IsSquare.sq u1
-        have h_chi_u1_sq_eq_one : χ (u1 ^ 2) = 1 := by
-          apply (χ_eq_one_iff_isSquare (pow_ne_zero 2 hu1_ne_zero) hq_card hq_mod).mpr
-          exact h_u1_sq_isSquare
-        simp [h_chi_u1_sq_eq_one]
-      have h_u1_pow6_pow_eq_chi_u1_mul_u1_cubed : (u1 ^ 6) ^ ((q + 1) / 4) = (χ u1) * u1 ^ 3 := by
-        have h_six_eq_three_mul_two : 6 = 3 * 2 := by norm_num
-        rw [h_six_eq_three_mul_two, ← pow_mul, mul_assoc, mul_comm, pow_mul, mul_comm]
-        rw [add_comm, one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
-        rw [add_comm, a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
-        change ((χ u1) * u1) ^ 3 = (χ u1) * u1 ^ 3
-        rw [mul_pow, χ_of_a_pow_n_eq_χ_a u1 ⟨3, by trivial⟩]
-      calc
-        ((χ v2) * v2) ^ ((q + 1) / 4) = ((χ v1) * v1 / u1 ^ 6) ^ ((q + 1) / 4) := by
-          rw [h_v2_mul_v2_eq_v1_mul_v1_div_u1_pow6]
-        _ = ((χ v1) * v1) ^ ((q + 1) / 4) * (χ u1) / u1 ^ 3 := by
-          rw [div_pow, h_u1_pow6_pow_eq_chi_u1_mul_u1_cubed]
-          nth_rw 2 [one_div_χ_of_a_eq_χ_a]
-          grind
-  have second_factor : (χ v2) = (χ v1) := v_comparison_implication4 t
-  have third_factor : χ (ubar ^ 2 + 1 / c ^ 2) = χ (u1 * v1 * (u1 ^ 2 + 1 / c ^ 2)) := by
-    calc
-      χ (ubar ^ 2 + 1 / c ^ 2)
-        = χ ((c ^ 2 * u1 ^ 4 * (ubar ^ 2 + 1 / c ^ 2)) * (u1 ^ 2 + 1 / c ^ 2) ^ 2) := by
-        rw [← χ_of_a_eq_χ_a_mul_b_pow_two (c_ne_zero hs_ne_zero hq_card hq_mod)]
-        rw [mul_comm, ← χ_of_a_eq_χ_a_mul_b_pow_two (pow_ne_zero 2 hu1_ne_zero)]
-        rw [χ_of_a_eq_χ_a_mul_b_pow_two
-          (v_factored_third_factor_ne_zero hs_ne_zero hq_card hq_mod t)]
-        grind
-      _ = χ ((u1 ^ 2 * (c ^ 2 + u1 ^ 2)) * (u1 ^ 2 + 1 / c ^ 2) ^ 2) := by
-        rw [pow_two ubar]
-        unfold ubar
-        rw [u_comparison t]
-        change χ (c ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c ^ 2) * (u1 ^ 2 + 1 / c ^ 2) ^ 2)
-          = χ (u1 ^ 2 * (c ^ 2 + u1 ^ 2) * (u1 ^ 2 + 1 / c ^ 2) ^ 2)
-        have h_clear_denominators :
-            c ^ 2 * u1 ^ 4 * (1 / u1 * (1 / u1) + 1 / c ^ 2) = u1 ^ 2 * (c ^ 2 + u1 ^ 2) := by
-          have hc_sq_ne_zero : c ^ 2 ≠ 0 := pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
-          grind
-        rw [h_clear_denominators]
-      _ = χ (u1 * v1 * (u1 ^ 2 + 1 / c ^ 2)) := by grind [v_factored]
-  calc
-    Y2 = Y1 * (χ u1) * χ (u1 * v1) / u1 ^ 3 := by
-      unfold Y2 Y
-      change ((χ v2) * v2) ^ ((q + 1) / 4) * (χ v2) * χ (ubar ^ 2 + 1 / c ^ 2)
-        = Y1 * (χ u1) * χ (u1 * v1) / u1 ^ 3
-      rw [first_factor, second_factor, third_factor, χ_mul]
-      have h_rearrange :
-        ((χ v1) * v1) ^ ((q + 1) / 4) * (χ u1) / u1 ^ 3 * (χ v1)
-        * (χ (u1 * v1) * (χ (u1 ^ 2 + 1 / c ^ 2)))
-        = ((χ v1) * v1) ^ ((q + 1) / 4) * (χ v1) * (χ (u1 ^ 2 + 1 / c ^ 2))
-          * (χ u1) * χ (u1 * v1) / u1 ^ 3 := by ring_nf
-      rw [h_rearrange]
-      rfl
-    _ = Y1 / ((χ v1) * u1) ^ 3 := by
-      calc
-      Y1 * (χ u1) * χ (u1 * v1) / u1 ^ 3 = Y1 * (χ v1) / u1 ^ 3 := by
-        rw [χ_mul, ← mul_assoc, mul_assoc Y1, ← χ_mul, ← pow_two, χ_sq hu1_ne_zero, mul_one]
-      _ = Y1 / ((χ v1) * u1) ^ (2 + 1) := by
-        nth_rw 1 [one_div_χ_of_a_eq_χ_a]
-        rw [mul_div_assoc, div_div]
-        nth_rw 1 [← χ_of_a_pow_n_eq_χ_a v1 ⟨3, by trivial⟩, ← mul_pow]
-        ring_nf
-    _ = Y1 / X1 ^ 3 := by rfl
 
 end Y
 

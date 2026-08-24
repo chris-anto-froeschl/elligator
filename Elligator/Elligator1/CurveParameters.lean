@@ -89,16 +89,16 @@ lemma c_sub_one_ne_zero (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) :
 lemma c_ne_neg_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) : (c s) ≠ -1 := by
   unfold c
   intro h_contra
-  have heq : s ^ 2 = -2 := by grind
-  have hne := s_pow_two_ne_neg_two sq_ne_pm_two
+  have hs_sq_eq_neg_two : s ^ 2 = -2 := by grind
+  have hs_sq_ne_neg_two := s_pow_two_ne_neg_two sq_ne_pm_two
   contradiction
 
 lemma c_add_one_ne_zero (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0) :
     (c s) + 1 ≠ 0 := by
-  intro hceq
+  intro h_contra
   have hc_ne_neg_one := c_ne_neg_one sq_ne_pm_two
-  rw [← add_left_inj (-1)] at hceq
-  ring_nf at hceq
+  rw [← add_left_inj (-1)] at h_contra
+  ring_nf at h_contra
   contradiction
 
 @[blueprint "lemma:c_mul_sub_one_mul_add_one_ne_zero"
@@ -325,7 +325,7 @@ lemma one_div_d_nonsquare (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     ¬IsSquare (1 / (d s)) := by
   rintro ⟨a, ha⟩
-  have hd_ne_zero : d s ≠ 0 := d_ne_zero sq_ne_pm_two hq_card hq_mod
+  have hd_ne_zero := d_ne_zero sq_ne_pm_two hq_card hq_mod
   -- `1/d = a*a ≠ 0` (since `d ≠ 0`), so `a ≠ 0`.
   have ha_ne_zero : a ≠ 0 := by
     rintro rfl
