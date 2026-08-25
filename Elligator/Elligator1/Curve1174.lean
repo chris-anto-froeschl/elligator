@@ -23,7 +23,7 @@ over the prime field $\mathbb{F}_q$ with $q = 2^{251} - 9$.
 
 The curve itself (its base field, its Edwards model, the non-squareness of its coefficient and its
 base point) is developed independently of Elligator in
-`Elligator.ECCPrimitives.Curves.Curve1174`. What is done here is the Elligator 1 side: following
+`Elligator.Primitives.ECC.Curves.Curve1174`. What is done here is the Elligator 1 side: following
 the paper, the curve is not given by its coefficient but produced by the Elligator 1 construction
 from the parameter
 

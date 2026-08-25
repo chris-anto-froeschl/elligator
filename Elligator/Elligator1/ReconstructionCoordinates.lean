@@ -552,7 +552,7 @@ omit [DecidableEq F] in
 lemma Xbar_pow_two_add_one_div_c_pow_two_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) :
+    (P : {p : F × F // p ∈ EOverF s}) :
     let X := Xbar s P q
     let c := c s
     X ^ 2 + 1 / c ^ 2 ≠ 0 := by

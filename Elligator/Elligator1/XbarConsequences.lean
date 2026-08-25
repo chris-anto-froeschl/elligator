@@ -426,7 +426,7 @@ lemma one_sub_d_mul_y_pow_two_ne_zero
 lemma x_pow_two_of_Xbar_ne_one_eq1
     (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
+    (P : {p : F × F // p ∈ EOverF s})
     (P_props : ϕOverFProps s P) :
     let x := P.val.1
     let y := P.val.2
@@ -450,7 +450,7 @@ lemma x_pow_two_of_Xbar_ne_one_eq1
 lemma x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (y_eq_one : P.val.2 ≠ 1) :
     let x := P.val.1
     let X := Xbar s P q

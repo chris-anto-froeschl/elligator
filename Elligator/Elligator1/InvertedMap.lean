@@ -53,7 +53,7 @@ variable {q : ℕ}
 
 lemma x_y_eq_zero_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_eq_zero : P.val.1 = 0) :
     P.val = ((0 : F), (1 : F)) := by
   let x := P.val.1
@@ -70,7 +70,7 @@ lemma x_y_eq_zero_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 omit [DecidableEq F] in
 lemma y_ne_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
+    (P : {p : F × F // p ∈ EOverF s})
     (x_ne_zero : P.val.1 ≠ 0) :
     let y := P.val.2
     y ≠ 1 := by
@@ -89,7 +89,7 @@ lemma y_ne_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 
 lemma η_ne_zero (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) :
     (η P.val) ≠ 0 := by
   let x := P.val.1
@@ -318,7 +318,7 @@ lemma x_y_eq_ϕ_of_zero_of_Xbar_eq_one
 lemma x_y_eq_ϕ_of_t_of_Xbar_ne_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let x := P.val.1
     let y := P.val.2
@@ -401,7 +401,7 @@ lemma ϕ_of_one_in_ϕ_of_F
 lemma P_in_ϕOverF_base_case
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_eq_zero : P.val.1 = 0) :
     let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
     P.val ∈ ϕOverF := by
@@ -412,7 +412,7 @@ lemma P_in_ϕOverF_base_case
 lemma P_in_ϕOverF_main_case_with_y_eq_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
+    (P : {p : F × F // p ∈ EOverF s})
     (x_ne_zero : P.val.1 ≠ 0) (y_eq_one : P.val.2 = 1) :
     let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
     P.val ∈ ϕOverF := by
@@ -438,7 +438,7 @@ lemma P_in_ϕOverF_main_case_with_y_eq_one
 lemma P_in_ϕOverF_main_case_with_y_ne_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
     P.val ∈ ϕOverF := by
@@ -458,7 +458,7 @@ lemma P_in_ϕOverF_main_case_with_y_ne_one
 lemma P_in_ϕOverF_main_case
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) :
     let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
     P.val ∈ ϕOverF := by
@@ -481,7 +481,7 @@ lemma P_in_ϕOverF_main_case
 theorem P_in_ϕOverF_of_P_props
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod})
+    (P : {p : F × F // p ∈ EOverF s})
     : ϕOverFProps s P → P.val ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod := by
   intro h1
   let x := P.val.1

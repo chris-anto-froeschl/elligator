@@ -93,7 +93,7 @@ lemma x_ne_zero [DecidableEq F]
 
 lemma x_y_eq_zero_sign_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // P ∈ EOverF sq_ne_pm_two hq_card hq_mod})
+    (P : {P : F × F // P ∈ EOverF s})
     (hx_eq_zero : P.val.1 = 0) :
     P.val = ((0 : F), (1 : F)) ∨ P.val = ((0 : F), (-1 : F)) := by
   let d := d s

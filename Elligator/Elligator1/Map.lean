@@ -142,9 +142,9 @@ records that the result satisfies the Edwards curve equation. -/
   -/)]
 def ϕ (t : F) (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    EOverF sq_ne_pm_two hq_card hq_mod :=
+    EOverF s :=
   let P := if h : t ≠ 1 ∧ t ≠ -1 then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s) else (0, 1)
-  have P_in_EOverF : P ∈ (EOverF sq_ne_pm_two hq_card hq_mod) := by
+  have P_in_EOverF : P ∈ (EOverF s) := by
     rw [mem_EOverF_iff, ← curve_equation_iff]
     unfold P
     by_cases ht : t ≠ 1 ∧ t ≠ -1

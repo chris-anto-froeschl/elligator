@@ -38,7 +38,7 @@ open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
 
-/-- `ϕOverFProp1` is the first property fulfilled by Ps in `EOverF`.
+/-- `ϕOverFProp1` is the first property fulfilled by Ps in `EOverF s`.
 This property does not have to consider a dedicated field `F` with `q`.
 This restriction is defined during the context evolution.
 
@@ -57,7 +57,7 @@ def ϕOverFProp1 (P : F × F) : Prop :=
     let y := P.snd
     y + 1 ≠ 0
 
-/-- `ϕOverFProp2` is the second property fulfilled by Ps in `EOverF`.
+/-- `ϕOverFProp2` is the second property fulfilled by Ps in `EOverF s`.
 
 Original: Section "3.3 Inverting the map", Theorem 3
 -/
@@ -76,7 +76,7 @@ def ϕOverFProp2 (s : F) (P : F × F) : Prop :=
     let η := η P
     IsSquare ((1 + η * r) ^ 2 - 1)
 
-/-- `ϕOverFProp3` is the third property fulfilled by Ps in `EOverF`.
+/-- `ϕOverFProp3` is the third property fulfilled by Ps in `EOverF s`.
 
 Original: Section "3.3 Inverting the map", Theorem 3
 -/
@@ -97,7 +97,7 @@ def ϕOverFProp3 (s : F) (P : F × F) : Prop :=
     η * r = -2 → x = 2 * s * (c - 1) * (χ c) / r
 
 /-- `ϕOverFProps` combines the previously defined properties which are fulfilled by Ps
-in `EOverF`, i.e. `ϕOverFProp1`, `ϕOverFProp2` and `ϕOverFProp3`.
+in `EOverF s`, i.e. `ϕOverFProp1`, `ϕOverFProp2` and `ϕOverFProp3`.
 
 Original: Section "3.3 Inverting the map", Theorem 3
 -/

@@ -44,7 +44,7 @@ section Y'
 /-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 def Y' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+    (P : {p : F × F // p ∈ EOverF s}) : F :=
     let x := P.val.1
     let c := c s
     let X := Xbar s P q
@@ -54,7 +54,7 @@ def Y' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 lemma Y'_pow_two_eq_of_Xbar_ne_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (y_eq_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let r := r s
@@ -110,7 +110,7 @@ lemma Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
 lemma Y'_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
     Y ≠ 0 := by
@@ -129,7 +129,7 @@ section z'
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 def z' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-  (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+  (P : {p : F × F // p ∈ EOverF s}) : F :=
   let Y := Y' sq_ne_pm_two hq_card hq_mod P
   let X := Xbar s P q
   let c := c s
@@ -138,7 +138,7 @@ def z' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 lemma z'_argument_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
     let X := Xbar s P q
@@ -149,7 +149,7 @@ lemma z'_argument_ne_zero
 lemma z'_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let z := z' sq_ne_pm_two hq_card hq_mod P
     z ≠ 0 := by
@@ -165,7 +165,7 @@ lemma z'_ne_zero
 lemma z'_eq_one_or_z'_eq_neg_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let z := z' sq_ne_pm_two hq_card hq_mod P
     z = 1 ∨ z = -1 := by
@@ -191,7 +191,7 @@ section u'
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 def u' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+    (P : {p : F × F // p ∈ EOverF s}) : F :=
   let z := z' sq_ne_pm_two hq_card hq_mod P
   let X := Xbar s P q
   z * X
@@ -199,7 +199,7 @@ def u' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 lemma u'_pow_two_eq_X_pow_two
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let X := Xbar s P q
@@ -209,7 +209,7 @@ lemma u'_pow_two_eq_X_pow_two
 lemma u'_eq_Xbar_or_u'_eq_neg_Xbar
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let X := Xbar s P q
@@ -219,7 +219,7 @@ lemma u'_eq_Xbar_or_u'_eq_neg_Xbar
 lemma u'_ne_neg_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let X := Xbar s P q
@@ -236,7 +236,7 @@ lemma u'_ne_neg_one
 lemma one_add_u'_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let X := Xbar s P q
@@ -253,7 +253,7 @@ lemma one_add_u'_ne_zero
 lemma u'_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let X := Xbar s P q
@@ -277,7 +277,7 @@ section v'
 /-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 def v' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+    (P : {p : F × F // p ∈ EOverF s}) : F :=
   let u := u' sq_ne_pm_two hq_card hq_mod P
   let r := r s
   -- Note: this is just the definition of v as in theorem 1
@@ -286,7 +286,7 @@ def v' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 lemma v'_eq_z'_mul_Y'_pow_two
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (y_ne_one : P.val.2 ≠ 1) :
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -319,7 +319,7 @@ lemma v'_eq_z'_mul_Y'_pow_two
 lemma v'_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let v := v' sq_ne_pm_two hq_card hq_mod P
@@ -342,7 +342,7 @@ end v'
 lemma χ_of_v'_eq_χ_of_z'
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let z := z' sq_ne_pm_two hq_card hq_mod P
@@ -361,7 +361,7 @@ lemma χ_of_v'_eq_χ_of_z'
 
 lemma χ_of_z'_eq_z' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) :
+    (P : {p : F × F // p ∈ EOverF s}) :
     let X := Xbar s P q
     let z := z' sq_ne_pm_two hq_card hq_mod P
     let χ_of_z := χ z
@@ -372,7 +372,7 @@ lemma χ_of_z'_eq_z' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 lemma χ_of_v'_eq_z'
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let v := v' sq_ne_pm_two hq_card hq_mod P
@@ -384,7 +384,7 @@ lemma χ_of_v'_eq_z'
 lemma X'_eq_χ_of_v'_mul_u'
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let v := v' sq_ne_pm_two hq_card hq_mod P
@@ -415,7 +415,7 @@ lemma X'_eq_χ_of_v'_mul_u'
 lemma Y'_pow_two_eq_χ_of_v'_mul_v'
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -451,7 +451,7 @@ lemma Y'_pow_two_eq_χ_of_v'_mul_v'
 lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -465,7 +465,7 @@ lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
 lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -478,7 +478,7 @@ lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
 lemma u'_pow_two_add_one_div_c_pow_two_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) :
+    (P : {p : F × F // p ∈ EOverF s}) :
     let u := u' sq_ne_pm_two hq_card hq_mod P
     let c := c s
     u ^ 2 + 1 / c ^ 2 ≠ 0 := by
@@ -495,7 +495,7 @@ lemma u'_pow_two_add_one_div_c_pow_two_ne_zero
 lemma Y'_observation1
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -524,7 +524,7 @@ lemma Y'_observation1
 lemma Y'_observation2
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let Y := Y' sq_ne_pm_two hq_card hq_mod P
@@ -560,14 +560,14 @@ section t'
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 def t' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+    (P : {p : F × F // p ∈ EOverF s}) : F :=
   let u := u' sq_ne_pm_two hq_card hq_mod P
   (1 - u) / (1 + u)
 
 lemma t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let t := t' sq_ne_pm_two hq_card hq_mod P
@@ -594,7 +594,7 @@ lemma t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
 
 lemma one_add_t'_ne_zero (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P q
     let t := t' sq_ne_pm_two hq_card hq_mod P
@@ -604,7 +604,7 @@ lemma one_add_t'_ne_zero (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s
 lemma u'_eq_one_sub_t'_div_one_add_t'
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
     let X := Xbar s P.val q
     let u := u' sq_ne_pm_two hq_card hq_mod P
@@ -620,7 +620,7 @@ lemma u'_eq_one_sub_t'_div_one_add_t'
 
 lemma u'_eq_u (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X := Xbar s P q
@@ -635,7 +635,7 @@ lemma u'_eq_u (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) �
 
 lemma v'_eq_v (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X := Xbar s P.val q;
@@ -650,7 +650,7 @@ lemma v'_eq_v (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) �
 
 lemma X'_eq_X (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X := Xbar s P q;
@@ -674,7 +674,7 @@ lemma X'_eq_X (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) �
 
 lemma Y'_eq_Y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X := Xbar s P q;
@@ -703,7 +703,7 @@ section x'
 /-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
 def x' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+    (P : {p : F × F // p ∈ EOverF s}) : F :=
   let c := c s
   let X' := Xbar s P q
   let Y' := Y' sq_ne_pm_two hq_card hq_mod P
@@ -711,7 +711,7 @@ def x' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
 
 lemma x'_eq_x (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X' := Xbar s P q
@@ -734,14 +734,14 @@ lemma x'_eq_x (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) �
 def y' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q)
     (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) : F :=
+    (P : {p : F × F // p ∈ EOverF s}) : F :=
   let X' := Xbar s P q
   let r := r s
   (r * X' - (1 + X') ^ 2) / (r * X' + (1 + X') ^ 2)
 
 lemma y'_eq_y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X' := Xbar s P q
@@ -761,7 +761,7 @@ lemma y'_eq_y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) �
 theorem x'_and_y'_fulfill_curve_equation
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X' := Xbar s P q
@@ -785,7 +785,7 @@ theorem x'_and_y'_fulfill_curve_equation
 
 lemma y_eq_y_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X' := Xbar s P q
@@ -806,7 +806,7 @@ lemma y_eq_y_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 
 
 lemma x_eq_x_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X' := Xbar s P q
@@ -840,7 +840,7 @@ lemma x_eq_x_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 
 
 lemma x_y_of_P_eq_x_y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF sq_ne_pm_two hq_card hq_mod}) (P_props : ϕOverFProps s P)
+    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
     (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
     (hXXbar :
       let X' := Xbar s P q

@@ -20,7 +20,7 @@ point of Section 4.1.
 Nothing here mentions Elligator: Curve1174 is described directly as the complete Edwards curve
 $$ x ^ 2 + y ^ 2 = 1 - 1174 x ^ 2 y ^ 2 $$
 over the prime field $\mathbb{F}_q$ with $q = 2 ^ {251} - 9$, using only the general Edwards curve
-API of `Elligator.ECCPrimitives.EdwardsCurve`. That the Elligator 1 construction reproduces exactly
+API of `Elligator.Primitives.ECC.EdwardsCurve`. That the Elligator 1 construction reproduces exactly
 this curve from its parameter `s` is the subject of `Elligator.Elligator1.Curve1174`.
 All numerical statements are checked by kernel computation. Field elements of `F1174` are `Fin`
 residues, so `decide` evaluates ring operations directly; the two places where an exponent is

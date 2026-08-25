@@ -378,7 +378,7 @@ records that this point lies on the Edwards curve. -/
 def ι (τ : (@S q))
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    {P : F × F // P ∈ EOverF sq_ne_pm_two hq_card hq_mod} :=
+    {P : F × F // P ∈ EOverF s} :=
   ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The admissible string set `S` has `(q + 1) / 2` elements.
