@@ -11,7 +11,7 @@ public import Elligator.Elligator1.CurveParameters
 /-!
 # The Edwards curve used by Elligator 1
 
-This file specializes the general Edwards curve API of `Elligator.ECCPrimitives.EdwardsCurve` to
+This file specializes the general Edwards curve API of `Elligator.Primitives.ECC.EdwardsCurve` to
 the curve and coefficient produced by Elligator 1.
 
 ## Main results

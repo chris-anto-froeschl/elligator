@@ -19,9 +19,6 @@ point `(x, y)` on the complete Edwards curve. The exceptional inputs `t = ±1` a
 
 * `u_defined`, `Y_defined`, `x_defined`, `y_defined`: the denominators in the paper's formulas
   are nonzero, so the displayed expressions are defined.
-* `map_fulfills_auxiliary_equation`: the auxiliary coordinates satisfy `Y² = X⁵ + (r² - 2)X³ + X`.
-* `variable_mul_ne_zero`: the nonvanishing assertion `u * v * X * Y * x * (y + 1) ≠ 0`
-  from Theorem 1.
 * `map_fulfills_curve_equation`: the resulting `(x, y)` satisfies the Edwards curve equation.
 * `ϕ`: Definition 2's total map from field elements to points on the Edwards curve.
 
@@ -104,48 +101,6 @@ theorem y_defined (t : {t : F // t ≠ 1 ∧ t ≠ -1})
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     ((r s) * (X t s) + (1 + (X t s)) ^ 2) ≠ 0 :=
   y_divisor_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t
-
-/-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
-`Y² = X⁵ + (r² - 2)X³ + X`. -/
-@[blueprint
-  (title := "$(X, Y)$ lies on the auxiliary curve")
-  (statement := /--
-  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let $r$, $X$,
-  $Y$ be as above. Then
-  $$
-  Y ^ 2 = X ^ 5 + (r ^ 2 - 2)X ^ 3 + X
-  $$
-  -/)]
-theorem map_fulfills_auxiliary_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let r := r s
-    let X := X t s
-    let Y := Y t s q
-    Y ^ 2 = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X :=
-  helper_eq t hs_ne_zero hq_card hq_mod
-
-/-- The quantities constructed for a nonexceptional input are all nonzero as asserted in
-Theorem 1: `u * v * X * Y * x * (y + 1) ≠ 0`. -/
-@[blueprint
-  (title := "Nonvanishing of the auxiliary quantities")
-  (statement := /--
-  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let
-  $u, v, X, Y, x, y$ be as above. Then
-  $$
-  uvXYx(y + 1) \neq 0 .
-  $$
-  -/)]
-theorem variable_mul_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let u := u t
-    let v := v t s
-    let X := X t s
-    let Y := Y t s q
-    let x := x t s q
-    let y := y t s
-    u * v * X  * Y * x * (y + 1) ≠ 0 :=
-  variable_mul_ne_zero' t hs_ne_zero sq_ne_pm_two hq_card hq_mod
 
 /-- The coordinates produced from a nonexceptional input satisfy the Edwards curve equation
 `x² + y² = 1 + d * x² * y²`. This is the final conclusion of Theorem 1. -/

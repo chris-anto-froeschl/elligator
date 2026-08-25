@@ -20,8 +20,9 @@ behavior under `t ↦ -t`.
 
 * `x`, `y`: the curve coordinates of [bernstein2013a], Section 3.2, Theorem 1.
 * `x_ne_zero`, `y_add_one_ne_zero`: nonvanishing facts needed for Definition 2's map `ϕ`.
+* `map_fulfills_auxiliary_equation`: the auxiliary coordinates satisfy `Y² = X⁵ + (r² - 2)X³ + X`.
 * `curve_equation`: `x² + y² = 1 + dx²y²`, the first conclusion of Theorem 1.
-* `variable_mul_ne_zero'`: `u·v·X·Y·x·(y+1) ≠ 0`, the second conclusion of Theorem 1.
+* `variable_mul_ne_zero`: `u·v·X·Y·x·(y+1) ≠ 0`, the second conclusion of Theorem 1.
 * `x_y_eq_zero_sign_one`: a point with `x = 0` is exactly `(0, ±1)`.
 
 ## References
@@ -138,7 +139,19 @@ def y
     let X := X t s
     (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2)
 
-lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
+/-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
+`Y² = X⁵ + (r² - 2)X³ + X`. -/
+@[blueprint
+  (title := "$(X, Y)$ lies on the auxiliary curve")
+  (statement := /--
+  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let $r$, $X$,
+  $Y$ be as above. Then
+  $$
+  Y ^ 2 = X ^ 5 + (r ^ 2 - 2)X ^ 3 + X
+  $$
+  -/)]
+theorem auxiliary_coordinates_fulfill_helper_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+    (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let r := r s
     let X := X t s
@@ -194,7 +207,8 @@ lemma y_divisor_ne_zero
   have hY_sq_eq_neg_expand : Y ^ 2 = -(1 + X) ^ 2 * X ^ 2 * (s + 2 / s) ^ 2 := by
     calc
       Y ^ 2 = X * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1) := by
-        rw [mul_add, mul_add, helper_eq t hs_ne_zero hq_card hq_mod]
+        rw [mul_add, mul_add]
+        rw [auxiliary_coordinates_fulfill_helper_equation t hs_ne_zero hq_card hq_mod]
         unfold X r
         ring
       _ = X ^ 3 * (2 * r ^ 2 + 4 * r) := by grind
@@ -272,7 +286,18 @@ lemma y_add_one_ne_zero (hs_ne_zero : s ≠ 0)
     (r_ne_zero hs_ne_zero hq_card hq_mod) (X_ne_zero hs_ne_zero hq_card hq_mod t)
   contradiction
 
-lemma variable_mul_ne_zero' (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+/-- The quantities constructed for a nonexceptional input are all nonzero as asserted in
+Theorem 1: `u * v * X * Y * x * (y + 1) ≠ 0`. -/
+@[blueprint
+  (title := "Nonvanishing of the auxiliary quantities")
+  (statement := /--
+  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let
+  $u, v, X, Y, x, y$ be as above. Then
+  $$
+  uvXYx(y + 1) \neq 0 .
+  $$
+  -/)]
+theorem map_variable_mul_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let u := u t
@@ -332,7 +357,8 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
         rw [neg_inj, ← div_left_inj' hY_sq_ne_zero, mul_comm, mul_div_assoc, div_self hY_sq_ne_zero]
         ring
     _ = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X - 2 * (r - 2) * X ^ 2 * (1 + X) ^ 2 := by
-        rw [h_c_sub_one_sq_mul_s_sq_eq, helper_eq t hs_ne_zero hq_card hq_mod]
+        rw [h_c_sub_one_sq_mul_s_sq_eq]
+        rw [auxiliary_coordinates_fulfill_helper_equation t hs_ne_zero hq_card hq_mod]
     _ = X * (r * X - (1 + X) ^ 2) ^ 2 := by ring
   have h_neg_d_mul_c_sub_one_sq_mul_s_sq_eq : -d * (c - 1) ^ 2 * s ^ 2 = 2 * (r + 2) := by
     rw [neg_d_eq_r_add_two_div_r_sub_two hs_ne_zero hq_card hq_mod, mul_assoc,
@@ -363,7 +389,7 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
       rw [sub_eq_add_neg, neg_eq_neg_one_mul, ← mul_assoc, ← mul_assoc, ← mul_assoc]
       rw [neg_eq_neg_one_mul, mul_assoc (-1)] at h_neg_d_mul_c_sub_one_sq_mul_s_sq_eq
       rw [mul_assoc, h_neg_d_mul_c_sub_one_sq_mul_s_sq_eq]
-      rw [helper_eq t hs_ne_zero hq_card hq_mod]
+      rw [auxiliary_coordinates_fulfill_helper_equation t hs_ne_zero hq_card hq_mod]
       ring
     _ = X * (r * X + (1 + X) ^ 2) ^ 2 := by ring
   have h_one_sub_d_mul_x_sq_ne_zero : (1 - d * x ^ 2) ≠ 0 := by
