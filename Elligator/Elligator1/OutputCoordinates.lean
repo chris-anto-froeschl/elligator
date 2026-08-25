@@ -11,15 +11,22 @@ public import Elligator.Elligator1.EdwardsCurve
 /-!
 # Output Coordinates
 
-TODO
+The Edwards curve coordinates `x`, `y` built from the auxiliary quantities of
+`AuxiliaryCoordinates.lean`, together with the two conclusions of Theorem 1 —
+nonvanishing of `u·v·X·Y·x·(y+1)` and the curve equation `x² + y² = 1 + dx²y²` — and their
+behavior under `t ↦ -t`.
 
 ## Main Results
 
-* TODO
+* `x`, `y`: the curve coordinates of [bernstein2013a], Section 3.2, Theorem 1.
+* `x_ne_zero`, `y_add_one_ne_zero`: nonvanishing facts needed for Definition 2's map `ϕ`.
+* `curve_equation`: `x² + y² = 1 + dx²y²`, the first conclusion of Theorem 1.
+* `variable_mul_ne_zero'`: `u·v·X·Y·x·(y+1) ≠ 0`, the second conclusion of Theorem 1.
+* `x_y_eq_zero_sign_one`: a point with `x = 0` is exactly `(0, ±1)`.
 
 ## References
 
-See [Bernstein2013a], Section 3.2, Theorem 1.
+See [bernstein2013a], Section 3.2, Theorem 1.
 -/
 
 @[expose] public section
@@ -76,13 +83,12 @@ lemma x_ne_zero [DecidableEq F]
   · apply mul_ne_zero
     · apply mul_ne_zero
       · apply mul_ne_zero
-        · intro hc_eq_one
-          have hc_eq_one' : c = 1 := by grind
-          exact (c_ne_one sq_ne_pm_two) hc_eq_one'
-        · apply hs_ne_zero
-      · apply X_ne_zero hs_ne_zero hq_card hq_mod t
-    · apply one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
-  · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
+        · intro hc_sub_eq_zero
+          exact (c_ne_one sq_ne_pm_two) (by linear_combination hc_sub_eq_zero)
+        · exact hs_ne_zero
+      · exact X_ne_zero hs_ne_zero hq_card hq_mod t
+    · exact one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
+  · exact Y_ne_zero hs_ne_zero hq_card hq_mod t
 
 lemma x_y_eq_zero_sign_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
@@ -96,10 +102,14 @@ lemma x_y_eq_zero_sign_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   change x = 0 at hx_eq_zero
   rw [← hx_eq_zero]
   have h_curve_eq : x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
-    let hP := P.prop
+    have hP := P.prop
     rw [mem_EOverF_iff] at hP
     exact hP
-  have hy_eq_pm_one : y = 1 ∨ y = -1 := by simp_all
+  -- with x = 0, the curve equation reduces to y² = 1, i.e. (y-1)(y+1) = 0.
+  have hy_sq_eq_one : y ^ 2 = 1 := by
+    rw [hx_eq_zero, zero_pow two_ne_zero, zero_add, mul_zero, zero_mul, add_zero] at h_curve_eq
+    exact h_curve_eq
+  have hy_eq_pm_one : y = 1 ∨ y = -1 := sq_eq_one_iff.mp hy_sq_eq_one
   rcases hy_eq_pm_one with h | h
   · rw [← h]; left; rfl
   · rw [← h]; right; rfl
@@ -147,11 +157,11 @@ lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
       rw [mul_pow (χ v) (u) 5, mul_pow (χ v) (u) 3]
       rw [χ_of_a_pow_n_eq_χ_a v ⟨5, by trivial⟩]
       rw [χ_of_a_pow_n_eq_χ_a v ⟨3, by trivial⟩]
-      ring_nf
+      ring
     _ = χ v * v := by rfl
-  have χ_a_mul_a_IsSquare := χ_a_mul_a_IsSquare hv_ne_zero hq_card hq_mod
+  have hχ_a_mul_a_IsSquare := χ_a_mul_a_IsSquare hv_ne_zero hq_card hq_mod
   have h_χ_v_mul_v_fixed : (χ v * v) ^ ((q + 1) / 2) = χ v * v :=
-    a_pow_q_add_one_div_two_eq_a χ_a_mul_a_IsSquare  hq_card hq_mod
+    a_pow_q_add_one_div_two_eq_a hχ_a_mul_a_IsSquare hq_card hq_mod
   let χ_of_sum := χ (u ^ 2 + 1 / c ^ 2)
   have h_Y_sq_eq_chi_v_mul_v : Y ^ 2 = χ v * v := by
     calc
@@ -183,9 +193,13 @@ lemma y_divisor_ne_zero
     Eq.symm (neg_eq_of_add_eq_zero_left h_contra)
   have hY_sq_eq_neg_expand : Y ^ 2 = -(1 + X) ^ 2 * X ^ 2 * (s + 2 / s) ^ 2 := by
     calc
-      Y ^ 2 = X * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1) := by grind [helper_eq]
+      Y ^ 2 = X * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1) := by
+        rw [mul_add, mul_add, helper_eq t hs_ne_zero hq_card hq_mod]
+        unfold X r
+        ring
       _ = X ^ 3 * (2 * r ^ 2 + 4 * r) := by grind
-      _ = r * X * X ^ 2 * (2 * r + 4) := by grind
+      _ = X ^ 3 * (2 * r ^ 2 + 4 * r) := by ring
+      _ = r * X * X ^ 2 * (2 * r + 4) := by ring
       _ = -(1 + X) ^ 2 * X ^ 2 * (s + 2 / s) ^ 2 := by
         rw [← hr_mul_X_eq_neg_expand]
         change r * X * X ^ 2 * (2 * (2 / s ^ 2 + 1 / (2 / s ^ 2)) + 4)
@@ -205,9 +219,15 @@ lemma y_divisor_ne_zero
         apply pow_ne_zero 2
         apply mul_ne_zero
         · apply mul_ne_zero
-          · apply one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
-          · apply X_ne_zero hs_ne_zero hq_card hq_mod t
-        · grind
+          · exact one_add_X_ne_zero hs_ne_zero hq_card hq_mod t
+          · exact X_ne_zero hs_ne_zero hq_card hq_mod t
+        · intro h_contra'
+          have hspow_eq_zero : s ^ 2 + 2 = 0 := by
+            rw [← div_left_inj' hs_ne_zero]
+            rw [zero_div, add_div, pow_two, mul_div_assoc, div_self hs_ne_zero, mul_one]
+            exact h_contra'
+          have hspow_ne_zero : s ^ 2 + 2 ≠ 0 := right_ne_zero_of_mul sq_ne_pm_two
+          contradiction
       rw [← div_left_inj' h_denom_ne_zero, mul_div_assoc, div_self h_denom_ne_zero, mul_one]
         at hY_sq_eq_neg_expand
       exact hY_sq_eq_neg_expand
@@ -215,7 +235,7 @@ lemma y_divisor_ne_zero
       rw [← div_pow] at h_ratio_eq_neg_one
       exact h_ratio_eq_neg_one
     rw [← h_ratio_sq_eq_neg_one, pow_two]
-    apply IsSquare.mul_self
+    exact IsSquare.mul_self _
   have h_mod_ne_three : q % 4 ≠ 3 := by
     rw [FiniteField.isSquare_neg_one_iff, hq_card] at h_isSquare_neg_one
     exact h_isSquare_neg_one
@@ -233,7 +253,14 @@ lemma y_add_one_ne_zero (hs_ne_zero : s ≠ 0)
   have hy_unfolded_eq_neg_one : (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2) = -1 := by
     change y = -1
     exact hy_eq_neg_one
-  have h_num_eq_neg_denom : r * X - (1 + X) ^ 2 = -(r * X + (1 + X) ^ 2) := by grind
+  have h_num_eq_neg_denom : r * X - (1 + X) ^ 2 = -(r * X + (1 + X) ^ 2) := by
+    rw [neg_eq_neg_one_mul, ← hy_unfolded_eq_neg_one]
+    have hdiv_ne_zero : r * X + (1 + X) ^ 2 ≠ 0 := by
+      intro h_contra'
+      rw [h_contra', div_zero, zero_eq_neg] at hy_unfolded_eq_neg_one
+      apply one_ne_zero' F at hy_unfolded_eq_neg_one
+      contradiction
+    rw [div_mul_comm, div_self hdiv_ne_zero, one_mul]
   have hr_mul_X_eq_zero : r * X = 0 := by
     rw [← add_left_inj (r * X + (1 + X) ^ 2)] at h_num_eq_neg_denom
     ring_nf at h_num_eq_neg_denom
@@ -260,12 +287,12 @@ lemma variable_mul_ne_zero' (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     · apply mul_ne_zero
       · apply mul_ne_zero
         · apply mul_ne_zero
-          · apply u_ne_zero t
-          · apply v_ne_zero hs_ne_zero hq_card hq_mod t
-        · apply X_ne_zero hs_ne_zero hq_card hq_mod t
-      · apply Y_ne_zero hs_ne_zero hq_card hq_mod t
-    · apply x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t
-  · apply y_add_one_ne_zero hs_ne_zero hq_card hq_mod t
+          · exact u_ne_zero t
+          · exact v_ne_zero hs_ne_zero hq_card hq_mod t
+        · exact X_ne_zero hs_ne_zero hq_card hq_mod t
+      · exact Y_ne_zero hs_ne_zero hq_card hq_mod t
+    · exact x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t
+  · exact y_add_one_ne_zero hs_ne_zero hq_card hq_mod t
 
 lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -281,7 +308,8 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   intro x y d
   have h_c_sub_one_sq_mul_s_sq_eq : (c - 1) ^ 2 * s ^ 2 = 2 * (r - 2) :=
     calc
-      (c - 1) ^ 2 * s ^ 2 = (c - 1) ^ 2 * (2 / c) := by grind [s_pow_two_eq_two_div_c]
+      (c - 1) ^ 2 * s ^ 2 = (c - 1) ^ 2 * (2 / c) := by
+        rw [← s_pow_two_eq_two_div_c hq_card hq_mod]
       _ = 2 * (r - 2) := by
         rw [sub_pow_two, mul_one, one_pow 2, add_mul, sub_mul]
         rw [← mul_div_assoc, one_mul, mul_comm, pow_two, ← mul_assoc]
@@ -297,9 +325,12 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
       Y ^ 2 * (1 - x ^ 2) = Y ^ 2 - (c - 1) ^ 2 * s ^ 2 * X ^ 2 * (1 + X) ^ 2 := by
         change Y ^ 2 * (1 - (((c - 1) * s * X * (1 + X)) / Y) ^ 2)
           = Y ^ 2 - (c - 1) ^ 2 * s ^ 2 * X ^ 2 * (1 + X) ^ 2
-        rw [mul_sub, mul_one]
         have hY_sq_ne_zero : Y ^ 2 ≠ 0 := pow_ne_zero 2 (Y_ne_zero hs_ne_zero hq_card hq_mod t)
-        grind
+        rw [mul_sub, mul_one, ← add_right_inj (-(Y ^ 2))]
+        repeat rw [← add_sub_assoc, neg_add_cancel, zero_sub]
+        nth_rw 2 [← mul_pow, ← mul_pow, ← mul_pow]
+        rw [neg_inj, ← div_left_inj' hY_sq_ne_zero, mul_comm, mul_div_assoc, div_self hY_sq_ne_zero]
+        ring
     _ = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X - 2 * (r - 2) * X ^ 2 * (1 + X) ^ 2 := by
         rw [h_c_sub_one_sq_mul_s_sq_eq, helper_eq t hs_ne_zero hq_card hq_mod]
     _ = X * (r * X - (1 + X) ^ 2) ^ 2 := by ring
@@ -309,7 +340,9 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     rw [mul_comm, ← mul_div_assoc, mul_assoc, mul_comm (r - 2) (r + 2), ← mul_assoc]
     have hr_sub_two_ne_zero : r - 2 ≠ 0 := by
       intro hr_sub_two_eq_zero
-      have h_c_sub_one_sq_mul_s_sq_eq_zero : (c - 1) ^ 2 * s ^ 2 = 0 := by grind
+      have h_c_sub_one_sq_mul_s_sq_eq_zero : (c - 1) ^ 2 * s ^ 2 = 0 := by
+        rw [hr_sub_two_eq_zero, mul_zero] at h_c_sub_one_sq_mul_s_sq_eq
+        exact h_c_sub_one_sq_mul_s_sq_eq
       have h_c_sub_one_sq_mul_s_sq_ne_zero : (c - 1) ^ 2 * s ^ 2 ≠ 0 := by
         apply mul_ne_zero
         · exact pow_ne_zero 2 (c_sub_one_ne_zero sq_ne_pm_two)
@@ -324,11 +357,14 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
           = Y ^ 2 - d * (c - 1) ^ 2 * s ^ 2 * X ^ 2 * (1 + X) ^ 2
         rw [mul_sub, mul_one]
         have hY_sq_ne_zero : Y ^ 2 ≠ 0 := pow_ne_zero 2 (Y_ne_zero hs_ne_zero hq_card hq_mod t)
-        rw [div_pow, ← mul_assoc, mul_comm (Y ^ 2)]
-        grind
+        rw [div_pow, mul_comm, ← mul_div_assoc, div_mul_comm, div_self hY_sq_ne_zero, one_mul]
+        ring
     _ = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X + 2 * (r + 2) * X ^ 2 * (1 + X) ^ 2 := by
+      rw [sub_eq_add_neg, neg_eq_neg_one_mul, ← mul_assoc, ← mul_assoc, ← mul_assoc]
+      rw [neg_eq_neg_one_mul, mul_assoc (-1)] at h_neg_d_mul_c_sub_one_sq_mul_s_sq_eq
+      rw [mul_assoc, h_neg_d_mul_c_sub_one_sq_mul_s_sq_eq]
       rw [helper_eq t hs_ne_zero hq_card hq_mod]
-      grind
+      ring
     _ = X * (r * X + (1 + X) ^ 2) ^ 2 := by ring
   have h_one_sub_d_mul_x_sq_ne_zero : (1 - d * x ^ 2) ≠ 0 := by
     intro h_one_sub_d_mul_x_sq_eq_zero
@@ -342,7 +378,7 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
       rw [mul_div_assoc, div_self hx_sq_ne_zero, mul_one] at h_one_sub_d_mul_x_sq_eq_zero
       rw [← mul_one 1, ← pow_two, ← div_pow _ _ 2] at h_one_sub_d_mul_x_sq_eq_zero
       rw [← h_one_sub_d_mul_x_sq_eq_zero, pow_two]
-      apply IsSquare.mul_self
+      exact IsSquare.mul_self _
     have hd_not_isSquare : ¬IsSquare d := d_nonsquare sq_ne_pm_two hq_card hq_mod
     contradiction
   have h_Y_sq_mul_one_sub_d_mul_x_sq_ne_zero : Y ^ 2 * (1 - d * x ^ 2) ≠ 0 := by
@@ -356,8 +392,8 @@ lemma curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
           have hY_sq_ne_zero : Y ^ 2 ≠ 0 := pow_ne_zero 2 (Y_ne_zero hs_ne_zero hq_card hq_mod t)
           rw [div_self hY_sq_ne_zero]
         nth_rw 1 [← one_mul (1 - x ^ 2), ← h_Y_sq_div_self_eq_one]
-        rw [mul_div_assoc, ← mul_div_mul_comm, h_Y_sq_mul_one_sub_x_sq_eq,
-          h_Y_sq_mul_one_sub_d_mul_x_sq_eq]
+        rw [mul_div_assoc, ← mul_div_mul_comm, h_Y_sq_mul_one_sub_x_sq_eq]
+        rw [h_Y_sq_mul_one_sub_d_mul_x_sq_eq]
         rw [mul_div_mul_comm X _ X _, div_self (X_ne_zero hs_ne_zero hq_card hq_mod t), one_mul]
       _ = y ^ 2 := by
         rw [← div_pow _ _ 2]

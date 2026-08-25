@@ -209,6 +209,7 @@ lemma eq_or_eq_neg_of_ϕ_eq (t t' : F)
   simp_all
 
 -- TODO order properly with main result for ϕ below
+-- Perhaps move back to var specific sections tho...
 -----------------------
 omit [Fintype F] [DecidableEq F] in
 lemma u_of_zero :
