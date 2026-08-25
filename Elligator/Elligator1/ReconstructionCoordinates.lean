@@ -313,23 +313,23 @@ lemma Y_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
         rw [v_comparison_implication2 t]
         change (χ v1) * (v1 / u1 ^ 6) = (χ v1) * v1 / u1 ^ 6
         rw [← mul_div_assoc]
-      have h_chi_u1_mul_u1_cubed_isSquare : IsSquare ((χ u1) * u1 ^ 3) := by
-        have h_chi_u1_mul_u1_cubed_ne_zero : (χ u1) * u1 ^ 3 ≠ 0 := by
+      have h_χ_u1_mul_u1_cubed_isSquare : IsSquare ((χ u1) * u1 ^ 3) := by
+        have h_χ_u1_mul_u1_cubed_ne_zero : (χ u1) * u1 ^ 3 ≠ 0 := by
           apply mul_ne_zero
           · apply χ_a_ne_zero hu1_ne_zero
           · apply pow_ne_zero 3 hu1_ne_zero
-        apply (χ_eq_one_iff_isSquare h_chi_u1_mul_u1_cubed_ne_zero hq_card hq_mod).mp
+        apply (χ_eq_one_iff_isSquare h_χ_u1_mul_u1_cubed_ne_zero hq_card hq_mod).mp
         have h_three_eq_one_add_two : (3 : ℕ) = 1 + 2 := by norm_num
         rw [h_three_eq_one_add_two, pow_add u1 1 2, ← mul_assoc, pow_one]
         rw [χ_mul, χ_mul]
         rw [χ_χ_eq_χ hq_card hq_mod]
         rw [← χ_mul, ← pow_two]
         have h_u1_sq_isSquare : IsSquare (u1 ^ 2) := IsSquare.sq u1
-        have h_chi_u1_sq_eq_one : χ (u1 ^ 2) = 1 := by
+        have h_χ_u1_sq_eq_one : χ (u1 ^ 2) = 1 := by
           apply (χ_eq_one_iff_isSquare (pow_ne_zero 2 hu1_ne_zero) hq_card hq_mod).mpr
           exact h_u1_sq_isSquare
-        simp [h_chi_u1_sq_eq_one]
-      have h_u1_pow6_pow_eq_chi_u1_mul_u1_cubed : (u1 ^ 6) ^ ((q + 1) / 4) = (χ u1) * u1 ^ 3 := by
+        simp [h_χ_u1_sq_eq_one]
+      have h_u1_pow6_pow_eq_χ_u1_mul_u1_cubed : (u1 ^ 6) ^ ((q + 1) / 4) = (χ u1) * u1 ^ 3 := by
         have h_six_eq_three_mul_two : 6 = 3 * 2 := by norm_num
         rw [h_six_eq_three_mul_two, ← pow_mul, mul_assoc, mul_comm, pow_mul, mul_comm]
         rw [add_comm, one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
@@ -340,7 +340,7 @@ lemma Y_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
         ((χ v2) * v2) ^ ((q + 1) / 4) = ((χ v1) * v1 / u1 ^ 6) ^ ((q + 1) / 4) := by
           rw [h_v2_mul_v2_eq_v1_mul_v1_div_u1_pow6]
         _ = ((χ v1) * v1) ^ ((q + 1) / 4) * (χ u1) / u1 ^ 3 := by
-          rw [div_pow, h_u1_pow6_pow_eq_chi_u1_mul_u1_cubed]
+          rw [div_pow, h_u1_pow6_pow_eq_χ_u1_mul_u1_cubed]
           nth_rw 2 [one_div_χ_of_a_eq_χ_a]
           grind
   have second_factor : (χ v2) = (χ v1) := v_comparison_implication4 t

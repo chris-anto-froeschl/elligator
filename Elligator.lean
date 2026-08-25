@@ -2,7 +2,6 @@ import Elligator.Basic
 import Elligator.Elligator1.AuxiliaryCoordinates
 import Elligator.Elligator1.Curve1174
 import Elligator.Elligator1.CurveParameters
-import Elligator.Elligator1.DecodingFunction
 import Elligator.Elligator1.EdwardsCurve
 import Elligator.Elligator1.Example
 import Elligator.Elligator1.InvertedMap

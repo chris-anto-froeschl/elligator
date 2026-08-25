@@ -7,7 +7,6 @@ module
 
 public import Elligator.Primitives.ECC.Curves.Curve1174
 public import Elligator.Elligator1.Map
-public import Elligator.Elligator1.DecodingFunction
 public import Elligator.Elligator1.InvertedMap
 public import Elligator.Elligator1.StringEncoding
 public meta import Mathlib.Data.ZMod.Defs
@@ -43,7 +42,7 @@ residues, so `decide` evaluates ring operations directly.
 * `c1174_eq`, `r1174_eq`: the values of the derived parameters `c = 2/s ^ 2` and `r = c + 1/c`.
 * `d1174_eq`: `d = -(c + 1) ^ 2/(c - 1) ^ 2 = -1174`, i.e. the Elligator 1 curve for `(q, s)` is
   Curve1174, `curve_s1174_eq`.
-* `chi_d1174_eq_neg_one`, `d1174_not_isSquare`: the Elligator 1 coefficient is a non-square.
+* `χ_d1174_eq_neg_one`, `d1174_not_isSquare`: the Elligator 1 coefficient is a non-square.
 * `decode1174_mem_affinePoints`, `decode1174_equation`: Theorem 1 and Definition 2 for Curve1174.
 * `decode1174_neg`, `decode1174_preimages`: Theorem 3 for Curve1174.
 * `b1174`, `S1174_card`, `encode1174_injective`, `encode1174_bijective`: Theorem 4 for Curve1174.
@@ -150,9 +149,9 @@ lemma d1174_eq : d s1174 = -1174 := by
   decide
 
 /-- The quadratic character of the Elligator 1 coefficient for `(q, s)` is `-1`. -/
-lemma chi_d1174_eq_neg_one : χ (d s1174) = -1 := by
+lemma χ_d1174_eq_neg_one : χ (d s1174) = -1 := by
   rw [d1174_eq]
-  exact chi_neg1174_eq_neg_one
+  exact χ_neg1174_eq_neg_one
 
 /-- The Elligator 1 coefficient for `(q, s)` is not a square in `F1174`. -/
 lemma d1174_not_isSquare : ¬IsSquare (d s1174) := by
@@ -172,7 +171,7 @@ lemma curve_s1174_isValid : (curve s1174).IsValid :=
 
 /-! ### The Elligator 1 maps for Curve1174 -/
 
-/-- The Elligator 1 decoding function `φ : F_q → E(F_q)` of Definition 2, for Curve1174. -/
+/-- The Elligator 1 decoding function `ϕ : F_q → E(F_q)` of Definition 2, for Curve1174. -/
 @[blueprint "def:decode1174"
   (title := "The Curve1174 decoding function")
   (statement := /--
@@ -180,7 +179,7 @@ lemma curve_s1174_isValid : (curve s1174).IsValid :=
   Curve1174.
   -/)]
 def decode1174 (t : F1174) : F1174 × F1174 :=
-  DecodingFunction t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
+  ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
 
 /-- Theorem 1 for Curve1174: every decoded value is a point of the curve. -/
 lemma decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.affinePoints :=

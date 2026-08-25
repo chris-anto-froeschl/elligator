@@ -38,7 +38,7 @@ modular exponentiation of `Elligator.PrimalityCertificate`.
 * `prime_q1174`, `card_F1174`, `q1174_mod_four`: `F1174` is a field with `q = 2 ^ 251 - 9`
   elements and `q ≡ 3 (mod 4)`.
 * `curve1174_equation`, `curve1174_isValid`: the defining equation and nonsingularity of the model.
-* `chi_neg1174_eq_neg_one`, `neg1174_not_isSquare`: `-1174` is a non-square in `F1174`, which is
+* `χ_neg1174_eq_neg_one`, `neg1174_not_isSquare`: `-1174` is a non-square in `F1174`, which is
   the completeness criterion quoted in Section 4.1.
 * `basePointV_montgomery`, `basePoint1174_mem_affinePoints`: the point `(U, V) = (4, V)` of
   Section 4.1 lies on the Montgomery model, and the corresponding point `(4/V, 3/5)` lies on
@@ -135,7 +135,7 @@ lemma curve1174_isValid : curve1174.IsValid := by
   (statement := /--
   The quadratic character of the Edwards coefficient satisfies $\chi(-1174) = -1$.
   -/)]
-lemma chi_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
+lemma χ_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
   have hneg :
     ((3618502788666131106986593281521497120414687020801267626233049500247285300065 : ℕ) : F1174)
     = -1174 := by decide
@@ -157,7 +157,7 @@ lemma neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
   intro hsq
   have hne : (-1174 : F1174) ≠ 0 := by decide
   have h1 : χ (-1174 : F1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174 q1174_mod_four).2 hsq
-  rw [chi_neg1174_eq_neg_one] at h1
+  rw [χ_neg1174_eq_neg_one] at h1
   exact absurd h1 (by decide)
 
 /-! ### The base point -/

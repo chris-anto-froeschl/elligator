@@ -6,7 +6,6 @@ Authors: Chris Anto Fröschl
 module
 
 public meta import Elligator.Elligator1.Map
-public import Elligator.Elligator1.DecodingFunction
 public import Elligator.Elligator1.InvertedMap
 public import Elligator.Primitives.ECC.Curves.Curve1174Prime
 public meta import Elligator.Elligator1.StringEncoding

@@ -19,7 +19,7 @@ point `(x, y)` on the complete Edwards curve. The exceptional inputs `t = ±1` a
 
 * `u_defined`, `Y_defined`, `x_defined`, `y_defined`: the denominators in the paper's formulas
   are nonzero, so the displayed expressions are defined.
-* `map_fulfills_helper_equation`: the auxiliary coordinates satisfy `Y² = X⁵ + (r² - 2)X³ + X`.
+* `map_fulfills_auxiliary_equation`: the auxiliary coordinates satisfy `Y² = X⁵ + (r² - 2)X³ + X`.
 * `variable_mul_ne_zero`: the nonvanishing assertion `u * v * X * Y * x * (y + 1) ≠ 0`
   from Theorem 1.
 * `map_fulfills_curve_equation`: the resulting `(x, y)` satisfies the Edwards curve equation.
@@ -39,11 +39,10 @@ open Elligator.Elligator1.CurveParameters
 open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 
-variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
+variable {F : Type*} [Field F]
 variable {s : F}
 variable {q : ℕ}
 
-omit [Fintype F] [DecidableEq F] in
 @[blueprint
   (title := "$u$ is defined")
   (statement := /--
@@ -57,7 +56,8 @@ omit [Fintype F] [DecidableEq F] in
 theorem u_defined (t : {t : F // t ≠ 1 ∧ t ≠ -1}) : 1 + t.val ≠ 0 :=
   FiniteFieldBasic.one_add_t_ne_zero t
 
-omit [DecidableEq F] in
+variable [Fintype F]
+
 @[blueprint
   (title := "$Y$ is defined")
   (statement := /--
@@ -71,6 +71,8 @@ theorem Y_defined (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     (c s) ^ 2 ≠ 0 :=
   pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
+
+variable [DecidableEq F]
 
 @[blueprint
   (title := "$x$ is defined")

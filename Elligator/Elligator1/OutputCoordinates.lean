@@ -149,7 +149,7 @@ lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
   let u := u t
   let v := v t s
   have hv_ne_zero := v_ne_zero hs_ne_zero hq_card hq_mod t
-  have h_X_expand_eq_chi_v_mul_v : X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X = χ v * v := by
+  have h_X_expand_eq_χ_v_mul_v : X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X = χ v * v := by
     calc
     X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X = χ v * (u ^ 5 + (r ^ 2 - 2) * u ^ 3 + u) := by
       change (χ v * u) ^ 5 + (r ^ 2 - 2) * (χ v * u) ^ 3 + (χ v * u)
@@ -163,7 +163,7 @@ lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
   have h_χ_v_mul_v_fixed : (χ v * v) ^ ((q + 1) / 2) = χ v * v :=
     a_pow_q_add_one_div_two_eq_a hχ_a_mul_a_IsSquare hq_card hq_mod
   let χ_of_sum := χ (u ^ 2 + 1 / c ^ 2)
-  have h_Y_sq_eq_chi_v_mul_v : Y ^ 2 = χ v * v := by
+  have h_Y_sq_eq_χ_v_mul_v : Y ^ 2 = χ v * v := by
     calc
       Y ^ 2 = (χ v * v) ^ ((q + 1) / 2) * (χ v) ^ 2 * χ_of_sum ^ 2 := by
         change ((χ v * v) ^ ((q + 1) / 4) * χ v * χ_of_sum) ^ 2
@@ -176,8 +176,8 @@ lemma helper_eq (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
           (v_factored_third_factor_ne_zero hs_ne_zero hq_card hq_mod t) ⟨2, even_two⟩]
         rw [mul_one]
       _ = χ v * v := by rw [h_χ_v_mul_v_fixed, mul_one]
-  rw [h_X_expand_eq_chi_v_mul_v]
-  exact h_Y_sq_eq_chi_v_mul_v
+  rw [h_X_expand_eq_χ_v_mul_v]
+  exact h_Y_sq_eq_χ_v_mul_v
 
 lemma y_divisor_ne_zero
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
