@@ -6,15 +6,30 @@ by Daniel J. Bernstein, Mike Hamburg, Anna Krasnova, and Tanja Lange.
 
 ## Translation
 
-| Original     | Formalization File                    |
-|--------------|---------------------------------------|
-| Theorem 1    | [Elligator.Elligator1.Map](https://chris-anto-froeschl.github.io/elligator/docs/Elligator/Elligator1/DecodingFunction.html)              |
-| Definition 2 | [Elligator.Elligator1.DecodingFunction](https://chris-anto-froeschl.github.io/elligator/docs/Elligator/Elligator1/DecodingFunction.html) |
-| Theorem 3    | [Elligator.Elligator1.InvertedMap](https://chris-anto-froeschl.github.io/elligator/docs/Elligator/Elligator1/InvertedMap.html)      |
-| Theorem 4    | [Elligator.Elligator1.StringEncoding](https://chris-anto-froeschl.github.io/elligator/docs/Elligator/Elligator1/InvertedMap.html)   |
-| Theorem 5    | TODO                                  |
-| Definition 6 | TODO                                  |
-| Theorem 7    | TODO                                  |
-| Theorem 8    | TODO                                  |
-| Section 4    | [Elligator.Elligator1.Curve1174](https://chris-anto-froeschl.github.io/elligator/docs/Elligator/Elligator1/Curve1174.html) |
+```
+├── Basic.lean
+├── Elligator1                                 -- Chapter 3 and 4
+│   ├── AuxiliaryCoordinates.lean              -- Theorem 1 facts about `u`, `v`, `X`, `Y` 
+│   ├── Curve1174.lean                         -- Chapter 4
+│   ├── CurveParameters.lean                   -- Theorem 1 facts about `c`, `r`, `d`
+│   ├── EdwardsCurve.lean                      
+│   ├── Example.lean                           -- Showcase of Elligator 1 usage
+│   ├── InvertedMap.lean                       -- Theorem 3
+│   ├── Map.lean                               -- Theorem 1 and Definition 2
+│   ├── OutputCoordinates.lean                 -- Theorem 1 facts about `x`, `y`
+│   ├── PhiOverFCharacterization.lean
+│   ├── ReconstructionCoordinates.lean         -- Theorem 3 proof part A
+│   ├── ReverseProofVehicle.lean               -- Theorem 3 proof part C
+│   ├── StringEncoding.lean                    -- Theorem 4
+│   └── XbarConsequences.lean
+├── FiniteFieldBasic.lean
+├── LegendreSymbol.lean
+└── Primitives
+    ├── ECC
+    │   ├── Curves
+    │   │   ├── Curve1174.lean
+    │   │   └── Curve1174Prime.lean
+    │   └── EdwardsCurve.lean
+    └── PrimalityCertificate.lean
+```
 
