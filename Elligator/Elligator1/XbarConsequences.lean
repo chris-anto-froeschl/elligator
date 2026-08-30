@@ -40,7 +40,7 @@ open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
 open Elligator.Elligator1.PhiOverFCharacterization
 
-lemma Xbar_h1
+lemma Xbar_sqrt_property
   (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
     (P : {P : F × F // ϕOverFProps s P}) :
     let η_of_P := η P.val
@@ -60,17 +60,17 @@ lemma Xbar_h1
   nth_rw 2 [add_comm]
   rw [a_pow_q_add_one_div_two_eq_a P.prop.2.1 hq_card hq_mod]
 
-lemma Xbar_h2 (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
+lemma Xbar_quadratic_eq_of_η (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
     (P : {P : F × F // ϕOverFProps s P}) :
     let η := η P.val
     let r := r s
     let Xbar := Xbar s P q
     Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 := by
   intro η r Xbar
-  have h := Xbar_h1 hq_card hq_mod P
+  have h := Xbar_sqrt_property hq_card hq_mod P
   grind
 
-lemma Xbar_h3
+lemma Xbar_eq_X_or_X'_factored
     (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
@@ -94,9 +94,9 @@ lemma Xbar_h3
       rw [mul_add, mul_comm X _]
       rw [X_comparison_implication2 t hs_ne_zero hq_card hq_mod]
       ring
-    _ = 0 := Xbar_h2 hq_card hq_mod ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
+    _ = 0 := Xbar_quadratic_eq_of_η hq_card hq_mod ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
 
-lemma Xbar_h4
+lemma Xbar_eq_X_or_eq_X'
     (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
@@ -108,10 +108,10 @@ lemma Xbar_h4
     let Xbar := Xbar s P q
     Xbar = X ∨ Xbar = X' := by
   intro t1 t2 P X' X Xbar
-  have h := Xbar_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  have h := Xbar_eq_X_or_X'_factored t hs_ne_zero sq_ne_pm_two hq_card hq_mod
   grind
 
-lemma ubar_h1 (t : { t : F // t ≠ 1 ∧ t ≠ -1})
+lemma ubar_eq_u_or_eq_u' (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
@@ -121,14 +121,14 @@ lemma ubar_h1 (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     let ubar := ubar s P.val q
     ubar = u ∨ ubar = u' := by
   intro P t_h u' u ubar
-  rcases (Xbar_h4 t hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
+  rcases (Xbar_eq_X_or_eq_X' t hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
   · left
     exact ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
   · right
     exact ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
 
 /-- The key step: rewriting `1 + ubar(ϕ(t))` in the main case (t ≠ ±1) to show it is ne_zero,
-    using `ubar_h1` which gives `ubar = u(t)` or `ubar = u(-t)`. -/
+    using `ubar_eq_u_or_eq_u'` which gives `ubar = u(t)` or `ubar = u(-t)`. -/
 lemma one_add_ubar_ne_zero_main_case (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hs_ne_zero : (s : F) ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
@@ -137,7 +137,7 @@ lemma one_add_ubar_ne_zero_main_case (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     1 + ubar ≠ 0 := by
   intro P ubar
   unfold ubar
-  obtain h|h := ubar_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  obtain h|h := ubar_eq_u_or_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod
   · rw [h]
     exact one_add_u_ne_zero t hq_card hq_mod
   · rw [h]
@@ -166,7 +166,7 @@ lemma Xbar_ne_zero
     let Xbar := Xbar s P q
     Xbar ≠ 0 := by
   intro Xbar
-  have h := Xbar_h2 hq_card hq_mod P
+  have h := Xbar_quadratic_eq_of_η hq_card hq_mod P
   let η := η P.val
   let r := r s
   change Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 at h
@@ -182,7 +182,7 @@ lemma y_divisor_ne_zero_with_Xbar_for_X (hs_ne_zero : s ≠ 0)
     r * Xbar + (1 + Xbar) ^ 2 ≠ 0 := by
   intro r Xbar h1
   let η := η P.val
-  have h2 := Xbar_h2 hq_card hq_mod P
+  have h2 := Xbar_quadratic_eq_of_η hq_card hq_mod P
   change Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 at h2
   let y := P.val.2
   have h3 : 2 * η = 1 := by
@@ -204,7 +204,7 @@ lemma Xbar_ne_neg_one (hs_ne_zero : s ≠ 0)
     Xbar ≠ -1 := by
   intro Xbar h1
   let η := η P.val
-  let Xbar_equation := Xbar_h2 hq_card hq_mod P
+  let Xbar_equation := Xbar_quadratic_eq_of_η hq_card hq_mod P
   let r := r s
   let P_prop := P.prop
   let y := P.val.2
@@ -251,7 +251,7 @@ lemma y_with_Xbar (hs_ne_zero : s ≠ 0)
     let y := P.val.2
     y = (r * Xbar - (1 + Xbar) ^ 2) / (r * Xbar + (1 + Xbar) ^ 2) := by
   intro Xbar r y
-  let Xbar_equation := Xbar_h2 hq_card hq_mod P
+  let Xbar_equation := Xbar_quadratic_eq_of_η hq_card hq_mod P
   let η := η P.val
   let y_add_one_ne_zero := P.prop.1
   let Xbar_ne_zero := Xbar_ne_zero hq_card hq_mod P
@@ -309,7 +309,7 @@ lemma η_mul_r_eq_neg_two_of_Xbar_eq_one
     let r := r s
     Xbar = 1 → η * r = -2 := by
   intro η  Xbar r Xbar_h
-  let h1 := Xbar_h2 hq_card hq_mod P
+  let h1 := Xbar_quadratic_eq_of_η hq_card hq_mod P
   let two_ne_zero := two_ne_zero hq_card hq_mod
   change Xbar ^ 2 + 2 * (1 + η *r) * Xbar + 1 = 0 at h1
   rw [Xbar_h, ← add_left_inj (-4), ← div_left_inj' two_ne_zero] at h1
@@ -552,7 +552,7 @@ lemma tbar_in_t_or_neg_t (t : F)
     tbar_of_P = t ∨ tbar_of_P = t' := by
   intro P t' tbar_of_P
   by_cases h : t ≠ 1 ∧ t ≠ -1
-  · rcases (Xbar_h4 ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h1 | h1
+  · rcases (Xbar_eq_X_or_eq_X' ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h1 | h1
     · left
       exact tbar_eq_t ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
     · right

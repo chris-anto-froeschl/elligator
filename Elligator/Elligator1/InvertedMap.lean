@@ -50,6 +50,30 @@ variable {s : F}
 variable {q : ℕ}
 
 ----------------------------------
+-- TODO move
+omit [Fintype F] [DecidableEq F] in
+lemma x_y_eq_zero_sign_one (P : {P : F × F // P ∈ EOverF s})
+    (hx_eq_zero : P.val.1 = 0) :
+    P.val = ((0 : F), (1 : F)) ∨ P.val = ((0 : F), (-1 : F)) := by
+  let d := d s
+  let x := P.val.1
+  let y := P.val.2
+  change (x, y) = (0, 1) ∨ (x, y) = (0, -1)
+  change x = 0 at hx_eq_zero
+  rw [← hx_eq_zero]
+  have h_curve_eq : x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2 := by
+    have hP := P.prop
+    rw [mem_EOverF_iff] at hP
+    exact hP
+  -- with x = 0, the curve equation reduces to y² = 1, i.e. (y-1)(y+1) = 0.
+  have hy_sq_eq_one : y ^ 2 = 1 := by
+    rw [hx_eq_zero, zero_pow two_ne_zero, zero_add, mul_zero, zero_mul, add_zero] at h_curve_eq
+    exact h_curve_eq
+  have hy_eq_pm_one : y = 1 ∨ y = -1 := sq_eq_one_iff.mp hy_sq_eq_one
+  rcases hy_eq_pm_one with h | h
+  · rw [← h]; left; rfl
+  · rw [← h]; right; rfl
+
 
 lemma x_y_eq_zero_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
@@ -59,7 +83,7 @@ lemma x_y_eq_zero_one (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
   let x := P.val.1
   let y := P.val.2
   have h : y + 1 ≠ 0 := P_props.1
-  let h' := x_y_eq_zero_sign_one sq_ne_pm_two hq_card hq_mod P x_eq_zero
+  let h' := x_y_eq_zero_sign_one P x_eq_zero
   change (x, y) = (0, 1)
   rcases h' with h'' | h''
   · exact h''

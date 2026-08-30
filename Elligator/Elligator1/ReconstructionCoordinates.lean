@@ -11,22 +11,31 @@ public import Mathlib.Algebra.QuadraticDiscriminant
 /-!
 # Reconstruction Coordinates
 
-TODO
+The quantities `η`, `X̄` (`Xbar`), `z`, `ū` (`ubar`), `t̄` (`tbar`) reconstructed from a curve
+point, mirroring the forward chain `u, v, X, Y, t` of `AuxiliaryCoordinates.lean` in reverse.
+Together with the base-case (`t = ±1`) values of each and the `X ↔ X̄` relation needed to prove
+`X̄` well-defined.
 
 ## Main Results
 
-* TODO
+* `η`, `Xbar`, `z`, `ubar`, `tbar`: the reconstruction quantities of [bernstein2013a],
+  Section 3.3, Theorem 3.
+* `X_quadratic_eq_of_y`, `X_quadratic_eq_of_η`, `X_add_inv_X_eq_neg_two_mul_one_add_η_mul_r`: relate `η` back to the forward-map quantities `X`, `y`.
+* `X_comparison_implication`, `X_comparison_implication2`: `X`'s behavior under `t ↦ -t`,
+  restated in terms of `η · r`.
+* `ubar_eq_u`, `ubar_eq_u'`, `tbar_eq_t`, `tbar_eq_t'`: identify the reconstructed quantities
+  with the forward-map values at `t` or `-t`, the key step of Theorem 3's inversion proof.
 
 ## References
 
-See [Bernstein2013a], Section 3.2, Theorem 1.
+See [bernstein2013a], Section 3.3, Theorem 3.
 -/
 
 @[expose] public section
 
 namespace Elligator.Elligator1.ReconstructionCoordinates
 
-variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
+variable {F : Type*} [Field F]
 variable {s : F}
 variable {q : ℕ}
 
@@ -37,6 +46,8 @@ open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 
 section η
+
+variable [Fintype F] [DecidableEq F]
 
 /-- η(s, q, point) is a function defined in the paper.
 
@@ -54,9 +65,8 @@ def η (P : F × F) : F :=
     let y := P.snd
     (y - 1) / (2 * (y + 1))
 
--- Used in Theorem 3 Proof B part as implication for P_in_ϕOverF_with_prop2_main_case
--- argument.
-lemma y_h1 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+-- Used in Theorem 3 Proof B part as implication for P_in_ϕOverF_with_prop2_main_case argument.
+lemma X_quadratic_eq_of_y (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let y := y t s
@@ -68,7 +78,7 @@ lemma y_h1 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   change (X ^ 2 + (2 + r * (y - 1) / (y + 1)) * X + 1) * (y + 1) = 0 * (y + 1)
   repeat rw [add_mul]
   rw [zero_mul]
-  have h1 : (2 * X * (y + 1) + r * (y - 1) / (y + 1) * X * (y + 1))
+  have h_factor_X : (2 * X * (y + 1) + r * (y - 1) / (y + 1) * X * (y + 1))
       = (2 * (y + 1) + r * (y - 1)) * X := by
     rw [add_mul _ _ X, ← div_left_inj' (y_add_one_ne_zero hs_ne_zero hq_card hq_mod t)]
     change (2 * X * (y + 1) + r * (y - 1) / (y + 1) * X * (y + 1)) / (y + 1)
@@ -78,8 +88,8 @@ lemma y_h1 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     nth_rw 2 [mul_div_assoc]
     rw [div_self (y_add_one_ne_zero hs_ne_zero hq_card hq_mod t)]
     ring
-  have h2 : (2 * (y + 1) + r * (y - 1)) = (y * r - r + 2 * y + 2) := by ring_nf
-  rw [h1, h2, mul_add, add_mul]
+  have h_expand_coefficient : (2 * (y + 1) + r * (y - 1)) = (y * r - r + 2 * y + 2) := by ring_nf
+  rw [h_factor_X, h_expand_coefficient, mul_add, add_mul]
   ring_nf
   rw [← add_right_inj (r * X - 1 - 2 * X - X ^ 2)]
   ring_nf
@@ -88,17 +98,17 @@ lemma y_h1 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   rw [add_assoc, ← mul_add y]
   rw [add_assoc, ← mul_add y, add_comm (X ^ 2) 1, ← add_assoc, add_comm (X * 2) 1]
   rw [mul_comm X 2]
-  have h3 : 1 + 2 * X + X ^ 2 = (1 + X) ^ 2 := by ring_nf
-  have h4 : -1 + r * X - 2 * X - X ^ 2 = r * X - (1 + 2 * X + X ^ 2) := by ring_nf
-  rw [h4, h3]
+  have h_perfect_square : 1 + 2 * X + X ^ 2 = (1 + X) ^ 2 := by ring
+  have h_regroup : -1 + r * X - 2 * X - X ^ 2 = r * X - (1 + 2 * X + X ^ 2) := by ring
+  rw [h_regroup, h_perfect_square]
   rw [← mul_assoc, mul_comm, ← mul_add]
   rw [← div_left_inj' (y_divisor_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t)]
   change (y * (r * X + (1 + X) ^ 2)) / (r * X + (1 + X) ^ 2) = y
   rw [mul_div_assoc]
   rw [div_self (y_divisor_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t), mul_one]
 
--- Implicated by y_h1. Saved for further proof arguments in Theorem 3 Proof B
-lemma y_h2 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+-- Implicated by X_quadratic_eq_of_y. Saved for further proof arguments in Theorem 3 Proof B
+lemma X_quadratic_eq_of_η (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let r := r s
@@ -124,10 +134,10 @@ lemma y_h2 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
       rw [div_eq_mul_inv 1 2, mul_one, one_mul, mul_assoc, ← mul_assoc]
       rw [mul_inv_cancel₀ (two_ne_zero hq_card hq_mod)]
       ring
-    _ = 0 := by rw [y_h1 t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+    _ = 0 := by rw [X_quadratic_eq_of_y t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
 
--- Implicated by y_h2.
-lemma y_h3 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
+-- Implicated by X_quadratic_eq_of_η.
+lemma X_add_inv_X_eq_neg_two_mul_one_add_η_mul_r (t : {n : F // n ≠ 1 ∧ n ≠ -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
     let r := r s
@@ -139,12 +149,12 @@ lemma y_h3 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   rw [← add_right_inj (2 * (1 + η * r))]
   rw [← mul_left_inj' (X_ne_zero hs_ne_zero hq_card hq_mod t)]
   change (2 * (1 + η * r) + (X + 1 / X)) * X = (2 * (1 + η * r) + -2 * (1 + η * r)) * X
-  have h1 : (2 * (1 + η * r) + -2 * (1 + η * r)) * X = 0 := by ring_nf
-  rw [h1, ← y_h2 t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+  have h_cancel_terms : (2 * (1 + η * r) + -2 * (1 + η * r)) * X = 0 := by ring
+  rw [h_cancel_terms, ← X_quadratic_eq_of_η t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
   change (2 * (1 + η * r) + (X + 1 / X)) * X = X ^ 2 + 2 * (1 + η * r) * X + 1
   ring_nf
   rw [mul_inv_cancel₀ (X_ne_zero hs_ne_zero hq_card hq_mod t)]
-  ring_nf
+  ring
 
 lemma ϕ_of_t_eq_zero_one (t : { n : F // n = 1 ∨ n = -1})
     (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
@@ -177,7 +187,7 @@ lemma y_add_one_eq_two (t : { t : F // t = 1 ∨ t = -1})
   intro P y
   unfold y P
   rw [ϕ_of_t_eq_zero_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
-  ring_nf
+  ring
 
 end η
 
@@ -225,7 +235,9 @@ lemma v_comparison_implication1 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) :
       unfold v2
       rw [v_comparison t]
       grind
-    _ = v1 := by grind [v]
+    _ = v1 := by
+      unfold v1 u1 v
+      ring
 
 lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
     let t1 := t.val
@@ -240,6 +252,8 @@ lemma v_comparison_implication2 (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
   unfold v1
   rw [← v_comparison_implication1 t]
   grind
+
+variable [Fintype F] [DecidableEq F]
 
 lemma v_comparison_implication3
     (t : {n : F // n ≠ 1 ∧ n ≠ -1}) :
@@ -403,7 +417,7 @@ lemma X_comparison_implication (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   intro t1 t2 X1 Xbar P η r
   unfold Xbar
   rw [X_comparison t]
-  exact (y_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_mod)
+  exact (X_add_inv_X_eq_neg_two_mul_one_add_η_mul_r t hs_ne_zero sq_ne_pm_two hq_card hq_mod)
 
 lemma X_comparison_implication2 (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
     (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
@@ -478,6 +492,8 @@ lemma P_comparison (t : { t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
 
 end comparison
 
+variable [Fintype F] [DecidableEq F]
+
 section Xbar
 
 /-- Xbar is a function defined in the paper.
@@ -544,7 +560,6 @@ lemma z_eq_zero (t : { t : F // t = 1 ∨ t = -1})
     z = 0 := by
   intro P z
   unfold z ReconstructionCoordinates.z
-  let c := c s
   repeat rw [Xbar_eq_neg_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
   simp_all
 
@@ -556,17 +571,18 @@ lemma Xbar_pow_two_add_one_div_c_pow_two_ne_zero
     let X := Xbar s P q
     let c := c s
     X ^ 2 + 1 / c ^ 2 ≠ 0 := by
-  intro X c h
-  rw [← mul_left_inj' (c_ne_zero hs_ne_zero hq_card hq_mod)] at h
-  rw [← mul_left_inj' (c_ne_zero hs_ne_zero hq_card hq_mod)] at h
-  ring_nf at h
-  change X ^ 2 * c ^ 2 + c⁻¹^2 * c ^ 2 = 0 at h
-  rw [inv_pow c 2, inv_mul_cancel₀ (pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod))] at h
-  rw [← add_left_inj (-1 : F), ← mul_pow] at h
-  simp only [add_neg_cancel_right, zero_add] at h
-  let h' := neg_one_non_square hq_card hq_mod
-  have h'' : IsSquare (-1 : F) := by
-    rw [← h, pow_two]
+  intro X c h_sum_eq_zero
+  rw [← mul_left_inj' (c_ne_zero hs_ne_zero hq_card hq_mod)] at h_sum_eq_zero
+  rw [← mul_left_inj' (c_ne_zero hs_ne_zero hq_card hq_mod)] at h_sum_eq_zero
+  ring_nf at h_sum_eq_zero
+  change X ^ 2 * c ^ 2 + c⁻¹ ^ 2 * c ^ 2 = 0 at h_sum_eq_zero
+  rw [inv_pow c 2,
+    inv_mul_cancel₀ (pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod))] at h_sum_eq_zero
+  rw [← add_left_inj (-1 : F), ← mul_pow] at h_sum_eq_zero
+  simp only [add_neg_cancel_right, zero_add] at h_sum_eq_zero
+  have h_neg_one_non_square := neg_one_non_square hq_card hq_mod
+  have h_isSquare_neg_one : IsSquare (-1 : F) := by
+    rw [← h_sum_eq_zero, pow_two]
     apply IsSquare.mul_self
   contradiction
 
@@ -634,8 +650,6 @@ lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   let Y := Y t s q
   let z := z s P q
   let v := v t s;
-  let χ_of_v := χ v
-  let χ_of_Y := χ Y
   unfold ubar ReconstructionCoordinates.ubar
   rw [hXXbar]
   change z * X = u
@@ -646,7 +660,7 @@ lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     change x = x * Y / Y
     rw [mul_div_assoc, div_self (Y_ne_zero hs_ne_zero hq_card hq_mod t)]
     ring_nf
-  have hz_eq_χY_mul_χ_sum : z = χ_of_Y * χ (X ^ 2 + 1 / c ^ 2) := by
+  have hz_eq_χY_mul_χ_sum : z = (χ Y) * χ (X ^ 2 + 1 / c ^ 2) := by
     calc
       z = χ (x ^ 2 * Y * (X ^ 2 + 1 / c ^ 2)) := by
         unfold z ReconstructionCoordinates.z
@@ -659,12 +673,11 @@ lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
         unfold Xbar X
         rw [hXXbar]
         ring_nf
-      _ = χ_of_Y * χ (X ^ 2 + 1 / c ^ 2) := by
+      _ = (χ Y) * χ (X ^ 2 + 1 / c ^ 2) := by
         rw [χ_mul, χ_mul]
         rw [χ_a_eq_one (pow_ne_zero 2
           (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t))
           (IsSquare.sq x)]
-        unfold χ_of_Y
         ring
   have hχu_sum_eq_χX_sum : χ (u ^ 2 + 1 / c ^ 2) = χ (X ^ 2 + 1 / c ^ 2) := by
     unfold X AuxiliaryCoordinates.X
@@ -675,11 +688,11 @@ lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
       (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) (IsSquare.sq v)]
     unfold u
     simp_all
-  have hχY_eq_χv_mul_χ_sum : χ_of_Y = χ_of_v * χ (X ^ 2 + 1 / c ^ 2) := by
+  have hχY_eq_χv_mul_χ_sum : χ Y = (χ v) * χ (X ^ 2 + 1 / c ^ 2) := by
     rw [← hχu_sum_eq_χX_sum]
-    unfold χ_of_Y Y AuxiliaryCoordinates.Y
-    let χ_sum := χ (u ^ 2 + 1 / c ^ 2)
-    change χ ((χ_of_v * v) ^ ((q + 1) / 4) * χ_of_v * χ_sum) = χ_of_v * χ_sum
+    unfold Y AuxiliaryCoordinates.Y
+    change χ (((χ v) * v) ^ ((q + 1) / 4) * (χ v) * χ (u ^ 2 + 1 / c ^ 2))
+      = (χ v) * χ (u ^ 2 + 1 / c ^ 2)
     rw [mul_assoc, χ_mul]
     rw [χ_a_eq_one
       (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero t hs_ne_zero hq_card hq_mod)
@@ -687,9 +700,8 @@ lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     rw [χ_mul]
     rw [χ_χ_eq_χ hq_card hq_mod]
     rw [χ_χ_eq_χ hq_card hq_mod]
-    unfold χ_of_v χ_sum
     simp_all
-  have hz_eq_χv : z = χ_of_v := by
+  have hz_eq_χv : z = χ v := by
     rw [hz_eq_χY_mul_χ_sum, hχY_eq_χv_mul_χ_sum, mul_assoc, ← χ_mul, ← pow_two]
     rw [χ_a_eq_one
       (pow_ne_zero 2 (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod t))
@@ -697,7 +709,7 @@ lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
     simp
   rw [hz_eq_χv]
   unfold X AuxiliaryCoordinates.X
-  change χ_of_v * (χ_of_v * u) = u
+  change (χ v) * ((χ v) * u) = u
   rw [← mul_assoc, ← χ_mul, ← pow_two]
   have hv_sq_isSquare : IsSquare (v ^ 2) := IsSquare.sq v
   rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) hv_sq_isSquare]
@@ -856,15 +868,16 @@ lemma tbar_eq_t (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   intro P tbar_of_P
   let u := u t
   let ubar := ubar s P q
-  have h : ubar = u := ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod hXXbar
-  unfold u AuxiliaryCoordinates.u at h
+  have hubar_eq_u : ubar = u := ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod hXXbar
+  unfold u AuxiliaryCoordinates.u at hubar_eq_u
   unfold tbar_of_P tbar
   change (1 - ubar) / (1 + ubar) = t.val
-  change ubar = (1 - t.val) / (1 + t.val) at h
-  rw [h, sub_div' (one_add_t_ne_zero t)]
+  change ubar = (1 - t.val) / (1 + t.val) at hubar_eq_u
+  rw [hubar_eq_u, sub_div' (one_add_t_ne_zero t)]
   rw [add_div' (1 - t.val) 1 (1 + t.val) (one_add_t_ne_zero t)]
   rw [div_div_div_eq]
-  have h' : (1 + t.val) * 2 ≠ 0 := mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero hq_card hq_mod)
+  have h_denom_ne_zero : (1 + t.val) * 2 ≠ 0 :=
+    mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero hq_card hq_mod)
   grind
 
 lemma tbar_eq_t' (t : { t : F // t ≠ 1 ∧ t ≠ -1})
@@ -884,14 +897,14 @@ lemma tbar_eq_t' (t : { t : F // t ≠ 1 ∧ t ≠ -1})
   have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
   let u' := u ⟨t', t_h⟩
   let ubar := ubar s P q
-  let h : ubar = u' := ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod hXXbar
-  unfold u' u at h
+  have hubar_eq_u' : ubar = u' := ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod hXXbar
+  unfold u' u at hubar_eq_u'
   unfold tbar_of_P tbar
   change (1 - ubar) / (1 + ubar) = t'
-  change ubar = (1 - t') / (1 + t') at h
-  rw [h, sub_div' (one_add_t_ne_zero ⟨t', t_h⟩)]
+  change ubar = (1 - t') / (1 + t') at hubar_eq_u'
+  rw [hubar_eq_u', sub_div' (one_add_t_ne_zero ⟨t', t_h⟩)]
   rw [add_div' (1 - t') 1 (1 + t') (one_add_t_ne_zero ⟨t', t_h⟩), div_div_div_eq]
-  have h' : ((1 + t') * 2) ≠ 0 :=
+  have h_denom_ne_zero : ((1 + t') * 2) ≠ 0 :=
     mul_ne_zero (one_add_t_ne_zero ⟨t', t_h⟩) (two_ne_zero hq_card hq_mod)
   grind
 

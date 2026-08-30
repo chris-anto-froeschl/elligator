@@ -192,7 +192,7 @@ lemma P_in_ϕOverF_with_prop2_main_case (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   let y := y t s
   let c := c s
   let η := η P
-  have h1 : X ^ 2 + 2 * (1 + η * r) * X + 1 = 0 := y_h2 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  have h1 : X ^ 2 + 2 * (1 + η * r) * X + 1 = 0 := X_quadratic_eq_of_η t hs_ne_zero sq_ne_pm_two hq_card hq_mod
   have h2 : NeZero (2 : F) := by
     rw [neZero_iff]
     exact two_ne_zero hq_card hq_mod
@@ -259,7 +259,7 @@ lemma X_η_h1 (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
   let r := r s
   let η := η P.val
-  have h : X + 1 / X = -2 * (1 + η * r) := y_h3 t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  have h : X + 1 / X = -2 * (1 + η * r) := X_add_inv_X_eq_neg_two_mul_one_add_η_mul_r t hs_ne_zero sq_ne_pm_two hq_card hq_mod
   rw [hηr] at h
   ring_nf at h
   rw [← mul_left_inj' (X_ne_zero hs_ne_zero hq_card hq_mod t), add_mul] at h
