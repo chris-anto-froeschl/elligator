@@ -7,6 +7,7 @@ module
 
 public import Elligator.Basic
 public import Elligator.LegendreSymbol
+public import Elligator.Elligator1.Context
 
 /-!
 # Curve Parameters
