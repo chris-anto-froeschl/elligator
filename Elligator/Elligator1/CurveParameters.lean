@@ -39,58 +39,6 @@ variable {F : Type*} [Field F]
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
 
-/-- The base field has cardinality `q ≡ 3 (mod 4)`. -/
-class IsCardThreeModFour (F : Type*) [Fintype F] : Prop where
-  /-- The cardinality of `F` is congruent to `3` modulo `4`. -/
-  card_mod_four : Fintype.card F % 4 = 3
-
-/-- The base field has prime cardinality; this is the extra assumption of Theorem 4. -/
-class IsPrimeCard (F : Type*) [Fintype F] : Prop where
-  /-- The cardinality of `F` is prime. -/
-  card_prime : Prime (Fintype.card F)
-
-/-- The curve parameter `s` is nonzero. -/
-class IsNonzeroParam {F : Type*} [Field F] (s : F) : Prop where
-  /-- The parameter `s` is nonzero. -/
-  s_ne_zero : s ≠ 0
-
-/-- The curve parameter `s` satisfies `s ^ 2 ≠ ± 2`. -/
-class IsRegularParam {F : Type*} [Field F] (s : F) : Prop where
-  /-- The parameter `s` satisfies `(s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0`. -/
-  s_sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0
-
-export IsCardThreeModFour (card_mod_four)
-export IsPrimeCard (card_prime)
-export IsNonzeroParam (s_ne_zero)
-export IsRegularParam (s_sq_ne_pm_two)
-
-/-- The curve parameter `s` of Theorem 1, bundled.
-
-No hypotheses: the quantities `c`, `r`, `d` and the curve `E` are defined for every `s`. -/
-structure ParamData (F : Type*) [Field F] where
-  /-- The Elligator 1 curve parameter. -/
-  s : F
-
-/-- An admissible input `t ∉ {1, -1}` of the Elligator 1 map, bundled.
-
-The two disequalities are data rather than hypotheses: they are exactly the subtype
-`{n : F // n ≠ 1 ∧ n ≠ -1}` on which the unbundled definitions are given, i.e. the domain of `u`. -/
-structure InputData (F : Type*) [Field F] where
-  /-- The input of the Elligator 1 map. -/
-  t : F
-  /-- The input is not `1`. -/
-  t_ne_one : t ≠ 1
-  /-- The input is not `-1`. -/
-  t_ne_neg_one : t ≠ -1
-
-/-- A curve parameter together with an admissible input: the data of Theorem 1. -/
-structure MapData (F : Type*) [Field F] extends ParamData F, InputData F
-
-/-- A curve parameter together with a point of the plane: the data of Theorem 3. -/
-structure PointData (F : Type*) [Field F] extends ParamData F where
-  /-- The point. -/
-  P : F × F
-
 variable (D : ParamData F)
 
 section s
@@ -123,7 +71,7 @@ Original:, Section "3.2 The map": Theorem 1
   -/)]
 def c (s : F) : F := 2 / s ^ 2
 
-def ParamData.c (D : ParamData F) : F := CurveParameters.c D.s
+def _root_.Elligator.Elligator1.ParamData.c (D : ParamData F) : F := CurveParameters.c D.s
 
 lemma c_ne_zero [Fintype F] [IsNonzeroParam D.s] [IsCardThreeModFour F] :
     D.c ≠ 0 := by
@@ -195,7 +143,7 @@ def r (s : F) : F :=
     let c := c s
     c + 1 / c
 
-def ParamData.r (D : ParamData F) : F := CurveParameters.r D.s
+def _root_.Elligator.Elligator1.ParamData.r (D : ParamData F) : F := CurveParameters.r D.s
 
 @[blueprint "lemma:r_ne_zero"
   (title := "$r \\neq 0$")
@@ -316,7 +264,7 @@ def d (s : F) : F :=
     let c := c s;
     -(c + 1) ^ 2 / (c - 1) ^ 2
 
-def ParamData.d (D : ParamData F) : F := CurveParameters.d D.s
+def _root_.Elligator.Elligator1.ParamData.d (D : ParamData F) : F := CurveParameters.d D.s
 
 @[blueprint "lemma:d_nonsquare"
   (title := "$d$ is not a square")
