@@ -45,11 +45,11 @@ section s
 
 lemma s_pow_two_ne_two [IsRegularParam D.s] :
     D.s ^ 2 ≠ 2 :=
-  sub_ne_zero.mp (left_ne_zero_of_mul IsRegularParam.s_sq_ne_pm_two)
+  sub_ne_zero.mp (left_ne_zero_of_mul s_sq_ne_pm_two)
 
 lemma s_pow_two_ne_neg_two [IsRegularParam D.s] :
     D.s ^ 2 ≠ -2 := by
-  have hright_ne_zero_of_mul : D.s^2 + 2 ≠ 0 := right_ne_zero_of_mul IsRegularParam.s_sq_ne_pm_two
+  have hright_ne_zero_of_mul : D.s^2 + 2 ≠ 0 := right_ne_zero_of_mul s_sq_ne_pm_two
   rwa [ne_eq, add_eq_zero_iff_eq_neg] at hright_ne_zero_of_mul
 
 end s

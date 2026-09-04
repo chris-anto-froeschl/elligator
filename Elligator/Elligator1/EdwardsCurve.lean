@@ -34,24 +34,22 @@ open Elligator.Primitives.ECC
 open Elligator.Elligator1.CurveParameters
 
 variable {F : Type*} [Field F]
-variable {q : ℕ}
+variable {s : F}
+variable (D : ParamData F)
 
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
-def curve (s : F) : TwistedEdwardsCurve F := edwardsCurve (d s)
+def curve : TwistedEdwardsCurve F := edwardsCurve D.d
 
 /-- The curve equation of the Elligator 1 curve, in explicit form. -/
-lemma curve_equation_iff (s x y : F) :
-    (curve s).Equation x y ↔ x ^ 2 + y ^ 2 = 1 + d s * x ^ 2 * y ^ 2 :=
-  edwardsCurve_equation_iff (d s) x y
+lemma curve_equation_iff (x y : F) :
+    (curve D).Equation x y ↔ x ^ 2 + y ^ 2 = 1 + D.d * x ^ 2 * y ^ 2 :=
+  edwardsCurve_equation_iff D.d x y
 
 /-- The Elligator 1 coefficient hypotheses imply that its specialized curve is valid. -/
-lemma curve_isValid [Fintype F]
-    {s : F}
-    (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    (curve s).IsValid := by
+lemma curve_isValid [Fintype F] [IsRegularParam D.s] [IsCardThreeModFour F] :
+    (curve D).IsValid := by
   rw [curve, edwardsCurve_isValid_iff]
-  exact d_ne_zero_and_d_ne_one sq_ne_pm_two hq_card hq_mod
+  exact d_ne_zero_and_d_ne_one D
 
 /-- `EOverF s` is the set of affine points on the Edwards curve selected by Elligator 1. -/
 @[blueprint "def:EOverF"
@@ -64,22 +62,22 @@ lemma curve_isValid [Fintype F]
   $$
   be the set of affine points of the complete Edwards curve $E$.
   -/)]
-def EOverF (s : F) : Set (F × F) := (curve s).affinePoints
+def EOverF : Set (F × F) := (curve D).affinePoints
 
 /-- The compatibility set `EOverF s` is exactly the affine point set of the general curve model. -/
-lemma EOverF_s_eq_affinePoints {s : F} :
-    EOverF s = (curve s).affinePoints := by
+lemma EOverF_s_eq_affinePoints :
+    EOverF D = (curve D).affinePoints := by
   rfl
 
 /-- Membership in `EOverF s`, written out as the Edwards curve equation. -/
-lemma mem_EOverF_iff {s : F} (p : F × F) :
-    p ∈ EOverF s ↔ p.1 ^ 2 + p.2 ^ 2 = 1 + d s * p.1 ^ 2 * p.2 ^ 2 :=
-  curve_equation_iff s p.1 p.2
+lemma mem_EOverF_iff (p : F × F) :
+    p ∈ EOverF D ↔ p.1 ^ 2 + p.2 ^ 2 = 1 + D.d * p.1 ^ 2 * p.2 ^ 2 :=
+  curve_equation_iff D p.1 p.2
 
 /-- The neutral point `(0, 1)` lies in `EOverF s`; a specialization of
 `Elligator.edwardsCurveEquation_zero_one`. -/
-lemma zero_mem_EOverF {s : F} :
-    ((0 : F), (1 : F)) ∈ EOverF s :=
-  (curve s).zero_mem_affinePoints
+lemma zero_mem_EOverF :
+    ((0 : F), (1 : F)) ∈ EOverF D :=
+  (curve D).zero_mem_affinePoints
 
 end Elligator.Elligator1
