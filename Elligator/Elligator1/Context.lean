@@ -48,6 +48,8 @@ See [Bernstein2013a], Section 3.
 
 namespace Elligator.Elligator1
 
+variable {F : Type*} [Field F]
+
 /-- The base field has cardinality `q ≡ 3 (mod 4)`. -/
 class IsCardThreeModFour (F : Type*) [Fintype F] : Prop where
   /-- The cardinality of `F` is congruent to `3` modulo `4`. -/
@@ -99,5 +101,15 @@ structure MapData (F : Type*) [Field F] extends ParamData F, InputData F
 structure PointData (F : Type*) [Field F] extends ParamData F where
   /-- The point. -/
   P : F × F
+
+namespace InputData
+
+variable (I : InputData F)
+
+/-- The input, as an element of the subtype `{n : F // n ≠ 1 ∧ n ≠ -1}` on which the unbundled
+definitions are given. -/
+def tSub : {n : F // n ≠ 1 ∧ n ≠ -1} := ⟨I.t, I.t_ne_one, I.t_ne_neg_one⟩
+
+end InputData
 
 end Elligator.Elligator1
