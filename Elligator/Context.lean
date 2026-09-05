@@ -46,7 +46,7 @@ See [Bernstein2013a], Section 3.
 
 @[expose] public section
 
-namespace Elligator.Elligator1
+namespace Elligator
 
 variable {F : Type*} [Field F]
 
@@ -112,4 +112,4 @@ def tSub : {n : F // n ≠ 1 ∧ n ≠ -1} := ⟨I.t, I.t_ne_one, I.t_ne_neg_one
 
 end InputData
 
-end Elligator.Elligator1
+end Elligator

@@ -1,6 +1,6 @@
 import Elligator.Basic
+import Elligator.Context
 import Elligator.Elligator1.AuxiliaryCoordinates
-import Elligator.Elligator1.Context
 import Elligator.Elligator1.Curve1174
 import Elligator.Elligator1.CurveParameters
 import Elligator.Elligator1.EdwardsCurve

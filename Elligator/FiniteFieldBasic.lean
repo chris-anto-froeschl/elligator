@@ -84,9 +84,7 @@ lemma neg_one_non_square (hq_mod : Fintype.card F % 4 = 3) :
 /-- If some algebraic identity would force `-1` to be a square, contradiction - `-1` is never
 a square when `q % 4 = 3`. A common closing step for the `r`/`d` nonvanishing proofs. -/
 lemma false_of_isSquare_neg_one (hq_mod : Fintype.card F % 4 = 3)
-    (h : IsSquare (-1 : F)) :
-    False :=
-  neg_one_non_square hq_mod h
+    (h : IsSquare (-1 : F)) : False := neg_one_non_square hq_mod h
 
 omit [Fintype F] in
 lemma one_sub_t_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : (1 : F) - t.val ≠ 0 :=
@@ -128,8 +126,9 @@ lemma ringChar_of_F_eq_q (q_prime : Prime (Fintype.card F)) : ringChar F = Finty
   obtain ⟨n, h_char_prime, h_card_eq_pow⟩ := FiniteField.card F (ringChar F)
   have h_q_eq_pow : Fintype.card F = (ringChar F) ^ (n : ℕ) := by rw [h_card_eq_pow]
   -- In particular `ringChar F` divides `q` (the exponent `n` is at least `1`).
-  -- TODO
-  have h_dvd : ringChar F ∣ Fintype.card F := h_q_eq_pow ▸ dvd_pow_self _ n.pos.ne'
+  have h_dvd : ringChar F ∣ Fintype.card F := by
+    rw [h_q_eq_pow]
+    exact dvd_pow_self _ n.pos.ne'
   -- `q` is prime, so its only divisors are `1` and `q` - and a field's characteristic
   -- is never `1`, so it must be `q` itself.
   rcases (Nat.dvd_prime (Nat.prime_iff.mpr q_prime)).1 h_dvd with hchar | hchar

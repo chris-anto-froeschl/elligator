@@ -40,7 +40,7 @@ variable (D : ParamData F)
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
 def curve (s : F) : TwistedEdwardsCurve F := edwardsCurve (d s)
 
-def _root_.Elligator.Elligator1.ParamData.curve : TwistedEdwardsCurve F :=
+def _root_.Elligator.ParamData.curve : TwistedEdwardsCurve F :=
     Elligator1.curve D.s
 
 /-- The curve equation of the Elligator 1 curve, in explicit form. -/
@@ -68,7 +68,7 @@ lemma curve_isValid [Fintype F] [IsRegularParam D.s] [IsCardThreeModFour F] :
   -/)]
 def EOverF (s : F) : Set (F × F) := (curve s).affinePoints
 
-def _root_.Elligator.Elligator1.ParamData.EOverF : Set (F × F) :=
+def _root_.Elligator.ParamData.EOverF : Set (F × F) :=
     Elligator1.EOverF D.s
 
 /-- The compatibility set `EOverF s` is exactly the affine point set of the general curve model. -/

@@ -55,7 +55,7 @@ def u (t : {n : F // n ≠ 1 ∧ n ≠ -1}) : F :=
     let t := t.val
     (1 - t) / (1 + t)
 
-def _root_.Elligator.Elligator1.InputData.u (I : InputData F) : F := AuxiliaryCoordinates.u I.tSub
+def _root_.Elligator.InputData.u (I : InputData F) : F := AuxiliaryCoordinates.u I.tSub
 
 @[blueprint "lemma:u_ne_zero"
   (title := "$u \\neq 0$")
@@ -97,7 +97,7 @@ def v (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
     let r := r s
     u ^ 5 + (r ^ 2 - 2) * u ^ 3 + u
 
-def _root_.Elligator.Elligator1.MapData.v (M : MapData F) : F := AuxiliaryCoordinates.v M.tSub M.s
+def _root_.Elligator.MapData.v (M : MapData F) : F := AuxiliaryCoordinates.v M.tSub M.s
 
 lemma v_factored [IsNonzeroParam M.s] [IsCardThreeModFour F] :
     M.v = M.u * (M.u ^ 2 + M.c ^ 2) * (M.u ^ 2 + 1 / M.c ^ 2) := by
@@ -182,7 +182,7 @@ def X (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
     let v := v t s
     (χ v) * u
 
-def _root_.Elligator.Elligator1.MapData.X (M : MapData F) : F := AuxiliaryCoordinates.X M.tSub M.s
+def _root_.Elligator.MapData.X (M : MapData F) : F := AuxiliaryCoordinates.X M.tSub M.s
 
 lemma X_pow_two_add_one_div_c_pow_two_ne_zero [IsNonzeroParam M.s] [IsCardThreeModFour F] :
     M.X ^ 2 + 1 / M.c ^ 2 ≠ 0 := by
@@ -235,7 +235,7 @@ def Y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
     let v := v t s
     ((χ v) * v) ^ ((q + 1) / 4) * (χ v) * χ (u ^ 2 + 1 / c ^ 2)
 
-def _root_.Elligator.Elligator1.MapData.Y (M : MapData F) : F :=
+def _root_.Elligator.MapData.Y (M : MapData F) : F :=
     AuxiliaryCoordinates.Y M.tSub M.s (Fintype.card F)
 
 lemma Y_ne_zero [IsNonzeroParam M.s] [IsCardThreeModFour F] :

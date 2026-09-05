@@ -148,7 +148,7 @@ def ϕ (t : F) {s : F}
       exact (curve s).zero_mem_affinePoints
   ⟨P, P_in_EOverF⟩
 
-def _root_.Elligator.Elligator1.ParamData.ϕ
+def _root_.Elligator.ParamData.ϕ
     [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F] (t : F) :
     {P : F × F // P ∈ D.EOverF} :=
   Elligator1.ϕ t s_ne_zero s_sq_ne_pm_two card_mod_four

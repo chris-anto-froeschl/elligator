@@ -183,6 +183,7 @@ def decode1174 (t : F1174) : F1174 × F1174 :=
 
 /-- Theorem 1 for Curve1174: every decoded value is a point of the curve. -/
 lemma decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.affinePoints :=
+  -- TODO
   curve_s1174_eq ▸ (ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four).prop
 
 /-- Theorem 1 for Curve1174, in coordinates. -/

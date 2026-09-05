@@ -62,7 +62,7 @@ def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
     let Y := Y t s q
     (c - 1) * s * X * (1 + X) / Y
 
-def _root_.Elligator.Elligator1.MapData.x (M : MapData F) : F :=
+def _root_.Elligator.MapData.x (M : MapData F) : F :=
     OutputCoordinates.x M.tSub M.s (Fintype.card F)
 
 @[blueprint "lemma:x_ne_zero"
@@ -106,7 +106,7 @@ def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
     let X := X t s
     (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2)
 
-def _root_.Elligator.Elligator1.MapData.y (M : MapData F) : F :=
+def _root_.Elligator.MapData.y (M : MapData F) : F :=
     OutputCoordinates.y M.tSub M.s
 
 /-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
