@@ -29,7 +29,6 @@ namespace Elligator.LegendreSymbol
 open Elligator.FiniteFieldBasic
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
-variable {q : ℕ}
 
 /-- χ(a) is the quadratic character of a in the finite field F with q elements, where q is a
 prime congruent to 3 modulo 4, viewed as an element of `F`.

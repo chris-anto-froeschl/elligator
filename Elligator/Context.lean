@@ -8,7 +8,7 @@ module
 public import Elligator.Basic
 
 /-!
-# Bundled data and hypotheses for Elligator 1
+# Bundled data and hypotheses for Elligator
 
 Almost every statement of the Elligator 1 development repeats the same variables and the same
 standing hypotheses:
@@ -25,23 +25,6 @@ This file provides two independent mechanisms for getting rid of this repetition
 2. *the hypotheses are unbundled* into one `class` per hypothesis (`IsCardThreeModFour`,
    `IsPrimeCard`, `IsNonzeroParam`, `IsRegularParam`), which a statement lists individually and
    which are found by instance resolution instead of being passed by hand.
-
-## Design notes
-
-* The hypotheses are deliberately *not* fields of the data structures.  The hypotheses used by the
-  development do not form a chain: `c_ne_one` needs only `(s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0`,
-  `c_ne_zero` needs only `s ≠ 0` and `q % 4 = 3`, `u_ne_zero` needs none of them.  Storing them in
-  the contexts would therefore either weaken those lemmas or force a large lattice of contexts;
-  one class per hypothesis keeps every statement exactly as strong as before while still hiding the
-  hypotheses from the statement.
-* Instances are registered once per concrete curve, after which all bundled statements apply with no
-  hypothesis passing at all.
-* Where a hypothesis genuinely varies from lemma to lemma (`P ∈ E(F)`, `ϕOverFProps s P`,
-  `x ≠ 0`, …) it stays an ordinary explicit argument; see `Elligator.Elligator1.PointContext`.
-
-## References
-
-See [Bernstein2013a], Section 3.
 -/
 
 @[expose] public section

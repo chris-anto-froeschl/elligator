@@ -29,7 +29,6 @@ See [Bernstein2013a] for the original account on this specifc finite field.
 @[expose] public section
 
 variable {F : Type*} [Field F] [Fintype F]
-variable {q : ℕ}
 
 namespace Elligator.FiniteFieldBasic
 
@@ -39,7 +38,7 @@ This is why no statement of this development has to assume `IsPrimePow q`: the h
 `Fintype.card F = q` already forces `q` to be a prime power, so all results proved for a finite
 field `F` with `Fintype.card F = q` and `q % 4 = 3` are exactly the results of [Bernstein2013a]
 for an arbitrary prime power `q ≡ 3 (mod 4)`. -/
-lemma card_isPrimePow (hq_card : Fintype.card F = q) : IsPrimePow q := by
+lemma card_isPrimePow {q : ℕ} (hq_card : Fintype.card F = q) : IsPrimePow q := by
   rw [← hq_card]
   exact FiniteField.isPrimePow_card F
 

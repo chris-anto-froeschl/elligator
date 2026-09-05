@@ -71,6 +71,7 @@ Original:, Section "3.2 The map": Theorem 1
   -/)]
 def c (s : F) : F := 2 / s ^ 2
 
+/-- ParamData wrapper for c. -/
 def _root_.Elligator.ParamData.c (D : ParamData F) : F := CurveParameters.c D.s
 
 lemma c_ne_zero [Fintype F] [IsNonzeroParam D.s] [IsCardThreeModFour F] :
@@ -143,6 +144,7 @@ def r (s : F) : F :=
     let c := c s
     c + 1 / c
 
+/-- ParamData wrapper for r. -/
 def _root_.Elligator.ParamData.r (D : ParamData F) : F := CurveParameters.r D.s
 
 @[blueprint "lemma:r_ne_zero"
@@ -264,6 +266,7 @@ def d (s : F) : F :=
     let c := c s;
     -(c + 1) ^ 2 / (c - 1) ^ 2
 
+/-- ParamData wrapper for d. -/
 def _root_.Elligator.ParamData.d (D : ParamData F) : F := CurveParameters.d D.s
 
 @[blueprint "lemma:d_nonsquare"

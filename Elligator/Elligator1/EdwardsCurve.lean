@@ -34,7 +34,6 @@ open Elligator.Primitives.ECC
 open Elligator.Elligator1.CurveParameters
 
 variable {F : Type*} [Field F]
-variable {s : F}
 variable (D : ParamData F)
 
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
