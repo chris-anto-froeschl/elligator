@@ -56,8 +56,7 @@ Original:, Section "3.2 The map": Theorem 1
   x = (c - 1)sX(1 + X)/Y .
   $$
   -/)]
-def x
-    (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
+def x (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) (q : ℕ) : F :=
     let c := c s
     let X := X t s
     let Y := Y t s q
@@ -102,8 +101,7 @@ Original:, Section "3.2 The map": Theorem 1
   y = (rX - (1 + X) ^ 2)/(rX + (1 + X) ^ 2) .
   $$
   -/)]
-def y
-    (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
+def y (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (s : F) : F :=
     let r := r s
     let X := X t s
     (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2)
