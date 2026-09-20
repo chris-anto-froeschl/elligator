@@ -43,6 +43,7 @@ open Elligator.Elligator1.AuxiliaryCoordinates
 open Elligator.Elligator1.OutputCoordinates
 
 variable {F : Type*} [Field F]
+variable (D : ParamData F)
 variable (I : InputData F)
 variable (M : MapData F)
 variable (Q : PointData F)
@@ -154,38 +155,30 @@ lemma X_add_inv_X_eq_neg_two_mul_one_add_η_mul_r
   rw [mul_inv_cancel₀ (X_ne_zero M)]
   ring
 
--- Typical classes and structures not used here since indeed a rare special case.
-lemma ϕ_of_t_eq_zero_one {s : F} (t : { n : F // n = 1 ∨ n = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_mod : Fintype.card F % 4 = 3) :
-    let ϕ := ϕ t.val hs_ne_zero sq_ne_pm_two hq_mod
-    ϕ.val = (0, 1) := by
-  intro ϕ
-  unfold ϕ Elligator1.ϕ
+/-- The two exceptional inputs `t = ± 1` are both decoded to the neutral point `(0, 1)`.
+
+The input is the bare subtype `{n : F // n = 1 ∨ n = -1}` rather than an `InputData`, since these
+are precisely the two inputs an `InputData` excludes. -/
+lemma ϕ_of_t_eq_zero_one [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.ϕ t.val).val = (0, 1) := by
+  unfold ParamData.ϕ Elligator1.ϕ
   rcases t.prop with h | h <;> simp [h]
 
-lemma η_eq_zero {s : F} (t : { t : F // t = 1 ∨ t = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_mod : Fintype.card F % 4 = 3) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_mod).val
-    (η P) = 0 := by
-  intro P
-  unfold η
-  let y := P.2
-  change (y - 1) / (2 * (y + 1)) = 0
-  unfold y P
-  rw [ϕ_of_t_eq_zero_one t hs_ne_zero sq_ne_pm_two hq_mod]
-  rw [sub_self, zero_div]
+lemma η_eq_zero [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.decoded t.val).η = 0 := by
+  have hP : (D.decoded t.val).P = ((0 : F), (1 : F)) := ϕ_of_t_eq_zero_one D t
+  unfold PointData.η η
+  rw [hP]
+  norm_num
 
-lemma y_add_one_eq_two {s : F} (t : { t : F // t = 1 ∨ t = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_mod : Fintype.card F % 4 = 3) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_mod).val
-    let y := P.2
-    y + 1 = 2 := by
-  intro P y
-  unfold y P
-  rw [ϕ_of_t_eq_zero_one t hs_ne_zero sq_ne_pm_two hq_mod]
+lemma y_add_one_eq_two [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.decoded t.val).y + 1 = 2 := by
+  have hP : (D.decoded t.val).P = ((0 : F), (1 : F)) := ϕ_of_t_eq_zero_one D t
+  unfold PointData.y
+  rw [hP]
   ring
 
 end η
@@ -387,23 +380,34 @@ def Xbar (s : F) (P : F × F) (q : ℕ) : F :=
 /-- PointData wrapper for η. -/
 def _root_.Elligator.PointData.Xbar : F := ReconstructionCoordinates.Xbar Q.s Q.P (Fintype.card F)
 
+/-- MapData wrapper for Xbar, evaluated at the point decoded from the input `t`. -/
 def _root_.Elligator.MapData.Xbar
     [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : F :=
     M.decoded.Xbar
 
-lemma Xbar_eq_neg_one
-    (t : { t : F // t = 1 ∨ t = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let Xbar := Xbar s P.1 q
-    Xbar = -1 := by
-  intro P Xbar
-  unfold Xbar ReconstructionCoordinates.Xbar
-  let η := η P.1
-  change -(1 + η * (r s)) + ((1 + η * (r s)) ^ 2 - 1) ^ ((q + 1) / 4) = -1
-  unfold η
-  rw [η_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+/-- The decoded point does not change when the input `t` is replaced by `-t`. -/
+lemma _root_.Elligator.MapData.neg_decoded_P
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.neg.decoded.P = M.decoded.P := by
+  rw [M.neg.decoded_P_eq_point_P, M.decoded_P_eq_point_P]
+  change (M.neg.x, M.neg.y) = (M.x, M.y)
+  rw [x_comparison M, y_comparison M]
+
+/-- Hence the reconstructed coordinate `X̄` does not change either. -/
+lemma _root_.Elligator.MapData.neg_Xbar
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.neg.Xbar = M.Xbar := by
+  change ReconstructionCoordinates.Xbar M.neg.s M.neg.decoded.P (Fintype.card F)
+    = ReconstructionCoordinates.Xbar M.s M.decoded.P (Fintype.card F)
+  rw [M.neg_decoded_P, MapData.neg_s]
+
+lemma Xbar_eq_neg_one [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.decoded t.val).Xbar = -1 := by
+  have hη : η (D.decoded t.val).P = 0 := η_eq_zero D t
+  have hcard := card_mod_four (F := F)
+  unfold PointData.Xbar ReconstructionCoordinates.Xbar
+  rw [hη]
   ring_nf
   rw [zero_pow, add_zero]
   omega
@@ -430,39 +434,35 @@ def z (s : F) (P : F × F) (q : ℕ) : F :=
     let Xbar := Xbar s P q
     χ ((c - 1) * s * Xbar * (1 + Xbar) * x * (Xbar ^ 2 + 1 / c ^ 2))
 
-lemma z_eq_zero (t : { t : F // t = 1 ∨ t = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-    let z := z s P q
-    z = 0 := by
-  intro P z
-  unfold z ReconstructionCoordinates.z
-  repeat rw [Xbar_eq_neg_one t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
-  simp_all
+/-- PointData wrapper for z. -/
+def _root_.Elligator.PointData.z : F := ReconstructionCoordinates.z Q.s Q.P (Fintype.card F)
+
+/-- MapData wrapper for z. -/
+def _root_.Elligator.MapData.z
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : F :=
+    M.decoded.z
+
+lemma z_eq_zero [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.decoded t.val).z = 0 := by
+  have hXbar :
+      ReconstructionCoordinates.Xbar (D.decoded t.val).s (D.decoded t.val).P (Fintype.card F)
+        = -1 :=
+    Xbar_eq_neg_one D t
+  unfold PointData.z ReconstructionCoordinates.z
+  rw [hXbar]
+  simp
 
 omit [DecidableEq F] in
 lemma Xbar_pow_two_add_one_div_c_pow_two_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) :
-    let X := Xbar s P q
-    let c := c s
-    X ^ 2 + 1 / c ^ 2 ≠ 0 := by
-  intro X c h_sum_eq_zero
-  rw [← mul_left_inj' (c_ne_zero hs_ne_zero hq_card hq_mod)] at h_sum_eq_zero
-  rw [← mul_left_inj' (c_ne_zero hs_ne_zero hq_card hq_mod)] at h_sum_eq_zero
-  ring_nf at h_sum_eq_zero
-  change X ^ 2 * c ^ 2 + c⁻¹ ^ 2 * c ^ 2 = 0 at h_sum_eq_zero
-  rw [inv_pow c 2,
-    inv_mul_cancel₀ (pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod))] at h_sum_eq_zero
-  rw [← add_left_inj (-1 : F), ← mul_pow] at h_sum_eq_zero
-  simp only [add_neg_cancel_right, zero_add] at h_sum_eq_zero
-  have h_neg_one_non_square := neg_one_non_square hq_card hq_mod
-  have h_isSquare_neg_one : IsSquare (-1 : F) := by
-    rw [← h_sum_eq_zero, pow_two]
-    apply IsSquare.mul_self
-  contradiction
+    [IsNonzeroParam Q.s] [IsCardThreeModFour F] :
+    Q.Xbar ^ 2 + 1 / Q.c ^ 2 ≠ 0 := by
+  intro h_sum_eq_zero
+  have hc_ne_zero : Q.c ≠ 0 := c_ne_zero Q.toParamData
+  have h_sq : (Q.Xbar * Q.c) ^ 2 = -1 := by
+    field_simp at h_sum_eq_zero
+    linear_combination h_sum_eq_zero
+  exact false_of_isSquare_neg_one card_mod_four ⟨Q.Xbar * Q.c, by rw [← h_sq]; ring⟩
 
 end z
 
@@ -485,217 +485,84 @@ def ubar (s : F) (P : F × F) (q : ℕ) : F :=
     let z := z s P q
     z * Xbar
 
-lemma ubar_eq_zero (t : { t : F // t = 1 ∨ t = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-    let ubar := ubar s P q
-    ubar = 0 := by
-  grind [z_eq_zero, ubar]
+/-- PointData wrapper for ubar. -/
+def _root_.Elligator.PointData.ubar : F := ReconstructionCoordinates.ubar Q.s Q.P (Fintype.card F)
 
--- TODO find proper place
-lemma χ_IsSquare_h1 [DecidableEq F]
-    (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let v := v t s
-    IsSquare (((χ v) * v) ^ ((q + 1) / 4)) := by
-  intro v
-  have hv_ne_zero := v_ne_zero hs_ne_zero hq_card hq_mod t
-  have hχ_a_mul_a_IsSquare := χ_a_mul_a_IsSquare hv_ne_zero hq_card hq_mod
-  unfold IsSquare at hχ_a_mul_a_IsSquare
-  rcases hχ_a_mul_a_IsSquare with ⟨r, hr⟩
-  rw [hr, ← pow_two, ← pow_mul, mul_comm, pow_mul]
+/-- MapData wrapper for ubar. -/
+def _root_.Elligator.MapData.ubar
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : F :=
+    M.decoded.ubar
+
+lemma ubar_eq_zero [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.decoded t.val).ubar = 0 := by
+  have hz : ReconstructionCoordinates.z (D.decoded t.val).s (D.decoded t.val).P (Fintype.card F)
+      = 0 :=
+    z_eq_zero D t
+  unfold PointData.ubar ReconstructionCoordinates.ubar
+  rw [hz, zero_mul]
+
+lemma χ_IsSquare_h1 [IsNonzeroParam M.s] [IsCardThreeModFour F] :
+    IsSquare ((χ M.v * M.v) ^ ((Fintype.card F + 1) / 4)) := by
+  obtain ⟨w, hw⟩ := χ_a_mul_a_IsSquare (v_ne_zero M) card_mod_four
+  rw [hw, ← pow_two, ← pow_mul, mul_comm, pow_mul]
   exact IsSquare.sq _
 
-lemma ubar_eq_u (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (hXXbar :
-      let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-      let X := X t s
-      let Xbar := Xbar s P q
-      Xbar = X) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-    let u := u t
-    let ubar := ubar s P q
-    ubar = u := by
-  intro P u ubar
-  let X := X t s
-  let Xbar := Xbar s P q
-  let c := c s
-  let x := x t s q
-  let Y := Y t s q
-  let z := z s P q
-  let v := v t s;
-  unfold ubar ReconstructionCoordinates.ubar
-  rw [hXXbar]
-  change z * X = u
-  have hXbar_expand_eq_x_mul_Y : (c - 1) * s * Xbar * (1 + Xbar) = x * Y := by
-    unfold Xbar
-    rw [hXXbar]
-    rw [← div_left_inj' (Y_ne_zero hs_ne_zero hq_card hq_mod t)]
-    change x = x * Y / Y
-    rw [mul_div_assoc, div_self (Y_ne_zero hs_ne_zero hq_card hq_mod t)]
-    ring_nf
-  have hz_eq_χY_mul_χ_sum : z = (χ Y) * χ (X ^ 2 + 1 / c ^ 2) := by
-    calc
-      z = χ (x ^ 2 * Y * (X ^ 2 + 1 / c ^ 2)) := by
-        unfold z ReconstructionCoordinates.z
-        change χ ((c - 1) * s * Xbar * (1 + Xbar) * P.1 * (Xbar ^ 2 + 1 / c ^ 2))
-          = χ (x ^ 2 * Y * (X ^ 2 + 1 / c ^ 2))
-        unfold P ϕ
-        simp only [hXbar_expand_eq_x_mul_Y]
-        rw [dite_eq_left t.prop]
-        change χ (x * Y * x * (Xbar ^ 2 + 1 / c ^ 2)) = χ (x ^ 2 * Y * (X ^ 2 + 1 / c ^ 2))
-        unfold Xbar X
-        rw [hXXbar]
-        ring_nf
-      _ = (χ Y) * χ (X ^ 2 + 1 / c ^ 2) := by
-        rw [χ_mul, χ_mul]
-        rw [χ_a_eq_one (pow_ne_zero 2
-          (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t))
-          (IsSquare.sq x)]
-        ring
-  have hχu_sum_eq_χX_sum : χ (u ^ 2 + 1 / c ^ 2) = χ (X ^ 2 + 1 / c ^ 2) := by
-    unfold X AuxiliaryCoordinates.X
-    rw [mul_pow]
-    nth_rw 3 [pow_two]
-    rw [← χ_mul]
-    rw [← pow_two, χ_a_eq_one
-      (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) (IsSquare.sq v)]
-    unfold u
-    simp_all
-  have hχY_eq_χv_mul_χ_sum : χ Y = (χ v) * χ (X ^ 2 + 1 / c ^ 2) := by
-    rw [← hχu_sum_eq_χX_sum]
-    unfold Y AuxiliaryCoordinates.Y
-    change χ (((χ v) * v) ^ ((q + 1) / 4) * (χ v) * χ (u ^ 2 + 1 / c ^ 2))
-      = (χ v) * χ (u ^ 2 + 1 / c ^ 2)
-    rw [mul_assoc, χ_mul]
-    rw [χ_a_eq_one
-      (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero t hs_ne_zero hq_card hq_mod)
-      (χ_IsSquare_h1 t hs_ne_zero hq_card hq_mod)]
-    rw [χ_mul]
-    rw [χ_χ_eq_χ hq_card hq_mod]
-    rw [χ_χ_eq_χ hq_card hq_mod]
-    simp_all
-  have hz_eq_χv : z = χ v := by
-    rw [hz_eq_χY_mul_χ_sum, hχY_eq_χv_mul_χ_sum, mul_assoc, ← χ_mul, ← pow_two]
-    rw [χ_a_eq_one
-      (pow_ne_zero 2 (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod t))
-      (IsSquare.sq (X ^ 2 + 1 / c ^ 2))]
-    simp
-  rw [hz_eq_χv]
-  unfold X AuxiliaryCoordinates.X
-  change (χ v) * ((χ v) * u) = u
-  rw [← mul_assoc, ← χ_mul, ← pow_two]
-  have hv_sq_isSquare : IsSquare (v ^ 2) := IsSquare.sq v
-  rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod t)) hv_sq_isSquare]
-  simp
+/-- `X` and `u` differ by the sign `χ(v)`, hence have the same square. -/
+lemma X_sq_eq_u_sq [IsNonzeroParam M.s] [IsCardThreeModFour F] : M.X ^ 2 = M.u ^ 2 := by
+  change (χ M.v * M.u) ^ 2 = M.u ^ 2
+  rw [mul_pow, pow_two, χ_mul_self_eq_one (v_ne_zero M), one_mul]
 
-lemma ubar_eq_u' (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (hXXbar :
-      let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-      let X' := X ⟨-t.val, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-      let Xbar := Xbar s P q
-      Xbar = X') :
-    let t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-    let u' := u ⟨-t.val, t_h⟩
-    let ubar := ubar s P q
-    ubar = u' := by
-  intro t_h P u' ubar
-  let X' := X ⟨-t.val, t_h⟩ s
-  let X := X t s
-  let Xbar := Xbar s P q
-  let c := c s
-  let x' := x ⟨-t.val, t_h⟩ s q
-  let x := x t s q
-  let Y' := Y ⟨-t.val, t_h⟩ s q
-  let Y := Y t s q
-  let z := z s P q
-  let v' := v ⟨-t.val, t_h⟩ s
-  let v := v t s;
-  unfold ubar ReconstructionCoordinates.ubar
-  rw [hXXbar]
-  change z * X' = u'
-  have hXbar_expand_eq_x'_mul_Y' : (c - 1) * s * Xbar * (1 + Xbar) = x' * Y' := by
-    unfold Xbar
-    rw [hXXbar]
-    rw [← div_left_inj' (Y_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)]
-    change x' = x' * Y' / Y'
-    rw [mul_div_assoc, div_self (Y_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩)]
-    ring_nf
-  have hz_eq_χY'_mul_χ_sum : z = (χ Y') * (χ (X'^2 + 1 / c ^ 2)) := by
-    calc
-      z = (χ (x'^2 * Y' * (X'^2 + 1 / c ^ 2))) := by
-        unfold z ReconstructionCoordinates.z
-        change χ ((c - 1) * s * Xbar * (1 + Xbar) * P.1 * (Xbar ^ 2 + 1 / c ^ 2))
-          = χ (x'^2 * Y' * (X'^2 + 1 / c ^ 2))
-        unfold P ϕ
-        simp only [hXbar_expand_eq_x'_mul_Y']
-        rw [dite_eq_left t.prop]
-        change χ (x' * Y' * x * (Xbar ^ 2 + 1 / c ^ 2)) = χ (x'^2 * Y' * (X'^2 + 1 / c ^ 2))
-        unfold Xbar X' x' x
-        rw [x_comparison t hs_ne_zero hq_card hq_mod]
-        rw [hXXbar]
-        ring_nf
-      _ = (χ Y') * χ (X'^2 + 1 / c ^ 2) := by
-        rw [χ_mul]
-        rw [χ_mul]
-        rw [χ_a_eq_one (pow_ne_zero 2
-          (x_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨-t, t_h⟩))
-          (IsSquare.sq x')]
-        ring_nf
-  have hχu'_sum_eq_χX'_sum : (χ (u'^2 + 1 / c ^ 2)) = (χ (X'^2 + 1 / c ^ 2)) := by
-    unfold X' AuxiliaryCoordinates.X
-    rw [mul_pow]
-    nth_rw 3 [pow_two]
-    rw [← χ_mul]
-    rw [← pow_two, χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t, t_h⟩))
-      (IsSquare.sq v')]
-    unfold u'
-    simp_all
-  have hχY'_eq_χv'_mul_χ_sum : (χ Y') = (χ v') * (χ (X'^2 + 1 / c ^ 2)) := by
-    rw [← hχu'_sum_eq_χX'_sum]
-    unfold Y' AuxiliaryCoordinates.Y
-    let χ_sum := χ (u'^2 + 1 / c ^ 2);
-    change (χ (((χ v') * v') ^ ((q + 1) / 4) * (χ v') * χ_sum)) = (χ v') * χ_sum
-    rw [mul_assoc, χ_mul]
-    rw [χ_a_eq_one
-      (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_mod)
-      (χ_IsSquare_h1 ⟨-t.val, t_h⟩ hs_ne_zero hq_card hq_mod)]
-    rw [χ_mul, χ_χ_eq_χ hq_card hq_mod]
-    rw [χ_χ_eq_χ hq_card hq_mod]
-    unfold χ_sum
-    simp_all
-  have hz_eq_χv' : z = (χ v') := by
-    rw [hz_eq_χY'_mul_χ_sum, hχY'_eq_χv'_mul_χ_sum, mul_assoc]
-    rw [← χ_mul, ← pow_two]
-    rw [χ_a_eq_one (pow_ne_zero 2
-        (X_pow_two_add_one_div_c_pow_two_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩))
-      (IsSquare.sq (X'^2 + 1 / c ^ 2))]
-    simp
-  rw [hz_eq_χv']
-  unfold X' AuxiliaryCoordinates.X
-  change (χ v') * ((χ v') * u') = u'
-  rw [← mul_assoc, ← χ_mul, ← pow_two]
-  have hv'_sq_isSquare : IsSquare (v'^2) := IsSquare.sq v'
-  rw [χ_a_eq_one (pow_ne_zero 2 (v_ne_zero hs_ne_zero hq_card hq_mod ⟨-t.val, t_h⟩))
-    hv'_sq_isSquare]
-  simp
+lemma χ_Y_eq_χ_v_mul_χ_sum [IsNonzeroParam M.s] [IsCardThreeModFour F] :
+    χ M.Y = χ M.v * χ (M.u ^ 2 + 1 / M.c ^ 2) := by
+  change χ ((χ M.v * M.v) ^ ((Fintype.card F + 1) / 4) * χ M.v * χ (M.u ^ 2 + 1 / M.c ^ 2)) = _
+  rw [χ_mul, χ_mul,
+    χ_a_eq_one (χ_of_v_mul_v_of_t_pow_q_add_one_div_four_ne_zero M) (χ_IsSquare_h1 M),
+    one_mul, χ_χ_eq_χ card_mod_four, χ_χ_eq_χ card_mod_four]
 
-lemma one_add_ubar_ne_zero_base_case (t : {n : F // n = 1 ∨ n = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).1
-    let ubar := ubar s P q
-    1 + ubar ≠ 0 := by
-  intro P ubar
-  unfold ubar
-  rw [ubar_eq_zero, add_zero]
+lemma z_eq_χ_v [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F]
+    (hXXbar : M.Xbar = M.X) :
+    M.z = χ M.v := by
+  have hY_ne_zero : M.Y ≠ 0 := Y_ne_zero M
+  have hx_eq : M.x * M.Y = (M.c - 1) * M.s * M.X * (1 + M.X) := by
+    change (M.c - 1) * M.s * M.X * (1 + M.X) / M.Y * M.Y = _
+    rw [div_mul_cancel₀ _ hY_ne_zero]
+  have hz : M.z = χ ((M.c - 1) * M.s * M.Xbar * (1 + M.Xbar) * M.decoded.P.1
+      * (M.Xbar ^ 2 + 1 / M.c ^ 2)) := rfl
+  rw [hz, hXXbar, M.decoded_P_eq_point_P]
+  change χ ((M.c - 1) * M.s * M.X * (1 + M.X) * M.x * (M.X ^ 2 + 1 / M.c ^ 2)) = χ M.v
+  rw [← hx_eq]
+  have hrearrange : M.x * M.Y * M.x * (M.X ^ 2 + 1 / M.c ^ 2)
+      = M.x ^ 2 * (M.Y * (M.X ^ 2 + 1 / M.c ^ 2)) := by ring
+  rw [hrearrange, χ_mul, χ_sq (x_ne_zero M), one_mul, χ_mul, χ_Y_eq_χ_v_mul_χ_sum M,
+    X_sq_eq_u_sq M, mul_assoc, χ_mul_self_eq_one (v_factored_third_factor_ne_zero M), mul_one]
+
+lemma ubar_eq_u [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F]
+    (hXXbar : M.Xbar = M.X) :
+    M.ubar = M.u := by
+  have hubar : M.ubar = M.z * M.Xbar := rfl
+  rw [hubar, hXXbar, z_eq_χ_v M hXXbar]
+  change χ M.v * (χ M.v * M.u) = M.u
+  rw [← mul_assoc, χ_mul_self_eq_one (v_ne_zero M), one_mul]
+
+/-- `ū` does not change when the input `t` is replaced by `-t`. -/
+lemma _root_.Elligator.MapData.neg_ubar
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.neg.ubar = M.ubar := by
+  change ReconstructionCoordinates.ubar M.neg.s M.neg.decoded.P (Fintype.card F)
+    = ReconstructionCoordinates.ubar M.s M.decoded.P (Fintype.card F)
+  rw [M.neg_decoded_P, MapData.neg_s]
+
+lemma ubar_eq_u' [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F]
+    (hXXbar : M.Xbar = M.neg.X) :
+    M.ubar = M.neg.u := by
+  rw [← M.neg_ubar]
+  exact ubar_eq_u M.neg (by rw [M.neg_Xbar]; exact hXXbar)
+
+lemma one_add_ubar_ne_zero_base_case [IsNonzeroParam D.s] [IsRegularParam D.s]
+    [IsCardThreeModFour F] (t : {n : F // n = 1 ∨ n = -1}) :
+    1 + (D.decoded t.val).ubar ≠ 0 := by
+  rw [ubar_eq_zero D t, add_zero]
   exact one_ne_zero' F
 
 end ubar
@@ -718,73 +585,51 @@ def tbar (s : F) (P : F × F) (q : ℕ) : F :=
     let ubar := ubar s P q
     (1 - ubar) / (1 + ubar)
 
-lemma tbar_eq_one (t : { t : F // t = 1 ∨ t = -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let tbar := tbar s P q
-    tbar = 1 := by
-  intro P tbar_of_P
-  unfold tbar_of_P tbar
-  let ubar_of_P := ubar s P q
-  change (1 - ubar_of_P) / (1 + ubar_of_P) = 1
-  unfold ubar_of_P
-  rw [ubar_eq_zero t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
+/-- PointData wrapper for tbar. -/
+def _root_.Elligator.PointData.tbar : F := ReconstructionCoordinates.tbar Q.s Q.P (Fintype.card F)
+
+/-- MapData wrapper for tbar. -/
+def _root_.Elligator.MapData.tbar
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : F :=
+    M.decoded.tbar
+
+lemma tbar_eq_one [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+    (t : { n : F // n = 1 ∨ n = -1}) :
+    (D.decoded t.val).tbar = 1 := by
+  have hubar :
+      ReconstructionCoordinates.ubar (D.decoded t.val).s (D.decoded t.val).P (Fintype.card F)
+        = 0 :=
+    ubar_eq_zero D t
+  unfold PointData.tbar ReconstructionCoordinates.tbar
+  rw [hubar]
   simp
 
-lemma tbar_eq_t (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (hXXbar :
-      let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      let X := X t s
-      let Xbar := Xbar s P q
-      Xbar = X) :
-    let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let tbar_of_P := tbar s P q
-    tbar_of_P = t := by
-  intro P tbar_of_P
-  let u := u t
-  let ubar := ubar s P q
-  have hubar_eq_u : ubar = u := ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod hXXbar
-  unfold u AuxiliaryCoordinates.u at hubar_eq_u
-  unfold tbar_of_P tbar
-  change (1 - ubar) / (1 + ubar) = t.val
-  change ubar = (1 - t.val) / (1 + t.val) at hubar_eq_u
-  rw [hubar_eq_u, sub_div' (one_add_t_ne_zero t)]
-  rw [add_div' (1 - t.val) 1 (1 + t.val) (one_add_t_ne_zero t)]
-  rw [div_div_div_eq]
-  have h_denom_ne_zero : (1 + t.val) * 2 ≠ 0 :=
-    mul_ne_zero (one_add_t_ne_zero t) (two_ne_zero hq_card hq_mod)
-  grind
+lemma tbar_eq_t [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F]
+    (hXXbar : M.Xbar = M.X) :
+    M.tbar = M.t := by
+  have htbar : M.tbar = (1 - M.ubar) / (1 + M.ubar) := rfl
+  have hu : M.u = (1 - M.t) / (1 + M.t) := rfl
+  have h_one_add_t_ne_zero : (1 : F) + M.t ≠ 0 := one_add_t_ne_zero M.tSub
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  rw [htbar, ubar_eq_u M hXXbar, hu]
+  field_simp
+  have hnum : 1 + M.t - (1 - M.t) = 2 * M.t := by ring
+  have hden : 1 + M.t + (1 - M.t) = 2 := by ring
+  rw [hnum, hden, mul_comm, mul_div_assoc, div_self h_two_ne_zero, mul_one]
 
-lemma tbar_eq_t' (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (hXXbar :
-      let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      let X' := X ⟨-t.val, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-      let Xbar := Xbar s P q
-      Xbar = X')
-    :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).val
-    let tbar_of_P := tbar s P q
-    let t' := -t.val
-    tbar_of_P = t' := by
-  intro P tbar_of_P t'
-  have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-  let u' := u ⟨t', t_h⟩
-  let ubar := ubar s P q
-  have hubar_eq_u' : ubar = u' := ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod hXXbar
-  unfold u' u at hubar_eq_u'
-  unfold tbar_of_P tbar
-  change (1 - ubar) / (1 + ubar) = t'
-  change ubar = (1 - t') / (1 + t') at hubar_eq_u'
-  rw [hubar_eq_u', sub_div' (one_add_t_ne_zero ⟨t', t_h⟩)]
-  rw [add_div' (1 - t') 1 (1 + t') (one_add_t_ne_zero ⟨t', t_h⟩), div_div_div_eq]
-  have h_denom_ne_zero : ((1 + t') * 2) ≠ 0 :=
-    mul_ne_zero (one_add_t_ne_zero ⟨t', t_h⟩) (two_ne_zero hq_card hq_mod)
-  grind
+/-- `t̄` does not change when the input `t` is replaced by `-t`. -/
+lemma _root_.Elligator.MapData.neg_tbar
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.neg.tbar = M.tbar := by
+  change ReconstructionCoordinates.tbar M.neg.s M.neg.decoded.P (Fintype.card F)
+    = ReconstructionCoordinates.tbar M.s M.decoded.P (Fintype.card F)
+  rw [M.neg_decoded_P, MapData.neg_s]
+
+lemma tbar_eq_t' [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F]
+    (hXXbar : M.Xbar = M.neg.X) :
+    M.tbar = -M.t := by
+  rw [← M.neg_tbar, ← MapData.neg_t]
+  exact tbar_eq_t M.neg (by rw [M.neg_Xbar]; exact hXXbar)
 
 end tbar
 

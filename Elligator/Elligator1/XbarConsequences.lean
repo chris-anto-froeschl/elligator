@@ -13,11 +13,16 @@ public import Mathlib.Algebra.QuadraticDiscriminant
 /-!
 # Xbar Consequences
 
-TODO
+Consequences of the image conditions of Theorem 3 for the reconstructed coordinate `X̄`: the
+quadratic equation it satisfies, its nonvanishing, and the resulting expression of `y` and `x`
+in terms of `X̄`.
 
 ## Main Results
 
-* TODO
+* `Xbar_quadratic_eq_of_η`: `X̄ ² + 2(1 + ηr)X̄ + 1 = 0`.
+* `Xbar_eq_X_or_eq_X'`: for a point of the image, `X̄` is `X(t)` or `X(-t)`.
+* `y_with_Xbar`, `x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one`: the coordinates in terms of `X̄`.
+* `tbar_in_t_or_neg_t`: the reconstructed preimage is `t` or `-t`.
 
 ## References
 
@@ -29,8 +34,6 @@ See [Bernstein2013a], Section 3.2, Theorem 1.
 namespace Elligator.Elligator1.XbarConsequences
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
-variable {s : F}
-variable {q : ℕ}
 
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
@@ -40,501 +43,265 @@ open Elligator.Elligator1.OutputCoordinates
 open Elligator.Elligator1.ReconstructionCoordinates
 open Elligator.Elligator1.PhiOverFCharacterization
 
-lemma Xbar_sqrt_property
-  (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P}) :
-    let η_of_P := η P.val
-    let r := r s
-    let Xbar := Xbar s P q
-    (1 + η_of_P * r + Xbar) ^ 2 = (1 + η_of_P * r) ^ 2 - 1 := by
-  intro η_of_P r Xbar
-  unfold Xbar ReconstructionCoordinates.Xbar
-  let a := ((1 + η_of_P * r) ^ 2 - 1) ^ ((q + 1) / 4)
-  let a_sqr := (1 + η_of_P * r) ^ 2 - 1
-  change (1 + η_of_P * r + (-(1 + η_of_P * r) + a)) ^ 2 = a_sqr
-  ring_nf
-  unfold a a_sqr
-  nth_rw 2 [add_comm]
-  rw [← pow_mul, one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
-  unfold η_of_P
-  nth_rw 2 [add_comm]
-  rw [a_pow_q_add_one_div_two_eq_a P.prop.2.1 hq_card hq_mod]
+variable (D : ParamData F)
+variable (M : MapData F)
+variable (Q : PointData F)
 
-lemma Xbar_quadratic_eq_of_η (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P}) :
-    let η := η P.val
-    let r := r s
-    let Xbar := Xbar s P q
-    Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 := by
-  intro η r Xbar
-  have h := Xbar_sqrt_property hq_card hq_mod P
-  grind
+section point
 
-lemma Xbar_eq_X_or_X'_factored
-    (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let t1 := t.val
-    let t2 := -t1
-    let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let X' := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    let X := X t s
-    let Xbar := Xbar s P.val q
-    (Xbar - X) * (Xbar - X') = 0 := by
-  intro t1 t2 P X' X Xbar
-  let η := η P.val
-  let r := r s
-  let P_of_ϕ_fulfills_ϕOverFProps :=
-    P_of_ϕ_fulfills_ϕOverFProps t hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  calc
-    (Xbar - X) * (Xbar - X') = Xbar ^ 2 - (X + X') * Xbar + X * X' := by ring
-    _ = Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 := by
-      rw [X_comparison_implication t hs_ne_zero sq_ne_pm_two hq_card hq_mod]
-      change Xbar ^ 2 - -2 * (1 + η * r) * Xbar + X * X' = Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1
-      rw [mul_add, mul_comm X _]
-      rw [X_comparison_implication2 t hs_ne_zero hq_card hq_mod]
-      ring
-    _ = 0 := Xbar_quadratic_eq_of_η hq_card hq_mod ⟨P.val, P_of_ϕ_fulfills_ϕOverFProps⟩
+lemma Xbar_sqrt_property [IsCardThreeModFour F] (hP : Q.ϕOverFProps) :
+    (1 + Q.η * Q.r + Q.Xbar) ^ 2 = (1 + Q.η * Q.r) ^ 2 - 1 := by
+  have hsq : IsSquare ((1 + Q.η * Q.r) ^ 2 - 1) := hP.2.1
+  have hXbar : Q.Xbar
+      = -(1 + Q.η * Q.r) + ((1 + Q.η * Q.r) ^ 2 - 1) ^ ((Fintype.card F + 1) / 4) := rfl
+  rw [hXbar]
+  have hcollapse : 1 + Q.η * Q.r + (-(1 + Q.η * Q.r)
+      + ((1 + Q.η * Q.r) ^ 2 - 1) ^ ((Fintype.card F + 1) / 4))
+      = ((1 + Q.η * Q.r) ^ 2 - 1) ^ ((Fintype.card F + 1) / 4) := by ring
+  have hexp : (Fintype.card F + 1) / 4 * 2 = (Fintype.card F + 1) / 2 := by
+    have := card_mod_four (F := F)
+    omega
+  rw [hcollapse, ← pow_mul, hexp]
+  exact a_pow_q_add_one_div_two_eq_a hsq card_mod_four
 
-lemma Xbar_eq_X_or_eq_X'
-    (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let t1 := t.val
-    let t2 := -t1
-    let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let X' := X ⟨t2, neg_t_ne_one_and_neg_t_ne_neg_one t⟩ s
-    let X := X t s
-    let Xbar := Xbar s P q
-    Xbar = X ∨ Xbar = X' := by
-  intro t1 t2 P X' X Xbar
-  have h := Xbar_eq_X_or_X'_factored t hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  grind
+lemma Xbar_quadratic_eq_of_η [IsCardThreeModFour F] (hP : Q.ϕOverFProps) :
+    Q.Xbar ^ 2 + 2 * (1 + Q.η * Q.r) * Q.Xbar + 1 = 0 := by
+  linear_combination Xbar_sqrt_property Q hP
 
-lemma ubar_eq_u_or_eq_u' (t : { t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    have t_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-    let u' := u ⟨-t.val, t_h⟩
-    let u := u t
-    let ubar := ubar s P.val q
-    ubar = u ∨ ubar = u' := by
-  intro P t_h u' u ubar
-  rcases (Xbar_eq_X_or_eq_X' t hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h | h
-  · left
-    exact ubar_eq_u t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
-  · right
-    exact ubar_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod h
+lemma Xbar_ne_zero [IsCardThreeModFour F] (hP : Q.ϕOverFProps) : Q.Xbar ≠ 0 := by
+  intro h
+  have hquad := Xbar_quadratic_eq_of_η Q hP
+  rw [h] at hquad
+  simp at hquad
+
+lemma y_divisor_ne_zero_with_Xbar_for_X [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) :
+    Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2 ≠ 0 := by
+  intro h1
+  have hquad := Xbar_quadratic_eq_of_η Q hP
+  have hr_ne_zero : Q.r ≠ 0 := r_ne_zero Q.toParamData
+  have hXbar_ne_zero : Q.Xbar ≠ 0 := Xbar_ne_zero Q hP
+  have hy_add_one_ne_zero : Q.y + 1 ≠ 0 := hP.1
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have h2 : Q.r * Q.Xbar * (1 - 2 * Q.η) = 0 := by linear_combination h1 - hquad
+  have h3 : 2 * Q.η = 1 := by
+    rcases mul_eq_zero.mp h2 with h | h
+    · rcases mul_eq_zero.mp h with h' | h'
+      · exact absurd h' hr_ne_zero
+      · exact absurd h' hXbar_ne_zero
+    · linear_combination -h
+  rw [Q.η_eq_y] at h3
+  have hdenom : 2 * (Q.y + 1) ≠ 0 := mul_ne_zero h_two_ne_zero hy_add_one_ne_zero
+  have h4 : 2 * ((Q.y - 1) / (2 * (Q.y + 1))) * (2 * (Q.y + 1)) = 2 * (Q.y + 1) := by
+    rw [h3, one_mul]
+  rw [mul_assoc, div_mul_cancel₀ _ hdenom] at h4
+  exact four_ne_zero (F := F) card_mod_four (by linear_combination -h4)
+
+lemma Xbar_ne_neg_one [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (y_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ -1 := by
+  intro h1
+  have hquad := Xbar_quadratic_eq_of_η Q hP
+  rw [h1] at hquad
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have hηr : Q.η * Q.r = 0 :=
+    mul_left_cancel₀ h_two_ne_zero (by linear_combination -hquad : (2 : F) * (Q.η * Q.r) = 2 * 0)
+  rcases mul_eq_zero.mp hηr with h | h
+  · have hy_add_one_ne_zero : Q.y + 1 ≠ 0 := hP.1
+    have hdenom : 2 * (Q.y + 1) ≠ 0 :=
+      mul_ne_zero (two_ne_zero card_mod_four) hy_add_one_ne_zero
+    have h0 : (Q.y - 1) / (2 * (Q.y + 1)) = 0 := by rw [← Q.η_eq_y, h]
+    rcases div_eq_zero_iff.mp h0 with h' | h'
+    · exact y_ne_one (by linear_combination h')
+    · exact hdenom h'
+  · exact r_ne_zero Q.toParamData h
+
+lemma Xbar_add_one_ne_zero [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (y_ne_one : Q.y ≠ 1) :
+    Q.Xbar + 1 ≠ 0 :=
+  fun h => Xbar_ne_neg_one Q hP y_ne_one (by linear_combination h)
+
+lemma y_with_Xbar [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) :
+    Q.y = (Q.r * Q.Xbar - (1 + Q.Xbar) ^ 2) / (Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) := by
+  have hquad := Xbar_quadratic_eq_of_η Q hP
+  have hy_add_one_ne_zero : Q.y + 1 ≠ 0 := hP.1
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have hden : Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2 ≠ 0 := y_divisor_ne_zero_with_Xbar_for_X Q hP
+  have hdenom : 2 * (Q.y + 1) ≠ 0 := mul_ne_zero h_two_ne_zero hy_add_one_ne_zero
+  have hηeq : 2 * Q.η * (Q.y + 1) = Q.y - 1 := by
+    rw [Q.η_eq_y]
+    linear_combination div_mul_cancel₀ (Q.y - 1) hdenom
+  have h2ηr : 2 * Q.η * (Q.r * Q.Xbar) + (1 + Q.Xbar) ^ 2 = 0 := by linear_combination hquad
+  rw [eq_div_iff hden]
+  linear_combination (Q.y + 1) * h2ηr - (Q.r * Q.Xbar) * hηeq
+
+lemma y_with_Xbar_of_Xbar_eq_one [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) :
+    Q.Xbar = 1 → Q.y = (Q.r - 4) / (Q.r + 4) := by
+  intro h
+  rw [y_with_Xbar Q hP, h]
+  norm_num
+
+lemma η_mul_r_eq_neg_two_of_Xbar_eq_one [IsCardThreeModFour F] (hP : Q.ϕOverFProps) :
+    Q.Xbar = 1 → Q.η * Q.r = -2 := by
+  intro h
+  have hquad := Xbar_quadratic_eq_of_η Q hP
+  rw [h] at hquad
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  exact mul_left_cancel₀ h_two_ne_zero (by linear_combination hquad : (2 : F) * (Q.η * Q.r)
+    = 2 * (-2))
+
+lemma Xbar_observation1_of_Xbar_ne_one [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) :
+    Q.Xbar ≠ 1 →
+      (Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) ^ 2 * (1 - Q.y ^ 2)
+        = 4 * Q.r * Q.Xbar * (1 + Q.Xbar) ^ 2 := by
+  intro _
+  have hden : Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2 ≠ 0 := y_divisor_ne_zero_with_Xbar_for_X Q hP
+  rw [y_with_Xbar Q hP]
+  field_simp
+  ring
+
+lemma Xbar_observation2_of_Xbar_ne_one
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) :
+    Q.Xbar ≠ 1 →
+      (Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) ^ 2 * (1 - Q.d * Q.y ^ 2)
+        = ((2 * Q.r) / (Q.r - 2)) * (Q.Xbar ^ 4 + (Q.r ^ 2 - 2) * Q.Xbar ^ 2 + 1) := by
+  intro _
+  have hden : Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2 ≠ 0 := y_divisor_ne_zero_with_Xbar_for_X Q hP
+  have hr_sub_two : Q.r - 2 ≠ 0 := r_sub_two_ne_zero Q.toParamData
+  have hd : Q.d = -((Q.r + 2) / (Q.r - 2)) := by
+    linear_combination -neg_d_eq_r_add_two_div_r_sub_two Q.toParamData
+  rw [y_with_Xbar Q hP, hd]
+  field_simp
+  ring
+
+omit [DecidableEq F] in
+lemma one_sub_d_mul_y_pow_two_ne_zero [IsRegularParam Q.s] [IsCardThreeModFour F] :
+    1 - Q.d * Q.y ^ 2 ≠ 0 := by
+  intro h
+  have hd_ne_zero : Q.d ≠ 0 := d_ne_zero Q.toParamData
+  apply one_div_d_nonsquare Q.toParamData
+  refine ⟨Q.y, ?_⟩
+  rw [div_eq_iff hd_ne_zero]
+  linear_combination h
+
+omit [DecidableEq F] in
+lemma x_pow_two_of_Xbar_ne_one_eq1 [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) :
+    Q.x ^ 2 = (1 - Q.y ^ 2) / (1 - Q.d * Q.y ^ 2) := by
+  have hcurve' : Q.x ^ 2 + Q.y ^ 2 = 1 + Q.d * Q.x ^ 2 * Q.y ^ 2 :=
+    (mem_EOverF_iff Q.toParamData Q.P).mp hcurve
+  rw [eq_div_iff (one_sub_d_mul_y_pow_two_ne_zero Q)]
+  linear_combination hcurve'
+
+lemma Xbar_poly_ne_zero
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hX1 : Q.Xbar ≠ 1) :
+    Q.Xbar ^ 5 + (Q.r ^ 2 - 2) * Q.Xbar ^ 3 + Q.Xbar ≠ 0 := by
+  have hr_sub_two : Q.r - 2 ≠ 0 := r_sub_two_ne_zero Q.toParamData
+  have hXbar_ne_zero : Q.Xbar ≠ 0 := Xbar_ne_zero Q hP
+  have hden : Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2 ≠ 0 := y_divisor_ne_zero_with_Xbar_for_X Q hP
+  have hne : 1 - Q.d * Q.y ^ 2 ≠ 0 := one_sub_d_mul_y_pow_two_ne_zero Q
+  have h4' : (Q.r - 2) * ((Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) ^ 2 * (1 - Q.d * Q.y ^ 2))
+      = 2 * Q.r * (Q.Xbar ^ 4 + (Q.r ^ 2 - 2) * Q.Xbar ^ 2 + 1) := by
+    rw [Xbar_observation2_of_Xbar_ne_one Q hP hX1]
+    field_simp
+  have hS : Q.Xbar ^ 4 + (Q.r ^ 2 - 2) * Q.Xbar ^ 2 + 1 ≠ 0 := by
+    intro hS0
+    rw [hS0, mul_zero] at h4'
+    exact (mul_ne_zero hr_sub_two (mul_ne_zero (pow_ne_zero 2 hden) hne)) h4'
+  intro hp
+  apply hS
+  have hfactor : Q.Xbar * (Q.Xbar ^ 4 + (Q.r ^ 2 - 2) * Q.Xbar ^ 2 + 1) = 0 := by
+    linear_combination hp
+  rcases mul_eq_zero.mp hfactor with h | h
+  · exact absurd h hXbar_ne_zero
+  · exact h
+
+lemma x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) :
+    Q.Xbar ≠ 1 →
+      Q.x ^ 2 = (2 * (Q.r - 2) * Q.Xbar ^ 2 * (1 + Q.Xbar) ^ 2)
+        / (Q.Xbar ^ 5 + (Q.r ^ 2 - 2) * Q.Xbar ^ 3 + Q.Xbar) := by
+  intro hX1
+  have hr_ne_zero : Q.r ≠ 0 := r_ne_zero Q.toParamData
+  have hr_sub_two : Q.r - 2 ≠ 0 := r_sub_two_ne_zero Q.toParamData
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have hden : Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2 ≠ 0 := y_divisor_ne_zero_with_Xbar_for_X Q hP
+  have hne : 1 - Q.d * Q.y ^ 2 ≠ 0 := one_sub_d_mul_y_pow_two_ne_zero Q
+  have h1 := x_pow_two_of_Xbar_ne_one_eq1 Q hcurve
+  have h3 := Xbar_observation1_of_Xbar_ne_one Q hP hX1
+  have e1 : Q.x ^ 2 * (1 - Q.d * Q.y ^ 2) = 1 - Q.y ^ 2 := by
+    rw [h1, div_mul_cancel₀ _ hne]
+  have h4' : (Q.r - 2) * ((Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) ^ 2 * (1 - Q.d * Q.y ^ 2))
+      = 2 * Q.r * (Q.Xbar ^ 4 + (Q.r ^ 2 - 2) * Q.Xbar ^ 2 + 1) := by
+    rw [Xbar_observation2_of_Xbar_ne_one Q hP hX1]
+    field_simp
+  rw [eq_div_iff (Xbar_poly_ne_zero Q hP hX1)]
+  refine mul_left_cancel₀ (mul_ne_zero h_two_ne_zero hr_ne_zero) ?_
+  linear_combination (-(Q.Xbar * Q.x ^ 2)) * h4'
+    + (Q.Xbar * (Q.r - 2) * (Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) ^ 2) * e1
+    + (Q.Xbar * (Q.r - 2)) * h3
+
+lemma Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
+    [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (y_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → Q.Xbar ≠ 1 ∧ Q.Xbar ≠ -1 :=
+  fun h => ⟨h, Xbar_ne_neg_one Q hP y_ne_one⟩
+
+end point
+
+section map
+
+variable [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F]
+
+/-- The point decoded from a nonexceptional input satisfies the image conditions. -/
+lemma decoded_ϕOverFProps : M.decoded.ϕOverFProps :=
+  P_of_ϕ_fulfills_ϕOverFProps M.toParamData M.t
+
+lemma Xbar_eq_X_or_X'_factored : (M.Xbar - M.X) * (M.Xbar - M.neg.X) = 0 := by
+  have hquad : M.Xbar ^ 2 + 2 * (1 + M.η * M.r) * M.Xbar + 1 = 0 :=
+    Xbar_quadratic_eq_of_η M.decoded (decoded_ϕOverFProps M)
+  have hsum : M.X + M.neg.X = -2 * (1 + M.η * M.r) := X_comparison_implication M
+  have hprod : M.neg.X * M.X = 1 := X_comparison_implication2 M
+  linear_combination hquad - M.Xbar * hsum + hprod
+
+lemma Xbar_eq_X_or_eq_X' : M.Xbar = M.X ∨ M.Xbar = M.neg.X := by
+  rcases mul_eq_zero.mp (Xbar_eq_X_or_X'_factored M) with h | h
+  · exact Or.inl (sub_eq_zero.mp h)
+  · exact Or.inr (sub_eq_zero.mp h)
+
+lemma ubar_eq_u_or_eq_u' : M.ubar = M.u ∨ M.ubar = M.neg.u := by
+  rcases Xbar_eq_X_or_eq_X' M with h | h
+  · exact Or.inl (ubar_eq_u M h)
+  · exact Or.inr (ubar_eq_u' M h)
 
 /-- The key step: rewriting `1 + ubar(ϕ(t))` in the main case (t ≠ ±1) to show it is ne_zero,
     using `ubar_eq_u_or_eq_u'` which gives `ubar = u(t)` or `ubar = u(-t)`. -/
-lemma one_add_ubar_ne_zero_main_case (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-    (hs_ne_zero : (s : F) ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := (ϕ t.val hs_ne_zero sq_ne_pm_two hq_card hq_mod).1
-    let ubar := ubar s P q
-    1 + ubar ≠ 0 := by
-  intro P ubar
-  unfold ubar
-  obtain h|h := ubar_eq_u_or_eq_u' t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+lemma one_add_ubar_ne_zero_main_case : 1 + M.ubar ≠ 0 := by
+  rcases ubar_eq_u_or_eq_u' M with h | h
   · rw [h]
-    exact one_add_u_ne_zero t hq_card hq_mod
+    exact one_add_u_ne_zero M.toInputData
   · rw [h]
-    have ht_h := neg_t_ne_one_and_neg_t_ne_neg_one t
-    exact one_add_u_ne_zero ⟨-t.val, ht_h⟩ hq_card hq_mod
+    exact one_add_u_ne_zero M.neg.toInputData
 
-lemma one_add_ubar_ne_zero (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod}) :
-    let ubar := ubar s P q
-    (1 + ubar) ≠ 0 := by
-  intro ubar
-  have hP_prop := P.prop
-  unfold ϕOverF at hP_prop
-  obtain ⟨t, ht⟩ := hP_prop
+end map
+
+section image
+
+variable [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+
+lemma one_add_ubar_ne_zero (t : F) : 1 + (D.decoded t).ubar ≠ 0 := by
   by_cases h : t ≠ 1 ∧ t ≠ -1
-  · have hne := one_add_ubar_ne_zero_main_case ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    grind
-  · have ht_eq : t = 1 ∨ t = -1 := by grind
-    have hne := one_add_ubar_ne_zero_base_case ⟨t, ht_eq⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    grind
-
-lemma Xbar_ne_zero
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P}) :
-    let Xbar := Xbar s P q
-    Xbar ≠ 0 := by
-  intro Xbar
-  have h := Xbar_quadratic_eq_of_η hq_card hq_mod P
-  let η := η P.val
-  let r := r s
-  change Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 at h
-  intro h'
-  rw [h'] at h
-  simp at h
-
-lemma y_divisor_ne_zero_with_Xbar_for_X (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P}) :
-    let r := r s
-    let Xbar := Xbar s P q
-    r * Xbar + (1 + Xbar) ^ 2 ≠ 0 := by
-  intro r Xbar h1
-  let η := η P.val
-  have h2 := Xbar_quadratic_eq_of_η hq_card hq_mod P
-  change Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 at h2
-  let y := P.val.2
-  have h3 : 2 * η = 1 := by
-    have hne : r * Xbar ≠ 0 :=
-      mul_ne_zero (r_ne_zero hs_ne_zero hq_card hq_mod) (Xbar_ne_zero hq_card hq_mod P)
-    rw [← div_left_inj' hne]
-    grind
-  have h4 : y - 1 = y + 1 := by
-    unfold η ReconstructionCoordinates.η at h3
-    grind
-  have h5 : y - 1 ≠ y + 1 := by grind
-  contradiction
-
-lemma Xbar_ne_neg_one (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_eq_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P q
-    Xbar ≠ -1 := by
-  intro Xbar h1
-  let η := η P.val
-  let Xbar_equation := Xbar_quadratic_eq_of_η hq_card hq_mod P
-  let r := r s
-  let P_prop := P.prop
-  let y := P.val.2
-  change Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 at Xbar_equation
-  rw [h1] at Xbar_equation
-  have h2 : η = 0 := by
-    ring_nf at Xbar_equation
-    let r_ne_zero := r_ne_zero hs_ne_zero hq_card hq_mod
-    rw [← div_left_inj' (two_ne_zero hq_card hq_mod)] at Xbar_equation
-    rw [← div_left_inj' r_ne_zero] at Xbar_equation
-    ring_nf at Xbar_equation
-    have h2_1 : -(η * r * 2⁻¹ * r⁻¹ * 2) = -(η * (r * r⁻¹) * (2 * 2⁻¹)) := by grind
-    rw [h2_1] at Xbar_equation
-    rw [mul_inv_cancel₀ r_ne_zero, mul_inv_cancel₀ (two_ne_zero hq_card hq_mod)] at Xbar_equation
-    grind
-  have h3 : η ≠ 0 := by
-    unfold η ReconstructionCoordinates.η
-    have h3_1 : y - 1 ≠ 0 := by grind
-    have h3_2 : 2 * (y + 1) ≠ 0 := by
-      intro h3_2_1
-      let y_add_one_ne_zero := P_prop.1
-      unfold ϕOverFProp1 at y_add_one_ne_zero
-      rw [← div_left_inj' (two_ne_zero hq_card hq_mod)] at h3_2_1
-      ring_nf at h3_2_1
-      rw [inv_mul_cancel₀ (two_ne_zero hq_card hq_mod)] at h3_2_1
-      grind
-    apply div_ne_zero h3_1 h3_2
-  contradiction
-
-lemma Xbar_add_one_ne_zero (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_ne_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P q
-    Xbar + 1 ≠ 0 := by
-  grind [Xbar_ne_neg_one]
-
-lemma y_with_Xbar (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_eq_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P.val q
-    let r := r s
-    let y := P.val.2
-    y = (r * Xbar - (1 + Xbar) ^ 2) / (r * Xbar + (1 + Xbar) ^ 2) := by
-  intro Xbar r y
-  let Xbar_equation := Xbar_quadratic_eq_of_η hq_card hq_mod P
-  let η := η P.val
-  let y_add_one_ne_zero := P.prop.1
-  let Xbar_ne_zero := Xbar_ne_zero hq_card hq_mod P
-  let two_ne_zero := two_ne_zero hq_card hq_mod
-  let r_ne_zero := r_ne_zero hs_ne_zero hq_card hq_mod
-  change Xbar ^ 2 + 2 * (1 + η * r) * Xbar + 1 = 0 at Xbar_equation
-  have h1 : y = (1 + 2 * η) / (1 - 2 * η) := by
-    have h1_1 : η = (y - 1) / (2 * (y + 1)) := by simp [η, ReconstructionCoordinates.η, y]
-    have h1_2 : (2 * (y + 1)) ≠ 0 := mul_ne_zero two_ne_zero y_add_one_ne_zero
-    grind
-  have h2 : 2 * η = - ((1 + Xbar) ^ 2) / (r * Xbar) := by
-    have h2_1 : 1 + η * r = - (Xbar ^ 2 + 1) / (2 * Xbar) := by
-      have h2_1_1 : 2 * Xbar ≠ 0 := mul_ne_zero two_ne_zero Xbar_ne_zero
-      rw [← add_left_inj (-Xbar ^ 2), ← add_left_inj (-1)] at Xbar_equation
-      rw [← div_left_inj' h2_1_1] at Xbar_equation
-      grind
-    have h2_2 : 2 * η = -((1 + Xbar) ^ 2) / (r * Xbar) := by
-      have h2_2_1 : η = (-(Xbar ^ 2 + 1) / (2 * Xbar) -1) / r := by grind
-      have h2_2_2 : η = -(Xbar + 1) ^ 2 / (2 * r * Xbar) := by
-        have h2_2_2_1 : (2 * Xbar) / (2 * Xbar) = 1 := by grind
-        rw [← h2_2_2_1] at h2_2_1
-        rw [h2_2_1]
-        ring_nf
-        grind
-      rw [← mul_left_inj' two_ne_zero] at h2_2_2
-      ring_nf
-      grind
-    grind
-  have h3 : (1 + 2 * η) / (1 - 2 * η)
-      = ((r * Xbar - (1 + Xbar) ^ 2)) / ((r * Xbar + (1 + Xbar) ^ 2)) := by
-    have h3_1 : 1 = (r * Xbar) / (r * Xbar) := by grind
-    rw [h2]
-    nth_rw 1 [h3_1]
-    nth_rw 2 [h3_1]
-    rw [← add_div, ← sub_div, div_div]
-    grind
-  rw [← h3]
-  exact h1
-
-lemma y_with_Xbar_of_Xbar_eq_one (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_eq_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P.val q
-    let r := r s
-    let y := P.val.2
-    Xbar = 1 → y = (r - 4) / (r + 4) := by
-  grind [y_with_Xbar]
-
-lemma η_mul_r_eq_neg_two_of_Xbar_eq_one
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P}) :
-    let η := η P
-    let Xbar := Xbar s P q
-    let r := r s
-    Xbar = 1 → η * r = -2 := by
-  intro η  Xbar r Xbar_h
-  let h1 := Xbar_quadratic_eq_of_η hq_card hq_mod P
-  let two_ne_zero := two_ne_zero hq_card hq_mod
-  change Xbar ^ 2 + 2 * (1 + η *r) * Xbar + 1 = 0 at h1
-  rw [Xbar_h, ← add_left_inj (-4), ← div_left_inj' two_ne_zero] at h1
-  ring_nf at h1
-  grind
-
-lemma Xbar_observation1_of_Xbar_ne_one (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_eq_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P.val q
-    let y := P.val.2
-    let r := r s
-    Xbar ≠ 1 → (r * Xbar + (1 + Xbar) ^ 2) ^ 2 * (1 - y ^ 2) = 4 * r * Xbar * (1 + Xbar) ^ 2 := by
-  intro Xbar y r Xbar_h
-  let y_with_Xbar := y_with_Xbar hs_ne_zero hq_card hq_mod P y_eq_one
-  let y_divisor_ne_zero_with_Xbar_for_X :=
-    y_divisor_ne_zero_with_Xbar_for_X hs_ne_zero hq_card hq_mod
-  change y = (r * Xbar - (1 + Xbar) ^ 2) / (r * Xbar + (1 + Xbar) ^ 2) at y_with_Xbar
-  have h1 : (r * Xbar + (1 + Xbar) ^ 2) ^ 2 * (1 - y ^ 2)
-    = (r * Xbar + (1 + Xbar) ^ 2) ^ 2 - (r * Xbar - (1 + Xbar) ^ 2) ^ 2 := by
-    rw [y_with_Xbar, div_pow, mul_sub, ← mul_div_assoc]
-    nth_rw 3 [mul_comm]
-    have h1_1 : (r * Xbar + (1 + Xbar) ^ 2) ^ 2 ≠ 0 := pow_ne_zero 2 (by simp_all; grind)
-    rw [mul_div_assoc, div_self h1_1]
-    ring_nf
-  grind
-
-lemma Xbar_observation2_of_Xbar_ne_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_eq_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P.val q
-    let y := P.val.2
-    let r := r s
-    let d := d s;
-    Xbar ≠ 1 → (r * Xbar + (1 + Xbar) ^ 2) ^ 2 * (1 - d * y ^ 2)
-      = ((2 * r) / (r - 2)) * (Xbar ^ 4 + (r ^ 2 - 2) * Xbar ^ 2 + 1) := by
-  intro Xbar y r d Xbar_h
-  let neg_d_eq_r_add_two_div_r_sub_two :=
-    neg_d_eq_r_add_two_div_r_sub_two hs_ne_zero hq_card hq_mod
-  change -d = (r + 2) / (r - 2) at neg_d_eq_r_add_two_div_r_sub_two
-  let y_divisor_ne_zero_with_Xbar_for_X :=
-    y_divisor_ne_zero_with_Xbar_for_X hs_ne_zero hq_card hq_mod
-  let y_with_Xbar := y_with_Xbar hs_ne_zero hq_card hq_mod P y_eq_one
-  change y = (r * Xbar - (1 + Xbar) ^ 2) / (r * Xbar + (1 + Xbar) ^ 2) at y_with_Xbar
-  have h1 : (r * Xbar + (1 + Xbar) ^ 2) ^ 2 * (1 - d * y ^ 2)
-    = (r * Xbar + (1 + Xbar) ^ 2) ^ 2 + (r + 2) / (r - 2) * ((r * Xbar - (1 + Xbar) ^ 2) ^ 2) := by
-    rw [sub_eq_add_neg, neg_eq_neg_one_mul, ← mul_assoc, ← neg_eq_neg_one_mul]
-    rw [neg_d_eq_r_add_two_div_r_sub_two, y_with_Xbar, div_pow, mul_add]
-    nth_rw 3 [mul_comm]
-    have h1_1 : (r * Xbar + (1 + Xbar) ^ 2) ^ 2 ≠ 0 := pow_ne_zero 2 (by simp_all; grind)
-    rw [← mul_div_assoc, div_mul, mul_div_assoc, div_self h1_1]
-    grind
-  have h2 : (1 + Xbar) ^ 2 = Xbar ^ 2 + 2 * Xbar + 1 := by grind
-  rw [h1, h2]
-  let A := r * Xbar + (Xbar ^ 2 + 2 * Xbar + 1)
-  let B := r * Xbar - (Xbar ^ 2 + 2 * Xbar + 1)
-  change A ^ 2 + (r + 2) / (r - 2) * B ^ 2
-    = 2 * r / (r - 2) * (Xbar ^ 4 + (r ^ 2 - 2) * Xbar ^ 2 + 1)
-  have h3 : A ^ 2 = Xbar^ 4 + 2 * (r + 2) * Xbar ^ 3
-      + ((r + 2) ^ 2 + 2) * Xbar ^ 2 + 2 * (r + 2) * Xbar + 1 := by
-    ring
-  have h4 : B ^ 2 = Xbar^ 4 - 2 * (r - 2) * Xbar ^ 3
-      + ((r - 2) ^ 2 + 2) * Xbar ^ 2 - 2 * (r - 2) * Xbar + 1 := by
-    ring
-  rw [h3, h4]
-  let r_sub_two_ne_zero :=
-    r_sub_two_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  have X_pow_four_term : Xbar ^ 4 + (r + 2) / (r - 2) * Xbar ^ 4
-    = Xbar ^ 4 * (2 * r) / (r - 2) := by grind
-  have X_pow_three_term : Xbar ^ 3 * 2 * (r + 2)
-    + (r + 2) / (r - 2) * (-2 * (r - 2) * Xbar ^ 3) = 0 := by grind
-  have X_pow_two_term : Xbar ^ 2 * (r ^ 2+ 4 * r + 6) + (r + 2) / (r - 2) * (r ^ 2 - 4 * r + 6)
-    * Xbar ^ 2 = Xbar ^ 2 * (2 * r * (r ^ 2 - 2) / (r - 2)) := by
-    nth_rw 3 [mul_comm]
-    rw [← mul_add (Xbar ^ 2)]
-    have h5 : (r ^ 2 + 4 * r + 6 + (r + 2) / (r - 2) * (r ^ 2 - 4 * r + 6))
-      = ((r ^ 2 + 4 * r + 6) * (r - 2) + (r + 2) * (r ^ 2 - 4 * r + 6)) / (r - 2) := by grind
-    rw [h5]
-    have h6 : (r ^ 2 + 4 * r + 6) * (r - 2) = r ^ 3 + 2 * r ^ 2 - 2 * r - 12 := by ring
-    have h7 : (r + 2) * (r ^ 2 - 4 * r + 6) = r ^ 3 - 2 * r ^ 2 - 2 * r + 12 := by ring
-    rw [h6, h7]
-    have h8 : r ^ 3 + 2 * r ^ 2 - 2 * r - 12 + (r ^ 3 - 2 * r ^ 2 - 2 * r + 12)
-        = 2 * r ^ 3 - 4 * r := by
-      ring
-    ring
-  have X_pow_one_term : 2 * (r + 2) * Xbar - 2 * (r + 2) * Xbar = 0 := by ring
-  have const_term : 1 + (r + 2) / (r - 2) = (2 * r) / (r - 2) := by grind
-  grind
-
-lemma one_sub_d_mul_y_pow_two_ne_zero
-    (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P}) :
-    let y := P.val.2
-    let d := d s;
-    1 - d * y ^ 2 ≠ 0 := by
-  intro y d h1
-  let d_ne_zero := d_ne_zero sq_ne_pm_two hq_card hq_mod
-  rw [← add_left_inj (d * y ^ 2)] at h1
-  ring_nf at h1
-  rw [mul_comm, ← div_left_inj' d_ne_zero, mul_div_assoc, div_self d_ne_zero, mul_one] at h1
-  change 1 / d = y ^ 2 at h1
-  have h2 : IsSquare (1 / d) := by
-    unfold IsSquare
-    use y
-    grind
-  let h3 := one_div_d_nonsquare sq_ne_pm_two hq_card hq_mod
-  change ¬IsSquare (1 / d) at h3
-  contradiction
-
-lemma x_pow_two_of_Xbar_ne_one_eq1
-    (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s})
-    (P_props : ϕOverFProps s P) :
-    let x := P.val.1
-    let y := P.val.2
-    let d := d s;
-    x ^ 2 = (1 - y ^ 2) / (1 - d*y ^ 2) := by
-  intro x y d
-  have curve_equation := P.prop;
-  rw [mem_EOverF_iff] at curve_equation
-  let one_sub_d_mul_y_pow_two_ne_zero :=
-    one_sub_d_mul_y_pow_two_ne_zero sq_ne_pm_two hq_card hq_mod ⟨P.val, P_props⟩
-  change 1 - d * y ^ 2 ≠ 0 at one_sub_d_mul_y_pow_two_ne_zero
-  change x ^ 2 + y ^ 2 = 1 + d * x ^ 2 * y ^ 2  at curve_equation
-  rw [← add_left_inj (-d * x ^ 2 * y ^ 2 - y ^ 2)] at curve_equation
-  ring_nf at curve_equation
-  nth_rw 1 [← mul_one (x ^ 2)] at curve_equation
-  rw [mul_assoc, ← mul_sub (x ^ 2)] at curve_equation
-  nth_rw 2 [mul_comm] at curve_equation
-  rw [← div_left_inj' one_sub_d_mul_y_pow_two_ne_zero] at curve_equation
-  simp_all
-
-lemma x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (y_eq_one : P.val.2 ≠ 1) :
-    let x := P.val.1
-    let X := Xbar s P q
-    let r := r s
-    X ≠ 1 → x ^ 2 = (2 * (r -2) * X ^ 2 * (1 + X) ^ 2) / (X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X) := by
-  intro x X r Xh
-  let y := P.val.2
-  let d := d s;
-  let x_pow_two_of_Xbar_ne_one_eq1 :=
-    x_pow_two_of_Xbar_ne_one_eq1 sq_ne_pm_two hq_card hq_mod P P_props
-  change x ^ 2 = (1 - y ^ 2) / (1 - d*y ^ 2) at x_pow_two_of_Xbar_ne_one_eq1
-  let y_with_Xbar := y_with_Xbar hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
-  change y = (r * X - (1 + X) ^ 2) / (r * X + (1 + X) ^ 2) at y_with_Xbar
-  let y_divisor_ne_zero_with_Xbar_for_X :=
-    y_divisor_ne_zero_with_Xbar_for_X hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-  change r * X + (1 + X) ^ 2 ≠ 0 at y_divisor_ne_zero_with_Xbar_for_X
-  have h1 : (r * X + (1 + X) ^ 2) ^ 2 ≠ 0 := by grind
-  have h2 : 1 = ((r * X + (1 + X) ^ 2) ^ 2) / ((r * X + (1 + X) ^ 2) ^ 2) := by grind
-  let Xbar_observation1_of_Xbar_ne_one :=
-    Xbar_observation1_of_Xbar_ne_one hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
-  change X ≠ 1 →
-    (r * X + (1 + X) ^ 2) ^ 2 * (1 - y ^ 2) = 4 * r * X * (1 + X) ^ 2
-    at Xbar_observation1_of_Xbar_ne_one
-  have h3 : (r * X + (1 + X) ^ 2) ^ 2 * (1 - y ^ 2) = 4 * r * X * (1 + X) ^ 2 := by grind
-  let Xbar_observation2_of_Xbar_ne_one := Xbar_observation2_of_Xbar_ne_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
-  change X ≠ 1 → (r * X + (1 + X) ^ 2) ^ 2 * (1 - d * y ^ 2)
-    = ((2 * r) / (r - 2)) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1) at Xbar_observation2_of_Xbar_ne_one
-  have h4 : (r * X + (1 + X) ^ 2) ^ 2 * (1 - d * y ^ 2)
-    = ((2 * r) / (r - 2)) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1) := by grind
-  let X_ne_zero := Xbar_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-  change X ≠ 0 at X_ne_zero
-  calc
-    x ^ 2 = (1 - y ^ 2) / (1 - d*y ^ 2) := by grind
-    _ = (4 * r * X * (1 + X) ^ 2) / ((2 * r) / (r - 2) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by
-      rw [← one_mul (1 - y ^ 2), ← one_mul (1 - d * y ^ 2)]
-      nth_rw 1 [h2]
-      rw [mul_div_assoc, div_mul_div_comm]
-      grind
-    _ = (2 * (r - 2) * X * (1 + X) ^ 2) / (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1) := by
-      let r_sub_two_ne_zero := r_sub_two_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      change r - 2 ≠ 0 at r_sub_two_ne_zero
-      have h' : 1 = (r - 2) / (r - 2) := by grind
-      rw [← one_mul
-        ((4 * r * X * (1 + X) ^ 2) / ((2 * r) / (r - 2) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)))]
-      nth_rw 1 [h']
-      rw [div_mul_div_comm]
-      nth_rw 2 [← mul_assoc]
-      nth_rw 1 [← mul_div_assoc]
-      rw [mul_comm (r - 2) (2 * r), mul_div_assoc]
-      nth_rw 2 [mul_div_assoc]
-      rw [div_self r_sub_two_ne_zero, ← mul_div_assoc]
-      have h'' :
-        (r - 2) * (4 * r * X * (1 + X) ^ 2) / (2 * r * 1 * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1))
-        = (r - 2) * (2 * X * (1 + X) ^ 2) / ((X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by
-        have h''' : (4 * r) / (2 * r) = 2 := by
-          let two_ne_zero := two_ne_zero hq_card hq_mod
-          let r_ne_zero := (r_ne_zero hs_ne_zero hq_card hq_mod)
-          rw [← mul_left_inj' two_ne_zero]
-          ring_nf
-          rw [mul_inv_cancel₀ r_ne_zero]
-          grind
-        have h'''' :
-          (r - 2) * (4 * r * X * (1 + X) ^ 2) / (2 * r * 1 * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1))
-          = ((r - 2) * (X * (1 + X) ^ 2)) * (4 * r)
-              / ((2 * r) * (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)) := by ring
-        rw [h'''', div_mul_eq_div_div, mul_div_assoc, h''']
-        ring
-      rw [h'']
-      ring
-    _ = (2 * (r -2) * X ^ 2 * (1 + X) ^ 2) / (X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X) := by
-      have h5 : 1 = X / X := by grind
-      nth_rw 1 [← one_mul ((2 * (r - 2) * X * (1 + X) ^ 2) / (X ^ 4 + (r ^ 2 - 2) * X ^ 2 + 1)), h5]
-      rw [div_mul_div_comm]
-      ring
-
-lemma Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
-    (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_ne_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P q
-    Xbar ≠ 1 → Xbar ≠ 1 ∧ Xbar ≠ -1 :=
-  by grind [Xbar_ne_neg_one]
+  · exact one_add_ubar_ne_zero_main_case (D.withInput t h.1 h.2)
+  · have h' : t = 1 ∨ t = -1 := by
+      rw [ne_eq, ne_eq, ← not_or, not_not] at h
+      exact h
+    exact one_add_ubar_ne_zero_base_case D ⟨t, h'⟩
 
 @[blueprint "lemma:tbar_in_t_or_neg_t"
   (title := "$\\bar t = \\pm t$")
@@ -543,25 +310,18 @@ lemma Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
   Theorem 3.3 satisfies $\bar t = t$ or $\bar t = -t$. This is the key step showing that
   $\varphi(t)$ has no preimages besides $t$ and $-t$.
   -/)]
-lemma tbar_in_t_or_neg_t (t : F)
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let P := ϕ t hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let t' := -t
-    let tbar_of_P := tbar s P q
-    tbar_of_P = t ∨ tbar_of_P = t' := by
-  intro P t' tbar_of_P
+lemma tbar_in_t_or_neg_t (t : F) : (D.decoded t).tbar = t ∨ (D.decoded t).tbar = -t := by
   by_cases h : t ≠ 1 ∧ t ≠ -1
-  · rcases (Xbar_eq_X_or_eq_X' ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod) with h1 | h1
-    · left
-      exact tbar_eq_t ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
-    · right
-      exact tbar_eq_t' ⟨t, h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod h1
+  · rcases Xbar_eq_X_or_eq_X' (D.withInput t h.1 h.2) with h1 | h1
+    · exact Or.inl (tbar_eq_t (D.withInput t h.1 h.2) h1)
+    · exact Or.inr (tbar_eq_t' (D.withInput t h.1 h.2) h1)
   · have h' : t = 1 ∨ t = -1 := by
-      rw [← not_ne_iff, ← not_ne_iff, ← Lean.Grind.not_and]
+      rw [ne_eq, ne_eq, ← not_or, not_not] at h
       exact h
-    unfold tbar_of_P t'
-    rw [tbar_eq_one ⟨t, h'⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod]
-    grind
+    rcases h' with h' | h'
+    · exact Or.inl ((tbar_eq_one D ⟨t, Or.inl h'⟩).trans h'.symm)
+    · exact Or.inr ((tbar_eq_one D ⟨t, Or.inr h'⟩).trans (by rw [h']; ring))
+
+end image
 
 end Elligator.Elligator1.XbarConsequences

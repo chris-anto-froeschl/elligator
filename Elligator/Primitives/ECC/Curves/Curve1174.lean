@@ -102,6 +102,11 @@ lemma card_F1174 : Fintype.card F1174 = q1174 := ZMod.card q1174
   -/)]
 lemma q1174_mod_four : q1174 % 4 = 3 := by decide
 
+/-- The cardinality of `F1174` is congruent to `3` modulo `4`. -/
+lemma card_F1174_mod_four : Fintype.card F1174 % 4 = 3 := by
+  rw [card_F1174]
+  exact q1174_mod_four
+
 /-- `q1174` is a prime power. -/
 lemma q1174_isPrimePow : IsPrimePow q1174 := prime_q1174.prime.isPrimePow
 
@@ -142,7 +147,7 @@ lemma χ_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
   have hone :
     ((3618502788666131106986593281521497120414687020801267626233049500247285301238 : ℕ) : F1174)
     = -1 := by decide
-  rw [χ_eq_pow (-1174 : F1174) card_F1174 q1174_mod_four, ← hneg, ← hone]
+  rw [χ_eq_pow (-1174 : F1174) card_F1174_mod_four, card_F1174, ← hneg, ← hone]
   exact natCast_pow_eq_natCast _ _ _ 256 (by decide) (by decide)
 
 /-- `-1174` is not a square in `F1174`; by [Bernstein2013a], Section 4.1 this is what makes
@@ -156,7 +161,7 @@ Curve1174 a complete Edwards curve. -/
 lemma neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
   intro hsq
   have hne : (-1174 : F1174) ≠ 0 := by decide
-  have h1 : χ (-1174 : F1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174 q1174_mod_four).2 hsq
+  have h1 : χ (-1174 : F1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174_mod_four).2 hsq
   rw [χ_neg1174_eq_neg_one] at h1
   exact absurd h1 (by decide)
 

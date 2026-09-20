@@ -138,6 +138,9 @@ lemma χ_of_a_pow_n_eq_χ_a (a : F) (n : {n : ℕ | Odd n}) :
     exact hn.neg_one_pow
   · rw [h, one_pow]
 
+lemma χ_mul_self_eq_one {a : F} (ha : a ≠ 0) : χ a * χ a = 1 := by
+  rw [← χ_mul, ← pow_two, χ_sq ha]
+
 lemma χ_χ_eq_χ {a : F} (hq_mod : Fintype.card F % 4 = 3) :
     χ (χ a) = χ a := by
   rcases χ_values (a := a) with h | h | h

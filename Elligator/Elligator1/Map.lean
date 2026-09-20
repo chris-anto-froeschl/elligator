@@ -21,6 +21,9 @@ point `(x, y)` on the complete Edwards curve. The exceptional inputs `t = ±1` a
   are nonzero, so the displayed expressions are defined.
 * `map_fulfills_curve_equation`: the resulting `(x, y)` satisfies the Edwards curve equation.
 * `ϕ`: Definition 2's total map from field elements to points on the Edwards curve.
+* `ParamData.decoded`: the decoded point `ϕ t`, packaged as a `PointData`, so that the
+  reconstruction quantities of Theorem 3 can be written `(D.decoded t).Xbar` and so on; the
+  special case `t = M.t` of an admissible input is `MapData.decoded`.
 
 ## References
 
@@ -154,8 +157,8 @@ def _root_.Elligator.ParamData.ϕ
     {P : F × F // P ∈ D.EOverF} :=
   Elligator1.ϕ t s_ne_zero s_sq_ne_pm_two card_mod_four
 
-/-- The point `(x, y)` of Theorem 1, as a `PointData`; this is how one passes from the “Theorem 1”
-side of the development to the “Theorem 3” side. -/
+/-- The point `(x, y)` of Theorem 1, as a `PointData`; this is how one passes from the Theorem 1
+side of the development to the Theorem 3 side. -/
 def _root_.Elligator.MapData.point : PointData F where
   s := M.s
   P := (M.x, M.y)
@@ -168,11 +171,22 @@ def _root_.Elligator.PointData.x : F := Q.P.1
 /-- The `y`-coordinate of the point. -/
 def _root_.Elligator.PointData.y : F := Q.P.2
 
+/-- The decoded point `ϕ t`, packaged together with the curve parameter as a `PointData`.
+
+Every quantity of Theorem 3 (`η`, `X̄`, `z`, `ū`, `t̄`, the image conditions ...) is a field of
+`PointData`, so this is what allows statements about a decoded point to be written in dot
+notation, e.g. `(D.decoded t).tbar`, instead of applying the unbundled functions to `D.s`,
+`(D.ϕ t).val` and `Fintype.card F`. Unlike `MapData.decoded` it also covers the two exceptional
+inputs `t = ± 1`, which no `MapData` provides. -/
+def _root_.Elligator.ParamData.decoded
+    [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F] (t : F) : PointData F where
+  toParamData := D
+  P := (D.ϕ t).val
+
 /-- The point of the decoding map, as a `PointData`. -/
 def _root_.Elligator.MapData.decoded
-    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : PointData F where
-    s := M.s
-    P := (M.ϕ M.t).val
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : PointData F :=
+  M.toParamData.decoded M.t
 
 /-- Show equivalence between an explicit (x, y) (`OutputCoordinates`) point and the
 implicit generation via `ϕ`, resulting in the context of a `MapData` due to `t` in the same point.
@@ -181,14 +195,16 @@ implicit generation via `ϕ`, resulting in the context of a `MapData` due to `t`
 lemma _root_.Elligator.MapData.decoded_P_eq_point_P
     [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
     M.decoded.P = M.point.P := by
-  unfold MapData.decoded MapData.point ParamData.ϕ ϕ MapData.x MapData.y InputData.tSub
+  unfold MapData.decoded ParamData.decoded MapData.point ParamData.ϕ ϕ MapData.x MapData.y
+    InputData.tSub
   dsimp
   rw [dite_eq_left ⟨M.t_ne_one, M.t_ne_neg_one⟩]
 
 lemma _root_.Elligator.MapData.decoded_eq_point
     [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
     M.decoded = M.point := by
-  unfold MapData.decoded MapData.point ParamData.ϕ ϕ MapData.x MapData.y InputData.tSub
+  unfold MapData.decoded ParamData.decoded MapData.point ParamData.ϕ ϕ MapData.x MapData.y
+    InputData.tSub
   dsimp
   rw [dite_eq_left ⟨M.t_ne_one, M.t_ne_neg_one⟩]
 

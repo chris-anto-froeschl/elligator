@@ -9,13 +9,19 @@ public import Elligator.Elligator1.XbarConsequences
 public import Mathlib.Algebra.QuadraticDiscriminant
 
 /-!
-# Reconstruction Coordinates
+# Reverse Proof Vehicle
 
-TODO
+The primed quantities `Y'`, `z'`, `u'`, `v'`, `t'`, `x'`, `y'` reconstructed from a point of
+`E(F)` satisfying the image conditions of Theorem 3. They mirror the forward quantities of
+Theorem 1 and are shown to coincide with them for the input `t'`, which is the heart of the
+reverse direction of Theorem 3.
 
 ## Main Results
 
-* TODO
+* `Y'`, `z'`, `u'`, `v'`, `t'`, `x'`, `y'`: the reconstructed quantities.
+* `u'_eq_u`, `v'_eq_v`, `X'_eq_X`, `Y'_eq_Y`, `x'_eq_x`, `y'_eq_y`: they agree with the
+  forward quantities computed from the input `t'`.
+* `x_y_of_P_eq_x_y`: the forward map applied to `t'` returns the original point.
 
 ## References
 
@@ -27,8 +33,6 @@ See [Bernstein2013a], Section 3.2, Theorem 1.
 namespace Elligator.Elligator1.ReverseProofVehicle
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
-variable {s : F}
-variable {q : ℕ}
 
 open Elligator.FiniteFieldBasic
 open Elligator.LegendreSymbol
@@ -39,821 +43,410 @@ open Elligator.Elligator1.ReconstructionCoordinates
 open Elligator.Elligator1.PhiOverFCharacterization
 open Elligator.Elligator1.XbarConsequences
 
+variable (Q : PointData F)
+
 section Y'
 
-/-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def Y' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) : F :=
-    let x := P.val.1
-    let c := c s
-    let X := Xbar s P q
-    -- This is just `def x` with the denominator `Y` replaced by `x` of P
-    (c - 1) * s * X * (1 + X) / x
+/-- `Y'` is the `Y` equivalent used in the proof reverse argumentation of Theorem 3 part C.
+
+This is just `def x` with the denominator `Y` replaced by the `x`-coordinate of the point. -/
+def Y' : F := (Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) / Q.x
+
+omit [DecidableEq F] in
+lemma c_sub_one_pow_two_mul_s_pow_two [IsNonzeroParam Q.s] [IsCardThreeModFour F] :
+    (Q.c - 1) ^ 2 * Q.s ^ 2 = 2 * (Q.r - 2) := by
+  have hs_ne_zero : Q.s ≠ 0 := s_ne_zero
+  have hc_ne_zero : Q.c ≠ 0 := c_ne_zero Q.toParamData
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have hc : Q.c = 2 / Q.s ^ 2 := rfl
+  have hr : Q.r = Q.c + 1 / Q.c := rfl
+  rw [hr, hc]
+  field_simp
+  ring
+
+lemma one_add_Xbar_ne_zero [IsNonzeroParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hy_ne_one : Q.y ≠ 1) :
+    1 + Q.Xbar ≠ 0 :=
+  fun h => Xbar_ne_neg_one Q hP hy_ne_one (by linear_combination h)
 
 lemma Y'_pow_two_eq_of_Xbar_ne_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (y_eq_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let r := r s
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    -- This is just `def x` with the denominator `Y` replaced by `x` of P
-    X ≠ 1 → Y ^ 2 = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X := by
-  intro X r Y Xh
-  let c := c s
-  let x := P.val.1
-  let h := x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_eq_one
-  let two_ne_zero := two_ne_zero hq_card hq_mod
-  have h' : x ^ 2 = (2 * (r -2) * X ^ 2 * (1 + X) ^ 2) / (X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X) := h Xh
-  calc
-    Y ^ 2 = (c - 1) ^ 2 * s ^ 2 * X ^ 2 * (1 + X) ^ 2 / (x ^ 2) := by
-      unfold Y Y'
-      change ((c - 1) * s * X * (1 + X) / x) ^ 2
-        = (c - 1) ^ 2 * s ^ 2 * X ^ 2 * (1 + X) ^ 2 / (x ^ 2)
-      rw [div_pow]
-      repeat rw [← mul_pow]
-  _ = 2 * (r - 2) * X ^ 2 * (1 + X) ^ 2 / (x ^ 2) := by
-    have h : (c - 1) ^ 2 * s ^ 2 = 2 * (r - 2) := by
-      unfold r CurveParameters.r c CurveParameters.c
-      field_simp [hs_ne_zero]
-      ring
-    rw [h]
-  _ = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X := by
-    have h'' : (2 * (r - 2) * X ^ 2 * (1 + X) ^ 2) ≠ 0 := by
-      let Xbar_add_one_ne_zero :=
-        Xbar_add_one_ne_zero hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_eq_one
-      let r_sub_two_ne_zero := r_sub_two_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod
-      let Xbar_ne_zero := Xbar_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-      rw [add_comm]
-      apply mul_ne_zero
-      · apply mul_ne_zero
-        · apply mul_ne_zero two_ne_zero r_sub_two_ne_zero
-        · apply pow_ne_zero 2 Xbar_ne_zero
-      · apply pow_ne_zero 2 Xbar_add_one_ne_zero
-    rw [h']
-    nth_rw 1 [← div_one (2 * (r - 2) * X ^ 2 * (1 + X) ^ 2)]
-    rw [div_div_div_comm, div_self h'']
-    simp_all
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → Y' Q ^ 2 = Q.Xbar ^ 5 + (Q.r ^ 2 - 2) * Q.Xbar ^ 3 + Q.Xbar := by
+  intro hX1
+  have hx2 := x_pow_two_of_Xbar_ne_one_eq2_of_Xbar_ne_one Q hcurve hP hX1
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have hA : 2 * (Q.r - 2) * Q.Xbar ^ 2 * (1 + Q.Xbar) ^ 2 ≠ 0 :=
+    mul_ne_zero
+      (mul_ne_zero (mul_ne_zero h_two_ne_zero (r_sub_two_ne_zero Q.toParamData))
+        (pow_ne_zero 2 (Xbar_ne_zero Q hP)))
+      (pow_ne_zero 2 (one_add_Xbar_ne_zero Q hP hy_ne_one))
+  have hY2 : Y' Q ^ 2 = (2 * (Q.r - 2) * Q.Xbar ^ 2 * (1 + Q.Xbar) ^ 2) / Q.x ^ 2 := by
+    change ((Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) / Q.x) ^ 2 = _
+    rw [div_pow]
+    congr 1
+    linear_combination (Q.Xbar ^ 2 * (1 + Q.Xbar) ^ 2) * c_sub_one_pow_two_mul_s_pow_two Q
+  rw [hY2, hx2, div_div_eq_mul_div, mul_comm, mul_div_assoc, div_self hA, mul_one]
 
-lemma Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
-    (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {P : F × F // ϕOverFProps s P})
-    (y_ne_one : P.val.2 ≠ 1) :
-    let Xbar := Xbar s P q
-    Xbar ≠ 1 → Xbar ≠ 1 ∧ Xbar ≠ -1 :=
-  by grind [Xbar_ne_neg_one]
-
-lemma Y'_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    Y ≠ 0 := by
-  intro Y
-  have Xbar_add_one_ne_zero :=
-    Xbar_add_one_ne_zero hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-  have Xbar_ne_zero := Xbar_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-  have c_sub_one_ne_zero := c_sub_one_ne_zero sq_ne_pm_two
-  unfold Y Y'
-  grind
+lemma Y'_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Y' Q ≠ 0 := by
+  apply div_ne_zero _ hx_ne_zero
+  exact mul_ne_zero
+    (mul_ne_zero (mul_ne_zero (c_sub_one_ne_zero Q.toParamData) s_ne_zero) (Xbar_ne_zero Q hP))
+    (one_add_Xbar_ne_zero Q hP hy_ne_one)
 
 end Y'
 
 section z'
 
 /-- `z'` is the `z` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def z' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-  (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-  (P : {p : F × F // p ∈ EOverF s}) : F :=
-  let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  let X := Xbar s P q
-  let c := c s
-  χ (Y * (X ^ 2 + 1 / c ^ 2))
+def z' : F := χ (Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2))
 
-lemma z'_argument_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    let c := c s
-    Y * (X ^ 2 + 1 / c ^ 2) ≠ 0 := by
-  grind [Y'_ne_zero, Xbar_pow_two_add_one_div_c_pow_two_ne_zero]
+lemma z'_argument_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2) ≠ 0 :=
+  mul_ne_zero (Y'_ne_zero Q hP hx_ne_zero hy_ne_one)
+    (Xbar_pow_two_add_one_div_c_pow_two_ne_zero Q)
 
-lemma z'_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let z := z' sq_ne_pm_two hq_card hq_mod P
-    z ≠ 0 := by
-  intro z
-  let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  let X := Xbar s P q
-  let c := c s
-  let z'_argument_ne_zero :=
-    z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let a := (Y * (X ^ 2 + 1 / c ^ 2))
-  exact χ_a_ne_zero z'_argument_ne_zero
+lemma z'_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    z' Q ≠ 0 :=
+  χ_a_ne_zero (z'_argument_ne_zero Q hP hx_ne_zero hy_ne_one)
 
-lemma z'_eq_one_or_z'_eq_neg_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let z := z' sq_ne_pm_two hq_card hq_mod P
-    z = 1 ∨ z = -1 := by
-  intro z
-  let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  let X := Xbar s P q
-  let c := c s
-  let a := (Y * (X ^ 2 + 1 / c ^ 2))
-  open Classical in
-  let χ_of_a := χ a
-  have h1 := χ_values (a := a)
-  change χ_of_a = 0 ∨ χ_of_a = -1 ∨ χ_of_a = 1 at h1
-  have h2 := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  change χ_of_a ≠ 0 at h2
-  change χ_of_a = 1 ∨ χ_of_a = -1
-  simp_all
-  grind
+lemma z'_eq_one_or_z'_eq_neg_one [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    z' Q = 1 ∨ z' Q = -1 := by
+  have hne := z'_ne_zero Q hP hx_ne_zero hy_ne_one
+  rcases χ_values (a := Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2)) with h | h | h
+  · exact absurd h hne
+  · exact Or.inr h
+  · exact Or.inl h
 
 end z'
 
 section u'
 
 /-- `u'` is the `u` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def u' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) : F :=
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  let X := Xbar s P q
-  z * X
+def u' : F := z' Q * Q.Xbar
 
-lemma u'_pow_two_eq_X_pow_two
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    u ^ 2 = X ^ 2 := by
-  grind [u, u', z', z'_eq_one_or_z'_eq_neg_one]
+lemma u'_pow_two_eq_X_pow_two [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    u' Q ^ 2 = Q.Xbar ^ 2 := by
+  change (z' Q * Q.Xbar) ^ 2 = _
+  rcases z'_eq_one_or_z'_eq_neg_one Q hP hx_ne_zero hy_ne_one with h | h <;> rw [h] <;> ring
 
 lemma u'_eq_Xbar_or_u'_eq_neg_Xbar
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    u = X ∨ u = -X := by
-  grind [u, u', z'_eq_one_or_z'_eq_neg_one]
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    u' Q = Q.Xbar ∨ u' Q = -Q.Xbar := by
+  rcases z'_eq_one_or_z'_eq_neg_one Q hP hx_ne_zero hy_ne_one with h | h
+  · left
+    change z' Q * Q.Xbar = Q.Xbar
+    rw [h, one_mul]
+  · right
+    change z' Q * Q.Xbar = -Q.Xbar
+    rw [h]
+    ring
 
-lemma u'_ne_neg_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    X ≠ 1 → u ≠ -1 := by
-  intro u X h1
-  have hz'_cases := z'_eq_one_or_z'_eq_neg_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  have hXbar_ne_pm_one := Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
-    hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-  unfold u u'
-  grind
+lemma u'_ne_neg_one [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → u' Q ≠ -1 := by
+  intro hX1 hcontra
+  rcases u'_eq_Xbar_or_u'_eq_neg_Xbar Q hP hx_ne_zero hy_ne_one with h | h
+  · exact Xbar_ne_neg_one Q hP hy_ne_one (by rw [← h, hcontra])
+  · exact hX1 (by linear_combination h - hcontra)
 
-lemma one_add_u'_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    X ≠ 1 → 1 + u ≠ 0 := by
-  intro u X h1
-  have hz'_cases := z'_eq_one_or_z'_eq_neg_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  have hXbar_ne_pm_one := Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
-    hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-  unfold u u'
-  grind
+lemma one_add_u'_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → 1 + u' Q ≠ 0 := by
+  intro hX1 hcontra
+  exact u'_ne_neg_one Q hP hx_ne_zero hy_ne_one hX1 (by linear_combination hcontra)
 
-lemma u'_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    X ≠ 1 → u ≠ 0 := by
-  intro u X h1
-  have hz'_cases := z'_eq_one_or_z'_eq_neg_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
-    y_ne_one
-  have hXbar_ne_zero := Xbar_ne_zero hq_card hq_mod ⟨P.val, P_props⟩
-  have hXbar_ne_pm_one := Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
-    hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-  unfold u u'
-  grind
+lemma u'_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    u' Q ≠ 0 :=
+  mul_ne_zero (z'_ne_zero Q hP hx_ne_zero hy_ne_one) (Xbar_ne_zero Q hP)
 
 end u'
 
 section v'
 
-/-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def v' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) : F :=
-  let u := u' sq_ne_pm_two hq_card hq_mod P
-  let r := r s
-  -- Note: this is just the definition of v as in theorem 1
-  u ^ 5 + (r ^ 2 - 2) * u ^ 3 + u
+/-- `v'` is the `v` equivalent used in the proof reverse argumentation of Theorem 3 part C.
 
-lemma v'_eq_z'_mul_Y'_pow_two
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (y_ne_one : P.val.2 ≠ 1) :
-    let z := z' sq_ne_pm_two hq_card hq_mod P
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let X := Xbar s P q
-    X ≠ 1 → v = z * Y ^ 2 := by
-  intro z Y v X h1
-  let r := r s
-  let c := c s
-  have hXbar_ne_pm_one := Xbar_ne_one_and_Xbar_ne_neg_one_of_Xbar_ne_one
-    hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-  have hY'_sq := Y'_pow_two_eq_of_Xbar_ne_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-  have hz_cube_eq_z : z ^ 3 = z := by
-    have := χ_of_a_pow_n_eq_χ_a (Y * (X ^ 2 + 1 / c ^ 2)) ⟨3, by grind⟩
-    change z ^ 3 = z at this
-    exact this
-  have hz_pow5_eq_z : z ^ 5 = z := by
-    have := χ_of_a_pow_n_eq_χ_a (Y * (X ^ 2 + 1 / c ^ 2)) ⟨5, by grind⟩
-    change z ^ 5 = z at this
-    exact this
-  let x := P.val.1
-  have hv_eq_z_mul_expand : v = z * (X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X) := by
-    change (z * X) ^ 5 + (r ^ 2 - 2) * (z * X) ^ 3 + (z * X) = z * (X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X)
-    repeat rw [mul_pow]
-    rw [hz_cube_eq_z, hz_pow5_eq_z]
-    grind
-  grind
+Note: this is just the definition of `v` as in Theorem 1. -/
+def v' : F := u' Q ^ 5 + (Q.r ^ 2 - 2) * u' Q ^ 3 + u' Q
 
-lemma v'_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    X ≠ 1 → v ≠ 0 := by
-  intro X v h1
-  have hv_eq_z_mul_Y_sq :=
-    v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  have hv_eq_zY2 : v = z * Y ^ 2 := by grind
-  rw [hv_eq_zY2]
-  have hY_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
-    y_ne_one
-  have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
-    y_ne_one
-  grind
+lemma z'_pow_three_eq_z' : z' Q ^ 3 = z' Q :=
+  χ_of_a_pow_n_eq_χ_a (Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2)) ⟨3, by decide⟩
+
+lemma z'_pow_five_eq_z' : z' Q ^ 5 = z' Q :=
+  χ_of_a_pow_n_eq_χ_a (Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2)) ⟨5, by decide⟩
+
+lemma v'_eq_z'_mul_Y'_pow_two [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → v' Q = z' Q * Y' Q ^ 2 := by
+  intro hX1
+  have hY2 := Y'_pow_two_eq_of_Xbar_ne_one Q hcurve hP hy_ne_one hX1
+  have hv : v' Q = (z' Q * Q.Xbar) ^ 5 + (Q.r ^ 2 - 2) * (z' Q * Q.Xbar) ^ 3
+      + (z' Q * Q.Xbar) := rfl
+  rw [hv, hY2, mul_pow, mul_pow, z'_pow_three_eq_z' Q, z'_pow_five_eq_z' Q]
+  ring
+
+lemma v'_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → v' Q ≠ 0 := by
+  intro hX1
+  rw [v'_eq_z'_mul_Y'_pow_two Q hcurve hP hy_ne_one hX1]
+  exact mul_ne_zero (z'_ne_zero Q hP hx_ne_zero hy_ne_one)
+    (pow_ne_zero 2 (Y'_ne_zero Q hP hx_ne_zero hy_ne_one))
 
 end v'
 
-lemma χ_of_v'_eq_χ_of_z'
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let z := z' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let χ_of_v := χ v
-    let χ_of_z := χ z
-    X ≠ 1 → χ_of_v = χ_of_z := by
-  intro X z v χ_of_v χ_of_z h
-  let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  have hv_eq_zY2 :=
-    v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-  unfold χ_of_v v
-  rw [hv_eq_zY2 h]
-  have hY_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  rw [χ_of_a_eq_χ_a_mul_b_pow_two hY_ne_zero]
+lemma χ_of_v'_eq_χ_of_z' [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → χ (v' Q) = χ (z' Q) := by
+  intro hX1
+  rw [v'_eq_z'_mul_Y'_pow_two Q hcurve hP hy_ne_one hX1,
+    χ_of_a_eq_χ_a_mul_b_pow_two (Y'_ne_zero Q hP hx_ne_zero hy_ne_one)]
 
-lemma χ_of_z'_eq_z' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) :
-    let X := Xbar s P q
-    let z := z' sq_ne_pm_two hq_card hq_mod P
-    let χ_of_z := χ z
-    X ≠ 1 → χ_of_z = z := by
-  intro X z χ_of_z h1
-  exact χ_χ_eq_χ hq_card hq_mod
+lemma χ_of_z'_eq_z' [IsCardThreeModFour F] : χ (z' Q) = z' Q := by
+  change χ (χ (Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2))) = χ (Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2))
+  exact χ_χ_eq_χ card_mod_four
 
-lemma χ_of_v'_eq_z'
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let z := z' sq_ne_pm_two hq_card hq_mod P
-    let χ_of_v := χ v
-    X ≠ 1 → χ_of_v = z := by
-  grind [χ_of_v'_eq_χ_of_z', χ_of_z'_eq_z']
+lemma χ_of_v'_eq_z' [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → χ (v' Q) = z' Q := by
+  intro hX1
+  rw [χ_of_v'_eq_χ_of_z' Q hcurve hP hx_ne_zero hy_ne_one hX1, χ_of_z'_eq_z' Q]
 
-lemma X'_eq_χ_of_v'_mul_u'
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let χ_of_v := χ v
-    X ≠ 1 → X = χ_of_v * u := by
-  intro X v u χ_of_v h1
-  have hχv_eq_z := χ_of_v'_eq_z'
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  unfold χ_of_v v
-  rw [hχv_eq_z h1]
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
-    y_ne_one
-  rw [mul_comm, ← div_left_inj' hz_ne_zero]
-  rw [mul_div_assoc, div_self hz_ne_zero]
-  change X / z = z * X * 1
-  have hz_arg_ne_zero :=
-    z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let Y := Y' sq_ne_pm_two hq_card hq_mod P
-  let c := c s
-  let a := (Y * (X ^ 2 + 1 / c ^ 2))
-  nth_rw 1 [← mul_one X]
-  unfold z z'
-  rw [mul_div_assoc, ← one_div_χ_of_a_eq_χ_a]
-  grind
+lemma X'_eq_χ_of_v'_mul_u' [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → Q.Xbar = χ (v' Q) * u' Q := by
+  intro hX1
+  rw [χ_of_v'_eq_z' Q hcurve hP hx_ne_zero hy_ne_one hX1]
+  change Q.Xbar = z' Q * (z' Q * Q.Xbar)
+  rcases z'_eq_one_or_z'_eq_neg_one Q hP hx_ne_zero hy_ne_one with h | h <;> rw [h] <;> ring
 
 lemma Y'_pow_two_eq_χ_of_v'_mul_v'
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let χ_of_v := χ v
-    X ≠ 1 → Y ^ 2 = χ_of_v * v := by
-  intro X Y v χ_of_v h1
-  have hv_eq_zY2 :=
-    v'_eq_z'_mul_Y'_pow_two hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props y_ne_one
-  let z := z' sq_ne_pm_two hq_card hq_mod P
-  have hv_eq_zY2' : v = z * Y ^ 2 := by grind
-  have hz_ne_zero := z'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
-    y_ne_one
-  rw [mul_comm, ← div_left_inj' hz_ne_zero] at hv_eq_zY2'
-  rw [mul_div_assoc, div_self hz_ne_zero, mul_one] at hv_eq_zY2'
-  change v / z = Y ^ 2 at hv_eq_zY2'
-  have hz_arg_ne_zero :=
-    z'_argument_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let c := c s
-  let u := u' sq_ne_pm_two hq_card hq_mod P
-  let r := r s
-  let a := u ^ 5 + (r ^ 2 - 2) * u ^ 3 + u
-  rw [← hv_eq_zY2', mul_comm]
-  unfold χ_of_v v v'
-  rw [one_div_χ_of_a_eq_χ_a]
-  change v / z = v * (1 / χ_of_v)
-  have hχv_eq_z := χ_of_v'_eq_z'
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  unfold χ_of_v v
-  rw [hχv_eq_z h1]
-  grind
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → Y' Q ^ 2 = χ (v' Q) * v' Q := by
+  intro hX1
+  rw [χ_of_v'_eq_z' Q hcurve hP hx_ne_zero hy_ne_one hX1,
+    v'_eq_z'_mul_Y'_pow_two Q hcurve hP hy_ne_one hX1]
+  rcases z'_eq_one_or_z'_eq_neg_one Q hP hx_ne_zero hy_ne_one with h | h <;> rw [h] <;> ring
 
 lemma χ_of_v'_eq_z'_unfold_of_X'_ne_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let c := c s
-    X ≠ 1 → (χ v) = χ (Y * (X ^ 2 + 1 / c ^ 2)) := by
-  intro X Y v c h1
-  rw [χ_of_v'_eq_z' hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1]
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → χ (v' Q) = χ (Y' Q * (Q.Xbar ^ 2 + 1 / Q.c ^ 2)) := by
+  intro hX1
+  rw [χ_of_v'_eq_z' Q hcurve hP hx_ne_zero hy_ne_one hX1]
   rfl
 
 lemma χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let c := c s
-    X ≠ 1 → (χ v) = χ (Y * (u ^ 2 + 1 / c ^ 2)) := by
-  grind [χ_of_v'_eq_z'_unfold_of_X'_ne_one, u'_pow_two_eq_X_pow_two]
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → χ (v' Q) = χ (Y' Q * (u' Q ^ 2 + 1 / Q.c ^ 2)) := by
+  intro hX1
+  rw [u'_pow_two_eq_X_pow_two Q hP hx_ne_zero hy_ne_one]
+  exact χ_of_v'_eq_z'_unfold_of_X'_ne_one Q hcurve hP hx_ne_zero hy_ne_one hX1
 
-lemma u'_pow_two_add_one_div_c_pow_two_ne_zero
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) :
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let c := c s
-    u ^ 2 + 1 / c ^ 2 ≠ 0 := by
-  intro u c h
-  have hneg_one_sq : -1 = (u * c) ^ 2 := by grind [pow_ne_zero, c_ne_zero]
-  have hisSquare : IsSquare (-1 : F) := by
-    rw [hneg_one_sq, pow_two]
-    apply IsSquare.mul_self (u * c)
-  have hmod_ne_three : q % 4 ≠ 3 := by
-    rw [FiniteField.isSquare_neg_one_iff, hq_card] at hisSquare
-    exact hisSquare
-  contradiction
+lemma u'_pow_two_add_one_div_c_pow_two_ne_zero [IsNonzeroParam Q.s] [IsCardThreeModFour F] :
+    u' Q ^ 2 + 1 / Q.c ^ 2 ≠ 0 := by
+  intro h
+  have hc_ne_zero : Q.c ≠ 0 := c_ne_zero Q.toParamData
+  have hsq : (u' Q * Q.c) ^ 2 = -1 := by
+    field_simp at h
+    linear_combination h
+  exact false_of_isSquare_neg_one card_mod_four ⟨u' Q * Q.c, by rw [← hsq]; ring⟩
 
-lemma Y'_observation1
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let c := c s
-    X ≠ 1 → (χ Y) = (χ v) * χ (u ^ 2 + 1 / c ^ 2) := by
-  intro X Y v u c h1
-  have hχv_eq_χ_term := χ_of_v'_eq_z'_unfold_of_X'_ne_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  have hχv_eq_χ_Yu := χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  let term1 := (u ^ 2 + 1 / c ^ 2)
-  let term2 := Y * term1
-  have hstep2 : (χ v) * χ (u ^ 2 + 1 / c ^ 2) = (χ term2) * χ (u ^ 2 + 1 / c ^ 2) := by grind
-  have hstep3 : (χ v) * χ (u ^ 2 + 1 / c ^ 2) = (χ Y) * (χ term1) * χ (u ^ 2 + 1 / c ^ 2) := by
-    grind [χ_mul]
-  rw [hstep3]
-  have hterm1_mul_self_eq_one : (χ term1) * χ (u ^ 2 + 1 / c ^ 2) = 1 := by
-    rw [← pow_two]
-    have hterm1_ne_zero := u'_pow_two_add_one_div_c_pow_two_ne_zero
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P
-    rw [χ_of_a_even_pow_n_eq_one hterm1_ne_zero ⟨2, even_two⟩]
-  grind
+lemma Y'_observation1 [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → χ (Y' Q) = χ (v' Q) * χ (u' Q ^ 2 + 1 / Q.c ^ 2) := by
+  intro hX1
+  rw [χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two Q hcurve hP hx_ne_zero hy_ne_one hX1,
+    χ_mul, mul_assoc, χ_mul_self_eq_one (u'_pow_two_add_one_div_c_pow_two_ne_zero Q), mul_one]
 
-lemma Y'_observation2
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let Y := Y' sq_ne_pm_two hq_card hq_mod P
-    let v := v' sq_ne_pm_two hq_card hq_mod P
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let c := c s
-  X ≠ 1 → Y = ((χ v) * v) ^ ((q + 1) / 4) * (χ v) * χ (u ^ 2 + 1 / c ^ 2) := by
-  intro X Y v u c h1
-  have hχv_eq_χ_term := χ_of_v'_eq_z'_unfold_of_X'_ne_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  have hχv_eq_χ_Yu := χ_of_v'_eq_χ_Y'_mul_u'_pow_two_add_one_div_c_pow_two
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  have hobs1 := Y'_observation1
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  change (χ Y) = (χ v) * χ (u ^ 2 + 1 / c ^ 2) at hobs1
-  have hY_sq := Y'_pow_two_eq_χ_of_v'_mul_v'
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  rw [← hY_sq, mul_assoc, ← hobs1]
-  rw [← pow_mul, add_comm]
-  change Y = Y ^ (2 * ((1 + q) / 4)) * (χ Y)
-  nth_rw 2 [mul_comm]
-  rw [one_add_q_div_four_mul_two_eq_one_add_q_div_two hq_mod]
-  rw [add_comm, a_pow_q_add_one_div_two_eq_χ_of_a_mul_a hq_card hq_mod]
-  rw [mul_comm, ← mul_assoc]
-  rw [← χ_mul, ← pow_two]
-  have hY_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero
-    y_ne_one
-  rw [χ_sq hY_ne_zero]
-  grind
+lemma Y'_observation2 [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → Y' Q = (χ (v' Q) * v' Q) ^ ((Fintype.card F + 1) / 4) * χ (v' Q)
+      * χ (u' Q ^ 2 + 1 / Q.c ^ 2) := by
+  intro hX1
+  have hY_ne_zero := Y'_ne_zero Q hP hx_ne_zero hy_ne_one
+  have hY2 := Y'_pow_two_eq_χ_of_v'_mul_v' Q hcurve hP hx_ne_zero hy_ne_one hX1
+  have hobs1 := Y'_observation1 Q hcurve hP hx_ne_zero hy_ne_one hX1
+  have hexp : 2 * ((Fintype.card F + 1) / 4) = (Fintype.card F + 1) / 2 := by
+    have := card_mod_four (F := F)
+    omega
+  rw [← hY2, ← pow_mul, hexp, a_pow_q_add_one_div_two_eq_χ_of_a_mul_a card_mod_four]
+  rw [mul_assoc, ← hobs1]
+  have hregroup : χ (Y' Q) * Y' Q * χ (Y' Q) = Y' Q * (χ (Y' Q) * χ (Y' Q)) := by ring
+  rw [hregroup, χ_mul_self_eq_one hY_ne_zero, mul_one]
 
 section t'
 
 /-- `t'` is the `t` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def t' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) : F :=
-  let u := u' sq_ne_pm_two hq_card hq_mod P
-  (1 - u) / (1 + u)
+def t' : F := (1 - u' Q) / (1 + u' Q)
 
 lemma t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    X ≠ 1 → t ≠ 1 ∧ t ≠ -1 := by
-  intro X t h1
-  unfold t t'
-  let u := u' sq_ne_pm_two hq_card hq_mod P
-  let u'_eq_Xbar_or_u'_eq_neg_Xbar := u'_eq_Xbar_or_u'_eq_neg_Xbar
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  change u = X ∨ u = -X at u'_eq_Xbar_or_u'_eq_neg_Xbar
-  change (1 - u) / (1 + u) ≠ 1 ∧ (1 - u) / (1 + u) ≠ -1
-  let one_add_u'_ne_zero := one_add_u'_ne_zero
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  let u'_ne_zero := u'_ne_zero
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  let two_ne_zero := two_ne_zero hq_card hq_mod
-  and_intros
-  · intro h2
-    have h3 : 2 = 0 := by grind
-    contradiction
-  · intro h2
-    have h3 : 2 = 0 := by grind
-    contradiction
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → t' Q ≠ 1 ∧ t' Q ≠ -1 := by
+  intro hX1
+  have h1u : 1 + u' Q ≠ 0 := one_add_u'_ne_zero Q hP hx_ne_zero hy_ne_one hX1
+  have hu0 : u' Q ≠ 0 := u'_ne_zero Q hP hx_ne_zero hy_ne_one
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  constructor
+  · intro h
+    have h' : 1 - u' Q = 1 * (1 + u' Q) := (div_eq_iff h1u).mp h
+    exact hu0 (mul_left_cancel₀ h_two_ne_zero (by linear_combination -h' : (2 : F) * u' Q = 2 * 0))
+  · intro h
+    have h' : 1 - u' Q = -1 * (1 + u' Q) := (div_eq_iff h1u).mp h
+    exact h_two_ne_zero (by linear_combination h')
 
-lemma one_add_t'_ne_zero (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P q
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    X ≠ 1 → t + 1 ≠ 0 := by
-  grind [t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one]
+lemma one_add_t'_ne_zero [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → t' Q + 1 ≠ 0 := by
+  intro hX1 h
+  exact (t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one Q hP hx_ne_zero hy_ne_one hX1).2
+    (by linear_combination h)
+
+/-- The `MapData` of Theorem 1 attached to the reconstructed input `t'`. -/
+@[reducible]
+def mapDataOfPoint (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) : MapData F :=
+  Q.toParamData.withInput (t' Q) ht.1 ht.2
 
 lemma u'_eq_one_sub_t'_div_one_add_t'
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1) :
-    let X := Xbar s P.val q
-    let u := u' sq_ne_pm_two hq_card hq_mod P
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    X ≠ 1 → u = (1 - t) / (1 + t) := by
-  intro X u t h1
-  unfold t t'
-  let u := u' sq_ne_pm_two hq_card hq_mod P
-  let one_add_u'_ne_zero := one_add_u'_ne_zero
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one h1
-  let two_ne_zero := two_ne_zero hq_card hq_mod
-  grind
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1) :
+    Q.Xbar ≠ 1 → u' Q = (1 - t' Q) / (1 + t' Q) := by
+  intro hX1
+  have h1u : 1 + u' Q ≠ 0 := one_add_u'_ne_zero Q hP hx_ne_zero hy_ne_one hX1
+  have h_two_ne_zero : (2 : F) ≠ 0 := two_ne_zero card_mod_four
+  have ht' : t' Q = (1 - u' Q) / (1 + u' Q) := rfl
+  have hd : (1 : F) + (1 - u' Q) / (1 + u' Q) = 2 / (1 + u' Q) := by
+    field_simp
+    ring
+  have hdne : (1 : F) + (1 - u' Q) / (1 + u' Q) ≠ 0 := by
+    rw [hd]
+    exact div_ne_zero h_two_ne_zero h1u
+  rw [ht', eq_div_iff hdne]
+  field_simp
+  ring
 
-lemma u'_eq_u (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X := Xbar s P q
-      X ≠ 1) :
-    let u' := u' sq_ne_pm_two hq_card hq_mod P
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let u := u ⟨t, t_h⟩
-    u' = u := by
-  grind [u', u, u'_eq_one_sub_t'_div_one_add_t']
+lemma u'_eq_u [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1)
+    (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    u' Q = (mapDataOfPoint Q ht).u :=
+  u'_eq_one_sub_t'_div_one_add_t' Q hP hx_ne_zero hy_ne_one hX1
 
-lemma v'_eq_v (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X := Xbar s P.val q;
-      X ≠ 1) :
-    let v' := v' sq_ne_pm_two hq_card hq_mod P
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let v := v ⟨t, t_h⟩ s
-    v' = v := by
-  grind [v', v, u'_eq_one_sub_t'_div_one_add_t', u'_eq_u]
-
-lemma X'_eq_X (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X := Xbar s P q;
-      X ≠ 1) :
-    let X' := Xbar s P q
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let X := X ⟨t, t_h⟩ s
-    X' = X := by
-  intro X' t t_h X
-  let h1 := u'_eq_u hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let h2 := v'_eq_v hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let h3 := X'_eq_χ_of_v'_mul_u'
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  unfold X'
-  rw [h3, h1, h2]
+lemma v'_eq_v [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0) (hy_ne_one : Q.y ≠ 1)
+    (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    v' Q = (mapDataOfPoint Q ht).v := by
+  have hu := u'_eq_u Q hP hx_ne_zero hy_ne_one hX1 ht
+  change u' Q ^ 5 + (Q.r ^ 2 - 2) * u' Q ^ 3 + u' Q = _
+  rw [hu]
   rfl
 
-lemma Y'_eq_Y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X := Xbar s P q;
-      X ≠ 1) :
-    let Y' := Y' sq_ne_pm_two hq_card hq_mod P
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let Y := Y ⟨t, t_h⟩ s q
-    Y' = Y := by
-  intro Y' t t_h Y
-  let h1 := u'_eq_u hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let h2 := v'_eq_v hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let h3 := Y'_observation2
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  unfold Y'
-  rw [h3, h1, h2]
-  rfl
+lemma X'_eq_X [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    Q.Xbar = (mapDataOfPoint Q ht).X := by
+  have hu := u'_eq_u Q hP hx_ne_zero hy_ne_one hX1 ht
+  have hv := v'_eq_v Q hP hx_ne_zero hy_ne_one hX1 ht
+  change Q.Xbar = χ (mapDataOfPoint Q ht).v * (mapDataOfPoint Q ht).u
+  rw [← hu, ← hv]
+  exact X'_eq_χ_of_v'_mul_u' Q hcurve hP hx_ne_zero hy_ne_one hX1
+
+lemma Y'_eq_Y [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    Y' Q = (mapDataOfPoint Q ht).Y := by
+  have hu := u'_eq_u Q hP hx_ne_zero hy_ne_one hX1 ht
+  have hv := v'_eq_v Q hP hx_ne_zero hy_ne_one hX1 ht
+  change _ = (χ (mapDataOfPoint Q ht).v * (mapDataOfPoint Q ht).v) ^ ((Fintype.card F + 1) / 4)
+    * χ (mapDataOfPoint Q ht).v * χ ((mapDataOfPoint Q ht).u ^ 2 + 1 / Q.c ^ 2)
+  rw [← hu, ← hv]
+  exact Y'_observation2 Q hcurve hP hx_ne_zero hy_ne_one hX1
 
 end t'
 
 section x'
 
 /-- `x'` is the `x` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def x' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) : F :=
-  let c := c s
-  let X' := Xbar s P q
-  let Y' := Y' sq_ne_pm_two hq_card hq_mod P
-  (c - 1) * s * X' * (1 + X') / Y'
-
-lemma x'_eq_x (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X' := Xbar s P q
-      X' ≠ 1) :
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let x := x ⟨t, t_h⟩ s q
-    let x' := x' sq_ne_pm_two hq_card hq_mod P
-    x' = x := by
-  intro t t_h x x'
-  unfold x' ReverseProofVehicle.x' x OutputCoordinates.x
-  let hY'_eq_Y := Y'_eq_Y hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let hX'_eq_X := X'_eq_X hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  grind
+def x' : F := (Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) / Y' Q
 
 /-- `y'` is the `y` equivalent used in the proof reverse argumentation of Theorem 3 part C. -/
-def y' (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q)
-    (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) : F :=
-  let X' := Xbar s P q
-  let r := r s
-  (r * X' - (1 + X') ^ 2) / (r * X' + (1 + X') ^ 2)
+def y' : F := (Q.r * Q.Xbar - (1 + Q.Xbar) ^ 2) / (Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2)
 
-lemma y'_eq_y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X' := Xbar s P q
-      X' ≠ 1) :
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let y := y ⟨t, t_h⟩ s
-    let y' := y' sq_ne_pm_two hq_card hq_mod P
-    y' = y := by
-  intro t t_h y y'
-  unfold y' ReverseProofVehicle.y' y OutputCoordinates.y
-  let hX'_eq_X := X'_eq_X
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  grind
-
-theorem x'_and_y'_fulfill_curve_equation
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X' := Xbar s P q
-      X' ≠ 1) :
-    let x' := x' sq_ne_pm_two hq_card hq_mod P
-    let y' := y' sq_ne_pm_two hq_card hq_mod P
-    (curve s).Equation x' y' := by
-  intro x' y'
-  let t := t' sq_ne_pm_two hq_card hq_mod P
-  let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let x := x ⟨t, t_h⟩ s q
-  let y := y ⟨t, t_h⟩ s
-  let x'_eq_x := x'_eq_x hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let y'_eq_y := y'_eq_y hs_ne_zero
-    sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let h := curve_equation ⟨t, t_h⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
-  rw [curve_equation_iff]
-  grind [x'_eq_x, y'_eq_y]
-
-lemma y_eq_y_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X' := Xbar s P q
-      X' ≠ 1) :
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let y := y ⟨t, t_h⟩ s
-    let y_of_P := P.val.2
-    y = y_of_P := by
-  intro t t_h y y_of_P
-  let y_with_Xbar := y_with_Xbar hs_ne_zero hq_card hq_mod ⟨P.val, P_props⟩ y_ne_one
-  unfold y_of_P
-  rw [y_with_Xbar]
-  unfold y OutputCoordinates.y
-  let h := X'_eq_X hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  grind
-
-lemma x_eq_x_of_P (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X' := Xbar s P q
-      X' ≠ 1) :
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let x := x ⟨t, t_h⟩ s q
-    let x_of_P := P.val.1
-    x = x_of_P := by
-  intro t t_h x x_of_P
-  let Y' := Y' sq_ne_pm_two hq_card hq_mod P
-  let c := c s
-  let X := Xbar s P q
-  let Y'_ne_zero := Y'_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one
-  change x_of_P ≠ 0 at x_ne_zero
-  have h1 : Y' = (c - 1) * s * X * (1 + X) / x_of_P := by grind [Y', ReverseProofVehicle.Y']
-  have h2 : x_of_P = (c - 1) * s * X * (1 + X) / Y' := by
-    unfold Y' ReverseProofVehicle.Y'
-    rw [← div_left_inj' x_ne_zero, ← mul_left_inj' Y'_ne_zero]
-    change x_of_P / x_of_P * Y' = (c - 1) * s * X * (1 + X) / Y' / x_of_P * Y'
-    grind
-  rw [h2]
-  let h3 := Y'_eq_Y
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  let h4 := X'_eq_X
-    hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-  unfold Y' X
-  rw [h3, h4]
+lemma x'_eq_x [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    x' Q = (mapDataOfPoint Q ht).x := by
+  have hX := X'_eq_X Q hcurve hP hx_ne_zero hy_ne_one hX1 ht
+  have hY := Y'_eq_Y Q hcurve hP hx_ne_zero hy_ne_one hX1 ht
+  change (Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) / Y' Q = _
+  rw [hX, hY]
   rfl
 
-lemma x_y_of_P_eq_x_y (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (P : {p : F × F // p ∈ EOverF s}) (P_props : ϕOverFProps s P)
-    (x_ne_zero : P.val.1 ≠ 0) (y_ne_one : P.val.2 ≠ 1)
-    (hXXbar :
-      let X' := Xbar s P q
-      X' ≠ 1) :
-    let t := t' sq_ne_pm_two hq_card hq_mod P
-    let t_h := t'_ne_one_and_t'_ne_neg_one_of_Xbar_ne_one
-      hs_ne_zero sq_ne_pm_two hq_card hq_mod P P_props x_ne_zero y_ne_one hXXbar
-    let y := y ⟨t, t_h⟩ s
-    let y_of_P := P.val.2
-    let x := x ⟨t, t_h⟩ s q
-    let x_of_P := P.val.1
-    (x, y) = (x_of_P, y_of_P) := by
-  grind [x_eq_x_of_P, y_eq_y_of_P]
+lemma y'_eq_y [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    y' Q = (mapDataOfPoint Q ht).y := by
+  have hX := X'_eq_X Q hcurve hP hx_ne_zero hy_ne_one hX1 ht
+  change (Q.r * Q.Xbar - (1 + Q.Xbar) ^ 2) / (Q.r * Q.Xbar + (1 + Q.Xbar) ^ 2) = _
+  rw [hX]
+  rfl
+
+theorem x'_and_y'_fulfill_curve_equation
+    [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    Q.curve.Equation (x' Q) (y' Q) := by
+  rw [x'_eq_x Q hcurve hP hx_ne_zero hy_ne_one hX1 ht,
+    y'_eq_y Q hcurve hP hx_ne_zero hy_ne_one hX1 ht]
+  exact map_fulfills_curve_equation (mapDataOfPoint Q ht)
+
+lemma y_eq_y_of_P [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    (mapDataOfPoint Q ht).y = Q.y := by
+  rw [← y'_eq_y Q hcurve hP hx_ne_zero hy_ne_one hX1 ht]
+  exact (y_with_Xbar Q hP).symm
+
+lemma x_eq_x_of_P [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    (mapDataOfPoint Q ht).x = Q.x := by
+  have hN : (Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) ≠ 0 :=
+    mul_ne_zero
+      (mul_ne_zero (mul_ne_zero (c_sub_one_ne_zero Q.toParamData) s_ne_zero) (Xbar_ne_zero Q hP))
+      (one_add_Xbar_ne_zero Q hP hy_ne_one)
+  have hx' : x' Q = Q.x := by
+    change (Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) / Y' Q = Q.x
+    rw [show Y' Q = (Q.c - 1) * Q.s * Q.Xbar * (1 + Q.Xbar) / Q.x from rfl,
+      div_div_eq_mul_div, mul_comm, mul_div_assoc, div_self hN, mul_one]
+  rw [← x'_eq_x Q hcurve hP hx_ne_zero hy_ne_one hX1 ht, hx']
+
+lemma x_y_of_P_eq_x_y [IsNonzeroParam Q.s] [IsRegularParam Q.s] [IsCardThreeModFour F]
+    (hcurve : Q.P ∈ Q.EOverF) (hP : Q.ϕOverFProps) (hx_ne_zero : Q.x ≠ 0)
+    (hy_ne_one : Q.y ≠ 1) (hX1 : Q.Xbar ≠ 1) (ht : t' Q ≠ 1 ∧ t' Q ≠ -1) :
+    ((mapDataOfPoint Q ht).x, (mapDataOfPoint Q ht).y) = Q.P := by
+  rw [x_eq_x_of_P Q hcurve hP hx_ne_zero hy_ne_one hX1 ht,
+    y_eq_y_of_P Q hcurve hP hx_ne_zero hy_ne_one hX1 ht]
+  rfl
 
 end x'
 

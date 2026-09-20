@@ -89,6 +89,17 @@ lemma s1174_ne_zero : s1174 ≠ 0 := by trivial
   -/)]
 lemma s1174_sq_ne_pm_two : (s1174 ^ 2 - 2) * (s1174 ^ 2 + 2) ≠ 0 := by decide
 
+/-- The Elligator 1 parameter of Curve1174, bundled. -/
+def D1174 : ParamData F1174 := ⟨s1174⟩
+
+instance : IsCardThreeModFour F1174 := ⟨card_F1174_mod_four⟩
+
+instance : IsPrimeCard F1174 := ⟨by rw [card_F1174]; exact prime_q1174.prime⟩
+
+instance : IsNonzeroParam D1174.s := ⟨s1174_ne_zero⟩
+
+instance : IsRegularParam D1174.s := ⟨s1174_sq_ne_pm_two⟩
+
 /-- The value of the curve parameter `c = 2/s ^ 2` for Curve1174. -/
 @[blueprint "lemma:c1174"
   (title := "The value of $c$ for Curve1174")
@@ -99,7 +110,7 @@ lemma s1174_sq_ne_pm_two : (s1174 ^ 2 - 2) * (s1174 ^ 2 + 2) ≠ 0 := by decide
   $$
   -/)]
 lemma c1174_eq :
-    c s1174 = 2179648967284864129978754827181620133949030013113193603783078030367640144353 := by
+    D1174.c = 2179648967284864129978754827181620133949030013113193603783078030367640144353 := by
   have h : s1174 ^ 2 ≠ 0 := by decide
   change (2 : F1174) / s1174 ^ 2 = _
   rw [div_eq_iff h]
@@ -115,16 +126,16 @@ lemma c1174_eq :
   $$
   -/)]
 lemma r1174_eq :
-    r s1174 = 169665518650159600071835149602457239235130252467237612483220564802728637315 := by
-  have h : c s1174 ≠ 0 := by
+    D1174.r = 169665518650159600071835149602457239235130252467237612483220564802728637315 := by
+  have h : D1174.c ≠ 0 := by
     rw [c1174_eq]
     decide
   have key :
-    (1 : F1174) / (c s1174)
-    = 169665518650159600071835149602457239235130252467237612483220564802728637315 - (c s1174) := by
+    (1 : F1174) / D1174.c
+    = 169665518650159600071835149602457239235130252467237612483220564802728637315 - D1174.c := by
     rw [div_eq_iff h, c1174_eq]
     decide
-  change c s1174 + 1 / c s1174 = _
+  change D1174.c + 1 / D1174.c = _
   rw [key]
   ring
 
@@ -140,34 +151,35 @@ lemma 1 and Definition 2 for this choice of parameters is exactly Curve1174. -/
   so the complete Edwards curve of Theorem 1 and Definition 2 for this choice of $(q, s)$ is
   exactly Curve1174, $x ^ 2 + y ^ 2 = 1 - 1174 x ^ 2 y ^ 2$.
   -/)]
-lemma d1174_eq : d s1174 = -1174 := by
-  have h : ((c s1174 : F1174) - 1) ^ 2 ≠ 0 := by
+lemma d1174_eq : D1174.d = -1174 := by
+  have h : (D1174.c - 1) ^ 2 ≠ 0 := by
     rw [c1174_eq]
     decide
-  change -(c s1174 + 1) ^ 2 / (c s1174 - 1) ^ 2 = -1174
+  change -(D1174.c + 1) ^ 2 / (D1174.c - 1) ^ 2 = -1174
   rw [div_eq_iff h, c1174_eq]
   decide
 
 /-- The quadratic character of the Elligator 1 coefficient for `(q, s)` is `-1`. -/
-lemma χ_d1174_eq_neg_one : χ (d s1174) = -1 := by
+lemma χ_d1174_eq_neg_one : χ D1174.d = -1 := by
   rw [d1174_eq]
   exact χ_neg1174_eq_neg_one
 
 /-- The Elligator 1 coefficient for `(q, s)` is not a square in `F1174`. -/
-lemma d1174_not_isSquare : ¬IsSquare (d s1174) := by
+lemma d1174_not_isSquare : ¬IsSquare D1174.d := by
   rw [d1174_eq]
   exact neg1174_not_isSquare
 
 /-! ### The curve -/
 
 /-- The Edwards curve selected by the Elligator 1 parameter `s` is Curve1174. -/
-lemma curve_s1174_eq : curve s1174 = curve1174 := by
-  unfold curve curve1174
-  rw [d1174_eq]
+lemma curve_s1174_eq : D1174.curve = curve1174 := by
+  unfold ParamData.curve curve curve1174
+  rw [← d1174_eq]
+  rfl
 
 /-- Curve1174 is a valid (nonsingular) Edwards model, seen through the Elligator 1 hypotheses. -/
-lemma curve_s1174_isValid : (curve s1174).IsValid :=
-  curve_isValid s1174_sq_ne_pm_two card_F1174 q1174_mod_four
+lemma curve_s1174_isValid : D1174.curve.IsValid :=
+  curve_isValid D1174
 
 /-! ### The Elligator 1 maps for Curve1174 -/
 
@@ -179,12 +191,11 @@ lemma curve_s1174_isValid : (curve s1174).IsValid :=
   Curve1174.
   -/)]
 def decode1174 (t : F1174) : F1174 × F1174 :=
-  ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
+  D1174.ϕ t
 
 /-- Theorem 1 for Curve1174: every decoded value is a point of the curve. -/
 lemma decode1174_mem_affinePoints (t : F1174) : decode1174 t ∈ curve1174.affinePoints :=
-  -- TODO
-  curve_s1174_eq ▸ (ϕ t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four).prop
+  curve_s1174_eq ▸ (D1174.ϕ t).prop
 
 /-- Theorem 1 for Curve1174, in coordinates. -/
 @[blueprint "thm:decode1174"
@@ -200,15 +211,12 @@ lemma decode1174_equation (t : F1174) :
 
 /-- Theorem 3 for Curve1174: `φ` identifies `t` and `-t`. -/
 lemma decode1174_neg (t : F1174) : decode1174 (-t) = decode1174 t :=
-  (ϕ_of_t_eq_ϕ_of_neg_t t
-    s1174_ne_zero s1174_sq_ne_pm_two card_F1174
-    q1174_mod_four
-  ).symm
+  (ϕ_of_t_eq_ϕ_of_neg_t D1174 t).symm
 
 /-- Theorem 3 for Curve1174: `t` and `-t` are the only preimages of `φ t`. -/
 lemma decode1174_preimages (t : F1174) :
     ¬∃ p : {n : F1174 // n ≠ t ∧ n ≠ -t}, decode1174 p.val = decode1174 t :=
-  ϕ_preimages t s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four
+  ϕ_preimages D1174 t
 
 /-! ### The string encoding for Curve1174 -/
 
@@ -223,12 +231,14 @@ lemma b1174 : b q1174 = 250 := by
   refine Nat.log_eq_of_pow_le_of_lt_pow ?_ ?_ <;> norm_num
 
 /-- Theorem 4 for Curve1174: there are `(q + 1)/2` admissible bit strings. -/
-lemma S1174_card : (@S q1174).card = (q1174 + 1) / 2 := S_card q1174_mod_four
+lemma S1174_card : (@S q1174).card = (q1174 + 1) / 2 := by
+  have h := S_card (F := F1174)
+  rwa [card_F1174] at h
 
 /-- Theorem 4 for Curve1174: the string encoding `ι : S → E(F_q)` is injective. -/
-lemma encode1174_injective : Function.Injective fun τ : @S q1174 =>
-    ι τ s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four :=
-  ι_injective s1174_ne_zero s1174_sq_ne_pm_two card_F1174 prime_q1174.prime q1174_mod_four
+lemma encode1174_injective :
+    Function.Injective fun τ : @S (Fintype.card F1174) => ι D1174 τ :=
+  ι_injective D1174
 
 /-- Theorem 4 for Curve1174: the string encoding is a bijection from `S` onto `φ(F_q)`. -/
 @[blueprint "thm:encode1174"
@@ -237,8 +247,7 @@ lemma encode1174_injective : Function.Injective fun τ : @S q1174 =>
   For Curve1174 the string encoding $\iota$ is a bijection from $S$ onto
   $\varphi(\mathbb{F}_q)$.
   -/)]
-lemma encode1174_bijective :
-    Function.Bijective (ιToϕOverF s1174_ne_zero s1174_sq_ne_pm_two card_F1174 q1174_mod_four) :=
-  ιToϕOverF_bijective s1174_ne_zero s1174_sq_ne_pm_two card_F1174 prime_q1174.prime q1174_mod_four
+lemma encode1174_bijective : Function.Bijective (ιToϕOverF D1174) :=
+  ιToϕOverF_bijective D1174
 
 end Elligator.Elligator1.Curve1174

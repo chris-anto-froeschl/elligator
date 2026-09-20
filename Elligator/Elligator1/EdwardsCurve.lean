@@ -39,6 +39,7 @@ variable (D : ParamData F)
 /-- The Edwards curve selected by the Elligator 1 parameter `s`. -/
 def curve (s : F) : TwistedEdwardsCurve F := edwardsCurve (d s)
 
+/-- ParamData wrapper for the Elligator 1 curve. -/
 def _root_.Elligator.ParamData.curve : TwistedEdwardsCurve F :=
     Elligator1.curve D.s
 
@@ -67,6 +68,7 @@ lemma curve_isValid [Fintype F] [IsRegularParam D.s] [IsCardThreeModFour F] :
   -/)]
 def EOverF (s : F) : Set (F × F) := (curve s).affinePoints
 
+/-- ParamData wrapper for the point set `EOverF`. -/
 def _root_.Elligator.ParamData.EOverF : Set (F × F) :=
     Elligator1.EOverF D.s
 

@@ -94,6 +94,7 @@ variable (I : InputData F)
 definitions are given. -/
 def tSub : {n : F // n ≠ 1 ∧ n ≠ -1} := ⟨I.t, I.t_ne_one, I.t_ne_neg_one⟩
 
+/-- The input `t` replaced by `-t`. -/
 def neg : InputData F where
   t := -I.t
   t_ne_one := (FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one I.tSub).1
@@ -101,12 +102,33 @@ def neg : InputData F where
 
 end InputData
 
+namespace ParamData
+
+/-- The `MapData` assembled from a curve parameter and an admissible input `t ∉ {1, -1}`. -/
+@[reducible]
+def withInput (D : ParamData F) (t : F) (t_ne_one : t ≠ 1) (t_ne_neg_one : t ≠ -1) : MapData F :=
+  { toParamData := D, t := t, t_ne_one := t_ne_one, t_ne_neg_one := t_ne_neg_one }
+
+end ParamData
+
 namespace MapData
 
 variable (M : MapData F)
 
 /-- The input `t` replaced by `-t`, the curve parameter kept. -/
 def neg : MapData F := { M with toInputData := M.toInputData.neg }
+
+/-- Negating the input does not change the curve parameter. -/
+lemma neg_s : M.neg.s = M.s := rfl
+
+/-- Negating the input negates it. -/
+lemma neg_t : M.neg.t = -M.t := rfl
+
+instance instIsNonzeroParamNeg [IsNonzeroParam M.s] : IsNonzeroParam M.neg.s :=
+  ⟨s_ne_zero (s := M.s)⟩
+
+instance instIsRegularParamNeg [IsRegularParam M.s] : IsRegularParam M.neg.s :=
+  ⟨s_sq_ne_pm_two (s := M.s)⟩
 
 end MapData
 

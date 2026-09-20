@@ -225,45 +225,49 @@ lemma bitsToNat_surj (n : ℕ) (m : ℕ) (hm : m < 2 ^ n) :
     · exact ⟨Fin.cons false τ, by simp [hτ]; omega⟩
     · exact ⟨Fin.cons true τ, by simp [hτ]; omega⟩
 
-lemma natCast_injective_of_prime_card {q : ℕ}
-    (hq_card : Fintype.card F = q) (q_prime : Prime q)
-    (a b : ℕ) (ha : a < q) (hb : b < q) (h : (a : F) = (b : F))
-    : a = b := by
-  have hchar := ringChar_of_F_eq_q hq_card q_prime
+omit [DecidableEq F] in
+lemma natCast_injective_of_prime_card [IsPrimeCard F]
+    (a b : ℕ) (ha : a < Fintype.card F) (hb : b < Fintype.card F) (h : (a : F) = (b : F)) :
+    a = b := by
+  have hchar := ringChar_of_F_eq_q (card_prime (F := F))
   have hmod : a % ringChar F = b % ringChar F := (CharP.cast_eq_iff_mod_eq F (ringChar F)).mp h
   rw [hchar, Nat.mod_eq_of_lt ha, Nat.mod_eq_of_lt hb] at hmod
   exact hmod
 
+omit [DecidableEq F] in
 @[blueprint "lemma:lower_half_neg_eq"
   (title := "The lower half contains no pair of negatives")
   (statement := /--
   Let $q$ be prime and let $a, b \in \{0, 1, \ldots, (q-1)/2\}$ with $a = -b$ in $\mathbb{F}_q$.
   Then $a = b$. This is the step of Theorem 4 that removes the sign ambiguity of $\varphi$.
   -/)]
-lemma lower_half_neg_eq {a b : ℕ}
-    (hq_card : Fintype.card F = q) (hq : Prime q)
-    (ha : a ≤ (q - 1) / 2) (hb : b ≤ (q - 1) / 2) (heq : (a : F) = -(b : F)) :
+lemma lower_half_neg_eq [IsPrimeCard F] {a b : ℕ}
+    (ha : a ≤ (Fintype.card F - 1) / 2) (hb : b ≤ (Fintype.card F - 1) / 2)
+    (heq : (a : F) = -(b : F)) :
     a = b := by
-  obtain ⟨k, hk⟩ : ∃ k : ℕ, a + b = k * q := by
-    have h_div : q ∣ (a + b : ℕ) := by
-      rw [← ringChar_of_F_eq_q hq_card hq, ← CharP.cast_eq_zero_iff F]
+  obtain ⟨k, hk⟩ : ∃ k : ℕ, a + b = k * Fintype.card F := by
+    have h_div : Fintype.card F ∣ (a + b : ℕ) := by
+      rw [← ringChar_of_F_eq_q (card_prime (F := F)), ← CharP.cast_eq_zero_iff F]
       simp_all
     exact exists_eq_mul_left_of_dvd h_div
   rcases k <;> grind
 
+omit [DecidableEq F] in
 @[blueprint "lemma:σ_injective"
   (title := "$\\sigma$ is injective")
   (statement := /--
   Since $2 ^ b \leq q$, the integers $0, 1, \ldots, 2 ^ b - 1$ are distinct in $\mathbb{F}_q$;
   hence $\sigma$ is injective.
   -/)]
-lemma σ_injective (hq_card : Fintype.card F = q) (q_prime : Prime q) (hq_mod : q % 4 = 3) :
-    Function.Injective (@σ F _ q) := by
+lemma σ_injective [IsPrimeCard F] [IsCardThreeModFour F] :
+    Function.Injective (@σ F _ (Fintype.card F)) := by
   intro a b h_eq
   apply bitsToNat_injective
-  have h1 : bitsToNat a < q := lt_of_lt_of_le (bitsToNat_lt_two_pow_n a) (two_pow_b_le_q hq_mod)
-  have h2 : bitsToNat b < q := lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q hq_mod)
-  exact natCast_injective_of_prime_card hq_card q_prime _ _ h1 h2 h_eq
+  have h1 : bitsToNat a < Fintype.card F :=
+    lt_of_lt_of_le (bitsToNat_lt_two_pow_n a) (two_pow_b_le_q card_mod_four)
+  have h2 : bitsToNat b < Fintype.card F :=
+    lt_of_lt_of_le (bitsToNat_lt_two_pow_n b) (two_pow_b_le_q card_mod_four)
+  exact natCast_injective_of_prime_card _ _ h1 h2 h_eq
 
 @[blueprint "lemma:exists_S_elem_of_le"
   (title := "Preimages under $\\sigma$ of the lower half")
@@ -284,6 +288,7 @@ lemma exists_S_elem_of_le (hq_mod : q % 4 = 3)
   obtain ⟨τ, hτ⟩ := bitsToNat_surj (@b q) n hn_pow
   exact ⟨⟨τ, by simp [S, hle, hτ]⟩, hτ⟩
 
+omit [DecidableEq F] in
 /-- Every field element has a representative in `S` up to sign.
 For prime `q` with `q ≡ 3 (mod 4)` and any `t : F`, there is a string `τ ∈ S` such that
 `σ τ = t` or `σ τ = -t`. This is the lower-half representative argument used to prove that the
@@ -295,17 +300,19 @@ string encoding covers all of `ϕ(F)` in Theorem 4. -/
   $\{0, 1, \ldots, (q-1)/2\} = \sigma(S)$; that is, there is $\tau \in S$ with
   $\sigma(\tau) = t$ or $\sigma(\tau) = -t$.
   -/)]
-lemma exists_σ_preimage_or_neg
-    (hq_card : Fintype.card F = q) (q_prime : Prime q) (hq_mod : q % 4 = 3) (t : F)
-    : ∃ (τ : (@S q)), (@σ F _ q τ.1) = t ∨ (@σ F _ q τ.1) = -t := by
-  obtain ⟨n, hn, rfl⟩ := exists_nat_cast_eq hq_card q_prime t
-  by_cases h : n ≤ ( q - 1 ) / 2
-  · obtain ⟨ τ, hτ ⟩ := exists_S_elem_of_le hq_mod n h
+lemma exists_σ_preimage_or_neg [IsPrimeCard F] [IsCardThreeModFour F] (t : F) :
+    ∃ (τ : (@S (Fintype.card F))),
+      (@σ F _ (Fintype.card F) τ.1) = t ∨ (@σ F _ (Fintype.card F) τ.1) = -t := by
+  have hcard := card_mod_four (F := F)
+  obtain ⟨n, hn, rfl⟩ := exists_nat_cast_eq (card_prime (F := F)) t
+  by_cases h : n ≤ (Fintype.card F - 1) / 2
+  · obtain ⟨τ, hτ⟩ := exists_S_elem_of_le (q := Fintype.card F) card_mod_four n h
     unfold σ
     aesop
-  · obtain ⟨τ, hτ⟩ := exists_S_elem_of_le hq_mod (q - n) (by omega)
+  · obtain ⟨τ, hτ⟩ :=
+      exists_S_elem_of_le (q := Fintype.card F) card_mod_four (Fintype.card F - n) (by omega)
     use τ
-    simp_all +decide only [not_le, σ, Nat.cast_sub hn.le ]
+    simp_all +decide only [not_le, σ, Nat.cast_sub hn.le]
     aesop
 
 /-- Binary evaluation maps the admissible strings `S` onto exactly the natural-number interval
@@ -362,6 +369,9 @@ end σ
 
 section ι
 
+variable (D : ParamData F)
+variable [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F]
+
 /-- The Elligator string encoding from Theorem 4 of the paper.
 For an admissible `b`-bit string `τ ∈ S`, `ι τ` is the curve point `ϕ (σ τ)`. The return subtype
 records that this point lies on the Edwards curve. -/
@@ -375,12 +385,10 @@ records that this point lies on the Edwards curve. -/
   $$
   by $\iota(\tau) = \varphi(\sigma(\tau))$.
   -/)]
-def ι (τ : (@S q))
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    {P : F × F // P ∈ EOverF s} :=
-  ϕ (σ τ.1) hs_ne_zero sq_ne_pm_two hq_card hq_mod
+def ι (τ : (@S (Fintype.card F))) : {P : F × F // P ∈ D.EOverF} :=
+  D.ϕ (σ τ.1)
 
+omit [Field F] [DecidableEq F] [IsNonzeroParam D.s] [IsRegularParam D.s] in
 /-- The admissible string set `S` has `(q + 1) / 2` elements.
 This is the cardinality assertion in Theorem 4. Here `S` consists of the `b`-bit strings whose
 binary values lie in the integer interval from `0` through `(q - 1) / 2`. -/
@@ -392,22 +400,24 @@ binary values lie in the integer interval from `0` through `(q - 1) / 2`. -/
   \#S = (q + 1)/2 .
   $$
   -/)]
-theorem S_card (hq_mod : q % 4 = 3) : (@S q).card = (q + 1) / 2 :=
-  S_card_eq_q_add_one_div_two hq_mod
+theorem S_card : (@S (Fintype.card F)).card = (Fintype.card F + 1) / 2 :=
+  S_card_eq_q_add_one_div_two card_mod_four
 
+omit [DecidableEq F] [IsCardThreeModFour F] in
 /-- Lower-half representatives resolve the sign ambiguity of `ϕ`.
 
 If two strings in `S` represent equal or opposite field elements, then they in fact represent the
 same field element: two distinct integers in `[0, (q - 1) / 2]` cannot be negatives modulo `q`. -/
-lemma σ_eq_of_eq_or_eq_neg (hq_card : Fintype.card F = q) (q_prime : Prime q)
-    (τ τ' : @S q) (h : (@σ F _ q τ.1) = (@σ F _ q τ'.1) ∨ (@σ F _ q τ.1) = -(@σ F _ q τ'.1)) :
-    (@σ F _ q τ.1) = (@σ F _ q τ'.1) := by
+lemma σ_eq_of_eq_or_eq_neg [IsPrimeCard F] (τ τ' : @S (Fintype.card F))
+    (h : (@σ F _ (Fintype.card F) τ.1) = (@σ F _ (Fintype.card F) τ'.1) ∨
+      (@σ F _ (Fintype.card F) τ.1) = -(@σ F _ (Fintype.card F) τ'.1)) :
+    (@σ F _ (Fintype.card F) τ.1) = (@σ F _ (Fintype.card F) τ'.1) := by
   rcases h with h | h
   · exact h
   · unfold σ at h
     unfold σ
-    rw [lower_half_neg_eq hq_card q_prime
-      (bitsToNat_le_q_sub_one_div_two τ) (bitsToNat_le_q_sub_one_div_two τ') h]
+    rw [lower_half_neg_eq (bitsToNat_le_q_sub_one_div_two τ)
+      (bitsToNat_le_q_sub_one_div_two τ') h]
 
 /-- The Elligator string encoding `ι : S → E(F)` is injective.
 
@@ -419,14 +429,13 @@ negative case, and injectivity of binary evaluation then identifies the original
   (statement := /--
   In the situation of Theorem 4, $\iota$ is an injective map from $S$ to $E(\mathbb{F}_q)$.
   -/)]
-theorem ι_injective (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (q_prime : Prime q) (hq_mod : q % 4 = 3) :
-    Function.Injective (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_mod) := by
+theorem ι_injective [IsPrimeCard F] :
+    Function.Injective (fun τ : (@S (Fintype.card F)) => ι D τ) := by
   intro τ τ' h
   apply Subtype.ext
-  apply σ_injective hq_card q_prime hq_mod
-  apply σ_eq_of_eq_or_eq_neg hq_card q_prime
-  exact eq_or_eq_neg_of_ϕ_eq _ _ hs_ne_zero sq_ne_pm_two hq_card hq_mod h
+  apply σ_injective (F := F)
+  apply σ_eq_of_eq_or_eq_neg
+  exact eq_or_eq_neg_of_ϕ_eq D _ _ h
 
 /-- The set of curve points produced by the string encoding `ι`.
 This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
@@ -438,10 +447,8 @@ This is the range `ι(S)` appearing in Theorem 4 of the paper. -/
   \iota(S) = \{\varphi(\sigma(\tau)) : \tau \in S\} \subseteq E(\mathbb{F}_q) .
   $$
   -/)]
-def ιOverS (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    Set (F × F) :=
-  Set.range (fun τ : S => ι τ hs_ne_zero sq_ne_pm_two hq_card hq_mod)
+def ιOverS : Set (F × F) :=
+  Set.range (fun τ : (@S (Fintype.card F)) => (ι D τ).val)
 
 /-- The string encoding and the Elligator map have exactly the same image: `ι(S) = ϕ(F)`.
 For each `t : F`, one of `t` and `-t` has a lower-half representative `σ τ` with `τ ∈ S`; since
@@ -453,24 +460,18 @@ Theorem 4. -/
   (statement := /--
   In the situation of Theorem 4, $\iota(S) = \varphi(\mathbb{F}_q)$.
   -/)]
-theorem ϕOverF_eq_ιOverS (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (q_prime : Prime q) (hq_mod : q % 4 = 3) :
-    let ϕOverF := ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    let ιOverS := ιOverS hs_ne_zero sq_ne_pm_two hq_card hq_mod
-    ϕOverF = ιOverS := by
-  dsimp only
-  unfold PhiOverFCharacterization.ϕOverF ιOverS ι
+theorem ϕOverF_eq_ιOverS [IsPrimeCard F] : D.ϕOverF = ιOverS D := by
   ext P
   constructor
   · rintro ⟨t, rfl⟩
-    obtain ⟨τ, hτ | hτ⟩ := exists_σ_preimage_or_neg hq_card q_prime hq_mod t
+    obtain ⟨τ, hτ | hτ⟩ := exists_σ_preimage_or_neg (F := F) t
     · refine ⟨τ, ?_⟩
-      dsimp
+      change (D.ϕ (σ τ.1)).val = (D.ϕ t).val
       rw [hτ]
     · refine ⟨τ, ?_⟩
-      dsimp
+      change (D.ϕ (σ τ.1)).val = (D.ϕ t).val
       rw [hτ]
-      exact (ϕ_of_t_eq_ϕ_of_neg_t t hs_ne_zero sq_ne_pm_two hq_card hq_mod).symm
+      exact (ϕ_of_t_eq_ϕ_of_neg_t D t).symm
   · rintro ⟨τ, rfl⟩
     exact ⟨σ τ.1, rfl⟩
 
@@ -487,10 +488,8 @@ stronger fact that every encoded point belongs to the image of `ϕ`. -/
   $$
   with codomain the image of $\varphi$ rather than all of $E(\mathbb{F}_q)$.
   -/)]
-def ιToϕOverF (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3)
-    (τ : @S q) : {P : F × F // P ∈ ϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod} :=
-  ⟨(ι τ hs_ne_zero sq_ne_pm_two hq_card hq_mod).val, ⟨σ τ.1, rfl⟩⟩
+def ιToϕOverF (τ : @S (Fintype.card F)) : {P : F × F // P ∈ D.ϕOverF} :=
+  ⟨(ι D τ).val, ⟨σ τ.1, rfl⟩⟩
 
 /-- The encoding `ι` is a bijection from `S` onto `ϕ(F)`.
 The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in the type. Injectivity is
@@ -504,21 +503,18 @@ The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in th
   $$
   is a bijection.
   -/)]
-theorem ιToϕOverF_bijective (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (q_prime : Prime q) (hq_mod : q % 4 = 3) :
-    Function.Bijective (ιToϕOverF hs_ne_zero sq_ne_pm_two hq_card hq_mod) := by
+theorem ιToϕOverF_bijective [IsPrimeCard F] : Function.Bijective (ιToϕOverF D) := by
   constructor
   · intro τ τ' h
-    apply ι_injective hs_ne_zero sq_ne_pm_two hq_card q_prime hq_mod
+    apply ι_injective D
     apply Subtype.ext
     simpa [ιToϕOverF] using congr_arg Subtype.val h
   · intro P
-    have hP : P.val ∈ ιOverS hs_ne_zero sq_ne_pm_two hq_card hq_mod := by
-      rw [← ϕOverF_eq_ιOverS hs_ne_zero sq_ne_pm_two hq_card q_prime hq_mod]
+    have hP : P.val ∈ ιOverS D := by
+      rw [← ϕOverF_eq_ιOverS D]
       exact P.prop
     rcases hP with ⟨τ, hτ⟩
-    refine ⟨τ, Subtype.ext ?_⟩
-    exact hτ
+    exact ⟨τ, Subtype.ext hτ⟩
 
 end ι
 
