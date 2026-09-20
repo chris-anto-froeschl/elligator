@@ -32,6 +32,7 @@ open Elligator.Primitives.PrimalityCertificate
 open Elligator.Primitives.ECC
 open Elligator.Elligator1.CurveParameters
 open Elligator.Elligator1.OutputCoordinates
+open Elligator.StringEncoding
 
 /-! ### The field and parameter -/
 

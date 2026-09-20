@@ -62,6 +62,7 @@ open Elligator.Primitives.PrimalityCertificate
 open Elligator.Primitives.ECC.Curves.Curve1174
 open Elligator.Elligator1.CurveParameters
 open Elligator.Elligator1.OutputCoordinates
+open Elligator.StringEncoding
 
 set_option maxRecDepth 20000
 

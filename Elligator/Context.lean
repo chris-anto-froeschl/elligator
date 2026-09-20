@@ -39,6 +39,22 @@ class IsCardThreeModFour (F : Type*) [Fintype F] : Prop where
   /-- The cardinality of `F` is congruent to `3` modulo `4`. -/
   card_mod_four : Fintype.card F % 4 = 3
 
+/-- The base field has cardinality `q ≡ 1 (mod 4)`.
+
+This is the extra assumption of [Bernstein2013a], Theorem 5 (last part) and Theorem 8, under
+which the Elligator 2 map is defined on all of `F`. -/
+class IsCardOneModFour (F : Type*) [Fintype F] : Prop where
+  /-- The cardinality of `F` is congruent to `1` modulo `4`. -/
+  card_mod_four_eq_one : Fintype.card F % 4 = 1
+
+/-- The base field has odd cardinality, i.e. odd characteristic.
+
+This is the standing hypothesis of [Bernstein2013a], Section 5: Elligator 2 works over every
+finite field of odd characteristic, and in particular does not require `q % 4 = 3`. -/
+class IsOddCard (F : Type*) [Fintype F] : Prop where
+  /-- The cardinality of `F` is odd. -/
+  card_odd : Fintype.card F % 2 = 1
+
 /-- The base field has prime cardinality; this is the extra assumption of Theorem 4. -/
 class IsPrimeCard (F : Type*) [Fintype F] : Prop where
   /-- The cardinality of `F` is prime. -/
@@ -54,10 +70,38 @@ class IsRegularParam {F : Type*} [Field F] (s : F) : Prop where
   /-- The parameter `s` satisfies `(s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0`. -/
   s_sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0
 
+/-- The parameter `u` is a non-square; this is the parameter of Elligator 2. -/
+class IsNonsquareParam {F : Type*} [Field F] (u : F) : Prop where
+  /-- The parameter `u` is not a square. -/
+  u_nonsquare : ¬IsSquare u
+
+/-- `sqrt` is a *square-root function* in the sense of [Bernstein2013a], Section 5.1: a function
+defined on the squares of `F` with `sqrt (a ^ 2) ∈ {a, -a}` for every `a`.
+
+The paper's `√ : F² → F` is modelled here by a total function `F → F`, of which only the values
+on squares are constrained; this is harmless since Elligator 2 never evaluates it elsewhere. -/
+class IsSqrtFun {F : Type*} [Field F] (sqrt : F → F) : Prop where
+  /-- `sqrt (a ^ 2)` is a square root of `a ^ 2`, i.e. `sqrt (a ^ 2) ∈ {a, -a}`. -/
+  sq_sqrt_sq : ∀ a : F, sqrt (a ^ 2) ^ 2 = a ^ 2
+
 export IsCardThreeModFour (card_mod_four)
+export IsCardOneModFour (card_mod_four_eq_one)
+export IsOddCard (card_odd)
 export IsPrimeCard (card_prime)
 export IsNonzeroParam (s_ne_zero)
 export IsRegularParam (s_sq_ne_pm_two)
+export IsNonsquareParam (u_nonsquare)
+export IsSqrtFun (sq_sqrt_sq)
+
+/-- A field with `q ≡ 3 (mod 4)` has odd cardinality. -/
+instance (priority := 100) IsCardThreeModFour.toIsOddCard
+    (F : Type*) [Fintype F] [IsCardThreeModFour F] : IsOddCard F :=
+  ⟨by have := card_mod_four (F := F); omega⟩
+
+/-- A field with `q ≡ 1 (mod 4)` has odd cardinality. -/
+instance (priority := 100) IsCardOneModFour.toIsOddCard
+    (F : Type*) [Fintype F] [IsCardOneModFour F] : IsOddCard F :=
+  ⟨by have := card_mod_four_eq_one (F := F); omega⟩
 
 /-- The curve parameter `s` of Theorem 1, bundled.
 
