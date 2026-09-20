@@ -1,0 +1,30 @@
+\section{Computability and validation}
+\label{sec:computability}
+
+TODO describe the extraction/execution mechanism used
+(Lean's eval, code generation, or otherwise), and report the
+actual validation.
+
+A definition that merely proves the existence of an encoding is of
+limited practical use; we give computable, extractable definitions
+for every encoding in this paper, so that they produce actual byte
+sequences that can be compared against independent implementations.
+This matters for CSLib's stated goal of being practically reusable,
+not only mathematically faithful.
+
+\subsection{Extraction}
+\label{subsec:extraction}
+
+TODO how the Lean definitions are made executable, and any
+performance caveats.
+
+\subsection{Validation against published test vectors}
+\label{subsec:validation}
+
+TODO report which test vectors were checked (e.g. from elligator.cr.yp.to or elligator.org) and the outcome.
+
+We cross-checked the extracted implementations of
+Section~\ref{subsec:extraction} against the test vectors published
+alongside the original Elligator paper~\cite{elligatorcryptotests}
+and the reference implementations catalogued at~\cite{elligatororg}.
+

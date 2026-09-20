@@ -1,0 +1,54 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Elliptic-curve cryptography routinely transmits points on a fixed
+public curve, and such points are easily distinguished from uniform
+random bit strings: an observer who can tell elliptic-curve traffic
+apart from random traffic can selectively block it. Bernstein,
+Hamburg, Krasnova and Lange's Elligator~\cite{bernstein2013a}
+addresses this by giving efficient, invertible encodings between
+(most of) the points of a suitable elliptic curve and uniform bit
+strings, so that a random curve point can be transmitted as what
+looks like a random string. The paper introduces two such encodings,
+Elligator~1 and Elligator~2, together with Curve1174, a concrete
+Edwards curve suited to Elligator~1. Later work has extended the
+approach to further curve shapes, including a Legendre-curve variant
+due to Saha and Karati~\cite{gourab2026a}.
+
+Despite substantial practical uptake --- Elligator has been
+numerically tested~\cite{elligatorcryptotests} and implemented
+across a range of libraries and protocols~\cite{elligatororg} --- the
+underlying theory has, to our knowledge, never been formalized in a
+proof assistant. This paper reports on such a formalization, carried
+out in CSLib, a Lean~4 library that currently has essentially no
+cryptographic primitives, not even basic elliptic-curve definitions.
+Elligator is accordingly the first substantial elliptic-curve
+encoding family to enter CSLib.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item A formalization of elliptic curves and the curve primitives
+    needed to state Elligator, none of which previously existed in
+    CSLib.
+  \item A formalization of Elligator~1 and Curve1174, and a
+    generalization of the viability lemmas underlying Elligator~1
+    from prime fields to prime power fields (Section~\ref{sec:elligator1}).
+  \item A formalization of Elligator~2 and of the Legendre-curve
+    variant of Saha and Karati as instances of a common encoding
+    family alongside Elligator~1 (Section~\ref{sec:elligator2-legendre}).
+  \item Computable, extractable definitions throughout, so that the
+    formalized encodings are not merely existence statements but can
+    be run and checked against published test
+    vectors (Section~\ref{sec:computability}).
+\end{enumerate}
+
+\paragraph{Outline.}
+Section~\ref{sec:background} recalls the curve and field background.
+Section~\ref{sec:elligator1} covers Elligator~1 and its
+generalization. Section~\ref{sec:elligator2-legendre} covers
+Elligator~2 and the Legendre-curve variant.
+Section~\ref{sec:curve1174} covers Curve1174.
+Section~\ref{sec:computability} discusses computability and
+validation against test vectors. Section~\ref{sec:related-work}
+discusses related work and Section~\ref{sec:conclusion} concludes.
+

@@ -1,0 +1,20 @@
+\section{Related work}
+\label{sec:related-work}
+
+The Elligator constructions have been extended and adapted in
+several directions we do not formalize here, including Elligator
+Squared~\cite{tibouchi2014a}, which supports curves of
+prime order not covered by the original constructions, and
+Elligator-T~\cite{gourab2026a} for twisted Edwards curves. To
+our knowledge, none of the Elligator family has previously been
+formalized in a proof assistant: existing validation has been
+numerical~\cite{elligatorcryptotests} or by way of independent
+implementations~\cite{elligatororg}, rather than machine-checked
+proof.
+
+CSLib itself has, prior to this work, essentially no cryptographic
+primitives; a separate, unrelated CSLib effort formalizes binding
+representations for the untyped lambda calculus, sharing this
+paper's goal of building reusable, well-reviewed foundations rather
+than one-off developments, but is otherwise unconnected in subject
+matter.

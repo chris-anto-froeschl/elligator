@@ -1,0 +1,15 @@
+\section{Curve1174}
+\label{sec:curve1174}
+
+TODO state the concrete curve equation/parameters, and
+which properties of it (completeness, group order, twist security,
+suitability for Elligator 1) are formalized vs. assumed/imported.
+
+Curve1174~\cite[\S4]{bernstein2013a} is the concrete Edwards curve
+$x^2 + y^2 = 1 - 1174x^2y^2$ over $\mathbb{F}_p$ with
+$p = 2^{251} - 9$, introduced alongside Elligator~1 as a curve
+satisfying the conditions required for the encoding together with
+the security properties expected of a cryptographic curve. We
+formalize its definition and the properties needed to instantiate
+the Elligator~1 encoding of Section~\ref{sec:elligator1} on it.
+

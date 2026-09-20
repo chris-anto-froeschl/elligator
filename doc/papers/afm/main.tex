@@ -1,0 +1,54 @@
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{orcidlink}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Formalization of the Elligator Family of Uniform Encodings
+  to Elliptic Curves}
+
+\author{Chris Anto Fröschl\orcidlink{0009-0006-3562-5395}}
+\address{Munich University of Applied Sciences, Department of
+  Computer Science and Mathematics, Germany}
+\email{chris.froeschl@hm.edu}
+
+\author{Prof. Matthias Güdemann\orcidlink{0000-0002-1002-6023}}
+\address{Munich University of Applied Sciences, Department of
+  Computer Science and Mathematics, Germany}
+\email{matthias.guedemann@hm.edu}
+
+\subjclass[2020]{03B70, 68V20, 94A60, 11T71, 14G50}
+\keywords{Elligator, elliptic curves, elliptic-curve cryptography,
+  Curve1174, uniform random encoding, formal verification, Lean}
+
+\begin{document}
+
+\begin{abstract}
+First Elligator formalization (what/who), What formalized (Ell1/2, Legendre), where stored (CSLib, what?), advances (prime power, computability, test vector testbenching...)
+\end{abstract}
+
+\maketitle
+
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/elligator1}
+\input{sections/elligator2-and-legendre}
+\input{sections/curve1174}
+\input{sections/computability-and-validation}
+\input{sections/related-work}
+\input{sections/conclusion}
+
+\bibliographystyle{alpha}
+\bibliography{refs}
+
+\end{document}

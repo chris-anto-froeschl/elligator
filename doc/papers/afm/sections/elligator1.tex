@@ -1,0 +1,33 @@
+\section{Elligator 1 and its generalization to prime powers}
+\label{sec:elligator1}
+
+state Bernstein et al.'s original viability conditions
+and lemmas, then generalized statements side by side, and give
+a proof sketch of the generalization.
+
+Elligator~1~\cite[\S3]{bernstein2013a} encodes bit strings as
+points on a complete Edwards curve $x^2 + y^2 = 1 + dx^2y^2$ over a
+prime field $\mathbb{F}_p$ with $p \equiv 3 \pmod 4$, for $d$ of a
+specific non-square form. The viability of the construction --- that
+the encoding is well-defined and injective on the intended domain ---
+is established in the original paper for prime $p$.
+
+\subsection{Generalizing to prime powers}
+\label{subsec:prime-power-generalization}
+
+We show that the viability lemmas underlying Elligator~1 do not in
+fact require $p$ to be prime, only that the underlying field has
+$q = p^k$ elements with $q \equiv 3 \pmod 4$: that is, the
+construction is viable over any finite field of order a prime power
+congruent to $3 \bmod 4$, not only prime fields. This is, to our
+knowledge, a genuine extension of Bernstein et al.'s result rather
+than a restatement of it.
+
+\begin{theorem}[Generalized Elligator 1 viability]
+\label{thm:elligator1-prime-power}
+TODO placeholder
+Let $q = p^k$ be a prime power with $q \equiv 3 \pmod 4$. Then the
+Elligator~1 encoding is well-defined and injective on
+[TODO: the intended domain] over $\mathbb{F}_q$.
+\end{theorem}
+
