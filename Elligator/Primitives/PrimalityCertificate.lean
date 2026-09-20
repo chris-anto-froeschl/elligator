@@ -133,6 +133,7 @@ lemma prime_of_pratt {p : ℕ}
       lt_of_le_of_lt (Nat.div_le_self _ _) hfuel
     -- `hprod` says `p - 1 = L.prod`, and `L` consists of primes. A prime `r` dividing a
     -- product of primes must actually *equal* one of the factors (unique factorization).
+    -- TODO
     obtain ⟨x, hx_mem, hr_dvd_x⟩ := (Prime.dvd_prod_iff hr_prime.prime).1 (hprod ▸ hr_dvd)
     obtain rfl : r = x := (Nat.prime_dvd_prime_iff_eq hr_prime (hL x hx_mem)).1 hr_dvd_x
     -- So `r ∈ L`, and `hchk` directly rules out `a ^ ((p-1)/r) = 1` - we just need to unwind

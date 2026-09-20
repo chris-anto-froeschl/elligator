@@ -5,17 +5,7 @@ Authors: Chris Anto Fröschl
 -/
 module
 
-public import Elligator.Elligator1.Variables
-public import Elligator.Elligator1.sProperties
-public import Elligator.Elligator1.cProperties
-public import Elligator.Elligator1.dProperties
-public import Elligator.Primitives.ECC.EdwardsCurve
-public import Elligator.Elligator1.uProperties
-public import Elligator.Elligator1.vProperties
-public import Elligator.Elligator1.XProperties
-public import Elligator.Elligator1.YProperties
-public import Elligator.Elligator1.xProperties
-public import Elligator.Elligator1.yProperties
+public import Elligator.Elligator1.OutputCoordinates
 
 /-!
 # Map
@@ -29,11 +19,11 @@ point `(x, y)` on the complete Edwards curve. The exceptional inputs `t = ±1` a
 
 * `u_defined`, `Y_defined`, `x_defined`, `y_defined`: the denominators in the paper's formulas
   are nonzero, so the displayed expressions are defined.
-* `map_fulfills_helper_equation`: the auxiliary coordinates satisfy `Y² = X⁵ + (r² - 2)X³ + X`.
-* `variable_mul_ne_zero`: the nonvanishing assertion `u * v * X * Y * x * (y + 1) ≠ 0`
-  from Theorem 1.
 * `map_fulfills_curve_equation`: the resulting `(x, y)` satisfies the Edwards curve equation.
 * `ϕ`: Definition 2's total map from field elements to points on the Edwards curve.
+* `ParamData.decoded`: the decoded point `ϕ t`, packaged as a `PointData`, so that the
+  reconstruction quantities of Theorem 3 can be written `(D.decoded t).Xbar` and so on; the
+  special case `t = M.t` of an admissible input is `MapData.decoded`.
 
 ## References
 
@@ -45,12 +35,15 @@ See [Bernstein2013a], Section 3.2, Theorem 1 and Definition 2.
 namespace Elligator.Elligator1
 
 open Elligator.Primitives.ECC
+open Elligator.Elligator1.CurveParameters
+open Elligator.Elligator1.AuxiliaryCoordinates
+open Elligator.Elligator1.OutputCoordinates
 
-variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
-variable {s : F}
-variable {q : ℕ}
+variable {F : Type*} [Field F]
+variable (D : ParamData F)
+variable (I : InputData F)
+variable (M : MapData F)
 
-omit [Fintype F] [DecidableEq F] in
 @[blueprint
   (title := "$u$ is defined")
   (statement := /--
@@ -61,10 +54,10 @@ omit [Fintype F] [DecidableEq F] in
   $$
   is nonzero, i.e. $1 + t \neq 0$.
   -/)]
-theorem u_defined (t : {t : F // t ≠ 1 ∧ t ≠ -1}) : 1 + t.val ≠ 0 :=
-  FiniteFieldBasic.one_add_t_ne_zero t
+theorem u_defined : 1 + I.t ≠ 0 := FiniteFieldBasic.one_add_t_ne_zero I.tSub
 
-omit [DecidableEq F] in
+variable [Fintype F]
+
 @[blueprint
   (title := "$Y$ is defined")
   (statement := /--
@@ -74,10 +67,10 @@ omit [DecidableEq F] in
   $$
   is defined for each $t \in \mathbb{F}_q \setminus \{\pm 1\}$, since $c ^ 2 \neq 0$.
   -/)]
-theorem Y_defined (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    (c s) ^ 2 ≠ 0 :=
-  pow_ne_zero 2 (c_ne_zero hs_ne_zero hq_card hq_mod)
+theorem Y_defined [IsNonzeroParam D.s] [IsCardThreeModFour F] : D.c ^ 2 ≠ 0 :=
+  pow_ne_zero 2 (c_ne_zero D)
+
+variable [DecidableEq F]
 
 @[blueprint
   (title := "$x$ is defined")
@@ -89,10 +82,7 @@ theorem Y_defined (hs_ne_zero : s ≠ 0)
   $$
   is defined.
   -/)]
-theorem x_defined (t : {t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    (Y t s q) ≠ 0 :=
-  Y_ne_zero hs_ne_zero hq_card hq_mod t
+theorem x_defined [IsNonzeroParam M.s] [IsCardThreeModFour F] : M.Y ≠ 0 := Y_ne_zero M
 
 @[blueprint
   (title := "$y$ is defined")
@@ -104,53 +94,9 @@ theorem x_defined (t : {t : F // t ≠ 1 ∧ t ≠ -1}) (hs_ne_zero : s ≠ 0)
   $$
   is defined.
   -/)]
-theorem y_defined (t : {t : F // t ≠ 1 ∧ t ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    ((r s) * (X t s) + (1 + (X t s)) ^ 2) ≠ 0 :=
-  y_divisor_ne_zero hs_ne_zero sq_ne_pm_two hq_card hq_mod t
-
-/-- The auxiliary coordinates `X` and `Y` satisfy the hyperelliptic equation used in Theorem 1:
-`Y² = X⁵ + (r² - 2)X³ + X`. -/
-@[blueprint
-  (title := "$(X, Y)$ lies on the auxiliary curve")
-  (statement := /--
-  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let $r$, $X$,
-  $Y$ be as above. Then
-  $$
-  Y ^ 2 = X ^ 5 + (r ^ 2 - 2)X ^ 3 + X
-  $$
-  -/)]
-theorem map_fulfills_auxiliary_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1}) (hs_ne_zero : s ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let r := r s
-    let X := X t s
-    let Y := Y t s q
-    Y ^ 2 = X ^ 5 + (r ^ 2 - 2) * X ^ 3 + X :=
-  helper_eq t hs_ne_zero hq_card hq_mod
-
-/-- The quantities constructed for a nonexceptional input are all nonzero as asserted in
-Theorem 1: `u * v * X * Y * x * (y + 1) ≠ 0`. -/
-@[blueprint
-  (title := "Nonvanishing of the auxiliary quantities")
-  (statement := /--
-  In the situation of Theorem 1, let $t \in \mathbb{F}_q \setminus \{\pm 1\}$ and let
-  $u, v, X, Y, x, y$ be as above. Then
-  $$
-  uvXYx(y + 1) \neq 0 .
-  $$
-  -/)]
-theorem variable_mul_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let u := u t
-    let v := v t s
-    let X := X t s
-    let Y := Y t s q
-    let x := x t s q
-    let y := y t s
-    u * v * X  * Y * x * (y + 1) ≠ 0 :=
-  variable_mul_ne_zero' t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+theorem y_defined [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    (M.r * M.X + (1 + M.X) ^ 2) ≠ 0 :=
+  y_divisor_ne_zero M
 
 /-- The coordinates produced from a nonexceptional input satisfy the Edwards curve equation
 `x² + y² = 1 + d * x² * y²`. This is the final conclusion of Theorem 1. -/
@@ -164,15 +110,11 @@ theorem variable_mul_ne_zero (t : {n : F // n ≠ 1 ∧ n ≠ -1})
   x ^ 2 + y ^ 2 = 1 + d x ^ 2 y ^ 2 .
   $$
   -/)]
-theorem map_fulfills_curve_equation (t : {n : F // n ≠ 1 ∧ n ≠ -1})
-    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    let x := x t s q
-    let y := y t s
-   (curve s).Equation x y := by
-  intro x_of_t y_of_t
+theorem map_fulfills_curve_equation
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.curve.Equation M.x M.y := by
   rw [curve_equation_iff]
-  exact curve_equation t hs_ne_zero sq_ne_pm_two hq_card hq_mod
+  exact curve_equation M
 
 /-- The total Elligator map `ϕ : F → E(F)` from Definition 2 of the paper.
 
@@ -190,18 +132,80 @@ records that the result satisfies the Edwards curve equation. -/
   $$
   if $t \notin \{\pm 1\}$ then $\varphi(t) = (x, y)$.
   -/)]
-def ϕ (t : F) (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
-    (hq_card : Fintype.card F = q) (hq_mod : q % 4 = 3) :
-    EOverF sq_ne_pm_two hq_card hq_mod :=
-  let P := if h : t ≠ 1 ∧ t ≠ -1 then (x ⟨t, h⟩ s q, y ⟨t, h⟩ s) else (0, 1)
-  have P_in_EOverF : P ∈ (EOverF sq_ne_pm_two hq_card hq_mod) := by
+def ϕ (t : F) {s : F}
+    (hs_ne_zero : s ≠ 0) (sq_ne_pm_two : (s ^ 2 - 2) * (s ^ 2 + 2) ≠ 0)
+    (hq_mod : Fintype.card F % 4 = 3) : EOverF s :=
+  haveI : IsNonzeroParam s := ⟨hs_ne_zero⟩
+  haveI : IsRegularParam s := ⟨sq_ne_pm_two⟩
+  haveI : IsCardThreeModFour F := ⟨hq_mod⟩
+  let D : ParamData F := ⟨s⟩
+  let P := if h : t ≠ 1 ∧ t ≠ -1 then (x ⟨t, h⟩ s (Fintype.card F), y ⟨t, h⟩ s) else (0, 1)
+  have P_in_EOverF : P ∈ D.EOverF := by
     rw [mem_EOverF_iff, ← curve_equation_iff]
     unfold P
     by_cases ht : t ≠ 1 ∧ t ≠ -1
     · rw [dite_eq_left ht]
-      exact map_fulfills_curve_equation ⟨t, ht⟩ hs_ne_zero sq_ne_pm_two hq_card hq_mod
+      exact map_fulfills_curve_equation
+        {s := s, t := t, t_ne_one := ht.1, t_ne_neg_one := ht.2}
     · rw [dite_eq_right ht]
       exact (curve s).zero_mem_affinePoints
   ⟨P, P_in_EOverF⟩
+
+/-- ParamData wrapper for ϕ. -/
+def _root_.Elligator.ParamData.ϕ
+    [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F] (t : F) :
+    {P : F × F // P ∈ D.EOverF} :=
+  Elligator1.ϕ t s_ne_zero s_sq_ne_pm_two card_mod_four
+
+/-- The point `(x, y)` of Theorem 1, as a `PointData`; this is how one passes from the Theorem 1
+side of the development to the Theorem 3 side. -/
+def _root_.Elligator.MapData.point : PointData F where
+  s := M.s
+  P := (M.x, M.y)
+
+variable (Q : PointData F)
+
+/-- The `x`-coordinate of the point. -/
+def _root_.Elligator.PointData.x : F := Q.P.1
+
+/-- The `y`-coordinate of the point. -/
+def _root_.Elligator.PointData.y : F := Q.P.2
+
+/-- The decoded point `ϕ t`, packaged together with the curve parameter as a `PointData`.
+
+Every quantity of Theorem 3 (`η`, `X̄`, `z`, `ū`, `t̄`, the image conditions ...) is a field of
+`PointData`, so this is what allows statements about a decoded point to be written in dot
+notation, e.g. `(D.decoded t).tbar`, instead of applying the unbundled functions to `D.s`,
+`(D.ϕ t).val` and `Fintype.card F`. Unlike `MapData.decoded` it also covers the two exceptional
+inputs `t = ± 1`, which no `MapData` provides. -/
+def _root_.Elligator.ParamData.decoded
+    [IsNonzeroParam D.s] [IsRegularParam D.s] [IsCardThreeModFour F] (t : F) : PointData F where
+  toParamData := D
+  P := (D.ϕ t).val
+
+/-- The point of the decoding map, as a `PointData`. -/
+def _root_.Elligator.MapData.decoded
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] : PointData F :=
+  M.toParamData.decoded M.t
+
+/-- Show equivalence between an explicit (x, y) (`OutputCoordinates`) point and the
+implicit generation via `ϕ`, resulting in the context of a `MapData` due to `t` in the same point.
+-/
+@[simp]
+lemma _root_.Elligator.MapData.decoded_P_eq_point_P
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.decoded.P = M.point.P := by
+  unfold MapData.decoded ParamData.decoded MapData.point ParamData.ϕ ϕ MapData.x MapData.y
+    InputData.tSub
+  dsimp
+  rw [dite_eq_left ⟨M.t_ne_one, M.t_ne_neg_one⟩]
+
+lemma _root_.Elligator.MapData.decoded_eq_point
+    [IsNonzeroParam M.s] [IsRegularParam M.s] [IsCardThreeModFour F] :
+    M.decoded = M.point := by
+  unfold MapData.decoded ParamData.decoded MapData.point ParamData.ϕ ϕ MapData.x MapData.y
+    InputData.tSub
+  dsimp
+  rw [dite_eq_left ⟨M.t_ne_one, M.t_ne_neg_one⟩]
 
 end Elligator.Elligator1

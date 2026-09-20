@@ -20,7 +20,7 @@ point of Section 4.1.
 Nothing here mentions Elligator: Curve1174 is described directly as the complete Edwards curve
 $$ x ^ 2 + y ^ 2 = 1 - 1174 x ^ 2 y ^ 2 $$
 over the prime field $\mathbb{F}_q$ with $q = 2 ^ {251} - 9$, using only the general Edwards curve
-API of `Elligator.ECCPrimitives.EdwardsCurve`. That the Elligator 1 construction reproduces exactly
+API of `Elligator.Primitives.ECC.EdwardsCurve`. That the Elligator 1 construction reproduces exactly
 this curve from its parameter `s` is the subject of `Elligator.Elligator1.Curve1174`.
 All numerical statements are checked by kernel computation. Field elements of `F1174` are `Fin`
 residues, so `decide` evaluates ring operations directly; the two places where an exponent is
@@ -38,7 +38,7 @@ modular exponentiation of `Elligator.PrimalityCertificate`.
 * `prime_q1174`, `card_F1174`, `q1174_mod_four`: `F1174` is a field with `q = 2 ^ 251 - 9`
   elements and `q ≡ 3 (mod 4)`.
 * `curve1174_equation`, `curve1174_isValid`: the defining equation and nonsingularity of the model.
-* `chi_neg1174_eq_neg_one`, `neg1174_not_isSquare`: `-1174` is a non-square in `F1174`, which is
+* `χ_neg1174_eq_neg_one`, `neg1174_not_isSquare`: `-1174` is a non-square in `F1174`, which is
   the completeness criterion quoted in Section 4.1.
 * `basePointV_montgomery`, `basePoint1174_mem_affinePoints`: the point `(U, V) = (4, V)` of
   Section 4.1 lies on the Montgomery model, and the corresponding point `(4/V, 3/5)` lies on
@@ -102,6 +102,11 @@ lemma card_F1174 : Fintype.card F1174 = q1174 := ZMod.card q1174
   -/)]
 lemma q1174_mod_four : q1174 % 4 = 3 := by decide
 
+/-- The cardinality of `F1174` is congruent to `3` modulo `4`. -/
+lemma card_F1174_mod_four : Fintype.card F1174 % 4 = 3 := by
+  rw [card_F1174]
+  exact q1174_mod_four
+
 /-- `q1174` is a prime power. -/
 lemma q1174_isPrimePow : IsPrimePow q1174 := prime_q1174.prime.isPrimePow
 
@@ -135,14 +140,14 @@ lemma curve1174_isValid : curve1174.IsValid := by
   (statement := /--
   The quadratic character of the Edwards coefficient satisfies $\chi(-1174) = -1$.
   -/)]
-lemma chi_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
+lemma χ_neg1174_eq_neg_one : χ (-1174 : F1174) = -1 := by
   have hneg :
     ((3618502788666131106986593281521497120414687020801267626233049500247285300065 : ℕ) : F1174)
     = -1174 := by decide
   have hone :
     ((3618502788666131106986593281521497120414687020801267626233049500247285301238 : ℕ) : F1174)
     = -1 := by decide
-  rw [χ_eq_pow (-1174 : F1174) card_F1174 q1174_mod_four, ← hneg, ← hone]
+  rw [χ_eq_pow (-1174 : F1174) card_F1174_mod_four, card_F1174, ← hneg, ← hone]
   exact natCast_pow_eq_natCast _ _ _ 256 (by decide) (by decide)
 
 /-- `-1174` is not a square in `F1174`; by [Bernstein2013a], Section 4.1 this is what makes
@@ -156,8 +161,8 @@ Curve1174 a complete Edwards curve. -/
 lemma neg1174_not_isSquare : ¬IsSquare (-1174 : F1174) := by
   intro hsq
   have hne : (-1174 : F1174) ≠ 0 := by decide
-  have h1 : χ (-1174 : F1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174 q1174_mod_four).2 hsq
-  rw [chi_neg1174_eq_neg_one] at h1
+  have h1 : χ (-1174 : F1174) = 1 := (χ_eq_one_iff_isSquare hne card_F1174_mod_four).2 hsq
+  rw [χ_neg1174_eq_neg_one] at h1
   exact absurd h1 (by decide)
 
 /-! ### The base point -/
