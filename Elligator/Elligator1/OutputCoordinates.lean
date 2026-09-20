@@ -12,8 +12,8 @@ public import Elligator.Elligator1.EdwardsCurve
 # Output Coordinates
 
 The Edwards curve coordinates `x`, `y` built from the auxiliary quantities of
-`AuxiliaryCoordinates.lean`, together with the two conclusions of Theorem 1 —
-nonvanishing of `u·v·X·Y·x·(y+1)` and the curve equation `x² + y² = 1 + dx²y²` — and their
+`AuxiliaryCoordinates.lean`, together with the two conclusions of Theorem 1 -
+nonvanishing of `u·v·X·Y·x·(y+1)` and the curve equation `x² + y² = 1 + dx²y²` - and their
 behavior under `t ↦ -t`.
 
 ## Main Results
