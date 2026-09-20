@@ -6,6 +6,7 @@ Authors: Chris Anto Fröschl
 module
 
 public import Elligator.Basic
+public import Elligator.FiniteFieldBasic
 
 /-!
 # Bundled data and hypotheses for Elligator
@@ -93,6 +94,20 @@ variable (I : InputData F)
 definitions are given. -/
 def tSub : {n : F // n ≠ 1 ∧ n ≠ -1} := ⟨I.t, I.t_ne_one, I.t_ne_neg_one⟩
 
+def neg : InputData F where
+  t := -I.t
+  t_ne_one := (FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one I.tSub).1
+  t_ne_neg_one := (FiniteFieldBasic.neg_t_ne_one_and_neg_t_ne_neg_one I.tSub).2
+
 end InputData
+
+namespace MapData
+
+variable (M : MapData F)
+
+/-- The input `t` replaced by `-t`, the curve parameter kept. -/
+def neg : MapData F := { M with toInputData := M.toInputData.neg }
+
+end MapData
 
 end Elligator
