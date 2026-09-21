@@ -98,7 +98,7 @@ expansion: bitsToNat(τ) = Σᵢ τᵢ · 2 ^ i.
 def bitsToNat {n : ℕ} (τ : Fin n → Bool) : ℕ :=
   ∑ i : Fin n, if τ i then 2 ^ (i : ℕ) else 0
 
-/-- `σ` interprets a bit vector `(τ₀, τ₁, …, τ_{b−1})` as the field element
+/-- `σ` interprets a bit vector `(τ₀, τ₁, ..., τ_{b−1})` as the field element
 `∑ᵢ τᵢ · 2ⁱ ∈ Fq`. This is the standard binary-to-integer conversion followed by casting into `F`.
 
 Original:, Section "3.4 Encoding as strings": Theorem 4
@@ -375,4 +375,3 @@ lemma σ_eq_of_eq_or_eq_neg [IsPrimeCard F] (τ τ' : @S (Fintype.card F))
       (bitsToNat_le_q_sub_one_div_two τ') h]
 
 end Elligator.StringEncoding
-

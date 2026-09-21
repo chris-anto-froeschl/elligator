@@ -159,7 +159,7 @@ def ιToϕOverF (τ : @S (Fintype.card F)) : {P : F × F // P ∈ D.ϕOverF} :=
   ⟨(ι D τ).val, ⟨σ τ.1, rfl⟩⟩
 
 /-- The encoding `ι` is a bijection from `S` onto `ϕ(F)`.
-The codomain restriction in `ιToϕOverF` makes “onto `ϕ(F)`” literal in the type. Injectivity is
+The codomain restriction in `ιToϕOverF` makes "onto `ϕ(F)`" literal in the type. Injectivity is
 `ι_injective`, while surjectivity is the image equality `ϕOverF_eq_ιOverS`. -/
 @[blueprint "thm:ι-bijective"
   (title := "$\\iota$ is a bijection from $S$ onto $\\varphi(\\mathbb{F}_q)$")

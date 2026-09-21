@@ -21,7 +21,7 @@ factorisation
 q - 1 = 2 * 19 * 3121 * p_6
 ```
 
-is completed by recursively certifying the large prime factors `p_1, …, p_6`, each of which is
+is completed by recursively certifying the large prime factors `p_1, ..., p_6`, each of which is
 again handled by `Elligator.PrimalityCertificate.prime_of_pratt`. All modular exponentiations are
 carried out with `powMod`, so the numerical side conditions are closed by `decide` and are
 checked by the Lean kernel.

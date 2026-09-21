@@ -18,7 +18,7 @@ In this file we introduce some generally helpful lemmas for the finite field `F`
 The assumption `IsPrimePow q` of [Bernstein2013a] never has to be stated: by
 `card_isPrimePow` it is a consequence of `Fintype.card F = q`, so `q` ranges over exactly the
 prime powers congruent to `3` modulo `4`. Conversely, `prime_of_natCast_surjective` shows that
-representing field elements by the naturals `0, 1, …, q - 1`, as the string encoding of
+representing field elements by the naturals `0, 1, ..., q - 1`, as the string encoding of
 Section 3.4 does, is possible only when `q` is prime.
 
 ## References
